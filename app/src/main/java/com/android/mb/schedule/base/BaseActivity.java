@@ -89,7 +89,7 @@ public abstract class BaseActivity extends AppCompatActivity{
         mTvTitle = findViewById(R.id.tv_title);
         mTvAction = findViewById(R.id.tv_action);
         mIvAction = findViewById(R.id.iv_action);
-        View view = getLayoutInflater().inflate(loadViewLayout(), null);
+        View view = getLayoutInflater().inflate(getLayoutId(), null);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         mLlRoot.addView(view,lp);
@@ -180,7 +180,7 @@ public abstract class BaseActivity extends AppCompatActivity{
     /**
      * 加载布局
      */
-    protected abstract int loadViewLayout();
+    protected abstract int getLayoutId();
 
     /**
      * 初始化标题栏

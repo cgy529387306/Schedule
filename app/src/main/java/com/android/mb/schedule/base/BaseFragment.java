@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.mb.schedule.R;
 import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.rxbus.RxBus;
 
@@ -32,7 +33,7 @@ public abstract class BaseFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return loadViewLayout(inflater, container);
+        return inflater.inflate(getLayoutId(), container, false);
     }
 
     @Override
@@ -96,7 +97,7 @@ public abstract class BaseFragment extends Fragment {
     /**
      * 加载布局
      */
-    protected abstract View loadViewLayout(LayoutInflater inflater, ViewGroup container);
+    protected abstract int getLayoutId();
 
     /**
      * 数据懒加载

@@ -23,7 +23,7 @@ public class LoginActivity extends BaseMvpActivity<HomePresenter,IHomeView> impl
     }
 
     @Override
-    protected int loadViewLayout() {
+    protected int getLayoutId() {
         return R.layout.activity_login;
     }
 
