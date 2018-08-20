@@ -3,6 +3,9 @@ package com.android.mb.schedule.app;
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;
+
+import com.android.mb.schedule.retrofit.http.exception.ApiException;
+
 /**
  * 主要用来获取全局的Context
  * @author cgy
@@ -21,7 +24,7 @@ public class MBApplication extends Application {
 	 */
 	public static Context getInstance(){
 		if (sInstance == null) {
-			Log.e(TAG, "THE APPLICATION OF YOUR PROJECT MUST BE 'MBApplication', OR SOMEONE EXTEND FROM IT");
+			throw new RuntimeException("Application must be init");
 		}
 		return sInstance;
 	}

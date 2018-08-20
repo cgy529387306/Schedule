@@ -5,7 +5,7 @@ import com.android.mb.schedule.base.BaseMvpView;
 /**
  * Created by cgy on 2018/2/11 0011.
  */
-public interface IScheduleHomeView extends BaseMvpView {
+public interface IHomeView extends BaseMvpView {
     void getHotList();
 
 }

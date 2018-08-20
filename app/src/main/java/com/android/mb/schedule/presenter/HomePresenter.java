@@ -1,9 +1,9 @@
 package com.android.mb.schedule.presenter;
 
 import com.android.mb.schedule.base.BaseMvpPresenter;
-import com.android.mb.schedule.presenter.interfaces.IPersonalSkillHomePresenter;
+import com.android.mb.schedule.presenter.interfaces.IHomePresenter;
 import com.android.mb.schedule.service.ScheduleMethods;
-import com.android.mb.schedule.view.interfaces.IScheduleHomeView;
+import com.android.mb.schedule.view.interfaces.IHomeView;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -12,7 +12,7 @@ import rx.Subscriber;
  * Created by cgy on 2018/2/11 0011.
  */
 
-public class PersonalSkillHomePresenter extends BaseMvpPresenter<IScheduleHomeView> implements IPersonalSkillHomePresenter {
+public class HomePresenter extends BaseMvpPresenter<IHomeView> implements IHomePresenter {
 
 
     @Override

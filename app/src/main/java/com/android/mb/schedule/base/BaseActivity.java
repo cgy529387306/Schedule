@@ -10,7 +10,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.android.mb.schedule.R;
 import com.android.mb.schedule.retrofit.cache.util.Utils;
 import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.rxbus.RxBus;
@@ -31,7 +36,7 @@ import rx.subscriptions.CompositeSubscription;
  *     desc  : BaseFragment
  * </pre>
  */
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity{
 
     protected Context mContext;
 
@@ -39,6 +44,16 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 管理Rxjava。
      */
     private CompositeSubscription mCompositeSubscription;
+
+    private LinearLayout mLlRoot;
+
+    private ImageView mIvBack;
+
+    private TextView mTvTitle;
+
+    private TextView mTvAction;
+
+    private ImageView mIvAction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +74,81 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 初始化界面
      */
     protected void initView(Bundle savedInstanceState) {
-        loadViewLayout();
         loadIntent();
+        initView();
+        initTitle();
         bindViews();
         processLogic(savedInstanceState);
         setListener();
+    }
+
+    private void initView(){
+        setContentView(R.layout.common_actionbar_back);
+        mLlRoot = findViewById(R.id.ll_root);
+        mIvBack = findViewById(R.id.iv_back);
+        mTvTitle = findViewById(R.id.tv_title);
+        mTvAction = findViewById(R.id.tv_action);
+        mIvAction = findViewById(R.id.iv_action);
+        View view = getLayoutInflater().inflate(loadViewLayout(), null);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        mLlRoot.addView(view,lp);
+
+        mIvBack.setOnClickListener(mTitleBarOnclick);
+        mTvAction.setOnClickListener(mTitleBarOnclick);
+        mIvAction.setOnClickListener(mTitleBarOnclick);
+    }
+
+    /**
+     * 设置右边文字
+     * @param c
+     */
+    public void setRightText(CharSequence c) {
+        if (mTvAction != null && mTvAction.getVisibility()==View.GONE)
+            mTvAction.setVisibility(View.VISIBLE);
+        mTvAction.setText(c);
+    }
+
+    /**
+     * 设置中间标题文字
+     * @param c
+     */
+    public void setTitleText(CharSequence c) {
+        if (mTvTitle != null && mTvTitle.getVisibility()==View.GONE)
+            mTvTitle.setVisibility(View.VISIBLE);
+        mTvTitle.setText(c);
+    }
+
+    /**
+     * 设置中间标题文字
+     * @param resId
+     */
+    public void setRightImage(int resId) {
+        if (mIvAction != null && mIvAction.getVisibility()==View.GONE)
+            mIvAction.setVisibility(View.VISIBLE);
+        mIvAction.setImageResource(resId);
+    }
+
+
+    private View.OnClickListener mTitleBarOnclick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            int id = v.getId();
+            if (id == R.id.iv_back){
+                finish();
+                onLeftBack();
+            }else if (id == R.id.iv_action){
+                onRightAction();
+            }else if (id == R.id.tv_action){
+                onRightAction();
+            }
+        }
+    };
+
+    protected void onLeftBack(){
+    }
+
+    protected void onRightAction(){
     }
 
     /**
@@ -88,20 +173,24 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * 加载布局
-     */
-    protected abstract void loadViewLayout();
-
-    /**
      * 跳转数据
      */
     protected abstract void loadIntent();
 
     /**
+     * 加载布局
+     */
+    protected abstract int loadViewLayout();
+
+    /**
+     * 初始化标题栏
+     */
+    protected abstract void initTitle();
+
+    /**
      * find控件
      */
     protected abstract void bindViews();
-
 
     /**
      * 处理数据
