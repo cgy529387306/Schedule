@@ -76,6 +76,7 @@
             android:layout_height="50dp"
             android:visibility="visible"/>
     </LinearLayout>
+
     <com.android.mb.schedule.widget.ScheduleView
         android:id="@+id/scheduleView"
         android:layout_width="match_parent"
