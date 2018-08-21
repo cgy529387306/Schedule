@@ -10,7 +10,7 @@
     <FrameLayout
         android:id="@+id/fl_actionbar"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="?attr/actionBarSize"
         android:background="@mipmap/bg_custom_actionbar">
 
         <ImageView

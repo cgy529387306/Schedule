@@ -11,6 +11,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FragmentViewPager mFragmentViewPager;
     private ArrayList<Fragment> mFragmentArrayList;
     private RadioGroup mRgMenu;
-    private RadioButton mRdMmonth;
+    private RadioButton mRdMonth;
     private RadioButton mRdWeek;
     private RadioButton mRdNewSchedule;
     private RadioButton mRdSchedule;
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
-        initLinstener();
+        initListener();
     }
 
     private void initView() {
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
         mFragmentViewPager = findViewById(R.id.fragmentViewPager);
         mRgMenu = findViewById(R.id.rg_menu);
-        mRdMmonth = findViewById(R.id.rd_month);
+        mRdMonth = findViewById(R.id.rd_month);
         mRdWeek = findViewById(R.id.rd_week);
         mRdNewSchedule = findViewById(R.id.rd_new_schedule);
         mRdSchedule = findViewById(R.id.rd_schedule);
@@ -94,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         showNewScheduleFragment();
     }
 
-    private void initLinstener() {
+    private void initListener() {
         mNavigationView.setNavigationItemSelectedListener(this);
         mIvOpenDrawerLayout.setOnClickListener(this);
         mCoordinatorLayout.setOnTouchListener(mOnTouchListener);
@@ -197,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * 显示月
      */
     private void showMonthFragment() {
-        mRdMmonth.setSelected(true);
+        mRdMonth.setSelected(true);
         mRdWeek.setSelected(false);
         mRdNewSchedule.setSelected(false);
         mRdSchedule.setSelected(false);
@@ -209,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * 显示周
      */
     private void showWeekFragment() {
-        mRdMmonth.setSelected(false);
+        mRdMonth.setSelected(false);
         mRdWeek.setSelected(true);
         mRdNewSchedule.setSelected(false);
         mRdSchedule.setSelected(false);
@@ -220,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * 显示新建日程
      */
     private void showNewScheduleFragment() {
-        mRdMmonth.setSelected(false);
+        mRdMonth.setSelected(false);
         mRdWeek.setSelected(false);
         mRdNewSchedule.setSelected(true);
         mRdSchedule.setSelected(false);
@@ -231,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * 显示日程
      */
     private void showScheduleFragment() {
-        mRdMmonth.setSelected(false);
+        mRdMonth.setSelected(false);
         mRdWeek.setSelected(false);
         mRdNewSchedule.setSelected(false);
         mRdSchedule.setSelected(true);
@@ -242,11 +243,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * 显示与我相关
      */
     private void showRelatedMeFragment() {
-        mRdMmonth.setSelected(false);
+        mRdMonth.setSelected(false);
         mRdWeek.setSelected(false);
         mRdNewSchedule.setSelected(false);
         mRdSchedule.setSelected(false);
         mRdRelatedMe.setSelected(true);
         mFragmentViewPager.setCurrentItem(4);
+    }
+
+    public void setTitle(String title){
+        if (mTvTitle!=null && !TextUtils.isEmpty(title)){
+            mTvTitle.setText(title);
+        }
     }
 }

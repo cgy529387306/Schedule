@@ -4,15 +4,12 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:id="@+id/right">
-
     <include layout="@layout/main_content" />
-
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/white">
-
         <ImageView
             android:id="@+id/iv_open_drawerlayout"
             android:layout_width="wrap_content"
@@ -29,7 +26,6 @@
             android:text="请设置标题"
             android:textColor="@color/black"
             android:textSize="20sp" />
-
         <ImageView
             android:id="@+id/iv_action"
             android:layout_width="wrap_content"
@@ -38,7 +34,6 @@
             android:padding="10dp"
             android:src="@mipmap/icon_search"
             android:visibility="visible" />
-
         <ImageView
             android:id="@+id/iv_action1"
             android:layout_width="wrap_content"
@@ -47,9 +42,5 @@
             android:padding="10dp"
             android:src="@mipmap/icon_search"
             android:visibility="visible" />
-
     </android.support.v7.widget.Toolbar>
-
-
-
 </android.support.design.widget.CoordinatorLayout>
