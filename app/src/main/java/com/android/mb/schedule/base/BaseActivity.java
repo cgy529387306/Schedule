@@ -135,7 +135,7 @@ public abstract class BaseActivity extends AppCompatActivity{
         public void onClick(View v) {
             int id = v.getId();
             if (id == R.id.iv_back){
-                finish();
+//                finish();
                 onLeftBack();
             }else if (id == R.id.iv_action){
                 onRightAction();

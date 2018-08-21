@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <item
+            android:id="@+id/nav_my_share"
+            android:icon="@mipmap/icon_search"
+            android:title="我的分享" />
+        <item
+            android:id="@+id/nav_other_share"
+            android:icon="@mipmap/icon_search"
+            android:title="他人分享" />
+        <item
+            android:id="@+id/nav_subordinate_log"
+            android:icon="@mipmap/icon_search"
+            android:title="下属日志" />
+        <item
+            android:id="@+id/nav_relatedme_log"
+            android:icon="@mipmap/icon_search"
+            android:title="与我相关的日程" />
+        <item
+            android:id="@+id/nav_setting"
+            android:icon="@mipmap/icon_search"
+            android:title="设置" />
+        <item
+            android:id="@+id/nav_exit"
+            android:icon="@mipmap/icon_search"
+            android:title="退出" />
+</menu>
