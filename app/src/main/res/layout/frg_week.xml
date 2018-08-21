@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="24dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="日"
+                android:textColor="@color/text_color"
+                android:textSize="13sp" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="一"
+                android:textColor="@color/text_color"
+                android:textSize="13sp" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="二"
+                android:textColor="@color/text_color"
+                android:textSize="13sp" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="三"
+                android:textColor="@color/text_color"
+                android:textSize="13sp" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="四"
+                android:textColor="@color/text_color"
+                android:textSize="13sp" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="五"
+                android:textColor="@color/text_color"
+                android:textSize="13sp" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="六"
+                android:textColor="@color/text_color"
+                android:textSize="13sp" />
+        </LinearLayout>
+        <com.necer.ncalendar.calendar.WeekCalendar
+            android:id="@+id/weekCalendar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:visibility="visible"/>
+    </LinearLayout>
+    <com.android.mb.schedule.widget.ScheduleView
+        android:id="@+id/scheduleView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        app:addBgColor="#dff4ff"
+        app:addTextColor="#47a1f6"
+        app:addTextSize="26sp"
+        app:allDayCountTextColor="#5e636d"
+        app:allDayCountTextSize="14sp"
+        app:allDayEventBgColor="#ffffff"
+        app:allDayEventDefaultColor="#85cdca"
+        app:allDayEventMaxRow="10"
+        app:allDayEventMinRow="2"
+        app:allDayEventRowHeight="20dp"
+        app:allDayEventSize="12sp"
+        app:allDayEventTitleColor="#525252"
+        app:allDayEventTitleSize="12sp"
+        app:bgColor="#ffffff"
+        app:columnNumber="7"
+        app:currentTimeColor="#5e636c"
+        app:currentTimeTextColor="#ffffff"
+        app:currentTimeTextSize="10sp"
+        app:eventTextBgColor="#85cdca"
+        app:eventTextBgLineColor="#dfdfdf"
+        app:eventTextColor="#ffffff"
+        app:eventTextSize="12sp"
+        app:hourTextBgColor="#ffffff"
+        app:hourTextColor="#525252"
+        app:hourTextSize="10sp"
+        app:lineColor="#dfdfdf"
+        app:lineSize="1dp"
+        app:pastTimeColor="#eff5f9"
+        app:rowHeight="60dp" />
+</LinearLayout>
