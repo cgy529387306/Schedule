@@ -588,7 +588,7 @@ public class ScheduleView extends View {
         if (columnNumber == 1) {
             columnWidth = getWidth() - hourTextWidth - lineSize;
         } else {
-            columnWidth = (getWidth() - 2 * hourTextWidth - (columnNumber + 1) * lineSize) / columnNumber;
+            columnWidth = (getWidth() -  hourTextWidth - (columnNumber + 1) * lineSize) / columnNumber;
         }
 
         /**
