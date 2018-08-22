@@ -5,6 +5,7 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/lly_head"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:gravity="center"
@@ -43,10 +44,12 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/tv_me"
+            android:id="@+id/tv_person"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
             android:drawableRight="@mipmap/icon_arrow" />
 
     </LinearLayout>
@@ -103,7 +106,7 @@
             android:textSize="14sp" />
 
         <ImageView
-            android:id="@+id/iv_voice"
+            android:id="@+id/iv_ring"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/icon_arrow" />

@@ -1,0 +1,115 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="10dp"
+            android:text="旧密码"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/edt_oldpwd"
+            android:layout_width="wrap_content"
+            android:background="@null"
+            android:hint="请输入原账户密码"
+            android:textSize="13sp"
+            android:textColor="@color/text_color"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/background_color" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="10dp"
+            android:text="新密码"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/edt_newpwd"
+            android:layout_width="wrap_content"
+            android:background="@null"
+            android:hint="6-16个字符,区分大小写"
+            android:textSize="13sp"
+            android:textColor="@color/text_color"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/background_color" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="10dp"
+            android:text="确认密码"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/edt_confirmpwd"
+            android:layout_width="wrap_content"
+            android:background="@null"
+            android:hint="再次输入新密码"
+            android:textSize="13sp"
+            android:textColor="@color/text_color"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_setpwd"
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/white"
+        android:text="修改密码"
+        android:layout_marginLeft="20dp"
+        android:textSize="16dp"
+        android:layout_marginRight="20dp"
+        android:gravity="center"
+        android:background="@color/base_blue"
+        android:layout_height="40dp" />
+
+</LinearLayout>

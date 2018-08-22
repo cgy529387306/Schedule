@@ -48,6 +48,6 @@
             android:layout_gravity="end"
             android:padding="10dp"
             android:src="@mipmap/icon_search"
-            android:visibility="visible" />
+            android:visibility="gone" />
     </FrameLayout>
 </LinearLayout>
