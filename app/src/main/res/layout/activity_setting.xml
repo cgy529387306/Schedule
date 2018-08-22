@@ -50,7 +50,7 @@
             android:paddingRight="15dp"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
-            android:drawableRight="@mipmap/icon_arrow" />
+            android:drawableRight="@mipmap/icon_right" />
 
     </LinearLayout>
 
@@ -81,7 +81,7 @@
             android:layout_height="wrap_content"
             android:text="设置新密码"
             android:drawablePadding="10dp"
-            android:drawableRight="@mipmap/icon_arrow" />
+            android:drawableRight="@mipmap/icon_right" />
     </LinearLayout>
 
     <View
@@ -109,13 +109,13 @@
             android:id="@+id/iv_ring"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/icon_arrow" />
+            android:src="@mipmap/icon_right" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:src="@mipmap/icon_arrow" />
+            android:src="@mipmap/icon_right" />
     </LinearLayout>
 
     <View
@@ -173,7 +173,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/icon_arrow" />
+            android:src="@mipmap/icon_right" />
 
     </LinearLayout>
 

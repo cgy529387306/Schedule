@@ -1,5 +1,7 @@
 package com.android.mb.schedule.view;
 
+import android.database.Cursor;
+import android.media.RingtoneManager;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
@@ -12,6 +14,9 @@ import com.android.mb.schedule.base.BaseMvpActivity;
 import com.android.mb.schedule.presenter.HomePresenter;
 import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.view.interfaces.IHomeView;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Administrator on 2018\8\20 0020.

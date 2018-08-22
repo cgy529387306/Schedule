@@ -72,6 +72,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         if (id == R.id.tv_setpwd){
             NavigationHelper.startActivity(SettingActivity.this,SetPwdActivity.class,null,false);
         }else if (id == R.id.iv_ring){
+            NavigationHelper.startActivity(SettingActivity.this,RingActivity.class,null,false);
         }else if (id == R.id.iv_vibrate){
             isRemind = !isRemind;
             mIvVibrate.setImageResource(isRemind?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);

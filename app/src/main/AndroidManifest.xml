@@ -3,6 +3,7 @@
     package="com.android.mb.schedule">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <application
         android:allowBackup="true"
         android:name=".app.MBApplication"
@@ -31,6 +32,12 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".view.SetPwdActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".view.RingActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".view.EditSchuduleActivity"
             android:screenOrientation="portrait"/>
     </application>
 
