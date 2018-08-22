@@ -30,6 +30,7 @@ import android.widget.OverScroller;
 
 
 import com.android.mb.schedule.R;
+import com.android.mb.schedule.utils.AppHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -516,7 +517,7 @@ public class ScheduleView extends View {
         hourTextPaint.setTextSize(hourTextSize);
         hourTextPaint.setColor(hourTextColor);
         hourTextPaint.setTextAlign(Paint.Align.CENTER);
-        hourTextWidth = hourTextPaint.measureText("000时");
+        hourTextWidth = AppHelper.calDpi2px(32);
         hourTextAmPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         hourTextAmPaint.setTextAlign(Paint.Align.CENTER);
         hourTextAmPaint.setTextSize(hourTextSize);
@@ -700,7 +701,8 @@ public class ScheduleView extends View {
              * 同理，只画屏幕内显示的
              */
             if (y <= getHeight() + hourTextSize && y >= minAllDayEventShowHeight() - hourTextSize) {
-                canvas.drawText("" + i + "时", (float) (hourTextWidth * 0.8) / 2, y, hourTextPaint);
+                String hourText = i<10?"0"+i:String.valueOf(i);
+                canvas.drawText(hourText+":00", (float) (hourTextWidth * 0.8) / 2, y+AppHelper.calDpi2px(30), hourTextPaint);
             }
 
             // canvas.drawText("时", mHourTextWidth / 2, top + 2 * mHourTextSize
