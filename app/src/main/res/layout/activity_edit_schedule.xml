@@ -132,6 +132,7 @@
             android:textSize="12sp"
             android:textColor="@color/text_color"/>
         <TextView
+            android:id="@+id/tv_changedocument"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="点击替换附件"
@@ -169,6 +170,7 @@
                 android:textSize="14sp" />
 
             <TextView
+                android:id="@+id/tv_startdate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2018年8月22日"
@@ -177,6 +179,7 @@
                 android:textSize="14sp" />
 
             <TextView
+                android:id="@+id/tv_starttime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="10:00"
@@ -207,6 +210,7 @@
                 android:textSize="14sp" />
 
             <TextView
+                android:id="@+id/tv_enddate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2018年8月22日"
@@ -215,6 +219,7 @@
                 android:textSize="14sp" />
 
             <TextView
+                android:id="@+id/tv_endtime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="11:00"
@@ -250,6 +255,7 @@
             android:textSize="14sp" />
 
         <ImageView
+            android:id="@+id/iv_remind"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/ic_vibrate_close" />
