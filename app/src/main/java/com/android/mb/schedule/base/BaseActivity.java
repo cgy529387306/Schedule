@@ -20,6 +20,7 @@ import com.android.mb.schedule.retrofit.cache.util.Utils;
 import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.rxbus.RxBus;
 import com.android.mb.schedule.utils.KeyBoardUtils;
+import com.android.mb.schedule.utils.ToastUtils;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -68,6 +69,10 @@ public abstract class BaseActivity extends AppCompatActivity{
         super.onDestroy();
         RxBus.getInstance().unSubscribe(this);
         onUnsubscribe();
+    }
+
+    public void showToastMessage(String message) {
+        ToastUtils.showShort(this,message);
     }
 
     /**

@@ -1,24 +1,22 @@
-package com.android.mb.schedule.fragment;
+package com.android.mb.schedule.view;
 
-import android.app.Activity;
+import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.mb.schedule.R;
-import com.android.mb.schedule.base.BaseFragment;
+import com.android.mb.schedule.base.BaseActivity;
 import com.android.mb.schedule.pop.ScheduleRepeatPop;
-import com.android.mb.schedule.view.EditSchuduleActivity;
-import com.android.mb.schedule.view.MainActivity;
+import com.android.mb.schedule.utils.ToastUtils;
 
 
 /**
  * 订单
  * Created by cgy on 16/7/18.
  */
-public class NewScheduleFragment extends BaseFragment implements View.OnClickListener{
+public class NewScheduleActivity extends BaseActivity implements View.OnClickListener{
 
     private EditText mEdtScheduleName; //日程名称
     private TextView mBtnLocation; //定位
@@ -43,33 +41,40 @@ public class NewScheduleFragment extends BaseFragment implements View.OnClickLis
     private ScheduleRepeatPop mPop;
 
     @Override
-    protected int getLayoutId() {
-        return R.layout.frg_new_schedule;
+    protected void loadIntent() {
+        
     }
 
     @Override
-    protected void bindViews(View view) {
-        mEdtScheduleName = view.findViewById(R.id.edt_schedulename);
-        mBtnLocation = view.findViewById(R.id.tv_location);
-        mTvAddress = view.findViewById(R.id.tv_address);
-        mEdtScheduleContent = view.findViewById(R.id.edt_schedulecontent);
-        mTvUploadDocument = view.findViewById(R.id.tv_uploaddocument);
-        mBtnChangeDocument = view.findViewById(R.id.tv_changedocument);
-        mTvStartDate = view.findViewById(R.id.tv_startdate);
-        mTvStartTime = view.findViewById(R.id.tv_starttime);
-        mTvEndDate = view.findViewById(R.id.tv_enddate);
-        mTvEndTime = view.findViewById(R.id.tv_endtime);
-        mIvRemind = view.findViewById(R.id.iv_remind);
-        mBtnAdd = view.findViewById(R.id.tv_add);
-        mIvNoRemind = view.findViewById(R.id.iv_noremind);
-        mIvShareToOther = view.findViewById(R.id.iv_sharetoother);
-        mTvRepeat = view.findViewById(R.id.tv_repeat);
-        mTvWhenRemind = view.findViewById(R.id.tv_whenremind);
-        mIvImportment = view.findViewById(R.id.iv_importment);
-        if (getActivity()!=null && getActivity() instanceof MainActivity){
-            ((MainActivity)getActivity()).setRightImage(R.mipmap.icon_right);
-        }
-        mPop = new ScheduleRepeatPop(getActivity(), new ScheduleRepeatPop.SelectListener() {
+    protected int getLayoutId() {
+        return R.layout.activity_new_schedule;
+    }
+
+    @Override
+    protected void initTitle() {
+
+    }
+
+    @Override
+    protected void bindViews() {
+        mEdtScheduleName = findViewById(R.id.edt_schedulename);
+        mBtnLocation = findViewById(R.id.tv_location);
+        mTvAddress = findViewById(R.id.tv_address);
+        mEdtScheduleContent = findViewById(R.id.edt_schedulecontent);
+        mTvUploadDocument = findViewById(R.id.tv_uploaddocument);
+        mBtnChangeDocument = findViewById(R.id.tv_changedocument);
+        mTvStartDate = findViewById(R.id.tv_startdate);
+        mTvStartTime = findViewById(R.id.tv_starttime);
+        mTvEndDate = findViewById(R.id.tv_enddate);
+        mTvEndTime = findViewById(R.id.tv_endtime);
+        mIvRemind = findViewById(R.id.iv_remind);
+        mBtnAdd = findViewById(R.id.tv_add);
+        mIvNoRemind = findViewById(R.id.iv_noremind);
+        mIvShareToOther = findViewById(R.id.iv_sharetoother);
+        mTvRepeat = findViewById(R.id.tv_repeat);
+        mTvWhenRemind = findViewById(R.id.tv_whenremind);
+        mIvImportment = findViewById(R.id.iv_importment);
+        mPop = new ScheduleRepeatPop(this, new ScheduleRepeatPop.SelectListener() {
             @Override
             public void onSelected(int type) {
                 switch (type){
@@ -90,9 +95,10 @@ public class NewScheduleFragment extends BaseFragment implements View.OnClickLis
     }
 
     @Override
-    protected void processLogic() {
+    protected void processLogic(Bundle savedInstanceState) {
 
     }
+
 
     @Override
     protected void setListener() {
@@ -106,7 +112,18 @@ public class NewScheduleFragment extends BaseFragment implements View.OnClickLis
         mTvWhenRemind.setOnClickListener(this);
         mIvImportment.setOnClickListener(this);
         mTvUploadDocument.setOnClickListener(this);
-
+        mPop.setSelectListener(new ScheduleRepeatPop.SelectListener() {
+            @Override
+            public void onSelected(int type) {
+                if (type==0){
+                    mTvRepeat.setText("一次性日程");
+                }else if (type == 1){
+                    mTvRepeat.setText("每天");
+                }else {
+                    mTvRepeat.setText("每周");
+                }
+            }
+        });
     }
 
     @Override

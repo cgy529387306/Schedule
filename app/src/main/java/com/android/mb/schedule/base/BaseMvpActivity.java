@@ -46,10 +46,6 @@ public abstract class BaseMvpActivity<P extends Presenter<V>,V extends BaseMvpVi
         finish();
     }
 
-    @Override
-    public void showToastMessage(String message) {
-        ToastUtils.showShort(this,message);
-    }
 
     @Override
     public void showProgressDialog() {

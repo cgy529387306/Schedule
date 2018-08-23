@@ -26,7 +26,6 @@ import android.widget.TextView;
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.adapter.MyFragmentPagerAdapter;
 import com.android.mb.schedule.fragment.MonthFragment;
-import com.android.mb.schedule.fragment.NewScheduleFragment;
 import com.android.mb.schedule.fragment.RelatedMeFragment;
 import com.android.mb.schedule.fragment.ScheduleFragment;
 import com.android.mb.schedule.fragment.WeekFragment;
@@ -89,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mFragmentArrayList = new ArrayList<>();
         mFragmentArrayList.add(new MonthFragment());
         mFragmentArrayList.add(new WeekFragment());
-        mFragmentArrayList.add(new NewScheduleFragment());
         mFragmentArrayList.add(new ScheduleFragment());
         mFragmentArrayList.add(new RelatedMeFragment());
         mFragmentViewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), mFragmentArrayList));
@@ -146,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     showWeekFragment();
                     break;
                 case R.id.rd_new_schedule:
-                    showNewScheduleFragment();
+                    NavigationHelper.startActivity(MainActivity.this,NewScheduleActivity.class,null,false);
                     break;
                 case R.id.rd_schedule:
                     showScheduleFragment();
