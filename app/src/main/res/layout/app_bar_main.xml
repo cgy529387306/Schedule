@@ -27,20 +27,30 @@
             android:textColor="@color/black"
             android:textSize="20sp" />
         <ImageView
+            android:id="@+id/iv_right"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:padding="10dp"
+            android:src="@mipmap/icon_search"
+            android:visibility="gone" />
+        <ImageView
             android:id="@+id/iv_action"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="end"
             android:padding="10dp"
             android:src="@mipmap/icon_search"
-            android:visibility="visible" />
-        <ImageView
-            android:id="@+id/iv_action1"
+            android:visibility="gone" />
+        <TextView
+            android:id="@+id/tv_right"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="end"
+            android:gravity="center"
             android:padding="10dp"
-            android:src="@mipmap/icon_search"
-            android:visibility="visible" />
+            android:text="11"
+            android:visibility="gone" />
+
     </android.support.v7.widget.Toolbar>
 </android.support.design.widget.CoordinatorLayout>

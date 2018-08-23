@@ -70,7 +70,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.tv_setpwd){
-            NavigationHelper.startActivity(SettingActivity.this,SetPwdActivity.class,null,false);
+            NavigationHelper.startActivity(SettingActivity.this,EditSchuduleActivity.class,null,false);
         }else if (id == R.id.iv_ring){
             NavigationHelper.startActivity(SettingActivity.this,RingActivity.class,null,false);
         }else if (id == R.id.iv_vibrate){

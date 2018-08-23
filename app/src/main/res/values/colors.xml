@@ -43,4 +43,5 @@
     <color name="bg_color">#f2f2f2</color>
     <!-- 页面背景颜色 -->
     <color name="background_color">#F8F8F8</color>
+    <color name="translate_color">#88000000</color>
 </resources>

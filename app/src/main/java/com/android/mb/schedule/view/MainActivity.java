@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextView mTvName;  // 名字
     private TextView mTvJob;  //职位
     private TextView mTvTitle; // 标题
+    private ImageView mIvRight; // 右边图标
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mTvName = findViewById(R.id.tv_name);
         mTvJob = findViewById(R.id.tv_job);
         mTvTitle = findViewById(R.id.tv_title);
+        mIvRight = findViewById(R.id.iv_right);
         mFragmentArrayList = new ArrayList<>();
         mFragmentArrayList.add(new MonthFragment());
         mFragmentArrayList.add(new WeekFragment());
@@ -255,5 +257,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (mTvTitle!=null && !TextUtils.isEmpty(title)){
             mTvTitle.setText(title);
         }
+    }
+    public void setRightImage(int resId) {
+        if (mIvRight != null && mIvRight.getVisibility()==View.GONE)
+            mIvRight.setVisibility(View.VISIBLE);
+        mIvRight.setImageResource(resId);
     }
 }

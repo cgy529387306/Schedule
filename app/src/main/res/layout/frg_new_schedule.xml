@@ -19,15 +19,25 @@
             android:textColor="@color/black"
             android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/tv_schedulename"
+        <!--<TextView-->
+            <!--android:id="@+id/tv_schedulename"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:lines="2"-->
+            <!--android:layout_marginLeft="30dp"-->
+            <!--android:text="会议记录内容.docx会议记录内容.docx会议记录内容.docx会议记录内容.docx"-->
+            <!--android:textSize="12sp"-->
+            <!--android:textColor="@color/text_color"/>-->
+
+        <EditText
+            android:id="@+id/edt_schedulename"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:lines="2"
-            android:layout_marginLeft="30dp"
-            android:text="会议记录内容.docx会议记录内容.docx会议记录内容.docx会议记录内容.docx"
+            android:background="@null"
+            android:hint="请输入日程名称"
             android:textSize="12sp"
-            android:textColor="@color/text_color"/>
+            android:layout_marginLeft="30dp"
+            android:textColor="@color/text_color"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
@@ -54,7 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
-            android:text="马尾造船厂"
+            android:text=""
             android:textSize="12sp"
             android:textColor="@color/text_color"/>
 
@@ -82,15 +92,25 @@
             android:textColor="@color/black"
             android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/tv_schedulecontent"
+        <!--<TextView-->
+            <!--android:id="@+id/tv_schedulecontent"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:lines="2"-->
+            <!--android:layout_marginLeft="30dp"-->
+            <!--android:text="会议记录内容.docx会议记录内容.docx会议记录内容.docx会议记录内容.docx"-->
+            <!--android:textSize="12sp"-->
+            <!--android:textColor="@color/text_color"/>-->
+
+        <EditText
+            android:id="@+id/edt_schedulecontent"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:lines="2"
-            android:layout_marginLeft="30dp"
-            android:text="会议记录内容.docx会议记录内容.docx会议记录内容.docx会议记录内容.docx"
+            android:background="@null"
+            android:hint="点击输入日程(字数不超过400字)"
             android:textSize="12sp"
-            android:textColor="@color/text_color"/>
+            android:layout_marginLeft="30dp"
+            android:textColor="@color/text_color"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
@@ -117,20 +137,20 @@
             android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/tv_document"
+            android:id="@+id/tv_uploaddocument"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="会议记录内容.docx"
+            android:text="点击可上传(文件大小小于100M)"
             android:textSize="12sp"
             android:textColor="@color/text_color"/>
+
         <TextView
             android:id="@+id/tv_changedocument"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="点击替换附件"
-            android:drawablePadding="10dp"
+            android:text=""
             android:textSize="12sp"
             android:textColor="@color/text_color"/>
     </LinearLayout>
@@ -282,7 +302,7 @@
             android:id="@+id/tv_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="张三、李四等"
+            android:text="添加人员自动提醒"
             android:drawablePadding="10dp"
             android:textSize="13sp"
             android:textColor="@color/text_color"
