@@ -5,26 +5,15 @@ import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.OrientationHelper;
-import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.android.mb.schedule.R;
-import com.android.mb.schedule.adapter.ScheduleRepeatAdapter;
-import com.android.mb.schedule.entitys.ChooseBean;
-import com.android.mb.schedule.view.interfaces.OnItemClickListener;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by chenqm
@@ -42,11 +31,11 @@ public class ScheduleRepeatPop extends PopupWindow implements View.OnClickListen
     private LinearLayout mLlyEveryWeek;
     private TextView mTvEveryWeek;
     private ImageView mIvEveryWeek;
-    private SelectListener selectListener;
+    private SelectListener mSelectListener;
     private int type = 0;
 
     public void setSelectListener(SelectListener selectListener) {
-        this.selectListener = selectListener;
+        this.mSelectListener = selectListener;
     }
 
     public interface SelectListener {
@@ -55,10 +44,10 @@ public class ScheduleRepeatPop extends PopupWindow implements View.OnClickListen
 
     public ScheduleRepeatPop(Activity context,SelectListener selectListener) {
         mContext = context;
-        selectListener = selectListener;
+        this.mSelectListener = selectListener;
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        conentView = inflater.inflate(R.layout.pop_simple, null);
+        conentView = inflater.inflate(R.layout.pop_schedulerepeat, null);
         // 设置SelectPicPopupWindow的View
         this.setContentView(conentView);
         setFocusable(false);
@@ -109,7 +98,7 @@ public class ScheduleRepeatPop extends PopupWindow implements View.OnClickListen
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.tv_choose){
-            selectListener.onSelected(type);
+            mSelectListener.onSelected(type);
             dismiss();
         }else if (id == R.id.lly_onlyone){
             type = 0;

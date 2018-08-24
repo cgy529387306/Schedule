@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mFragmentArrayList.add(new RelatedMeFragment());
         mFragmentViewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), mFragmentArrayList));
         mFragmentViewPager.setOffscreenPageLimit(mFragmentArrayList.size());
-        showNewScheduleFragment();
+        showMonthFragment();
     }
 
     private void initListener() {
@@ -144,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     showWeekFragment();
                     break;
                 case R.id.rd_new_schedule:
+                    showNewScheduleFragment();
                     NavigationHelper.startActivity(MainActivity.this,NewScheduleActivity.class,null,false);
                     break;
                 case R.id.rd_schedule:

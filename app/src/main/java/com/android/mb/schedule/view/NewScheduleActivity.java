@@ -1,15 +1,24 @@
 package com.android.mb.schedule.view;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.base.BaseActivity;
+import com.android.mb.schedule.pop.ScheduleRemindPop;
 import com.android.mb.schedule.pop.ScheduleRepeatPop;
+import com.android.mb.schedule.pop.ScheduleTimePop;
 import com.android.mb.schedule.utils.ToastUtils;
+import com.android.mb.schedule.widget.DatePicker;
+import com.android.mb.schedule.widget.TimePicker;
+
+import java.util.Calendar;
 
 
 /**
@@ -24,6 +33,7 @@ public class NewScheduleActivity extends BaseActivity implements View.OnClickLis
     private TextView mEdtScheduleContent; // 日程内容
     private TextView mTvUploadDocument; // 点击上传文件
     private TextView mBtnChangeDocument ; //点击替换附件
+    private LinearLayout mLlyStartDate ;
     private TextView mTvStartDate ; //开始日期
     private TextView mTvStartTime ; //开始时间
     private TextView mTvEndDate ; //结束日期
@@ -38,7 +48,9 @@ public class NewScheduleActivity extends BaseActivity implements View.OnClickLis
     private TextView mTvWhenRemind; // 日程什么时候开始提醒
     private ImageView mIvImportment; //是否重要
     private boolean isImportment = false;
-    private ScheduleRepeatPop mPop;
+    private ScheduleRepeatPop mScheduleRepeatPop;
+    private ScheduleRemindPop mScheduleRemindPop;
+    private ScheduleTimePop mScheduleTimePop;
 
     @Override
     protected void loadIntent() {
@@ -63,6 +75,7 @@ public class NewScheduleActivity extends BaseActivity implements View.OnClickLis
         mEdtScheduleContent = findViewById(R.id.edt_schedulecontent);
         mTvUploadDocument = findViewById(R.id.tv_uploaddocument);
         mBtnChangeDocument = findViewById(R.id.tv_changedocument);
+        mLlyStartDate = findViewById(R.id.lly_startdate);
         mTvStartDate = findViewById(R.id.tv_startdate);
         mTvStartTime = findViewById(R.id.tv_starttime);
         mTvEndDate = findViewById(R.id.tv_enddate);
@@ -74,31 +87,12 @@ public class NewScheduleActivity extends BaseActivity implements View.OnClickLis
         mTvRepeat = findViewById(R.id.tv_repeat);
         mTvWhenRemind = findViewById(R.id.tv_whenremind);
         mIvImportment = findViewById(R.id.iv_importment);
-        mPop = new ScheduleRepeatPop(this, new ScheduleRepeatPop.SelectListener() {
-            @Override
-            public void onSelected(int type) {
-                switch (type){
-                    case 0:
-                        mTvRepeat.setText("一次性");
-                        break;
-                    case 1:
-                        mTvRepeat.setText("每天");
-                        break;
-                    case 2:
-                        mTvRepeat.setText("每周");
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
+        choosePop();
     }
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
-
     }
-
 
     @Override
     protected void setListener() {
@@ -112,18 +106,7 @@ public class NewScheduleActivity extends BaseActivity implements View.OnClickLis
         mTvWhenRemind.setOnClickListener(this);
         mIvImportment.setOnClickListener(this);
         mTvUploadDocument.setOnClickListener(this);
-        mPop.setSelectListener(new ScheduleRepeatPop.SelectListener() {
-            @Override
-            public void onSelected(int type) {
-                if (type==0){
-                    mTvRepeat.setText("一次性日程");
-                }else if (type == 1){
-                    mTvRepeat.setText("每天");
-                }else {
-                    mTvRepeat.setText("每周");
-                }
-            }
-        });
+        mLlyStartDate.setOnClickListener(this);
     }
 
     @Override
@@ -141,13 +124,75 @@ public class NewScheduleActivity extends BaseActivity implements View.OnClickLis
             mIvNoRemind.setImageResource(isNoRemind?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
         }else  if (id == R.id.iv_sharetoother){
         }else  if (id == R.id.tv_repeat){
-            if(mPop != null){
-                mPop.showPopupWindow(view);
+            if(mScheduleRepeatPop != null){
+                mScheduleRepeatPop.showPopupWindow(view);
             }
         }else  if (id == R.id.tv_whenremind){
+            if(mScheduleRemindPop != null){
+                mScheduleRemindPop.showPopupWindow(view);
+            }
         }else  if (id == R.id.iv_importment){
             isImportment = !isImportment;
             mIvImportment.setImageResource(isImportment?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
+        }else  if (id == R.id.lly_startdate){
+            if(mScheduleTimePop != null){
+                mScheduleTimePop.showPopupWindow(view);
+            }
         }
+    }
+
+    private void choosePop() {
+        mScheduleRepeatPop = new ScheduleRepeatPop(this, new ScheduleRepeatPop.SelectListener() {
+            @Override
+            public void onSelected(int type) {
+                switch (type){
+                    case 0:
+                        mTvRepeat.setText("一次性");
+                        break;
+                    case 1:
+                        mTvRepeat.setText("每天");
+                        break;
+                    case 2:
+                        mTvRepeat.setText("每周");
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+        mScheduleRemindPop = new ScheduleRemindPop(this, new ScheduleRemindPop.SelectListener() {
+            @Override
+            public void onSelected(int type) {
+                switch (type){
+                    case 0:
+                        mTvWhenRemind.setText("5分钟前");
+                        break;
+                    case 1:
+                        mTvWhenRemind.setText("10分钟前");
+                        break;
+                    case 2:
+                        mTvWhenRemind.setText("1小时前");
+                        break;
+                    case 3:
+                        mTvWhenRemind.setText("2小时前");
+                        break;
+                    case 4:
+                        mTvWhenRemind.setText("24小时前");
+                        break;
+                    case 5:
+                        mTvWhenRemind.setText("不在提醒");
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+        mScheduleTimePop = new ScheduleTimePop(this, new ScheduleTimePop.SelectListener() {
+            @Override
+            public void onSelected(String selectDate, String selectTime) {
+                mTvStartDate.setText(selectDate);
+                mTvStartTime.setText(selectTime);
+            }
+        });
     }
 }

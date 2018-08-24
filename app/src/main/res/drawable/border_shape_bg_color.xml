@@ -5,8 +5,8 @@
         android:width="1dp"
         android:color="@color/background_color" />
     <!-- 圆角 -->
-    <corners android:topLeftRadius="10dp"
-        android:topRightRadius="10dp"/>
+    <corners android:topLeftRadius="5dp"
+        android:topRightRadius="5dp"/>
 
     <solid android:color="@color/white"/>
 
