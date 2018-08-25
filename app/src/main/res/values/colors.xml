@@ -25,20 +25,17 @@
     <!-- 输入框提示-->
     <color name="base_hint_color">#c0c0c0</color>
 
+    <color name="text_color">#454545</color>
     <!-- 橘色 -->
     <color name="base_orange">#FFBA52</color>
     <!-- 红色 -->
     <color name="base_red">#ff4543</color>
     <!-- 灰色 -->
-    <color name="base_gray">#999999</color>
+    <color name="base_gray">#a5a5a5</color>
     <!-- 蓝色 -->
     <color name="base_blue">#2aaeff</color>
-    <!-- 浅蓝色 -->
-    <color name="base_blue_light">#3b98fb</color>
     <!-- 绿色 -->
     <color name="base_green">#12c136</color>
-
-    <color name="text_color">#a9a9a9</color>
 
     <color name="bg_color">#f2f2f2</color>
     <!-- 页面背景颜色 -->

@@ -30,6 +30,7 @@ import com.android.mb.schedule.fragment.RelatedMeFragment;
 import com.android.mb.schedule.fragment.ScheduleFragment;
 import com.android.mb.schedule.fragment.WeekFragment;
 import com.android.mb.schedule.utils.NavigationHelper;
+import com.android.mb.schedule.utils.StatusBarUtil;
 import com.android.mb.schedule.widget.CircleImageView;
 import com.android.mb.schedule.widget.FragmentViewPager;
 
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        StatusBarUtil.setColor(this,getResources().getColor(R.color.white));
         initView();
         initListener();
     }
@@ -101,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mCoordinatorLayout.setOnTouchListener(mOnTouchListener);
         mDrawerLayout.setDrawerListener(mDrawerListener);
         mRgMenu.setOnCheckedChangeListener(mOnCheckedChangeListener);
+        findViewById(R.id.tv_add).setOnClickListener(this);
     }
 
     View.OnTouchListener mOnTouchListener = new View.OnTouchListener() {
@@ -144,8 +147,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     showWeekFragment();
                     break;
                 case R.id.rd_new_schedule:
-                    showNewScheduleFragment();
-                    NavigationHelper.startActivity(MainActivity.this,NewScheduleActivity.class,null,false);
+//                    showNewScheduleFragment();
+
                     break;
                 case R.id.rd_schedule:
                     showScheduleFragment();
@@ -193,6 +196,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             } else {
                 mDrawerLayout.closeDrawer(Gravity.LEFT);
             }
+        }else if (id == R.id.tv_add){
+            NavigationHelper.startActivity(MainActivity.this,NewScheduleActivity.class,null,false);
         }
     }
     /**

@@ -73,7 +73,7 @@ public class DatePicker extends LinearLayout {
 		newDays.setLayoutParams(newDays_param);
 		newDays.setAdapter(new StringWheelAdapter(dateList, 7));
 		newDays.setVisibleItems(7);
-		newDays.setCyclic(true);
+		newDays.setCyclic(false);
 		newDays.addChangingListener(onDaysChangedListener);
 		addView(newDays);
 	}

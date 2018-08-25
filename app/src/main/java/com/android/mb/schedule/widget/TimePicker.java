@@ -62,7 +62,7 @@ public class TimePicker extends LinearLayout{
 		lparams_hours.setMargins(0, 0, MARGIN_RIGHT, 0);
 		hours.setLayoutParams(lparams_hours);
 		hours.setAdapter(new StringWheelAdapter(hourList, 24));
-		hours.setVisibleItems(3);
+		hours.setVisibleItems(7);
 		hours.setCyclic(true);
 		hours.addChangingListener(onHoursChangedListener);		
 		addView(hours);		

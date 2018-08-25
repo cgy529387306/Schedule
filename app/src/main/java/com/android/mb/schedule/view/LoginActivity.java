@@ -1,36 +1,49 @@
 package com.android.mb.schedule.view;
 
-import android.database.Cursor;
-import android.media.RingtoneManager;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
 import com.android.mb.schedule.R;
-import com.android.mb.schedule.base.BaseMvpActivity;
-import com.android.mb.schedule.presenter.HomePresenter;
+import com.android.mb.schedule.base.BaseActivity;
 import com.android.mb.schedule.utils.NavigationHelper;
-import com.android.mb.schedule.view.interfaces.IHomeView;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by Administrator on 2018\8\20 0020.
  */
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
+public class LoginActivity extends BaseActivity implements View.OnClickListener{
 
     private TextView mTvLogin;
 
+
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+    protected void loadIntent() {
+
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_login;
+    }
+
+    @Override
+    protected void initTitle() {
+        hideActionBar();
+    }
+
+    @Override
+    protected void bindViews() {
         mTvLogin = findViewById(R.id.tv_login);
+    }
+
+    @Override
+    protected void processLogic(Bundle savedInstanceState) {
+
+    }
+
+    @Override
+    protected void setListener() {
         mTvLogin.setOnClickListener(this);
     }
 

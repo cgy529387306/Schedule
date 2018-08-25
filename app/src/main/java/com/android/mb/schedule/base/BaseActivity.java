@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -20,6 +21,7 @@ import com.android.mb.schedule.retrofit.cache.util.Utils;
 import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.rxbus.RxBus;
 import com.android.mb.schedule.utils.KeyBoardUtils;
+import com.android.mb.schedule.utils.StatusBarUtil;
 import com.android.mb.schedule.utils.ToastUtils;
 
 import rx.Observable;
@@ -56,10 +58,12 @@ public abstract class BaseActivity extends AppCompatActivity{
 
     private ImageView mIvAction;
 
+    private FrameLayout mActionBarLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
+        StatusBarUtil.setColor(this,getResources().getColor(R.color.white));
         initView(savedInstanceState);
     }
 
@@ -94,6 +98,7 @@ public abstract class BaseActivity extends AppCompatActivity{
         mTvTitle = findViewById(R.id.tv_title);
         mTvAction = findViewById(R.id.tv_action);
         mIvAction = findViewById(R.id.iv_action);
+        mActionBarLayout = findViewById(R.id.fl_actionbar);
         View view = getLayoutInflater().inflate(getLayoutId(), null);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
@@ -132,6 +137,11 @@ public abstract class BaseActivity extends AppCompatActivity{
         if (mIvAction != null && mIvAction.getVisibility()==View.GONE)
             mIvAction.setVisibility(View.VISIBLE);
         mIvAction.setImageResource(resId);
+    }
+
+    public void hideActionBar(){
+        if (mActionBarLayout!=null && mActionBarLayout.getVisibility()==View.VISIBLE)
+            mActionBarLayout.setVisibility(View.GONE);
     }
 
 

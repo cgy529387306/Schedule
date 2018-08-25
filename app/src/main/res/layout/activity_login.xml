@@ -2,16 +2,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:gravity="center"
-    android:background="@color/background_color"
     android:orientation="vertical"
     android:layout_height="match_parent">
-
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="380dp"
+        android:background="@mipmap/bg_login_header">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@mipmap/bg_login_logo"/>
+    </FrameLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:layout_marginTop="-50dp"
         android:background="@drawable/border_shape_bg_color"
         android:orientation="vertical">
         <com.android.mb.schedule.widget.ClearableEditText
@@ -20,12 +29,12 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="20dp"
-            android:textColorHint="@color/text_color"
+            android:textColorHint="@color/base_gray"
             android:textColor="@color/text_color"
             android:background="@null"
             android:hint="用户名"
-            android:textSize="14sp"
-            android:drawableLeft="@mipmap/icon_search"
+            android:textSize="16sp"
+            android:drawableLeft="@mipmap/ic_login_user"
             android:drawablePadding="10dp"
             android:inputType="number"
             tools:ignore="TextFields" />
@@ -40,13 +49,13 @@
             android:layout_height="60dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:textColorHint="@color/text_color"
+            android:textColorHint="@color/base_gray"
             android:textColor="@color/text_color"
             android:background="@null"
             android:hint="密码"
-            android:drawableLeft="@mipmap/icon_search"
+            android:drawableLeft="@mipmap/ic_login_pwd"
             android:drawablePadding="10dp"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:inputType="number"
             tools:ignore="TextFields" />
     </LinearLayout>
@@ -54,13 +63,22 @@
         android:id="@+id/tv_login"
         android:layout_width="match_parent"
         android:textColor="@color/white"
-        android:text="登录"
+        android:text="登录日程"
         android:layout_marginLeft="21dp"
         android:textSize="16sp"
         android:layout_marginRight="21dp"
         android:gravity="center"
         android:background="@color/base_blue"
         android:layout_height="40dp" />
-
-
+    <TextView
+        android:id="@+id/tv_hint"
+        android:layout_width="match_parent"
+        android:textColor="@color/base_gray"
+        android:layout_marginTop="30dp"
+        android:text="船政云日程管理系统"
+        android:layout_marginLeft="21dp"
+        android:textSize="12sp"
+        android:layout_marginRight="21dp"
+        android:gravity="center"
+        android:layout_height="wrap_content" />
 </LinearLayout>

@@ -14,8 +14,8 @@
             android:id="@+id/iv_open_drawerlayout"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:paddingRight="20dp"
-            android:src="@mipmap/icon_search" />
+            android:paddingRight="10dp"
+            android:src="@mipmap/ic_home_menu" />
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="180dp"
@@ -31,17 +31,17 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="end"
-            android:padding="10dp"
-            android:src="@mipmap/icon_search"
-            android:visibility="gone" />
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:src="@mipmap/ic_home_today" />
         <ImageView
             android:id="@+id/iv_action"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="end"
-            android:padding="10dp"
-            android:src="@mipmap/icon_search"
-            android:visibility="gone" />
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:src="@mipmap/ic_home_refresh" />
         <TextView
             android:id="@+id/tv_right"
             android:layout_width="wrap_content"

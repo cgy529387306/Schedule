@@ -41,7 +41,7 @@ public class RingAdapter extends RecyclerView.Adapter<RingAdapter.MyViewHolder> 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                holder.mIvRingChoice.setImageResource(R.mipmap.icon_back);
+                holder.mIvRingChoice.setImageResource(R.mipmap.ic_back);
             }
         });
 
