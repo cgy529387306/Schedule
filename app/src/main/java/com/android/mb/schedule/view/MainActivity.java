@@ -178,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }else if (id == R.id.nav_other_share){  //他人分享
         }else if (id == R.id.nav_subordinate_log){  // 下属日志
         }else if (id == R.id.nav_relatedme_log){  // 与我相关的日志
+            NavigationHelper.startActivity(MainActivity.this,RelateScheduleActivity.class,null,false);
         }else if (id == R.id.nav_setting){  //设置
             NavigationHelper.startActivity(MainActivity.this,SettingActivity.class,null,false);
         }else if (id == R.id.nav_exit){  //退出

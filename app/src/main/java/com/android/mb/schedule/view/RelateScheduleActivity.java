@@ -1,14 +1,17 @@
-package com.android.mb.schedule.fragment;
+package com.android.mb.schedule.view;
 
+import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.adapter.ScheduleAdapter;
-import com.android.mb.schedule.base.BaseFragment;
+import com.android.mb.schedule.base.BaseActivity;
+import com.android.mb.schedule.pop.ScheduleRepeatPop;
 import com.android.mb.schedule.utils.Helper;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
@@ -16,32 +19,41 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
 /**
- * 订单
- * Created by cgy on 16/7/18.
+ * Created by Administrator on 2018\8\20 0020.
  */
-public class RelatedMeFragment extends BaseFragment {
 
+public class RelateScheduleActivity extends BaseActivity implements View.OnClickListener{
     private RecyclerView mRecyclerView;
     private ScheduleAdapter mAdapter;
     private int mCurrentPage = 0;
+
     @Override
-    protected int getLayoutId() {
-        return R.layout.frg_me;
+    protected void loadIntent() {
+
     }
 
     @Override
-    protected void bindViews(View view) {
-        mRecyclerView =  view.findViewById(R.id.recyclerView);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+    protected int getLayoutId() {
+        return R.layout.activity_relate_schedule;
+    }
+
+    @Override
+    protected void initTitle() {
+        setTitleText("与我相关的日程");
+    }
+
+    @Override
+    protected void bindViews() {
+        mRecyclerView =  findViewById(R.id.recyclerView);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mAdapter = new ScheduleAdapter(R.layout.item_schedule,getData());
         mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
-    protected void processLogic() {
+    protected void processLogic(Bundle savedInstanceState) {
 
     }
 
@@ -69,6 +81,10 @@ public class RelatedMeFragment extends BaseFragment {
         },mRecyclerView);
     }
 
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+    }
 
     public List getData() {
         List<String> dataList = new ArrayList<>();
