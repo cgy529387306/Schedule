@@ -181,7 +181,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             NavigationHelper.startActivity(MainActivity.this,RelateScheduleActivity.class,null,false);
         }else if (id == R.id.nav_setting){  //设置
             NavigationHelper.startActivity(MainActivity.this,SettingActivity.class,null,false);
-        }else if (id == R.id.nav_exit){  //退出
+        }else if (id == R.id.nav_exit) {  //退出
+            NavigationHelper.startActivity(MainActivity.this, LoginActivity.class, null, true);
         }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
