@@ -48,7 +48,7 @@
                 android:id="@+id/tv_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@mipmap/ic_back"
+                android:drawableLeft="@mipmap/icon_location"
                 android:drawablePadding="5dp"
                 android:text="地点"
                 android:textColor="@color/text_color"
@@ -204,6 +204,7 @@
                 android:src="@mipmap/icon_right" />
 
             <LinearLayout
+                android:id="@+id/lly_enddate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"

@@ -50,7 +50,7 @@
                 android:id="@+id/iv_beforefive"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/icon_right" />
+                android:src="@mipmap/icon_checked" />
 
         </LinearLayout>
 
@@ -81,7 +81,7 @@
                 android:id="@+id/iv_beforeten"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/icon_right"
+                android:src="@mipmap/icon_checked"
                 android:visibility="gone"/>
 
         </LinearLayout>
@@ -113,7 +113,7 @@
                 android:id="@+id/iv_beforeonehour"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/icon_right"
+                android:src="@mipmap/icon_checked"
                 android:visibility="gone"/>
 
         </LinearLayout>
@@ -145,7 +145,7 @@
                 android:id="@+id/iv_beforetwohour"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/icon_right"
+                android:src="@mipmap/icon_checked"
                 android:visibility="gone"/>
 
         </LinearLayout>
@@ -177,7 +177,7 @@
                 android:id="@+id/iv_beforeoneday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/icon_right"
+                android:src="@mipmap/icon_checked"
                 android:visibility="gone"/>
 
         </LinearLayout>
@@ -209,7 +209,7 @@
                 android:id="@+id/iv_noremind"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/icon_right"
+                android:src="@mipmap/icon_checked"
                 android:visibility="gone"/>
 
         </LinearLayout>

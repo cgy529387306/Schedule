@@ -37,9 +37,6 @@
             android:name=".view.RingActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".view.EditSchuduleActivity"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".view.NewScheduleActivity"
             android:screenOrientation="portrait"/>
         <activity

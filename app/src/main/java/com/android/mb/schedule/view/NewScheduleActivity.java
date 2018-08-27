@@ -8,12 +8,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.base.BaseActivity;
 import com.android.mb.schedule.pop.ScheduleRemindPop;
 import com.android.mb.schedule.pop.ScheduleRepeatPop;
 import com.android.mb.schedule.pop.ScheduleTimePop;
+import com.android.mb.schedule.utils.ToastHelper;
 import com.android.mb.schedule.utils.ToastUtils;
 import com.android.mb.schedule.widget.DatePicker;
 import com.android.mb.schedule.widget.TimePicker;
@@ -36,6 +38,7 @@ public class NewScheduleActivity extends BaseActivity implements View.OnClickLis
     private LinearLayout mLlyStartDate ;
     private TextView mTvStartDate ; //开始日期
     private TextView mTvStartTime ; //开始时间
+    private LinearLayout mLlyEndDate;
     private TextView mTvEndDate ; //结束日期
     private TextView mTvEndTime ; //结束时间
     private ImageView mIvRemind ; //全天提醒
@@ -50,7 +53,8 @@ public class NewScheduleActivity extends BaseActivity implements View.OnClickLis
     private boolean isImportment = false;
     private ScheduleRepeatPop mScheduleRepeatPop;
     private ScheduleRemindPop mScheduleRemindPop;
-    private ScheduleTimePop mScheduleTimePop;
+    private ScheduleTimePop mScheduleStartTimePop;
+    private ScheduleTimePop mScheduleEndTimePop;
 
     @Override
     protected void loadIntent() {
@@ -64,7 +68,7 @@ public class NewScheduleActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void initTitle() {
-
+        setTitleText("新建日程");
     }
 
     @Override
@@ -78,6 +82,7 @@ public class NewScheduleActivity extends BaseActivity implements View.OnClickLis
         mLlyStartDate = findViewById(R.id.lly_startdate);
         mTvStartDate = findViewById(R.id.tv_startdate);
         mTvStartTime = findViewById(R.id.tv_starttime);
+        mLlyEndDate = findViewById(R.id.lly_enddate);
         mTvEndDate = findViewById(R.id.tv_enddate);
         mTvEndTime = findViewById(R.id.tv_endtime);
         mIvRemind = findViewById(R.id.iv_remind);
@@ -107,6 +112,7 @@ public class NewScheduleActivity extends BaseActivity implements View.OnClickLis
         mIvImportment.setOnClickListener(this);
         mTvUploadDocument.setOnClickListener(this);
         mLlyStartDate.setOnClickListener(this);
+        mLlyEndDate.setOnClickListener(this);
     }
 
     @Override
@@ -135,8 +141,12 @@ public class NewScheduleActivity extends BaseActivity implements View.OnClickLis
             isImportment = !isImportment;
             mIvImportment.setImageResource(isImportment?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
         }else  if (id == R.id.lly_startdate){
-            if(mScheduleTimePop != null){
-                mScheduleTimePop.showPopupWindow(view);
+            if(mScheduleStartTimePop != null){
+                mScheduleStartTimePop.showPopupWindow(view);
+            }
+        }else  if (id == R.id.lly_enddate){
+            if(mScheduleEndTimePop != null){
+                mScheduleEndTimePop.showPopupWindow(view);
             }
         }
     }
@@ -187,11 +197,18 @@ public class NewScheduleActivity extends BaseActivity implements View.OnClickLis
                 }
             }
         });
-        mScheduleTimePop = new ScheduleTimePop(this, new ScheduleTimePop.SelectListener() {
+        mScheduleStartTimePop = new ScheduleTimePop(this, new ScheduleTimePop.SelectListener() {
             @Override
             public void onSelected(String selectDate, String selectTime) {
                 mTvStartDate.setText(selectDate);
                 mTvStartTime.setText(selectTime);
+            }
+        });
+        mScheduleEndTimePop = new ScheduleTimePop(this, new ScheduleTimePop.SelectListener() {
+            @Override
+            public void onSelected(String selectDate, String selectTime) {
+                mTvEndDate.setText(selectDate);
+                mTvEndTime.setText(selectTime);
             }
         });
     }

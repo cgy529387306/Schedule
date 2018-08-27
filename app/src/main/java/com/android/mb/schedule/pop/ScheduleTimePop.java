@@ -63,7 +63,7 @@ public class ScheduleTimePop extends PopupWindow implements View.OnClickListener
 //        selectDate = calendar.get(Calendar.YEAR) + "年" + calendar.get(Calendar.MONTH) + "月"
 //                + calendar.get(Calendar.DAY_OF_MONTH) + "日"
 //                + DatePicker.getDayOfWeekCN(calendar.get(Calendar.DAY_OF_WEEK));
-        selectDate = calendar.get(Calendar.YEAR) + "年" + calendar.get(Calendar.MONTH) + "月"
+        selectDate = calendar.get(Calendar.YEAR) + "年" + (calendar.get(Calendar.MONTH) + 1) + "月"
                 + calendar.get(Calendar.DAY_OF_MONTH) + "日";
         //选择时间与当前时间的初始化，用于判断用户选择的是否是以前的时间，如果是，弹出toss提示不能选择过去的时间
         selectDay = currentDay = calendar.get(Calendar.DAY_OF_MONTH);

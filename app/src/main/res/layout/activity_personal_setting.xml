@@ -24,7 +24,7 @@
             android:id="@+id/iv_head"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/icon_gift" />
+            android:src="@mipmap/icon_head" />
 
         <ImageView
             android:layout_width="wrap_content"
