@@ -16,7 +16,7 @@ import java.util.Calendar;
 
 
 /**
- * 日视图
+ * 周视图
  * Created by cgy on 16/7/18.
  */
 public class WeekFragment extends BaseFragment {

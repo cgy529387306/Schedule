@@ -7,7 +7,7 @@ import com.android.mb.schedule.base.BaseFragment;
 
 
 /**
- * 订单
+ * 日程
  * Created by cgy on 16/7/18.
  */
 public class ScheduleFragment extends BaseFragment {

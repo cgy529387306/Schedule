@@ -1,14 +1,22 @@
 package com.android.mb.schedule.entitys;
 
+import android.media.Ringtone;
+
 /**
  * Created by Administrator on 2018/8/22.
  */
 
 public class RingBean {
+
     private String name;
     private String path;
-    private boolean isSelected;
+    private Ringtone ringtone;
 
+//    public RingBean(String name, String path, Ringtone ringtone) {
+//        this.name = name;
+//        this.path = path;
+//        this.ringtone = ringtone;
+//    }
     public String getName() {
         return name;
     }
@@ -25,11 +33,11 @@ public class RingBean {
         this.path = path;
     }
 
-    public boolean isSelected() {
-        return isSelected;
+    public Ringtone getRingtone() {
+        return ringtone;
     }
 
-    public void setSelected(boolean selected) {
-        isSelected = selected;
+    public void setRingtone(Ringtone ringtone) {
+        this.ringtone = ringtone;
     }
 }

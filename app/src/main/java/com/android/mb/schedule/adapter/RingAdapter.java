@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.entitys.RingBean;
+import com.android.mb.schedule.view.interfaces.OnItemClickListener;
 
 import java.util.List;
 
@@ -23,27 +24,39 @@ public class RingAdapter extends RecyclerView.Adapter<RingAdapter.MyViewHolder> 
 
     private Context context;
     private List<RingBean> mList;
+    private OnItemClickListener mListener;
+    private int index;
 
-    public RingAdapter(Context context,List<RingBean> mList) {
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mListener = listener;
+    }
+
+    public RingAdapter(Context context, List<RingBean> mList) {
         this.context = context;
         this.mList = mList;
+    }
+    public void setCurrentIndex(int index) {
+        this.index = index;
+        notifyDataSetChanged();
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new MyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_ring, parent,false));
+        View view = LayoutInflater.from(context).inflate(R.layout.item_ring, parent,false);
+        return new MyViewHolder(view,mListener);
     }
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         holder.mTvRingName.setText(mList.get(position).getName());
-
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                holder.mIvRingChoice.setImageResource(R.mipmap.ic_back);
-            }
-        });
+        if (position == 0){
+            holder.mIvRingChoice.setVisibility(View.VISIBLE);
+        }
+        if (index == position){
+            holder.mIvRingChoice.setVisibility(View.VISIBLE);
+        }else {
+            holder.mIvRingChoice.setVisibility(View.GONE);
+        }
 
     }
 
@@ -56,8 +69,15 @@ public class RingAdapter extends RecyclerView.Adapter<RingAdapter.MyViewHolder> 
         LinearLayout mLlyRing;
         TextView mTvRingName;
         ImageView mIvRingChoice;
-        public MyViewHolder(View itemView) {
+        public MyViewHolder(View itemView, OnItemClickListener onItemClickListener) {
             super(itemView);
+            mListener = onItemClickListener;
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.onItemClick(view,getPosition());
+                }
+            });
             mLlyRing = itemView.findViewById(R.id.lly_ring);
             mTvRingName =itemView.findViewById(R.id.tv_ringname);
             mIvRingChoice = itemView.findViewById(R.id.iv_ringchoice);

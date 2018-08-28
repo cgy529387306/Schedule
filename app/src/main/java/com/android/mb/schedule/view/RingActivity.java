@@ -1,12 +1,16 @@
 package com.android.mb.schedule.view;
 
+import android.content.ContentUris;
 import android.database.Cursor;
+import android.media.Ringtone;
 import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,6 +20,7 @@ import com.android.mb.schedule.adapter.RingAdapter;
 import com.android.mb.schedule.base.BaseActivity;
 import com.android.mb.schedule.entitys.RingBean;
 import com.android.mb.schedule.utils.NavigationHelper;
+import com.android.mb.schedule.view.interfaces.OnItemClickListener;
 import com.android.mb.schedule.widget.CircleImageView;
 
 import java.util.ArrayList;
@@ -31,7 +36,6 @@ public class RingActivity extends BaseActivity {
 
     private RingtoneManager mRingtoneManager;
     private List<RingBean> mList;
-    private Map<String,String> mMap;
     private RingAdapter mRingAdapter;
     private RecyclerView mRecyclerViewRing;
 
@@ -63,8 +67,8 @@ public class RingActivity extends BaseActivity {
         mRingtoneManager = new RingtoneManager(getApplicationContext());
         mRingtoneManager.setType(RingtoneManager.TYPE_ALARM);
         Cursor mCursor = mRingtoneManager.getCursor();
+        Ringtone ringtone ;
         mList = new ArrayList<>();
-        mMap = new HashMap<>();
         if (mCursor.moveToFirst()){
             while (mCursor.moveToNext()){
                 RingBean mRingBean = new RingBean();
@@ -73,11 +77,16 @@ public class RingActivity extends BaseActivity {
                 mRingBean.setName(mName);
                 mRingBean.setPath(mPath);
                 mList.add(mRingBean);
-                mMap.put(mName,mPath);
             }
         }
         mRingAdapter = new RingAdapter(RingActivity.this,mList);
         mRecyclerViewRing.setAdapter(mRingAdapter);
+        mRingAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int postion) {
+                mRingAdapter.setCurrentIndex(postion);
+            }
+        });
     }
 
     @Override

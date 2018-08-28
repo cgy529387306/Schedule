@@ -18,7 +18,7 @@ import java.util.List;
 
 
 /**
- * 订单
+ * 与我相关
  * Created by cgy on 16/7/18.
  */
 public class RelatedMeFragment extends BaseFragment {
