@@ -5,13 +5,11 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.android.mb.schedule.R;
-import com.android.mb.schedule.adapter.ScheduleAdapter;
+import com.android.mb.schedule.adapter.ScheduleRelateAdapter;
+import com.android.mb.schedule.adapter.ScheduleShareAdapter;
 import com.android.mb.schedule.base.BaseActivity;
-import com.android.mb.schedule.pop.ScheduleRepeatPop;
 import com.android.mb.schedule.utils.Helper;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
@@ -23,9 +21,9 @@ import java.util.List;
  * Created by Administrator on 2018\8\20 0020.
  */
 
-public class RelateScheduleActivity extends BaseActivity implements View.OnClickListener{
+public class ScheduleShareActivity extends BaseActivity implements View.OnClickListener{
     private RecyclerView mRecyclerView;
-    private ScheduleAdapter mAdapter;
+    private ScheduleShareAdapter mAdapter;
     private int mCurrentPage = 0;
 
     @Override
@@ -40,7 +38,7 @@ public class RelateScheduleActivity extends BaseActivity implements View.OnClick
 
     @Override
     protected void initTitle() {
-        setTitleText("与我相关的日程");
+        setTitleText("我分享的日程");
     }
 
     @Override
@@ -48,7 +46,7 @@ public class RelateScheduleActivity extends BaseActivity implements View.OnClick
         mRecyclerView =  findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mAdapter = new ScheduleAdapter(R.layout.item_schedule,getData());
+        mAdapter = new ScheduleShareAdapter(R.layout.item_schedule_share,getData());
         mRecyclerView.setAdapter(mAdapter);
     }
 
