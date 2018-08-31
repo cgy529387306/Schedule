@@ -1,26 +1,26 @@
 package com.android.mb.schedule.view;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.android.mb.schedule.R;
@@ -40,17 +40,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
+    private TabLayout mTabLayout;
     private boolean isDrawer=false;
     private CoordinatorLayout mCoordinatorLayout;
     private ImageView mIvOpenDrawerLayout;
     private FragmentViewPager mFragmentViewPager;
     private ArrayList<Fragment> mFragmentArrayList;
-    private RadioGroup mRgMenu;
-    private RadioButton mRdMonth;
-    private RadioButton mRdWeek;
-    private RadioButton mRdNewSchedule;
-    private RadioButton mRdSchedule;
-    private RadioButton mRdRelatedMe;
     private CircleImageView mIvHead; //头像
     private TextView mTvName;  // 名字
     private TextView mTvJob;  //职位
@@ -67,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void initView() {
+        mTabLayout = findViewById(R.id.tab_layout);
         mDrawerLayout = findViewById(R.id.drawer_layout);
         mNavigationView = findViewById(R.id.nav_view);
         mCoordinatorLayout = findViewById(R.id.right);
@@ -76,12 +72,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mDrawerLayout.setDrawerListener(toggle);
         toggle.syncState();
         mFragmentViewPager = findViewById(R.id.fragmentViewPager);
-        mRgMenu = findViewById(R.id.rg_menu);
-        mRdMonth = findViewById(R.id.rd_month);
-        mRdWeek = findViewById(R.id.rd_week);
-        mRdNewSchedule = findViewById(R.id.rd_new_schedule);
-        mRdSchedule = findViewById(R.id.rd_schedule);
-        mRdRelatedMe = findViewById(R.id.rd_related_me);
         mIvHead = findViewById(R.id.iv_head);
         mTvName = findViewById(R.id.tv_name);
         mTvJob = findViewById(R.id.tv_job);
@@ -94,7 +84,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mFragmentArrayList.add(new RelatedMeFragment());
         mFragmentViewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), mFragmentArrayList));
         mFragmentViewPager.setOffscreenPageLimit(mFragmentArrayList.size());
-        showMonthFragment();
+        mFragmentViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
+        setTabs();
+    }
+
+
+    /**
+     * @description: 设置添加Tab
+     */
+    private void setTabs(){
+        int[] tabTitles = new int[]{R.string.tab_month,R.string.tab_week,R.string.tab_add,R.string.tab_day,R.string.tab_user};
+        int[] tabImages = new int[]{R.drawable.btn_tab_month,R.drawable.btn_tab_week,R.color.transparent,R.drawable.btn_tab_day,R.drawable.btn_tab_user};
+        for (int i = 0; i < tabImages.length; i++) {
+            TabLayout.Tab tab = mTabLayout.newTab();
+            View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.custom_tab,null);
+            tab.setCustomView(view);
+
+            TextView tvTitle = view.findViewById(R.id.tv_tab);
+            tvTitle.setText(tabTitles[i]);
+            ImageView imgTab =  view.findViewById(R.id.iv_tab);
+            imgTab.setImageResource(tabImages[i]);
+            mTabLayout.addTab(tab);
+        }
     }
 
     private void initListener() {
@@ -102,8 +113,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mIvOpenDrawerLayout.setOnClickListener(this);
         mCoordinatorLayout.setOnTouchListener(mOnTouchListener);
         mDrawerLayout.setDrawerListener(mDrawerListener);
-        mRgMenu.setOnCheckedChangeListener(mOnCheckedChangeListener);
         findViewById(R.id.tv_add).setOnClickListener(this);
+        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                mFragmentViewPager.setCurrentItem(tab.getPosition(),true);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
     View.OnTouchListener mOnTouchListener = new View.OnTouchListener() {
@@ -134,32 +160,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         @Override
         public void onDrawerStateChanged(int newState) {}
-    };
-
-    RadioGroup.OnCheckedChangeListener mOnCheckedChangeListener = new RadioGroup.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(RadioGroup radioGroup, int id) {
-            switch (id){
-                case R.id.rd_month:
-                    showMonthFragment();
-                    break;
-                case R.id.rd_week:
-                    showWeekFragment();
-                    break;
-                case R.id.rd_new_schedule:
-//                    showNewScheduleFragment();
-
-                    break;
-                case R.id.rd_schedule:
-                    showScheduleFragment();
-                    break;
-                case R.id.rd_related_me:
-                    showRelatedMeFragment();
-                    break;
-                    default:
-                        break;
-            }
-        }
     };
 
     @Override
@@ -204,62 +204,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }else if (id == R.id.tv_add){
             NavigationHelper.startActivity(MainActivity.this,NewScheduleActivity.class,null,false);
         }
-    }
-    /**
-     * 显示月
-     */
-    private void showMonthFragment() {
-        mRdMonth.setSelected(true);
-        mRdWeek.setSelected(false);
-        mRdNewSchedule.setSelected(false);
-        mRdSchedule.setSelected(false);
-        mRdRelatedMe.setSelected(false);
-        mFragmentViewPager.setCurrentItem(0);
-    }
-
-    /**
-     * 显示周
-     */
-    private void showWeekFragment() {
-        mRdMonth.setSelected(false);
-        mRdWeek.setSelected(true);
-        mRdNewSchedule.setSelected(false);
-        mRdSchedule.setSelected(false);
-        mRdRelatedMe.setSelected(false);
-        mFragmentViewPager.setCurrentItem(1);
-    }
-    /**
-     * 显示新建日程
-     */
-    private void showNewScheduleFragment() {
-        mRdMonth.setSelected(false);
-        mRdWeek.setSelected(false);
-        mRdNewSchedule.setSelected(true);
-        mRdSchedule.setSelected(false);
-        mRdRelatedMe.setSelected(false);
-        mFragmentViewPager.setCurrentItem(2);
-    }
-    /**
-     * 显示日程
-     */
-    private void showScheduleFragment() {
-        mRdMonth.setSelected(false);
-        mRdWeek.setSelected(false);
-        mRdNewSchedule.setSelected(false);
-        mRdSchedule.setSelected(true);
-        mRdRelatedMe.setSelected(false);
-        mFragmentViewPager.setCurrentItem(3);
-    }
-    /**
-     * 显示与我相关
-     */
-    private void showRelatedMeFragment() {
-        mRdMonth.setSelected(false);
-        mRdWeek.setSelected(false);
-        mRdNewSchedule.setSelected(false);
-        mRdSchedule.setSelected(false);
-        mRdRelatedMe.setSelected(true);
-        mFragmentViewPager.setCurrentItem(4);
     }
 
     public void setTitle(String title){

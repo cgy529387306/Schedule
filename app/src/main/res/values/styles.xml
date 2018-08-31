@@ -38,4 +38,10 @@
         <item name="android:textColor">@color/text_color</item>
         <item name="android:textSize">18sp</item>
     </style>
+    <style name="CustomTab" parent="Widget.Design.TabLayout" >
+        <item name="tabIndicatorColor">@color/base_blue</item>
+        <item name="tabTextColor">@color/base_gray</item>
+        <item name="tabSelectedTextColor">@color/base_blue</item>
+        <item name="tabIndicatorHeight">0dp</item>
+    </style>
 </resources>
