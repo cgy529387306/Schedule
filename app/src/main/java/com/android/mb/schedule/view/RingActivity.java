@@ -67,7 +67,6 @@ public class RingActivity extends BaseActivity {
         mRingtoneManager = new RingtoneManager(getApplicationContext());
         mRingtoneManager.setType(RingtoneManager.TYPE_ALARM);
         Cursor mCursor = mRingtoneManager.getCursor();
-        Ringtone ringtone ;
         mList = new ArrayList<>();
         if (mCursor.moveToFirst()){
             while (mCursor.moveToNext()){
