@@ -2,112 +2,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="?attr/actionBarSize"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="#fff">
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <com.android.mb.schedule.widget.FragmentViewPager
         android:id="@+id/fragmentViewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/line"/>
-    <View
-        android:id="@+id/line"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_above="@+id/rg_menu"
-        android:layout_marginBottom="5dp"
-        android:background="@color/base_gray" />
-    <RadioGroup
-        android:id="@+id/rg_menu"
+        android:layout_above="@+id/fl_bottom"/>
+    <FrameLayout
+        android:id="@+id/fl_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="#00000000"
-        android:orientation="horizontal"
-        android:paddingBottom="5dp">
-
-        <RadioButton
-            android:id="@+id/rd_month"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="#fff"
-            android:button="@null"
-            android:drawablePadding="3dp"
-            android:drawableTop="@drawable/btn_tab_month"
-            android:gravity="center"
-            android:layout_marginLeft="5dp"
-            android:text="月"
-            android:checked="true"
-            android:textColor="@drawable/btn_text_gray_blue"
-            android:textSize="12sp" />
-
-        <RadioButton
-            android:id="@+id/rd_week"
-            android:layout_width="0dp"
+        android:background="@mipmap/bg_home_bottom">
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="#fff"
-            android:button="@null"
-            android:drawablePadding="3dp"
-            android:drawableTop="@drawable/btn_tab_week"
-            android:gravity="center"
-            android:text="周"
-            android:textColor="@drawable/btn_text_gray_blue"
-            android:textSize="12sp" />
-
-        <RadioButton
-            android:id="@+id/rd_new_schedule"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="#fff"
-            android:button="@null"
-            android:clipChildren="false"
-            android:gravity="center|bottom"
-            android:textColor="@drawable/btn_text_gray_blue"
-            android:textSize="12sp" />
-
-        <RadioButton
-            android:id="@+id/rd_schedule"
-            android:layout_width="0dp"
+            android:layout_gravity="bottom"
+            style="@style/CustomTab" />
+        <TextView
+            android:id="@+id/tv_add"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="#fff"
-            android:button="@null"
+            android:paddingTop="10dp"
+            android:layout_gravity="center"
+            android:paddingBottom="5dp"
             android:drawablePadding="3dp"
-            android:drawableTop="@drawable/btn_tab_day"
-            android:gravity="center"
-            android:text="日程"
-            android:textColor="@drawable/btn_text_gray_blue"
-            android:textSize="12sp" />
-
-        <RadioButton
-            android:id="@+id/rd_related_me"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="#fff"
-            android:button="@null"
-            android:drawablePadding="3dp"
-            android:drawableTop="@drawable/btn_tab_user"
-            android:gravity="center"
-            android:text="与我相关"
-            android:textColor="@drawable/btn_text_gray_blue"
-            android:textSize="12sp"
-            android:layout_marginRight="5dp"/>
-    </RadioGroup>
-
-    <TextView
-        android:id="@+id/tv_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:paddingBottom="5dp"
-        android:drawablePadding="3dp"
-        android:drawableTop="@mipmap/ic_tab_add"
-        android:textColor="@color/base_blue"
-        android:text="新建日程"
-        android:textSize="12sp"/>
-
+            android:drawableTop="@drawable/btn_tab_add"
+            android:textColor="@color/base_blue"
+            android:text="新建日程"
+            android:textSize="12sp"/>
+    </FrameLayout>
 </RelativeLayout>

@@ -2,4 +2,10 @@
     <string name="app_name">My Application</string>
     <string name="open">开</string>
     <string name="close">关</string>
+
+    <string name="tab_month">月</string>
+    <string name="tab_week">周</string>
+    <string name="tab_day">日程</string>
+    <string name="tab_add"></string>
+    <string name="tab_user">与我相关</string>
 </resources>

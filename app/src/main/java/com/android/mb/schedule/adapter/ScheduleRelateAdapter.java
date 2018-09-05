@@ -6,9 +6,9 @@ import com.chad.library.adapter.base.BaseViewHolder;
 
 import java.util.List;
 
-public class ScheduleAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
+public class ScheduleRelateAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
 
-    public ScheduleAdapter(int layoutResId, List data) {
+    public ScheduleRelateAdapter(int layoutResId, List data) {
         super(layoutResId, data);
     }
 

@@ -175,10 +175,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.nav_my_share){ //我的分享
-            NavigationHelper.startActivity(MainActivity.this,RelateScheduleActivity.class,null,false);
         }else if (id == R.id.nav_other_share){  //他人分享
-            NavigationHelper.startActivity(MainActivity.this,RelateScheduleActivity.class,null,false);
-        }else if (id == R.id.nav_subordinate_log){  // 下属日程
+        }else if (id == R.id.nav_subordinate_log){  // 下属日志
         }else if (id == R.id.nav_relatedme_log){  // 与我相关的日志
             NavigationHelper.startActivity(MainActivity.this,RelateScheduleActivity.class,null,false);
         }else if (id == R.id.nav_setting){  //设置

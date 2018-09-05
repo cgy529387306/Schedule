@@ -40,7 +40,10 @@
             android:name=".view.NewScheduleActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".view.RelateScheduleActivity"
+            android:name=".view.ScheduleRelateActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".view.ScheduleShareActivity"
             android:screenOrientation="portrait"/>
     </application>
 
