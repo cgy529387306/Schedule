@@ -2,6 +2,9 @@ package com.necer.ncalendar.utils;
 
 import android.text.TextUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Jimmy on 2017/1/9 0009.
  * 农历工具类
@@ -365,6 +368,34 @@ public class LunarCalendarUtils {
             message = "国庆节";
         }
         return message;
+    }
+
+    public static List<String> getHolidayList(){
+        List<String> result = new ArrayList<>();
+        result.add("春节");
+        result.add("元宵节");
+        result.add("龙抬头");
+        result.add("端午节");
+        result.add("七夕");
+        result.add("中元节");
+        result.add("中秋节");
+        result.add("重阳节");
+        result.add("腊八节");
+        result.add("小年");
+
+        result.add("元旦");
+        result.add("情人节");
+        result.add("妇女节");
+        result.add("植树节");
+        result.add("消费者");
+        result.add("清明节");
+        result.add("劳动节");
+        result.add("青年节");
+        result.add("建党节");
+        result.add("建军节");
+        result.add("教师节");
+        result.add("国庆节");
+        return  result;
     }
 
 

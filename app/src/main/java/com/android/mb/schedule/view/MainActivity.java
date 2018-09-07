@@ -1,6 +1,7 @@
 package com.android.mb.schedule.view;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        StatusBarUtil.setColor(this,getResources().getColor(R.color.white));
+        initStatusBar();
         initView();
         initListener();
     }
@@ -86,6 +87,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mFragmentViewPager.setOffscreenPageLimit(mFragmentArrayList.size());
         mFragmentViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
         setTabs();
+    }
+
+    private void initStatusBar(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // 透明状态栏
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            StatusBarUtil.StatusBarIconManager.MIUI(this, StatusBarUtil.StatusBarIconManager.TYPE.BLACK);
+            StatusBarUtil.StatusBarIconManager.Flyme(this, StatusBarUtil.StatusBarIconManager.TYPE.BLACK);
+        }
     }
 
 

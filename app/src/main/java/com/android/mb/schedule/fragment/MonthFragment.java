@@ -14,6 +14,9 @@ import com.necer.ncalendar.listener.OnCalendarChangedListener;
 
 import org.joda.time.LocalDate;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * 月视图
@@ -39,6 +42,13 @@ public class MonthFragment extends BaseFragment implements OnCalendarChangedList
         TestAdapter testAdapter = new TestAdapter(getActivity());
         mRecyclerView.setAdapter(testAdapter);
         mNCalendar.setOnCalendarChangedListener(this);
+        List<String> pointList = new ArrayList<>();
+        pointList.add("2018-09-01");
+        pointList.add("2018-09-02");
+        pointList.add("2018-09-03");
+        pointList.add("2018-09-04");
+        pointList.add("2018-09-05");
+        mNCalendar.setPoint(pointList);
     }
 
     @Override

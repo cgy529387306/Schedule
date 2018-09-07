@@ -13,11 +13,9 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.mb.schedule.R;
-import com.android.mb.schedule.retrofit.cache.util.Utils;
 import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.rxbus.RxBus;
 import com.android.mb.schedule.utils.KeyBoardUtils;
@@ -63,8 +61,17 @@ public abstract class BaseActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
-        StatusBarUtil.setColor(this,getResources().getColor(R.color.white));
         initView(savedInstanceState);
+        initStatusBar();
+    }
+
+    private void initStatusBar(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // 透明状态栏
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            StatusBarUtil.StatusBarIconManager.MIUI(this, StatusBarUtil.StatusBarIconManager.TYPE.BLACK);
+            StatusBarUtil.StatusBarIconManager.Flyme(this, StatusBarUtil.StatusBarIconManager.TYPE.BLACK);
+        }
     }
 
 

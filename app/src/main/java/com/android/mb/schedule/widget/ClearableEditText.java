@@ -48,7 +48,7 @@ public class ClearableEditText extends EditText implements OnFocusChangeListener
         mClearDrawable = getCompoundDrawables()[2];   
         if (mClearDrawable == null) {   
 //          throw new NullPointerException("You can add drawableRight attribute in XML");  
-            mClearDrawable = getResources().getDrawable(R.drawable.delete_selector);
+            mClearDrawable = getResources().getDrawable(R.mipmap.ic_input_delete);
         }   
           
         mClearDrawable.setBounds(0, 0, mClearDrawable.getIntrinsicWidth(), mClearDrawable.getIntrinsicHeight());   

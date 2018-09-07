@@ -72,6 +72,7 @@
         android:layout_height="match_parent"
         app:selectCircleColor="@color/base_blue"
         app:selectCircleRadius ="20dp"
+        app:pointColor="@color/base_blue"
         app:firstDayOfWeek="Sunday">
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"
