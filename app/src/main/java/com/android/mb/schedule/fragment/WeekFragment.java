@@ -9,12 +9,11 @@ import com.android.mb.schedule.app.MBApplication;
 import com.android.mb.schedule.base.BaseFragment;
 import com.android.mb.schedule.widget.ScheduleView;
 import com.android.mb.schedule.widget.ScheduleViewEvent;
-import com.necer.ncalendar.calendar.WeekCalendar;
+import com.haibin.calendarview.CalendarLayout;
+import com.haibin.calendarview.CalendarView;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 
 /**
@@ -22,8 +21,9 @@ import java.util.List;
  * Created by cgy on 16/7/18.
  */
 public class WeekFragment extends BaseFragment {
+//    private CalendarLayout mCalendarLayout;
+//    private CalendarView mCalendarView;
     private ScheduleView mScheduleView;
-    private WeekCalendar mWeekCalendar;
     @Override
     protected int getLayoutId() {
         return R.layout.frg_week;
@@ -31,13 +31,14 @@ public class WeekFragment extends BaseFragment {
 
     @Override
     protected void bindViews(View view) {
+//        mCalendarLayout = view.findViewById(R.id.calendarLayout);
+//        mCalendarView = view.findViewById(R.id.calendarView);
         mScheduleView = view.findViewById(R.id.scheduleView);
-        mWeekCalendar = view.findViewById(R.id.weekCalendar);
     }
 
     @Override
     protected void processLogic() {
-
+//        mCalendarLayout.shrink();
     }
 
     @Override

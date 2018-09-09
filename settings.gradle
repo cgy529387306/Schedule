@@ -1,2 +1,2 @@
 include ':app'
-include ':ncalendar'
+include ':calendarview'

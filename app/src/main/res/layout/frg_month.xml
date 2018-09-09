@@ -5,79 +5,44 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="日"
-            android:textColor="@color/text_color"
-            android:textSize="13sp" />
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="一"
-            android:textColor="@color/text_color"
-            android:textSize="13sp" />
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="二"
-            android:textColor="@color/text_color"
-            android:textSize="13sp" />
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="三"
-            android:textColor="@color/text_color"
-            android:textSize="13sp" />
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="四"
-            android:textColor="@color/text_color"
-            android:textSize="13sp" />
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="五"
-            android:textColor="@color/text_color"
-            android:textSize="13sp" />
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="六"
-            android:textColor="@color/text_color"
-            android:textSize="13sp" />
-    </LinearLayout>
-    <com.necer.ncalendar.calendar.NCalendar
-        android:id="@+id/myCalendar"
+    <com.haibin.calendarview.CalendarLayout
+        android:id="@+id/calendarLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:selectCircleColor="@color/base_blue"
-        app:selectCircleRadius ="20dp"
-        app:pointColor="@color/base_blue"
-        app:firstDayOfWeek="Sunday">
+        android:background="#fff"
+        android:orientation="vertical"
+        app:calendar_content_view_id="@+id/recyclerView">
+
+        <com.haibin.calendarview.CalendarView
+            android:id="@+id/calendarView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            app:calendar_padding="10dp"
+            app:current_month_text_color="#333333"
+            app:current_month_lunar_text_color="#B2B2B2"
+            app:other_month_lunar_text_color="#e1e1e1"
+            app:other_month_text_color="#e1e1e1"
+            app:scheme_text_color="#333333"
+            app:scheme_month_text_color="#333333"
+            app:scheme_lunar_text_color="#B2B2B2"
+            app:max_year="2999"
+            app:min_year="1666"
+            app:month_view="com.android.mb.schedule.custom.CustomMonthView"
+            app:month_view_show_mode="mode_fix"
+            app:selected_lunar_text_color="#ffffff"
+            app:selected_text_color="#ffffff"
+            app:selected_theme_color="#2aaeff"
+            app:week_background="#ffffff"
+            app:week_start_with="sun"
+            app:week_text_color="#454545"
+            app:week_view="com.android.mb.schedule.custom.CustomWeekView" />
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/white"/>
-    </com.necer.ncalendar.calendar.NCalendar>
+
+    </com.haibin.calendarview.CalendarLayout>
 </LinearLayout>

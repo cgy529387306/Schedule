@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.mb.schedule.R;
-import com.necer.ncalendar.utils.MyLog;
 
 
 /**
@@ -36,7 +35,6 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.MyViewHolder> 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MyLog.d("position:::::" + position);
             }
         });
 
