@@ -56,7 +56,7 @@ public class ScheduleRemindPop extends PopupWindow implements View.OnClickListen
         this.mSelectListener = selectListener;
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        conentView = inflater.inflate(R.layout.pop_scheduleremind, null);
+        conentView = inflater.inflate(R.layout.pop_schedule_remind, null);
         // 设置SelectPicPopupWindow的View
         this.setContentView(conentView);
         setFocusable(false);

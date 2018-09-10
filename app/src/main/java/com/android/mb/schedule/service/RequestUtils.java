@@ -42,6 +42,11 @@ public class RequestUtils {
                 params.append("&").append(entry.getKey()).append("=").append(entry.getValue());
             }
         }
+        if (Helper.isEmpty(params.toString())){
+            params.append("ky=11111111111");
+        }else{
+            params.append("&").append("ky=11111111111");
+        }
        return md5(params.toString());
     }
 

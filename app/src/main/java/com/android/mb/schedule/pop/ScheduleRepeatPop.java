@@ -47,7 +47,7 @@ public class ScheduleRepeatPop extends PopupWindow implements View.OnClickListen
         this.mSelectListener = selectListener;
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        conentView = inflater.inflate(R.layout.pop_schedulerepeat, null);
+        conentView = inflater.inflate(R.layout.pop_schedule_repeat, null);
         // 设置SelectPicPopupWindow的View
         this.setContentView(conentView);
         setFocusable(false);

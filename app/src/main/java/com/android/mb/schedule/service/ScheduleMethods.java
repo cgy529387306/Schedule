@@ -40,11 +40,24 @@ public class ScheduleMethods extends BaseHttp {
 
 
     public Observable userLogin(Map<String,Object> requestMap){
-        requestMap.put("sign",RequestUtils.getSignParams(requestMap));
-        return getService().userLogin(RequestBodyUtil.getRequestBody(requestMap))
+//        requestMap.put("sign",RequestUtils.getSignParams(requestMap));
+//        requestMap.put("sign",RequestUtils.getSignParams(requestMap));
+        return getService().userLogin(requestMap)
                 .compose(CacheTransformer.emptyTransformer())
                 .map(new HttpCacheResultFunc<Object>());
     }
 
+    public Observable resetPwd(Map<String,Object> requestMap){
+//        requestMap.put("sign",RequestUtils.getSignParams(requestMap));
+        return getService().resetPwd(RequestBodyUtil.getRequestBody(requestMap))
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<Object>());
+    }
 
+    public Observable setProfile(Map<String,Object> requestMap){
+//        requestMap.put("sign",RequestUtils.getSignParams(requestMap));
+        return getService().setProfile(RequestBodyUtil.getRequestBody(requestMap))
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<Object>());
+    }
 }

@@ -2,6 +2,8 @@ package com.android.mb.schedule.service;
 
 import com.android.mb.schedule.retrofit.http.entity.HttpResult;
 
+import java.util.Map;
+
 import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
@@ -17,7 +19,8 @@ import rx.Observable;
  */
 public interface IScheduleService {
     @POST("/app/user/login")
-    Observable<HttpResult<Object>> userLogin(@Body RequestBody requestBody);
+    @FormUrlEncoded
+    Observable<HttpResult<Object>> userLogin(@FieldMap Map<String,Object> requestMap);
 
     @POST("/app/user/resetpwd")
     Observable<HttpResult<Object>> resetPwd(@Body RequestBody requestBody);

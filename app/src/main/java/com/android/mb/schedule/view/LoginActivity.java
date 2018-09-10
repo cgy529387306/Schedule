@@ -11,6 +11,7 @@ import com.android.mb.schedule.base.BaseMvpActivity;
 import com.android.mb.schedule.presenter.LoginPresenter;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.NavigationHelper;
+import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.view.interfaces.ILoginView;
 
 import java.util.HashMap;
@@ -72,11 +73,14 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter,ILoginView> im
                 showToastMessage("请输入密码");
                 return;
             }
+            if (!ProjectHelper.isPwdValid(pwd)){
+                showToastMessage("密码格式错误");
+                return;
+            }
             Map<String,Object> requestMap = new HashMap<>();
             requestMap.put("username",account);
             requestMap.put("password",pwd);
             mPresenter.userLogin(requestMap);
-
 //            NavigationHelper.startActivity(LoginActivity.this,MainActivity.class,null,true);
         }
     }
