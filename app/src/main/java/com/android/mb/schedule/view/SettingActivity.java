@@ -3,15 +3,11 @@ package com.android.mb.schedule.view;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.base.BaseActivity;
-import com.android.mb.schedule.base.BaseMvpActivity;
-import com.android.mb.schedule.presenter.HomePresenter;
 import com.android.mb.schedule.utils.NavigationHelper;
-import com.android.mb.schedule.view.interfaces.IHomeView;
 import com.android.mb.schedule.widget.CircleImageView;
 
 /**

@@ -21,8 +21,8 @@ import java.util.Calendar;
  * Created by cgy on 16/7/18.
  */
 public class WeekFragment extends BaseFragment {
-//    private CalendarLayout mCalendarLayout;
-//    private CalendarView mCalendarView;
+    private CalendarLayout mCalendarLayout;
+    private CalendarView mCalendarView;
     private ScheduleView mScheduleView;
     @Override
     protected int getLayoutId() {
@@ -31,14 +31,13 @@ public class WeekFragment extends BaseFragment {
 
     @Override
     protected void bindViews(View view) {
-//        mCalendarLayout = view.findViewById(R.id.calendarLayout);
-//        mCalendarView = view.findViewById(R.id.calendarView);
+        mCalendarLayout = view.findViewById(R.id.calendarLayout);
+        mCalendarView = view.findViewById(R.id.calendarView);
         mScheduleView = view.findViewById(R.id.scheduleView);
     }
 
     @Override
     protected void processLogic() {
-//        mCalendarLayout.shrink();
     }
 
     @Override

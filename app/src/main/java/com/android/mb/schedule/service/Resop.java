@@ -1,28 +1,18 @@
-package com.android.mb.schedule.retrofit.http.entity;
+package com.android.mb.schedule.service;
 
-/**
- * Created by cgy on 16/3/5.
- */
-public class HttpResult<T> {
+public class Resop {
 
     /**
-     * 返回成功与否标识（200：成功；0：失败）
+     * code : 402
+     * msg : Sign is wrong
+     * time : 1536565503
+     * data : null
      */
+
     private int code;
-    /**
-     * 返回信息
-     */
     private String msg;
-
-    /**
-     * 返回时间
-     */
     private String time;
-
-    /**
-     * 返回数据
-     */
-    private T data;
+    private Object data;
 
     public int getCode() {
         return code;
@@ -48,11 +38,11 @@ public class HttpResult<T> {
         this.time = time;
     }
 
-    public T getData() {
+    public Object getData() {
         return data;
     }
 
-    public void setData(T data) {
+    public void setData(Object data) {
         this.data = data;
     }
 }

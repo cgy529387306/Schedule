@@ -5,45 +5,79 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical">
-    <!--<com.android.mb.schedule.custom.CustomWeekBar-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"/>-->
-    <!--<com.android.mb.schedule.custom.CustomWeekView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"/>-->
-
-    <com.android.mb.schedule.widget.ScheduleView
-        android:id="@+id/scheduleView"
+    <com.haibin.calendarview.CalendarLayout
+        android:id="@+id/calendarLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ffffff"
-        app:addBgColor="#dff4ff"
-        app:addTextColor="#47a1f6"
-        app:addTextSize="26sp"
-        app:allDayCountTextColor="#5e636d"
-        app:allDayCountTextSize="14sp"
-        app:allDayEventBgColor="#ffffff"
-        app:allDayEventDefaultColor="#85cdca"
-        app:allDayEventMaxRow="10"
-        app:allDayEventMinRow="2"
-        app:allDayEventRowHeight="20dp"
-        app:allDayEventSize="12sp"
-        app:allDayEventTitleColor="#525252"
-        app:allDayEventTitleSize="12sp"
-        app:bgColor="#ffffff"
-        app:columnNumber="7"
-        app:currentTimeColor="#5e636c"
-        app:currentTimeTextColor="#ffffff"
-        app:currentTimeTextSize="10sp"
-        app:eventTextBgColor="#85cdca"
-        app:eventTextBgLineColor="#dfdfdf"
-        app:eventTextColor="#ffffff"
-        app:eventTextSize="12sp"
-        app:hourTextBgColor="#ffffff"
-        app:hourTextColor="#525252"
-        app:hourTextSize="10sp"
-        app:lineColor="#dfdfdf"
-        app:lineSize="1dp"
-        app:pastTimeColor="#eff5f9"
-        app:rowHeight="60dp" />
+        android:background="#fff"
+        android:orientation="vertical"
+        app:default_status="shrink"
+        app:calendar_show_mode="only_week_view"
+        app:calendar_content_view_id="@+id/fl_scheduleView">
+
+        <com.haibin.calendarview.CalendarView
+            android:id="@+id/calendarView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:background="#fff"
+            app:calendar_padding="10dp"
+            app:current_month_text_color="#333333"
+            app:current_month_lunar_text_color="#B2B2B2"
+            app:other_month_lunar_text_color="#e1e1e1"
+            app:other_month_text_color="#e1e1e1"
+            app:scheme_text_color="#333333"
+            app:scheme_month_text_color="#333333"
+            app:scheme_lunar_text_color="#B2B2B2"
+            app:max_year="2999"
+            app:min_year="1666"
+            app:month_view="com.android.mb.schedule.custom.CustomMonthView"
+            app:month_view_show_mode="mode_fix"
+            app:selected_lunar_text_color="#ffffff"
+            app:selected_text_color="#ffffff"
+            app:selected_theme_color="#2aaeff"
+            app:week_background="#ffffff"
+            app:week_start_with="sun"
+            app:week_text_color="#454545"
+            app:week_view="com.android.mb.schedule.custom.CustomWeekView" />
+        <FrameLayout
+            android:id="@+id/fl_scheduleView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.android.mb.schedule.widget.ScheduleView
+                android:id="@+id/scheduleView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:addBgColor="#dff4ff"
+                app:addTextColor="#47a1f6"
+                app:addTextSize="26sp"
+                app:allDayCountTextColor="#5e636d"
+                app:allDayCountTextSize="14sp"
+                app:allDayEventBgColor="#ffffff"
+                app:allDayEventDefaultColor="#85cdca"
+                app:allDayEventMaxRow="10"
+                app:allDayEventMinRow="2"
+                app:allDayEventRowHeight="20dp"
+                app:allDayEventSize="12sp"
+                app:allDayEventTitleColor="#525252"
+                app:allDayEventTitleSize="12sp"
+                app:bgColor="#ffffff"
+                app:columnNumber="7"
+                app:currentTimeColor="#5e636c"
+                app:currentTimeTextColor="#ffffff"
+                app:currentTimeTextSize="10sp"
+                app:eventTextBgColor="#85cdca"
+                app:eventTextBgLineColor="#dfdfdf"
+                app:eventTextColor="#ffffff"
+                app:eventTextSize="12sp"
+                app:hourTextBgColor="#ffffff"
+                app:hourTextColor="#525252"
+                app:hourTextSize="10sp"
+                app:lineColor="#dfdfdf"
+                app:lineSize="1dp"
+                app:pastTimeColor="#eff5f9"
+                app:rowHeight="60dp" />
+        </FrameLayout>
+    </com.haibin.calendarview.CalendarLayout>
+
 </LinearLayout>

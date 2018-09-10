@@ -21,7 +21,7 @@ public class BaseHttp {
 
 
     public String getServerHost() {
-        return "http://j.testyunoa.99.com";
+        return "https://shop.5979wenhua.com";
     }
 
     @SuppressWarnings("unchecked")
@@ -31,8 +31,8 @@ public class BaseHttp {
             HttpResult<T> httpResult;
             if (o instanceof HttpResult) {
                 httpResult = (HttpResult<T>) o;
-                if (httpResult.getCode() != 1) {
-                    throw new ApiException(40003, httpResult.getMessage());
+                if (httpResult.getCode() != 200) {
+                    throw new ApiException(40003, httpResult.getMsg());
                 }
                 return httpResult.getData();
             }
@@ -60,8 +60,6 @@ public class BaseHttp {
      */
     Map<String, String> getHead() {
         Map<String, String> cloudOfficeHeader = new HashMap<String, String>();
-        cloudOfficeHeader.put("Nd-CompanyId", "100");
-        cloudOfficeHeader.put("personId", "15850");
         return cloudOfficeHeader;
     }
 

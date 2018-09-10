@@ -29,7 +29,6 @@ public class HeaderInterceptor implements Interceptor {
         Request.Builder requestBuilder = originalRequest.newBuilder();
         requestBuilder.header("Charset", "UTF-8");
         requestBuilder.header("Connection", "Keep-Alive");
-        requestBuilder.header("Charset", "UTF-8");
         requestBuilder.header("Content-type", "application/json");
 
         if(mHeaders != null){
