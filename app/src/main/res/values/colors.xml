@@ -20,9 +20,9 @@
 
     <!-- 项目基本颜色-->
     <!-- 一级标题颜色 -->
-    <color name="base_text_color">#414141</color>
+    <color name="base_text_color">#3f3a39</color>
     <!-- 二级标题颜色 -->
-    <color name="base_subtext_color">#A8A8A8</color>
+    <color name="base_subtext_color">#a5a5a5</color>
     <!-- 页面背景颜色 -->
     <color name="base_background_color">#ffffffff</color>
     <!-- 分割线颜色-->
@@ -32,7 +32,7 @@
 
     <color name="text_color">#454545</color>
     <!-- 橘色 -->
-    <color name="base_orange">#FFBA52</color>
+    <color name="base_orange">#fcaa2d</color>
     <!-- 红色 -->
     <color name="base_red">#ff4543</color>
     <!-- 灰色 -->

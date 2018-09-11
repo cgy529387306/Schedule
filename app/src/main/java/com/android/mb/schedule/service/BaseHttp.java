@@ -31,7 +31,7 @@ public class BaseHttp {
             HttpResult<T> httpResult;
             if (o instanceof HttpResult) {
                 httpResult = (HttpResult<T>) o;
-                if (httpResult.getCode() != 200) {
+                if (httpResult.getCode() != 1) {
                     throw new ApiException(40003, httpResult.getMsg());
                 }
                 return httpResult.getData();

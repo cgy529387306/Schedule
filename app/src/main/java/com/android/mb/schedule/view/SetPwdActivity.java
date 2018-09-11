@@ -61,6 +61,7 @@ public class SetPwdActivity extends BaseMvpActivity<SetPwdPresenter,ISetPwdView>
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.tv_set_pwd){
+            ProjectHelper.disableViewDoubleClick(view);
             setPwd();
         }
     }

@@ -3,6 +3,7 @@ package com.android.mb.schedule.presenter;
 import android.text.TextUtils;
 
 import com.android.mb.schedule.base.BaseMvpPresenter;
+import com.android.mb.schedule.entitys.LoginData;
 import com.android.mb.schedule.presenter.interfaces.ILoginPresenter;
 import com.android.mb.schedule.retrofit.http.exception.ApiException;
 import com.android.mb.schedule.service.RequestUtils;
@@ -25,7 +26,7 @@ public class LoginPresenter extends BaseMvpPresenter<ILoginView> implements ILog
     @Override
     public void userLogin(Map<String,Object> requestMap) {
         Observable observable = ScheduleMethods.getInstance().userLogin(requestMap);
-        toSubscribe(observable,  new Subscriber<Object>() {
+        toSubscribe(observable,  new Subscriber<LoginData>() {
             @Override
             public void onCompleted() {
 
@@ -41,8 +42,9 @@ public class LoginPresenter extends BaseMvpPresenter<ILoginView> implements ILog
             }
 
             @Override
-            public void onNext(Object list) {
+            public void onNext(LoginData result) {
                 if (mMvpView!=null){
+                    mMvpView.loginSuccess(result);
                 }
             }
         });

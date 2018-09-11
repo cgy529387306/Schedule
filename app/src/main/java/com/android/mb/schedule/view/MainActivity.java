@@ -26,11 +26,13 @@ import android.widget.TextView;
 
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.adapter.MyFragmentPagerAdapter;
+import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.fragment.MonthFragment;
 import com.android.mb.schedule.fragment.RelatedMeFragment;
 import com.android.mb.schedule.fragment.ScheduleFragment;
 import com.android.mb.schedule.fragment.WeekFragment;
 import com.android.mb.schedule.utils.NavigationHelper;
+import com.android.mb.schedule.utils.PreferencesHelper;
 import com.android.mb.schedule.utils.StatusBarUtil;
 import com.android.mb.schedule.widget.CircleImageView;
 import com.android.mb.schedule.widget.FragmentViewPager;
@@ -195,6 +197,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }else if (id == R.id.nav_setting){  //设置
             NavigationHelper.startActivity(MainActivity.this,SettingActivity.class,null,false);
         }else if (id == R.id.nav_exit) {  //退出
+            PreferencesHelper.getInstance().putBoolean(ProjectConstants.KEY_IS_LOGIN,false);
+            PreferencesHelper.getInstance().putLong(ProjectConstants.KEY_TOKEN_ID,0);
+            PreferencesHelper.getInstance().putString(ProjectConstants.KEY_TOKEN_ID,null);
             NavigationHelper.startActivity(MainActivity.this, LoginActivity.class, null, true);
         }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

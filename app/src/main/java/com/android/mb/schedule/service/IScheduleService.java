@@ -1,5 +1,6 @@
 package com.android.mb.schedule.service;
 
+import com.android.mb.schedule.entitys.LoginData;
 import com.android.mb.schedule.retrofit.http.entity.HttpResult;
 
 import java.util.Map;
@@ -20,12 +21,14 @@ import rx.Observable;
 public interface IScheduleService {
     @POST("/app/user/login")
     @FormUrlEncoded
-    Observable<HttpResult<Object>> userLogin(@FieldMap Map<String,Object> requestMap);
+    Observable<HttpResult<LoginData>> userLogin(@FieldMap Map<String,Object> requestMap);
 
     @POST("/app/user/resetpwd")
-    Observable<HttpResult<Object>> resetPwd(@Body RequestBody requestBody);
+    @FormUrlEncoded
+    Observable<HttpResult<Object>> resetPwd(@FieldMap Map<String,Object> requestMap);
 
     @POST("/app/user/profile")
-    Observable<HttpResult<Object>> setProfile(@Body RequestBody requestBody);
+    @FormUrlEncoded
+    Observable<HttpResult<Object>> setProfile(@FieldMap Map<String,Object> requestMap);
 
 }

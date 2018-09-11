@@ -2,11 +2,14 @@ package com.android.mb.schedule.fragment;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 
 import com.android.mb.schedule.R;
+import com.android.mb.schedule.adapter.MultipleItemQuickAdapter;
 import com.android.mb.schedule.adapter.TestAdapter;
 import com.android.mb.schedule.base.BaseFragment;
+import com.android.mb.schedule.entitys.MultipleItem;
 import com.haibin.calendarview.Calendar;
 import com.haibin.calendarview.CalendarLayout;
 import com.haibin.calendarview.CalendarView;
@@ -25,6 +28,7 @@ public class MonthFragment extends BaseFragment {
     private CalendarLayout mCalendarLayout;
     private CalendarView mCalendarView;
     private RecyclerView mRecyclerView;
+    private MultipleItemQuickAdapter mAdapter;
     @Override
     protected int getLayoutId() {
         return R.layout.frg_month;
@@ -41,8 +45,11 @@ public class MonthFragment extends BaseFragment {
     protected void processLogic() {
         initData();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        TestAdapter testAdapter = new TestAdapter(getActivity());
-        mRecyclerView.setAdapter(testAdapter);
+
+        List<MultipleItem> data = getMultipleItemData();
+        mAdapter = new MultipleItemQuickAdapter(getActivity(), data);
+        mAdapter.addHeaderView(LayoutInflater.from(getActivity()).inflate(R.layout.header_home, null));
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     protected void initData() {
@@ -109,6 +116,15 @@ public class MonthFragment extends BaseFragment {
     @Override
     protected void setListener() {
 
+    }
+
+    public static List<MultipleItem> getMultipleItemData() {
+        List<MultipleItem> list = new ArrayList<>();
+        for (int i = 0; i <= 4; i++) {
+            list.add(new MultipleItem(MultipleItem.DAY));
+            list.add(new MultipleItem(MultipleItem.AM));
+        }
+        return list;
     }
 
 }

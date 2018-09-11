@@ -60,6 +60,7 @@
             android:singleLine="true"
             android:drawableLeft="@mipmap/ic_login_user"
             android:drawablePadding="10dp"
+            android:inputType="text"
             android:hint="用户名"
             android:textColor="@color/text_color"
             android:textColorHint="@color/base_gray"
