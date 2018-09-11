@@ -34,6 +34,7 @@ import com.android.mb.schedule.fragment.WeekFragment;
 import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.utils.PreferencesHelper;
 import com.android.mb.schedule.utils.StatusBarUtil;
+import com.android.mb.schedule.utils.ToastHelper;
 import com.android.mb.schedule.widget.CircleImageView;
 import com.android.mb.schedule.widget.FragmentViewPager;
 
@@ -180,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            backPressed();
         }
     }
     @Override
@@ -230,5 +231,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (mIvRight != null && mIvRight.getVisibility()==View.GONE)
             mIvRight.setVisibility(View.VISIBLE);
         mIvRight.setImageResource(resId);
+    }
+
+    private static final long DOUBLE_CLICK_INTERVAL = 2000;
+    private long mLastClickTimeMills = 0;
+
+    private void backPressed() {
+        if (System.currentTimeMillis() - mLastClickTimeMills > DOUBLE_CLICK_INTERVAL) {
+            ToastHelper.showToast("再按一次返回退出");
+            mLastClickTimeMills = System.currentTimeMillis();
+            return;
+        }
+        finish();
     }
 }

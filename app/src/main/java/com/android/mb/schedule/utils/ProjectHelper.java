@@ -261,4 +261,12 @@ public class ProjectHelper {
         return data == null?0:data.length();
     }
 
+
+    private final static String CHINESE_NUMBER[] = {"一", "二", "三", "四", "五",
+            "六", "七", "八", "九", "十", "十一", "腊"};
+
+    public static String getLunarMonth(int month){
+        return month<0?"":CHINESE_NUMBER[month-1];
+    }
+
 }

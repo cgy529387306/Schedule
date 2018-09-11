@@ -4,17 +4,21 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.adapter.MultipleItemQuickAdapter;
-import com.android.mb.schedule.adapter.TestAdapter;
 import com.android.mb.schedule.base.BaseFragment;
 import com.android.mb.schedule.entitys.MultipleItem;
+import com.android.mb.schedule.utils.Helper;
+import com.android.mb.schedule.utils.LunarUtil;
+import com.android.mb.schedule.view.MainActivity;
 import com.haibin.calendarview.Calendar;
 import com.haibin.calendarview.CalendarLayout;
 import com.haibin.calendarview.CalendarView;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +33,7 @@ public class MonthFragment extends BaseFragment {
     private CalendarView mCalendarView;
     private RecyclerView mRecyclerView;
     private MultipleItemQuickAdapter mAdapter;
+    private TextView mTvDate;
     @Override
     protected int getLayoutId() {
         return R.layout.frg_month;
@@ -48,8 +53,14 @@ public class MonthFragment extends BaseFragment {
 
         List<MultipleItem> data = getMultipleItemData();
         mAdapter = new MultipleItemQuickAdapter(getActivity(), data);
-        mAdapter.addHeaderView(LayoutInflater.from(getActivity()).inflate(R.layout.header_home, null));
+        mAdapter.addHeaderView(getHeaderView());
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    private View getHeaderView(){
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.header_home, null);
+        mTvDate = view.findViewById(R.id.tv_date);
+        return view;
     }
 
     protected void initData() {
@@ -115,7 +126,32 @@ public class MonthFragment extends BaseFragment {
 
     @Override
     protected void setListener() {
+        mCalendarView.setOnMonthChangeListener(new CalendarView.OnMonthChangeListener() {
+            @Override
+            public void onMonthChange(int year, int month) {
+                String title = year+"年"+month+"月";
+                ((MainActivity)getActivity()).setTitle(title);
+            }
+        });
+        mCalendarView.setOnCalendarSelectListener(new CalendarView.OnCalendarSelectListener() {
+            @Override
+            public void onCalendarOutOfRange(Calendar calendar) {
 
+            }
+
+            @Override
+            public void onCalendarSelect(Calendar calendar, boolean isClick) {
+                java.util.Calendar calendar1 = java.util.Calendar.getInstance();
+                Date date = Helper.string2Date(calendar.toString(),"yyyyMMdd");
+                calendar1.setTime(date);
+                LunarUtil lunar = new LunarUtil(calendar1);
+                if (calendar.isCurrentDay()){
+                    mTvDate.setText("今天  农历  "+ lunar.toString());
+                }else{
+                    mTvDate.setText("农历  "+lunar.toString());
+                }
+            }
+        });
     }
 
     public static List<MultipleItem> getMultipleItemData() {

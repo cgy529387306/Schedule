@@ -15,6 +15,7 @@ import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.utils.PreferencesHelper;
 import com.android.mb.schedule.utils.ProjectHelper;
+import com.android.mb.schedule.utils.ToastHelper;
 import com.android.mb.schedule.view.interfaces.ILoginView;
 
 import java.util.HashMap;
@@ -107,4 +108,18 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter,ILoginView> im
             NavigationHelper.startActivity(LoginActivity.this,MainActivity.class,null,true);
         }
     }
+
+    private static final long DOUBLE_CLICK_INTERVAL = 2000;
+    private long mLastClickTimeMills = 0;
+
+    @Override
+    public void onBackPressed() {
+        if (System.currentTimeMillis() - mLastClickTimeMills > DOUBLE_CLICK_INTERVAL) {
+            ToastHelper.showToast("再按一次返回退出");
+            mLastClickTimeMills = System.currentTimeMillis();
+            return;
+        }
+        finish();
+    }
+
 }

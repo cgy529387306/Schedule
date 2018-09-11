@@ -6,5 +6,7 @@
     android:layout_height="wrap_content"
     android:padding="12dp"
     android:text="今天"
-    android:textColor="@color/text_color"
-    android:gravity="center"/>
+    android:textColor="@color/black"
+    android:textSize="17sp"
+    android:background="@color/gray_f4"
+    android:gravity="center_vertical"/>
