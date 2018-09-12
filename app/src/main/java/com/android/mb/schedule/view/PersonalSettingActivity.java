@@ -15,6 +15,11 @@ import android.widget.TextView;
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.app.MBApplication;
 import com.android.mb.schedule.base.BaseActivity;
+import com.android.mb.schedule.base.BaseMvpActivity;
+import com.android.mb.schedule.presenter.SetPwdPresenter;
+import com.android.mb.schedule.presenter.UserPresenter;
+import com.android.mb.schedule.view.interfaces.ISetPwdView;
+import com.android.mb.schedule.view.interfaces.IUserView;
 import com.android.mb.schedule.widget.BottomMenuDialog;
 import com.android.mb.schedule.widget.CircleImageView;
 
@@ -24,7 +29,7 @@ import java.io.File;
  * Created by Administrator on 2018\8\20 0020.
  */
 
-public class PersonalSettingActivity extends BaseActivity implements View.OnClickListener{
+public class PersonalSettingActivity extends BaseMvpActivity<UserPresenter,IUserView> implements IUserView, View.OnClickListener{
 
     private CircleImageView mIvHead;
     private TextView mTvName;  // 名字
@@ -56,6 +61,7 @@ public class PersonalSettingActivity extends BaseActivity implements View.OnClic
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
+        mPresenter.getUserInfo();
     }
 
     @Override
@@ -202,5 +208,20 @@ public class PersonalSettingActivity extends BaseActivity implements View.OnClic
             result = MBApplication.getInstance().getCacheDir().getPath().concat(File.separator);
         }
         return result;
+    }
+
+    @Override
+    protected UserPresenter createPresenter() {
+        return new UserPresenter();
+    }
+
+    @Override
+    public void getUserInfoSuccess() {
+
+    }
+
+    @Override
+    public void setSuccess() {
+
     }
 }

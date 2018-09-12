@@ -7,9 +7,13 @@ import com.android.mb.schedule.retrofit.http.RetrofitHttpClient;
 import com.android.mb.schedule.retrofit.http.util.RequestBodyUtil;
 import com.android.mb.schedule.utils.PreferencesHelper;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import rx.Observable;
 
 /**
@@ -68,7 +72,11 @@ public class ScheduleMethods extends BaseHttp {
                 .map(new HttpCacheResultFunc<Object>());
     }
 
-    public Observable setProfile(Map<String,Object> requestMap){
+    public Observable setProfile(Map<String,Object> requestMap,File file){
+        RequestBody requestFile =
+                RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        MultipartBody.Part requestBody =
+                MultipartBody.Part.createFormData("file", file.getName(), requestFile);
         boolean isLogin = PreferencesHelper.getInstance().getBoolean(ProjectConstants.KEY_IS_LOGIN,false);
         if (isLogin){
             long tokenId = PreferencesHelper.getInstance().getLong(ProjectConstants.KEY_TOKEN_ID,0);
@@ -76,7 +84,21 @@ public class ScheduleMethods extends BaseHttp {
             requestMap.put("token_id",tokenId);
             requestMap.put("token",token);
         }
-        return getService().setProfile(requestMap)
+        return getService().setProfile(requestMap,requestBody)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<Object>());
+    }
+
+    public Observable getUserInfo(){
+        Map<String,Object> requestMap = new HashMap<>();
+        boolean isLogin = PreferencesHelper.getInstance().getBoolean(ProjectConstants.KEY_IS_LOGIN,false);
+        if (isLogin){
+            long tokenId = PreferencesHelper.getInstance().getLong(ProjectConstants.KEY_TOKEN_ID,0);
+            String token = PreferencesHelper.getInstance().getString(ProjectConstants.KEY_TOKEN);
+            requestMap.put("token_id",tokenId);
+            requestMap.put("token",token);
+        }
+        return getService().getUserInfo(requestMap)
                 .compose(CacheTransformer.emptyTransformer())
                 .map(new HttpCacheResultFunc<Object>());
     }

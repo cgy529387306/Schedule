@@ -5,13 +5,16 @@ import com.android.mb.schedule.retrofit.http.entity.HttpResult;
 
 import java.util.Map;
 
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 import rx.Observable;
 
@@ -27,8 +30,13 @@ public interface IScheduleService {
     @FormUrlEncoded
     Observable<HttpResult<Object>> resetPwd(@FieldMap Map<String,Object> requestMap);
 
+    @Multipart
     @POST("/app/user/profile")
     @FormUrlEncoded
-    Observable<HttpResult<Object>> setProfile(@FieldMap Map<String,Object> requestMap);
+    Observable<HttpResult<Object>> setProfile(@FieldMap Map<String,Object> requestMap,@Part MultipartBody.Part file);
+
+    @POST("/app/user/get")
+    @FormUrlEncoded
+    Observable<HttpResult<Object>> getUserInfo(@FieldMap Map<String,Object> requestMap);
 
 }
