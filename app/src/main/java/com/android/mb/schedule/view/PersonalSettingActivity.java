@@ -16,12 +16,16 @@ import com.android.mb.schedule.R;
 import com.android.mb.schedule.app.MBApplication;
 import com.android.mb.schedule.base.BaseActivity;
 import com.android.mb.schedule.base.BaseMvpActivity;
+import com.android.mb.schedule.entitys.CurrentUser;
+import com.android.mb.schedule.entitys.LoginData;
 import com.android.mb.schedule.presenter.SetPwdPresenter;
 import com.android.mb.schedule.presenter.UserPresenter;
+import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.view.interfaces.ISetPwdView;
 import com.android.mb.schedule.view.interfaces.IUserView;
 import com.android.mb.schedule.widget.BottomMenuDialog;
 import com.android.mb.schedule.widget.CircleImageView;
+import com.bumptech.glide.Glide;
 
 import java.io.File;
 
@@ -49,7 +53,7 @@ public class PersonalSettingActivity extends BaseMvpActivity<UserPresenter,IUser
 
     @Override
     protected void initTitle() {
-        setTitleText("个人设置");
+        setTitleText("设置");
     }
 
     @Override
@@ -61,6 +65,7 @@ public class PersonalSettingActivity extends BaseMvpActivity<UserPresenter,IUser
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
+        initUserInfo(CurrentUser.getInstance());
         mPresenter.getUserInfo();
     }
 
@@ -216,12 +221,23 @@ public class PersonalSettingActivity extends BaseMvpActivity<UserPresenter,IUser
     }
 
     @Override
-    public void getUserInfoSuccess() {
-
+    public void getUserInfoSuccess(LoginData result) {
+        if (result!=null && result.getUserinfo()!=null){
+            CurrentUser.getInstance().login(result.getUserinfo(),false);
+            initUserInfo(result.getUserinfo());
+        }
     }
 
     @Override
     public void setSuccess() {
 
+    }
+
+    private void initUserInfo(CurrentUser currentUser){
+        if (currentUser!=null){
+            mTvName.setText(ProjectHelper.getCommonText(currentUser.getNickname()));
+            mTvJob.setText(ProjectHelper.getCommonText(currentUser.getOffice_name()));
+            Glide.with(this).load(currentUser.getAvatar()).into(mIvHead);
+        }
     }
 }

@@ -9,6 +9,7 @@ import com.android.mb.schedule.R;
 import com.android.mb.schedule.base.BaseActivity;
 import com.android.mb.schedule.base.BaseMvpActivity;
 import com.android.mb.schedule.constants.ProjectConstants;
+import com.android.mb.schedule.entitys.CurrentUser;
 import com.android.mb.schedule.entitys.LoginData;
 import com.android.mb.schedule.presenter.LoginPresenter;
 import com.android.mb.schedule.utils.Helper;
@@ -102,9 +103,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter,ILoginView> im
     public void loginSuccess(LoginData result) {
         if (result!=null && result.getUserinfo()!=null){
             showToastMessage("登录成功");
-            PreferencesHelper.getInstance().putBoolean(ProjectConstants.KEY_IS_LOGIN,true);
-            PreferencesHelper.getInstance().putLong(ProjectConstants.KEY_TOKEN_ID,result.getUserinfo().getToken_id());
-            PreferencesHelper.getInstance().putString(ProjectConstants.KEY_TOKEN,result.getUserinfo().getToken());
+            CurrentUser.getInstance().login(result.getUserinfo(),true);
             NavigationHelper.startActivity(LoginActivity.this,MainActivity.class,null,true);
         }
     }

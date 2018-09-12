@@ -37,6 +37,6 @@ public interface IScheduleService {
 
     @POST("/app/user/get")
     @FormUrlEncoded
-    Observable<HttpResult<Object>> getUserInfo(@FieldMap Map<String,Object> requestMap);
+    Observable<HttpResult<LoginData>> getUserInfo(@FieldMap Map<String,Object> requestMap);
 
 }

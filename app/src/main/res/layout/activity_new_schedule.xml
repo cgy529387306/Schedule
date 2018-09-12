@@ -4,11 +4,9 @@
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/background_color"
+        android:layout_height="wrap_content"
         android:id="@+id/lly_root"
         android:orientation="vertical">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
@@ -16,26 +14,23 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="10dp">
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="日程名称"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
-
+                android:textColor="@color/text_color"
+                android:textSize="15sp" />
             <EditText
-                android:id="@+id/edt_schedulename"
+                android:id="@+id/et_schedule_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
                 android:background="@null"
                 android:hint="请输入日程名称"
+                android:textColorHint="@color/gray_a5"
                 android:textColor="@color/text_color"
-                android:textSize="12sp" />
-
+                android:textSize="15sp" />
         </LinearLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
@@ -43,7 +38,6 @@
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
             android:paddingRight="10dp">
-
             <TextView
                 android:id="@+id/tv_location"
                 android:layout_width="wrap_content"
@@ -51,26 +45,10 @@
                 android:drawableLeft="@mipmap/icon_location"
                 android:drawablePadding="5dp"
                 android:text="地点"
-                android:textColor="@color/text_color"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/tv_address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="50dp"
-                android:text=""
-                android:textColor="@color/text_color"
-                android:textSize="12sp" />
+                android:textColor="@color/gray_a5"
+                android:textSize="15sp" />
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@color/background_color" />
-
+        <include layout="@layout/common_divider" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
@@ -78,43 +56,40 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="10dp">
-
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="日程内容"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
-
-            <!--<TextView-->
-            <!--android:id="@+id/tv_schedulecontent"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:lines="2"-->
-            <!--android:layout_marginLeft="30dp"-->
-            <!--android:text="会议记录内容.docx会议记录内容.docx会议记录内容.docx会议记录内容.docx"-->
-            <!--android:textSize="12sp"-->
-            <!--android:textColor="@color/text_color"/>-->
-
-            <EditText
-                android:id="@+id/edt_schedulecontent"
+                android:textColor="@color/text_color"
+                android:textSize="15sp" />
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
                 android:background="@null"
                 android:hint="点击输入日程(字数不超过400字)"
                 android:textColor="@color/text_color"
-                android:textSize="12sp" />
-
+                android:textSize="15sp" />
         </LinearLayout>
-
-        <View
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@color/background_color" />
-
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="10dp">
+            <EditText
+                android:id="@+id/et_schedule_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minLines="3"
+                android:background="@null"
+                android:textColorHint="@color/gray_a5"
+                android:textColor="@color/text_color"
+                android:textSize="15sp" />
+        </LinearLayout>
+        <include layout="@layout/common_divider" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
@@ -122,38 +97,26 @@
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
             android:paddingRight="10dp">
-
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="附件"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/tv_uploaddocument"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="点击可上传(文件大小小于100M)"
                 android:textColor="@color/text_color"
-                android:textSize="12sp" />
-
+                android:textSize="15sp" />
             <TextView
-                android:id="@+id/tv_changedocument"
+                android:id="@+id/tv_upload_document"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:textColor="@color/text_color"
-                android:textSize="12sp" />
+                android:gravity="center"
+                android:text="点击可上传(文件大小小于100M)"
+                android:textColor="@color/gray_a5"
+                android:textSize="15sp" />
         </LinearLayout>
-
         <View
             android:layout_width="match_parent"
             android:layout_height="10dp"
-            android:background="@color/background_color" />
-
+            android:background="@color/bg_color" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -161,50 +124,43 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="10dp">
-
             <LinearLayout
-                android:id="@+id/lly_startdate"
+                android:id="@+id/lly_start_date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/white"
                 android:orientation="vertical"
                 android:padding="10dp">
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="开始"
-                    android:textColor="@color/text_color"
-                    android:textSize="14sp" />
-
+                    android:textColor="@color/gray_a5"
+                    android:textSize="15sp" />
                 <TextView
-                    android:id="@+id/tv_startdate"
+                    android:id="@+id/tv_start_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:text="2018年8月22日"
-                    android:textColor="@color/text_color"
-                    android:textSize="14sp" />
-
+                    android:textColor="@color/gray_a5"
+                    android:textSize="15sp" />
                 <TextView
-                    android:id="@+id/tv_starttime"
+                    android:id="@+id/tv_start_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="10:00"
-                    android:textColor="@color/black"
-                    android:textSize="14sp" />
-
+                    android:text="周一"
+                    android:textColor="@color/text_color"
+                    android:textSize="15sp" />
             </LinearLayout>
-
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@mipmap/icon_right" />
-
+                android:src="@mipmap/ic_arrow_right_big" />
             <LinearLayout
-                android:id="@+id/lly_enddate"
+                android:id="@+id/lly_end_date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
@@ -212,72 +168,55 @@
                 android:background="@color/white"
                 android:orientation="vertical"
                 android:padding="10dp">
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="结束"
-                    android:textColor="@color/text_color"
-                    android:textSize="14sp" />
-
+                    android:textColor="@color/gray_a5"
+                    android:textSize="15sp" />
                 <TextView
-                    android:id="@+id/tv_enddate"
+                    android:id="@+id/tv_end_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:text="2018年8月22日"
-                    android:textColor="@color/text_color"
-                    android:textSize="14sp" />
-
+                    android:textColor="@color/gray_a5"
+                    android:textSize="15sp" />
                 <TextView
-                    android:id="@+id/tv_endtime"
+                    android:id="@+id/tv_end_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="11:00"
-                    android:textColor="@color/black"
-                    android:textSize="14sp" />
-
+                    android:text="周五"
+                    android:textColor="@color/text_color"
+                    android:textSize="15sp" />
             </LinearLayout>
-
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@color/background_color" />
-
+        <include layout="@layout/common_divider" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:background="@color/white"
             android:gravity="center_vertical"
             android:padding="10dp">
-
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:drawablePadding="10dp"
                 android:text="全天"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
-
+                android:textColor="@color/text_color"
+                android:textSize="15sp" />
             <ImageView
                 android:id="@+id/iv_remind"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/ic_vibrate_close" />
-
         </LinearLayout>
-
         <View
             android:layout_width="match_parent"
             android:layout_height="10dp"
-            android:background="@color/background_color" />
-
+            android:background="@color/bg_color" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
@@ -291,8 +230,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="选择相关人员"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:textColor="@color/text_color"
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/tv_add"
@@ -305,12 +244,7 @@
                 android:textSize="13sp" />
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@color/background_color" />
+        <include layout="@layout/common_divider" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -325,23 +259,18 @@
                 android:layout_weight="1"
                 android:drawablePadding="10dp"
                 android:text="不提醒相关人员"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:textColor="@color/text_color"
+                android:textSize="15sp" />
 
             <ImageView
-                android:id="@+id/iv_noremind"
+                android:id="@+id/iv_no_remind"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/ic_vibrate_close" />
 
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@color/background_color" />
+        <include layout="@layout/common_divider" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -356,11 +285,11 @@
                 android:layout_weight="1"
                 android:drawablePadding="10dp"
                 android:text="分享给其他人"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:textColor="@color/text_color"
+                android:textSize="15sp" />
 
             <ImageView
-                android:id="@+id/iv_sharetoother"
+                android:id="@+id/iv_share_other"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/icon_right" />
@@ -370,7 +299,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="10dp"
-            android:background="@color/background_color" />
+            android:background="@color/bg_color" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -379,15 +308,13 @@
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
             android:paddingRight="10dp">
-
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="重复"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
-
+                android:textColor="@color/text_color"
+                android:textSize="15sp" />
             <TextView
                 android:id="@+id/tv_repeat"
                 android:layout_width="wrap_content"
@@ -400,12 +327,7 @@
                 android:textSize="13sp" />
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@color/background_color" />
+        <include layout="@layout/common_divider" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -420,11 +342,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="提醒"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:textColor="@color/text_color"
+                android:textSize="15sp" />
 
             <TextView
-                android:id="@+id/tv_whenremind"
+                android:id="@+id/tv_when_remind"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawablePadding="10dp"
@@ -435,12 +357,7 @@
                 android:textSize="13sp" />
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@color/background_color" />
+        <include layout="@layout/common_divider" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -454,8 +371,8 @@
                 android:layout_weight="1"
                 android:drawablePadding="10dp"
                 android:text="重要"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:textColor="@color/text_color"
+                android:textSize="15sp" />
 
             <ImageView
                 android:id="@+id/iv_importment"

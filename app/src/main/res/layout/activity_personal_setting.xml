@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_color"
+    android:background="@color/bg_color"
     android:orientation="vertical">
 
     <LinearLayout
@@ -10,7 +10,6 @@
         android:background="@color/white"
         android:gravity="center_vertical"
         android:padding="10dp">
-
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -18,13 +17,13 @@
             android:drawablePadding="10dp"
             android:text="头像"
             android:textColor="@color/text_color"
-            android:textSize="14sp" />
+            android:textSize="15sp" />
 
         <com.android.mb.schedule.widget.CircleImageView
             android:id="@+id/iv_head"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/icon_head" />
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@mipmap/ic_avatar_default" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -34,12 +33,7 @@
 
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.1dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@color/background_color" />
+    <include layout="@layout/common_divider" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -55,21 +49,19 @@
             android:drawablePadding="10dp"
             android:text="姓名"
             android:textColor="@color/text_color"
-            android:textSize="14sp" />
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="陈秋梅" />
+            android:singleLine="true"
+            android:text="陈秋梅"
+            android:textSize="15sp"
+            android:textColor="@color/gray_a5"/>
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.1dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@color/background_color" />
+    <include layout="@layout/common_divider" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -85,20 +77,15 @@
             android:drawablePadding="10dp"
             android:text="部门"
             android:textColor="@color/text_color"
-            android:textSize="14sp" />
-
+            android:textSize="15sp" />
         <TextView
             android:id="@+id/tv_job"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="部门" />
+            android:singleLine="true"
+            android:text="部门"
+            android:textSize="15sp"
+            android:textColor="@color/gray_a5"/>
     </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.1dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@color/background_color" />
-
+    <include layout="@layout/common_divider" />
 </LinearLayout>

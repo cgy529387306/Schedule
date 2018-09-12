@@ -18,7 +18,7 @@
             android:drawablePadding="6dp"
             android:text="到集团信息公司沟通问题"
             android:textSize="16sp"
-            android:textColor="@color/base_text_color"  />
+            android:textColor="@color/text_color"  />
         <TextView
             android:id="@+id/tv_time"
             android:layout_width="wrap_content"
@@ -34,5 +34,5 @@
         android:layout_marginTop="8dp"
         android:text="马尾造船厂集团18号楼 刘元"
         android:textSize="14sp"
-        android:textColor="@color/base_subtext_color" />
+        android:textColor="@color/gray_a5" />
 </LinearLayout>

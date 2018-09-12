@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.base.BaseMvpActivity;
 import com.android.mb.schedule.constants.ProjectConstants;
+import com.android.mb.schedule.entitys.CurrentUser;
 import com.android.mb.schedule.presenter.SetPwdPresenter;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.NavigationHelper;
@@ -106,9 +107,7 @@ public class SetPwdActivity extends BaseMvpActivity<SetPwdPresenter,ISetPwdView>
     @Override
     public void setSuccess() {
         showToastMessage("修改成功，请重新登录");
-        PreferencesHelper.getInstance().putBoolean(ProjectConstants.KEY_IS_LOGIN,false);
-        PreferencesHelper.getInstance().putLong(ProjectConstants.KEY_TOKEN_ID,0);
-        PreferencesHelper.getInstance().putString(ProjectConstants.KEY_TOKEN_ID,null);
+        CurrentUser.getInstance().loginOut();
         NavigationHelper.startActivity(SetPwdActivity.this, LoginActivity.class, null, true);
     }
 

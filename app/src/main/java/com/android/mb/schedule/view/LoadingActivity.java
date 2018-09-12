@@ -8,6 +8,7 @@ import android.view.WindowManager;
 
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.constants.ProjectConstants;
+import com.android.mb.schedule.entitys.CurrentUser;
 import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.utils.PreferencesHelper;
 
@@ -29,8 +30,7 @@ public class LoadingActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
 
             public void run() {
-                boolean isLogin = PreferencesHelper.getInstance().getBoolean(ProjectConstants.KEY_IS_LOGIN,false);
-                if (isLogin){
+                if (CurrentUser.getInstance().isLogin()){
                     NavigationHelper.startActivity(LoadingActivity.this, MainActivity.class, null, true);
                 }else{
                     NavigationHelper.startActivity(LoadingActivity.this, LoginActivity.class, null, true);

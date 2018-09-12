@@ -39,7 +39,7 @@ public class SetPwdPresenter extends BaseMvpPresenter<ISetPwdView> implements IS
             }
 
             @Override
-            public void onNext(Object list) {
+            public void onNext(Object result) {
                 if (mMvpView!=null){
                     mMvpView.setSuccess();
                 }

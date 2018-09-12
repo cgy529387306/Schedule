@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.base.BaseActivity;
+import com.android.mb.schedule.entitys.ScheduleRequest;
 import com.android.mb.schedule.pop.ScheduleRemindPop;
 import com.android.mb.schedule.pop.ScheduleRepeatPop;
 import com.android.mb.schedule.pop.ScheduleTimePop;
@@ -24,7 +25,7 @@ import java.util.Calendar;
 
 
 /**
- * 订单
+ * 新增日程
  * Created by cgy on 16/7/18.
  */
 public class NewScheduleActivity extends BaseActivity implements View.OnClickListener{
@@ -34,7 +35,7 @@ public class NewScheduleActivity extends BaseActivity implements View.OnClickLis
     private TextView mTvAddress ; //位置
     private TextView mEdtScheduleContent; // 日程内容
     private TextView mTvUploadDocument; // 点击上传文件
-    private TextView mBtnChangeDocument ; //点击替换附件
+//    private TextView mBtnChangeDocument ; //点击替换附件
     private LinearLayout mLlyStartDate ;
     private TextView mTvStartDate ; //开始日期
     private TextView mTvStartTime ; //开始时间
@@ -49,13 +50,13 @@ public class NewScheduleActivity extends BaseActivity implements View.OnClickLis
     private ImageView mIvShareToOther; //分享给其他人
     private TextView mTvRepeat; //重复
     private TextView mTvWhenRemind; // 日程什么时候开始提醒
-    private ImageView mIvImportment; //是否重要
-    private boolean isImportment = false;
+    private ImageView mIvImport; //是否重要
+    private boolean isImport = false;
     private ScheduleRepeatPop mScheduleRepeatPop;
     private ScheduleRemindPop mScheduleRemindPop;
     private ScheduleTimePop mScheduleStartTimePop;
     private ScheduleTimePop mScheduleEndTimePop;
-
+    private ScheduleRequest mScheduleRequest;
     @Override
     protected void loadIntent() {
         
@@ -73,43 +74,44 @@ public class NewScheduleActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void bindViews() {
-        mEdtScheduleName = findViewById(R.id.edt_schedulename);
+        mEdtScheduleName = findViewById(R.id.et_schedule_name);
         mBtnLocation = findViewById(R.id.tv_location);
         mTvAddress = findViewById(R.id.tv_address);
-        mEdtScheduleContent = findViewById(R.id.edt_schedulecontent);
-        mTvUploadDocument = findViewById(R.id.tv_uploaddocument);
-        mBtnChangeDocument = findViewById(R.id.tv_changedocument);
-        mLlyStartDate = findViewById(R.id.lly_startdate);
-        mTvStartDate = findViewById(R.id.tv_startdate);
-        mTvStartTime = findViewById(R.id.tv_starttime);
-        mLlyEndDate = findViewById(R.id.lly_enddate);
-        mTvEndDate = findViewById(R.id.tv_enddate);
-        mTvEndTime = findViewById(R.id.tv_endtime);
+        mEdtScheduleContent = findViewById(R.id.et_schedule_content);
+        mTvUploadDocument = findViewById(R.id.tv_upload_document);
+        mLlyStartDate = findViewById(R.id.lly_start_date);
+        mTvStartDate = findViewById(R.id.tv_start_date);
+        mTvStartTime = findViewById(R.id.tv_start_time);
+        mLlyEndDate = findViewById(R.id.lly_end_date);
+        mTvEndDate = findViewById(R.id.tv_end_date);
+        mTvEndTime = findViewById(R.id.tv_end_time);
         mIvRemind = findViewById(R.id.iv_remind);
         mBtnAdd = findViewById(R.id.tv_add);
-        mIvNoRemind = findViewById(R.id.iv_noremind);
-        mIvShareToOther = findViewById(R.id.iv_sharetoother);
+        mIvNoRemind = findViewById(R.id.iv_no_remind);
+        mIvShareToOther = findViewById(R.id.iv_share_other);
         mTvRepeat = findViewById(R.id.tv_repeat);
-        mTvWhenRemind = findViewById(R.id.tv_whenremind);
-        mIvImportment = findViewById(R.id.iv_importment);
+        mTvWhenRemind = findViewById(R.id.tv_when_remind);
+        mIvImport = findViewById(R.id.iv_importment);
         choosePop();
     }
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
+        if (mScheduleRequest == null){
+            mScheduleRequest = new ScheduleRequest();
+        }
     }
 
     @Override
     protected void setListener() {
         mBtnLocation.setOnClickListener(this);
-        mBtnChangeDocument.setOnClickListener(this);
         mIvRemind.setOnClickListener(this);
         mBtnAdd.setOnClickListener(this);
         mIvNoRemind.setOnClickListener(this);
         mIvShareToOther.setOnClickListener(this);
         mTvRepeat.setOnClickListener(this);
         mTvWhenRemind.setOnClickListener(this);
-        mIvImportment.setOnClickListener(this);
+        mIvImport.setOnClickListener(this);
         mTvUploadDocument.setOnClickListener(this);
         mLlyStartDate.setOnClickListener(this);
         mLlyEndDate.setOnClickListener(this);
@@ -119,32 +121,31 @@ public class NewScheduleActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.tv_location){
-        }else  if (id == R.id.tv_uploaddocument){
-        }else  if (id == R.id.tv_changedocument){
+        }else  if (id == R.id.tv_upload_document){
         }else  if (id == R.id.iv_remind){
             isRemind = !isRemind;
             mIvRemind.setImageResource(isRemind?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
         }else  if (id == R.id.tv_add){
-        }else  if (id == R.id.iv_noremind){
+        }else  if (id == R.id.iv_no_remind){
             isNoRemind = !isNoRemind;
             mIvNoRemind.setImageResource(isNoRemind?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
-        }else  if (id == R.id.iv_sharetoother){
+        }else  if (id == R.id.iv_share_other){
         }else  if (id == R.id.tv_repeat){
             if(mScheduleRepeatPop != null){
                 mScheduleRepeatPop.showPopupWindow(view);
             }
-        }else  if (id == R.id.tv_whenremind){
+        }else  if (id == R.id.tv_when_remind){
             if(mScheduleRemindPop != null){
                 mScheduleRemindPop.showPopupWindow(view);
             }
         }else  if (id == R.id.iv_importment){
-            isImportment = !isImportment;
-            mIvImportment.setImageResource(isImportment?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
-        }else  if (id == R.id.lly_startdate){
+            isImport = !isImport;
+            mIvImport.setImageResource(isImport?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
+        }else  if (id == R.id.lly_start_date){
             if(mScheduleStartTimePop != null){
                 mScheduleStartTimePop.showPopupWindow(view);
             }
-        }else  if (id == R.id.lly_enddate){
+        }else  if (id == R.id.lly_end_date){
             if(mScheduleEndTimePop != null){
                 mScheduleEndTimePop.showPopupWindow(view);
             }

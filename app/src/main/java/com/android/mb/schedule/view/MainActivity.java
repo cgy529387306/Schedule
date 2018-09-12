@@ -26,21 +26,29 @@ import android.widget.TextView;
 
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.adapter.MyFragmentPagerAdapter;
+import com.android.mb.schedule.base.BaseActivity;
+import com.android.mb.schedule.base.BaseMvpActivity;
 import com.android.mb.schedule.constants.ProjectConstants;
+import com.android.mb.schedule.entitys.CurrentUser;
+import com.android.mb.schedule.entitys.LoginData;
 import com.android.mb.schedule.fragment.MonthFragment;
 import com.android.mb.schedule.fragment.RelatedMeFragment;
 import com.android.mb.schedule.fragment.ScheduleFragment;
 import com.android.mb.schedule.fragment.WeekFragment;
+import com.android.mb.schedule.presenter.HomePresenter;
 import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.utils.PreferencesHelper;
+import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.utils.StatusBarUtil;
 import com.android.mb.schedule.utils.ToastHelper;
+import com.android.mb.schedule.view.interfaces.IHomeView;
 import com.android.mb.schedule.widget.CircleImageView;
 import com.android.mb.schedule.widget.FragmentViewPager;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener ,View.OnClickListener{
+public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> implements IHomeView, NavigationView.OnNavigationItemSelectedListener ,View.OnClickListener{
 
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
@@ -60,81 +68,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextView mTvTitle; // 标题
     private ImageView mIvRefresh; // 右边图标
     private ImageView mIvToday; // 右边图标
+
+
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        initStatusBar();
+    protected void loadIntent() {
+
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    protected void initTitle() {
+        hideActionBar();
+    }
+
+    @Override
+    protected void bindViews() {
         initView();
         initTabViewPager();
-        initListener();
     }
 
-    private void initView() {
-        mTabLayout = findViewById(R.id.tab_layout);
-        mDrawerLayout = findViewById(R.id.drawer_layout);
-        mNavigationView = findViewById(R.id.nav_view);
-        mCoordinatorLayout = findViewById(R.id.right);
-        mIvOpenDrawerLayout = findViewById(R.id.iv_open_drawerlayout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawerLayout,R.mipmap.icon_search , R.string.open, R.string.close);
-        mDrawerLayout.setDrawerListener(toggle);
-        toggle.syncState();
-        mFragmentViewPager = findViewById(R.id.fragmentViewPager);
-        mIvHead = findViewById(R.id.iv_head);
-        mTvName = findViewById(R.id.tv_name);
-        mTvJob = findViewById(R.id.tv_job);
-        mTvTitle = findViewById(R.id.tv_title);
-        mIvRefresh = findViewById(R.id.iv_refresh);
-        mIvToday = findViewById(R.id.iv_today);
+    @Override
+    protected void processLogic(Bundle savedInstanceState) {
+        mPresenter.getUserInfo();
     }
 
-    private void initTabViewPager(){
-        mFragmentArrayList = new ArrayList<>();
-        mMonthFragment = new MonthFragment();
-        mWeekFragment = new WeekFragment();
-        mScheduleFragment = new ScheduleFragment();
-        mRelatedMeFragment = new RelatedMeFragment();
-        mFragmentArrayList.add(mMonthFragment);
-        mFragmentArrayList.add(mWeekFragment);
-        mFragmentArrayList.add(mScheduleFragment);
-        mFragmentArrayList.add(mRelatedMeFragment);
-        mFragmentViewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), mFragmentArrayList));
-        mFragmentViewPager.setOffscreenPageLimit(mFragmentArrayList.size());
-        mFragmentViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
-        setViewTabs();
-    }
-
-    private void initStatusBar(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // 透明状态栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            StatusBarUtil.StatusBarIconManager.MIUI(this, StatusBarUtil.StatusBarIconManager.TYPE.BLACK);
-            StatusBarUtil.StatusBarIconManager.Flyme(this, StatusBarUtil.StatusBarIconManager.TYPE.BLACK);
-        }
-    }
-
-
-    /**
-     * @description: 设置添加Tab
-     */
-    private void setViewTabs(){
-        int[] tabTitles = new int[]{R.string.tab_month,R.string.tab_week,R.string.tab_add,R.string.tab_day,R.string.tab_user};
-        int[] tabImages = new int[]{R.drawable.btn_tab_month,R.drawable.btn_tab_week,R.color.transparent,R.drawable.btn_tab_day,R.drawable.btn_tab_user};
-        for (int i = 0; i < tabImages.length; i++) {
-            TabLayout.Tab tab = mTabLayout.newTab();
-            View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.custom_tab,null);
-            tab.setCustomView(view);
-
-            TextView tvTitle = view.findViewById(R.id.tv_tab);
-            tvTitle.setText(tabTitles[i]);
-            ImageView imgTab =  view.findViewById(R.id.iv_tab);
-            imgTab.setImageResource(tabImages[i]);
-            mTabLayout.addTab(tab);
-        }
-    }
-
-    private void initListener() {
+    @Override
+    protected void setListener() {
         mNavigationView.setNavigationItemSelectedListener(this);
         mIvOpenDrawerLayout.setOnClickListener(this);
         mCoordinatorLayout.setOnTouchListener(mOnTouchListener);
@@ -159,6 +122,62 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
     }
+
+    private void initView() {
+        mTvTitle = findViewById(R.id.tv_title);
+        mIvRefresh = findViewById(R.id.iv_refresh);
+        mIvToday = findViewById(R.id.iv_today);
+        mTabLayout = findViewById(R.id.tab_layout);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        mNavigationView = findViewById(R.id.nav_view);
+        mCoordinatorLayout = findViewById(R.id.right);
+        mIvOpenDrawerLayout = findViewById(R.id.iv_open_drawerlayout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, mDrawerLayout,R.mipmap.icon_search , R.string.open, R.string.close);
+        mDrawerLayout.setDrawerListener(toggle);
+        toggle.syncState();
+        mFragmentViewPager = findViewById(R.id.fragmentViewPager);
+        View headerView = mNavigationView.getHeaderView(0);
+        mIvHead = headerView.findViewById(R.id.iv_head);
+        mTvName =  headerView.findViewById(R.id.tv_name);
+        mTvJob =  headerView.findViewById(R.id.tv_job);
+    }
+
+    private void initTabViewPager(){
+        mFragmentArrayList = new ArrayList<>();
+        mMonthFragment = new MonthFragment();
+        mWeekFragment = new WeekFragment();
+        mScheduleFragment = new ScheduleFragment();
+        mRelatedMeFragment = new RelatedMeFragment();
+        mFragmentArrayList.add(mMonthFragment);
+        mFragmentArrayList.add(mWeekFragment);
+        mFragmentArrayList.add(mScheduleFragment);
+        mFragmentArrayList.add(mRelatedMeFragment);
+        mFragmentViewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), mFragmentArrayList));
+        mFragmentViewPager.setOffscreenPageLimit(mFragmentArrayList.size());
+        mFragmentViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
+        setViewTabs();
+    }
+
+    /**
+     * @description: 设置添加Tab
+     */
+    private void setViewTabs(){
+        int[] tabTitles = new int[]{R.string.tab_month,R.string.tab_week,R.string.tab_add,R.string.tab_day,R.string.tab_user};
+        int[] tabImages = new int[]{R.drawable.btn_tab_month,R.drawable.btn_tab_week,R.color.transparent,R.drawable.btn_tab_day,R.drawable.btn_tab_user};
+        for (int i = 0; i < tabImages.length; i++) {
+            TabLayout.Tab tab = mTabLayout.newTab();
+            View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.custom_tab,null);
+            tab.setCustomView(view);
+
+            TextView tvTitle = view.findViewById(R.id.tv_tab);
+            tvTitle.setText(tabTitles[i]);
+            ImageView imgTab =  view.findViewById(R.id.iv_tab);
+            imgTab.setImageResource(tabImages[i]);
+            mTabLayout.addTab(tab);
+        }
+    }
+
 
     View.OnTouchListener mOnTouchListener = new View.OnTouchListener() {
         @Override
@@ -213,9 +232,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }else if (id == R.id.nav_setting){  //设置
             NavigationHelper.startActivity(MainActivity.this,SettingActivity.class,null,false);
         }else if (id == R.id.nav_exit) {  //退出
-            PreferencesHelper.getInstance().putBoolean(ProjectConstants.KEY_IS_LOGIN,false);
-            PreferencesHelper.getInstance().putLong(ProjectConstants.KEY_TOKEN_ID,0);
-            PreferencesHelper.getInstance().putString(ProjectConstants.KEY_TOKEN_ID,null);
+            CurrentUser.getInstance().loginOut();
             NavigationHelper.startActivity(MainActivity.this, LoginActivity.class, null, true);
         }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -246,6 +263,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    private void initUserInfo(CurrentUser currentUser){
+        if (currentUser!=null){
+            mTvName.setText(ProjectHelper.getCommonText(currentUser.getNickname()));
+            mTvJob.setText(ProjectHelper.getCommonText(currentUser.getOffice_name()));
+            Glide.with(this).load(currentUser.getAvatar()).into(mIvHead);
+        }
+    }
+
     public void setTitle(String title){
         if (mTvTitle!=null && !TextUtils.isEmpty(title)){
             mTvTitle.setText(title);
@@ -262,5 +287,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return;
         }
         finish();
+    }
+
+    @Override
+    protected HomePresenter createPresenter() {
+        return new HomePresenter();
+    }
+
+    @Override
+    public void getUserInfoSuccess(LoginData result) {
+        if (result!=null && result.getUserinfo()!=null){
+            CurrentUser.getInstance().login(result.getUserinfo(),false);
+            initUserInfo(result.getUserinfo());
+        }
     }
 }

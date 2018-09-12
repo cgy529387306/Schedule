@@ -70,7 +70,7 @@ public class CustomMonthView extends MonthView {
         mHollowCirclePaint.setColor(Color.WHITE);
         mTextPaint.setAntiAlias(true);
 
-        mSolarTermTextPaint.setColor(0xffEC7230);
+        mSolarTermTextPaint.setColor(0xfffcaa2d);
         mSolarTermTextPaint.setAntiAlias(true);
         mSolarTermTextPaint.setTextAlign(Paint.Align.CENTER);
 

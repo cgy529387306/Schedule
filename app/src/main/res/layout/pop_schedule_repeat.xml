@@ -6,7 +6,7 @@
     android:gravity="bottom"
     android:paddingRight="20dp"
     android:paddingLeft="20dp"
-    android:background="@color/translate_color"
+    android:background="@color/translucent"
     android:layout_gravity="center">
 
     <LinearLayout
@@ -23,10 +23,7 @@
             android:textColor="@color/black"
             android:textSize="13dp" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:background="@color/background_color" />
+        <include layout="@layout/common_divider" />
 
         <LinearLayout
             android:id="@+id/lly_onlyone"
@@ -54,10 +51,7 @@
 
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:background="@color/background_color" />
+        <include layout="@layout/common_divider" />
 
         <LinearLayout
             android:id="@+id/lly_everyday"
@@ -86,10 +80,7 @@
 
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:background="@color/background_color" />
+        <include layout="@layout/common_divider" />
 
         <LinearLayout
             android:id="@+id/lly_everyweek"
@@ -115,14 +106,11 @@
                 android:layout_height="wrap_content"
                 android:src="@mipmap/icon_checked"
                 android:visibility="gone"/>
-
         </LinearLayout>
-
         <View
             android:layout_width="match_parent"
             android:layout_height="10dp"
-            android:background="@color/background_color" />
-
+            android:background="@color/bg_color" />
         <TextView
             android:id="@+id/tv_choose"
             android:layout_width="match_parent"
@@ -132,8 +120,6 @@
             android:textSize="16dp"
             android:gravity="center"
             android:background="@color/base_blue"/>
-
-
     </LinearLayout>
 
 </LinearLayout>

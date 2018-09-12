@@ -4,7 +4,7 @@
     android:id="@+id/ll_week"
     android:layout_width="match_parent"
     android:layout_height="40dp"
-    android:background="#FFFFFF"
+    android:background="@color/white"
     android:minHeight="40dp"
     android:orientation="horizontal"
     android:paddingBottom="8dp"
@@ -17,8 +17,8 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text="@string/sun"
-        android:textColor="#454545"
-        android:textSize="12sp" />
+        android:textColor="@color/gray_a5"
+        android:textSize="14sp"  />
 
     <TextView
         android:layout_width="0dp"
@@ -26,8 +26,8 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text="@string/mon"
-        android:textColor="#454545"
-        android:textSize="12sp" />
+        android:textColor="@color/gray_a5"
+        android:textSize="14sp"  />
 
     <TextView
         android:layout_width="0dp"
@@ -35,8 +35,8 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text="@string/tue"
-        android:textColor="#454545"
-        android:textSize="12sp" />
+        android:textColor="@color/gray_a5"
+        android:textSize="14sp" />
 
     <TextView
         android:layout_width="0dp"
@@ -44,8 +44,8 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text="@string/wed"
-        android:textColor="#454545"
-        android:textSize="12sp" />
+        android:textColor="@color/gray_a5"
+        android:textSize="14sp"  />
 
     <TextView
         android:layout_width="0dp"
@@ -53,8 +53,8 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text="@string/thu"
-        android:textColor="#454545"
-        android:textSize="12sp" />
+        android:textColor="@color/gray_a5"
+        android:textSize="14sp" />
 
     <TextView
         android:layout_width="0dp"
@@ -62,8 +62,8 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text="@string/fri"
-        android:textColor="#454545"
-        android:textSize="12sp" />
+        android:textColor="@color/gray_a5"
+        android:textSize="14sp"  />
 
     <TextView
         android:layout_width="0dp"
@@ -71,6 +71,6 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text="@string/sat"
-        android:textColor="#454545"
-        android:textSize="12sp" />
+        android:textColor="@color/gray_a5"
+        android:textSize="14sp" />
 </merge>

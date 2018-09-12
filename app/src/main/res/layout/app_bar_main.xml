@@ -24,7 +24,7 @@
             android:gravity="center"
             android:singleLine="true"
             android:text="请设置标题"
-            android:textColor="@color/black"
+            android:textColor="@color/text_color"
             android:textSize="20sp" />
         <ImageView
             android:id="@+id/iv_today"

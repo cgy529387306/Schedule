@@ -19,7 +19,7 @@ import android.widget.ImageView;
 import com.android.mb.schedule.R;
 
 
-public class CircleImageView extends ImageView {
+public class CircleImageView extends android.support.v7.widget.AppCompatImageView {
 
     private static final ScaleType SCALE_TYPE = ScaleType.CENTER_CROP;
 
@@ -27,7 +27,7 @@ public class CircleImageView extends ImageView {
     private static final int COLORDRAWABLE_DIMENSION = 1;
 
     private static final int DEFAULT_BORDER_WIDTH = 0;
-    private static final int DEFAULT_BORDER_COLOR = Color.BLACK;
+    private static final int DEFAULT_BORDER_COLOR = Color.TRANSPARENT;
 
     private final RectF mDrawableRect = new RectF();
     private final RectF mBorderRect = new RectF();
@@ -38,7 +38,6 @@ public class CircleImageView extends ImageView {
 
     private int mBorderColor = DEFAULT_BORDER_COLOR;
     private int mBorderWidth = DEFAULT_BORDER_WIDTH;
-
     private Bitmap mBitmap;
     private BitmapShader mBitmapShader;
     private int mBitmapWidth;

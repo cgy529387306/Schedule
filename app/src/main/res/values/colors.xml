@@ -17,36 +17,17 @@
     <color name="black">#ff000000</color>
     <color name="transparent">#00000000</color>
     <color name="translucent">#88000000</color>
-
-    <!-- 项目基本颜色-->
-    <!-- 一级标题颜色 -->
-    <color name="base_text_color">#3f3a39</color>
-    <!-- 二级标题颜色 -->
-    <color name="base_subtext_color">#a5a5a5</color>
-    <!-- 页面背景颜色 -->
-    <color name="base_background_color">#ffffffff</color>
-    <!-- 分割线颜色-->
-    <color name="base_line_color">#dcdcdc</color>
-    <!-- 输入框提示-->
-    <color name="base_hint_color">#c0c0c0</color>
-
-    <color name="text_color">#454545</color>
-    <!-- 橘色 -->
     <color name="base_orange">#fcaa2d</color>
-    <!-- 红色 -->
     <color name="base_red">#ff4543</color>
-    <!-- 灰色 -->
     <color name="base_gray">#a5a5a5</color>
-    <!-- 蓝色 -->
     <color name="base_blue">#2aaeff</color>
-    <!-- 绿色 -->
     <color name="base_green">#12c136</color>
 
-    <color name="bg_color">#f2f2f2</color>
-    <!-- 页面背景颜色 -->
-    <color name="background_color">#F8F8F8</color>
-    <color name="translate_color">#88000000</color>
-
-
+    <color name="text_color">#3f3a39</color>
+    <color name="bg_color">#f4f4f4</color>
+    <color name="gray_45">#454545</color>
     <color name="gray_f4">#f4f4f4</color>
+    <color name="gray_4d">#4d4d4d</color>
+    <color name="gray_a5">#a5a5a5</color>
+    <color name="gray_dc">#dcdcdc</color>
 </resources>

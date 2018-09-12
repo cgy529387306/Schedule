@@ -1,13 +1,13 @@
 package com.android.mb.schedule.entitys;
 
 public class LoginData {
-    private UserInfoBean userinfo;
+    private CurrentUser userinfo;
 
-    public UserInfoBean getUserinfo() {
+    public CurrentUser getUserinfo() {
         return userinfo;
     }
 
-    public void setUserinfo(UserInfoBean userinfo) {
+    public void setUserinfo(CurrentUser userinfo) {
         this.userinfo = userinfo;
     }
 }
