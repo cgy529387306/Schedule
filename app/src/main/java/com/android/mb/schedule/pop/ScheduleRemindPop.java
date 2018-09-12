@@ -19,29 +19,43 @@ import com.android.mb.schedule.R;
  * Created by chenqm
  */
 public class ScheduleRemindPop extends PopupWindow implements View.OnClickListener {
-    private View conentView;
+    private View mContentView;
     private Activity mContext;
     private TextView mBtnChoose;
-    private LinearLayout mLlyBeforeFive; //5分钟前
-    private TextView mTvBeforeFive;
-    private ImageView mIvBeforeFive;
+
     private LinearLayout mLlyBeforeTen; //10分钟前
     private TextView mTvBeforeTen;
     private ImageView mIvBeforeTen;
+
+    private LinearLayout mLlyBeforeFifteen; //15分钟前
+    private TextView mTvBeforeFifteen;
+    private ImageView mIvBeforeFifteen;
+
+    private LinearLayout mLlyBeforeHalfHour; //30分钟前
+    private TextView mTvBeforeHalfHour;
+    private ImageView mIvBeforeHalfHour;
+
     private LinearLayout mLlyBeforeOneHour; //1小时前
     private TextView mTvBeforeOneHour;
     private ImageView mIvBeforeOneHour;
+
     private LinearLayout mLlyBeforeTwoHour; //2小时前
     private TextView mTvBeforeTwoHour;
     private ImageView mIvBeforeTwoHour;
+
     private LinearLayout mLlyBeforeOneDay; //24小时前
     private TextView mTvBeforeOneDay;
     private ImageView mIvBeforeOneDay;
+
+    private LinearLayout mLlyBeforeTwoDay; //2天前
+    private TextView mTvBeforeTwoDay;
+    private ImageView mIvBeforeTwoDay;
+
     private LinearLayout mLlyNoRemind; //不在提醒
     private TextView mTvNoRemind;
     private ImageView mIvNoRemind;
     private SelectListener mSelectListener;
-    private int type = 0;
+    private int type = 1;//0 不提醒,1 10分钟前，2 15分钟前，3 30分钟前，4 1小时前，5 2小时前，6 24小时前，7 2天前
 
     public void setSelectListener(SelectListener selectListener) {
         this.mSelectListener = selectListener;
@@ -56,9 +70,9 @@ public class ScheduleRemindPop extends PopupWindow implements View.OnClickListen
         this.mSelectListener = selectListener;
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        conentView = inflater.inflate(R.layout.pop_schedule_remind, null);
+        mContentView = inflater.inflate(R.layout.pop_schedule_remind, null);
         // 设置SelectPicPopupWindow的View
-        this.setContentView(conentView);
+        this.setContentView(mContentView);
         setFocusable(false);
         setOutsideTouchable(false);
         setWidth(ViewPager.LayoutParams.MATCH_PARENT);
@@ -69,35 +83,55 @@ public class ScheduleRemindPop extends PopupWindow implements View.OnClickListen
     }
 
     private void initView() {
-        mBtnChoose = conentView.findViewById(R.id.tv_choose);
-        mLlyBeforeFive = conentView.findViewById(R.id.lly_beforefive);
-        mTvBeforeFive = conentView.findViewById(R.id.tv_beforefive);
-        mIvBeforeFive = conentView.findViewById(R.id.iv_beforefive);
-        mLlyBeforeTen = conentView.findViewById(R.id.lly_beforeten);
-        mTvBeforeTen = conentView.findViewById(R.id.tv_beforeten);
-        mIvBeforeTen = conentView.findViewById(R.id.iv_beforeten);
-        mLlyBeforeOneHour = conentView.findViewById(R.id.lly_beforeonehour);
-        mTvBeforeOneHour = conentView.findViewById(R.id.tv_beforeonehour);
-        mIvBeforeOneHour = conentView.findViewById(R.id.iv_beforeonehour);
-        mLlyBeforeTwoHour = conentView.findViewById(R.id.lly_beforetwohour);
-        mTvBeforeTwoHour = conentView.findViewById(R.id.tv_beforetwohour);
-        mIvBeforeTwoHour = conentView.findViewById(R.id.iv_beforetwohour);
-        mLlyBeforeOneDay = conentView.findViewById(R.id.lly_beforeoneday);
-        mTvBeforeOneDay = conentView.findViewById(R.id.tv_beforeoneday);
-        mIvBeforeOneDay = conentView.findViewById(R.id.iv_beforeoneday);
-        mLlyNoRemind = conentView.findViewById(R.id.lly_noremind);
-        mTvNoRemind = conentView.findViewById(R.id.tv_noremind);
-        mIvNoRemind = conentView.findViewById(R.id.iv_noremind);
+        mBtnChoose = mContentView.findViewById(R.id.tv_choose);
+        mLlyBeforeTen = mContentView.findViewById(R.id.lly_before_ten);
+        mTvBeforeTen = mContentView.findViewById(R.id.tv_before_ten);
+        mIvBeforeTen = mContentView.findViewById(R.id.iv_before_ten);
+
+        mLlyBeforeFifteen = mContentView.findViewById(R.id.lly_before_fifteen);
+        mTvBeforeFifteen = mContentView.findViewById(R.id.tv_before_fifteen);
+        mIvBeforeFifteen = mContentView.findViewById(R.id.iv_before_fifteen);
+
+        mLlyBeforeHalfHour = mContentView.findViewById(R.id.lly_before_half_hour);
+        mTvBeforeHalfHour = mContentView.findViewById(R.id.tv_before_half_hour);
+        mIvBeforeHalfHour = mContentView.findViewById(R.id.iv_before_half_hour);
+
+        mLlyBeforeOneHour = mContentView.findViewById(R.id.lly_before_one_hour);
+        mTvBeforeOneHour = mContentView.findViewById(R.id.tv_before_one_hour);
+        mIvBeforeOneHour = mContentView.findViewById(R.id.iv_before_one_hour);
+
+        mLlyBeforeTwoHour = mContentView.findViewById(R.id.lly_before_two_hour);
+        mTvBeforeTwoHour = mContentView.findViewById(R.id.tv_before_two_hour);
+        mIvBeforeTwoHour = mContentView.findViewById(R.id.iv_before_two_hour);
+
+        mLlyBeforeOneDay = mContentView.findViewById(R.id.lly_before_one_day);
+        mTvBeforeOneDay = mContentView.findViewById(R.id.tv_before_one_day);
+        mIvBeforeOneDay = mContentView.findViewById(R.id.iv_before_one_day);
+
+        mLlyBeforeOneDay = mContentView.findViewById(R.id.lly_before_one_day);
+        mTvBeforeOneDay = mContentView.findViewById(R.id.tv_before_one_day);
+        mIvBeforeOneDay = mContentView.findViewById(R.id.iv_before_one_day);
+
+        mLlyBeforeTwoDay = mContentView.findViewById(R.id.lly_before_two_day);
+        mTvBeforeTwoDay = mContentView.findViewById(R.id.tv_before_two_day);
+        mIvBeforeTwoDay = mContentView.findViewById(R.id.iv_before_two_day);
+
+        mLlyNoRemind = mContentView.findViewById(R.id.lly_no_remind);
+        mTvNoRemind = mContentView.findViewById(R.id.tv_no_remind);
+        mIvNoRemind = mContentView.findViewById(R.id.iv_no_remind);
         refresh(0);
     }
 
     private void initListener() {
+        mContentView.findViewById(R.id.lly_all).setOnClickListener(this);
         mBtnChoose.setOnClickListener(this);
-        mLlyBeforeFive.setOnClickListener(this);
         mLlyBeforeTen.setOnClickListener(this);
+        mLlyBeforeFifteen.setOnClickListener(this);
+        mLlyBeforeHalfHour.setOnClickListener(this);
         mLlyBeforeOneHour.setOnClickListener(this);
         mLlyBeforeTwoHour.setOnClickListener(this);
         mLlyBeforeOneDay.setOnClickListener(this);
+        mLlyBeforeTwoDay.setOnClickListener(this);
         mLlyNoRemind.setOnClickListener(this);
     }
 
@@ -118,42 +152,58 @@ public class ScheduleRemindPop extends PopupWindow implements View.OnClickListen
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.tv_choose){
+        if (id == R.id.lly_all){
+            dismiss();
+        }else if (id == R.id.tv_choose){
             mSelectListener.onSelected(type);
             dismiss();
-        }else if (id == R.id.lly_beforefive){
+        }else if (id == R.id.lly_no_remind){
             type = 0;
             refresh(type);
-        }else if (id == R.id.lly_beforeten){
+        }else if (id == R.id.lly_before_ten){
             type = 1;
             refresh(type);
-        }else if (id == R.id.lly_beforeonehour){
+        }else if (id == R.id.lly_before_fifteen){
             type = 2;
             refresh(type);
-        }else if (id == R.id.lly_beforetwohour){
+        }else if (id == R.id.lly_before_half_hour){
             type = 3;
             refresh(type);
-        }else if (id == R.id.lly_beforeoneday){
+        }else if (id == R.id.lly_before_one_hour){
             type = 4;
             refresh(type);
-        }else if (id == R.id.lly_noremind){
+        }else if (id == R.id.lly_before_two_hour){
             type = 5;
+            refresh(type);
+        }else if (id == R.id.lly_before_one_day){
+            type = 6;
+            refresh(type);
+        }else if (id == R.id.lly_before_two_day){
+            type = 7;
             refresh(type);
         }
     }
     private void refresh(int type){
-        mTvBeforeFive.setTextColor(type == 0?ContextCompat.getColor(mContext, R.color.base_blue):ContextCompat.getColor(mContext, R.color.black));
+        mTvNoRemind.setTextColor(type == 0?ContextCompat.getColor(mContext, R.color.base_blue):ContextCompat.getColor(mContext, R.color.black));
         mTvBeforeTen.setTextColor(type == 1?ContextCompat.getColor(mContext, R.color.base_blue):ContextCompat.getColor(mContext, R.color.black));
-        mTvBeforeOneHour.setTextColor(type == 2?ContextCompat.getColor(mContext, R.color.base_blue):ContextCompat.getColor(mContext, R.color.black));
-        mTvBeforeTwoHour.setTextColor(type == 3?ContextCompat.getColor(mContext, R.color.base_blue):ContextCompat.getColor(mContext, R.color.black));
-        mTvBeforeOneDay.setTextColor(type == 4?ContextCompat.getColor(mContext, R.color.base_blue):ContextCompat.getColor(mContext, R.color.black));
-        mTvNoRemind.setTextColor(type == 5?ContextCompat.getColor(mContext, R.color.base_blue):ContextCompat.getColor(mContext, R.color.black));
+        mTvBeforeFifteen.setTextColor(type == 2?ContextCompat.getColor(mContext, R.color.base_blue):ContextCompat.getColor(mContext, R.color.black));
+        mTvBeforeHalfHour.setTextColor(type == 3?ContextCompat.getColor(mContext, R.color.base_blue):ContextCompat.getColor(mContext, R.color.black));
+        mTvBeforeOneHour.setTextColor(type == 4?ContextCompat.getColor(mContext, R.color.base_blue):ContextCompat.getColor(mContext, R.color.black));
+        mTvBeforeTwoHour.setTextColor(type == 5?ContextCompat.getColor(mContext, R.color.base_blue):ContextCompat.getColor(mContext, R.color.black));
+        mTvBeforeOneDay.setTextColor(type == 6?ContextCompat.getColor(mContext, R.color.base_blue):ContextCompat.getColor(mContext, R.color.black));
+        mTvBeforeTwoDay.setTextColor(type == 7?ContextCompat.getColor(mContext, R.color.base_blue):ContextCompat.getColor(mContext, R.color.black));
 
-        mIvBeforeFive.setVisibility(type == 0?View.VISIBLE:View.GONE);
+        mIvNoRemind.setVisibility(type == 0?View.VISIBLE:View.GONE);
         mIvBeforeTen.setVisibility(type == 1?View.VISIBLE:View.GONE);
-        mIvBeforeOneHour.setVisibility(type == 2?View.VISIBLE:View.GONE);
-        mIvBeforeTwoHour.setVisibility(type == 3?View.VISIBLE:View.GONE);
-        mIvBeforeOneDay.setVisibility(type == 4?View.VISIBLE:View.GONE);
-        mIvNoRemind.setVisibility(type == 5?View.VISIBLE:View.GONE);
+        mIvBeforeFifteen.setVisibility(type == 2?View.VISIBLE:View.GONE);
+        mIvBeforeHalfHour.setVisibility(type == 3?View.VISIBLE:View.GONE);
+        mIvBeforeOneHour.setVisibility(type == 4?View.VISIBLE:View.GONE);
+        mIvBeforeTwoHour.setVisibility(type == 5?View.VISIBLE:View.GONE);
+        mIvBeforeOneDay.setVisibility(type == 6?View.VISIBLE:View.GONE);
+        mIvBeforeTwoDay.setVisibility(type == 7?View.VISIBLE:View.GONE);
+    }
+
+    public int getType() {
+        return type;
     }
 }

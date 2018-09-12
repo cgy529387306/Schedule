@@ -19,7 +19,7 @@ import com.android.mb.schedule.R;
  * Created by chenqm
  */
 public class ScheduleRepeatPop extends PopupWindow implements View.OnClickListener {
-    private View conentView;
+    private View mContentView;
     private Activity mContext;
     private TextView mBtnChoose;
     private LinearLayout mLlyOnlyOne;
@@ -31,8 +31,12 @@ public class ScheduleRepeatPop extends PopupWindow implements View.OnClickListen
     private LinearLayout mLlyEveryWeek;
     private TextView mTvEveryWeek;
     private ImageView mIvEveryWeek;
+
+    private LinearLayout mLlyEveryMonth;
+    private TextView mTvEveryMonth;
+    private ImageView mIvEveryMonth;
     private SelectListener mSelectListener;
-    private int type = 0;
+    private int type = 1;//1 - 一次性活动，2 - 每天重复，3 - 周重复，4 月重复
 
     public void setSelectListener(SelectListener selectListener) {
         this.mSelectListener = selectListener;
@@ -47,9 +51,9 @@ public class ScheduleRepeatPop extends PopupWindow implements View.OnClickListen
         this.mSelectListener = selectListener;
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        conentView = inflater.inflate(R.layout.pop_schedule_repeat, null);
+        mContentView = inflater.inflate(R.layout.pop_schedule_repeat, null);
         // 设置SelectPicPopupWindow的View
-        this.setContentView(conentView);
+        this.setContentView(mContentView);
         setFocusable(false);
         setOutsideTouchable(false);
         setWidth(ViewPager.LayoutParams.MATCH_PARENT);
@@ -60,24 +64,29 @@ public class ScheduleRepeatPop extends PopupWindow implements View.OnClickListen
     }
 
     private void initView() {
-        mBtnChoose = conentView.findViewById(R.id.tv_choose);
-        mLlyOnlyOne = conentView.findViewById(R.id.lly_onlyone);
-        mTvOnlyOne = conentView.findViewById(R.id.tv_onlyone);
-        mIvOnlyOne = conentView.findViewById(R.id.iv_onlyone);
-        mLlyEveryDay = conentView.findViewById(R.id.lly_everyday);
-        mTvEveryDay = conentView.findViewById(R.id.tv_everyday);
-        mIvEveryDay = conentView.findViewById(R.id.iv_everyday);
-        mLlyEveryWeek = conentView.findViewById(R.id.lly_everyweek);
-        mTvEveryWeek = conentView.findViewById(R.id.tv_everyweek);
-        mIvEveryWeek = conentView.findViewById(R.id.iv_everyweek);
-        refresh(0);
+        mBtnChoose = mContentView.findViewById(R.id.tv_choose);
+        mLlyOnlyOne = mContentView.findViewById(R.id.lly_only_one);
+        mTvOnlyOne = mContentView.findViewById(R.id.tv_only_one);
+        mIvOnlyOne = mContentView.findViewById(R.id.iv_only_one);
+        mLlyEveryDay = mContentView.findViewById(R.id.lly_every_day);
+        mTvEveryDay = mContentView.findViewById(R.id.tv_every_day);
+        mIvEveryDay = mContentView.findViewById(R.id.iv_every_day);
+        mLlyEveryWeek = mContentView.findViewById(R.id.lly_every_week);
+        mTvEveryWeek = mContentView.findViewById(R.id.tv_every_week);
+        mIvEveryWeek = mContentView.findViewById(R.id.iv_every_week);
+        mLlyEveryMonth = mContentView.findViewById(R.id.lly_every_month);
+        mTvEveryMonth = mContentView.findViewById(R.id.tv_every_month);
+        mIvEveryMonth = mContentView.findViewById(R.id.iv_every_month);
+        refresh(1);
     }
 
     private void initListener() {
+        mContentView.findViewById(R.id.lly_all).setOnClickListener(this);
         mBtnChoose.setOnClickListener(this);
         mLlyOnlyOne.setOnClickListener(this);
         mLlyEveryDay.setOnClickListener(this);
         mLlyEveryWeek.setOnClickListener(this);
+        mLlyEveryMonth.setOnClickListener(this);
     }
 
     /**
@@ -97,27 +106,38 @@ public class ScheduleRepeatPop extends PopupWindow implements View.OnClickListen
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.tv_choose){
+        if (id == R.id.lly_all){
+            dismiss();
+        }else if (id == R.id.tv_choose){
             mSelectListener.onSelected(type);
             dismiss();
-        }else if (id == R.id.lly_onlyone){
-            type = 0;
-            refresh(type);
-        }else if (id == R.id.lly_everyday){
+        }else if (id == R.id.lly_only_one){
             type = 1;
             refresh(type);
-        }else if (id == R.id.lly_everyweek){
+        }else if (id == R.id.lly_every_day){
             type = 2;
+            refresh(type);
+        }else if (id == R.id.lly_every_week){
+            type = 3;
+            refresh(type);
+        }else if (id == R.id.lly_every_month){
+            type = 4;
             refresh(type);
         }
     }
     private void refresh(int type){
-        mTvOnlyOne.setTextColor(type == 0?ContextCompat.getColor(mContext, R.color.base_blue):ContextCompat.getColor(mContext, R.color.black));
-        mTvEveryDay.setTextColor(type == 1?ContextCompat.getColor(mContext, R.color.base_blue):ContextCompat.getColor(mContext, R.color.black));
-        mTvEveryWeek.setTextColor(type == 2?ContextCompat.getColor(mContext, R.color.base_blue):ContextCompat.getColor(mContext, R.color.black));
+        mTvOnlyOne.setTextColor(type == 1?ContextCompat.getColor(mContext, R.color.base_blue):ContextCompat.getColor(mContext, R.color.black));
+        mTvEveryDay.setTextColor(type == 2?ContextCompat.getColor(mContext, R.color.base_blue):ContextCompat.getColor(mContext, R.color.black));
+        mTvEveryWeek.setTextColor(type == 3?ContextCompat.getColor(mContext, R.color.base_blue):ContextCompat.getColor(mContext, R.color.black));
+        mTvEveryMonth.setTextColor(type == 4?ContextCompat.getColor(mContext, R.color.base_blue):ContextCompat.getColor(mContext, R.color.black));
 
-        mIvOnlyOne.setVisibility(type == 0?View.VISIBLE:View.GONE);
-        mIvEveryDay.setVisibility(type == 1?View.VISIBLE:View.GONE);
-        mIvEveryWeek.setVisibility(type == 2?View.VISIBLE:View.GONE);
+        mIvOnlyOne.setVisibility(type == 1?View.VISIBLE:View.GONE);
+        mIvEveryDay.setVisibility(type == 2?View.VISIBLE:View.GONE);
+        mIvEveryWeek.setVisibility(type == 3?View.VISIBLE:View.GONE);
+        mIvEveryMonth.setVisibility(type == 4?View.VISIBLE:View.GONE);
+    }
+
+    public int getType() {
+        return type;
     }
 }

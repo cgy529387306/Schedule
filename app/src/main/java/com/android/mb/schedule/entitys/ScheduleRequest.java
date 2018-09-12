@@ -20,14 +20,25 @@ public class ScheduleRequest implements Serializable{
 
     private int allDay;
 
+    /**
+     * 重复类型 1 - 一次性活动，2 - 每天重复，3 - 周重复，4 月重复
+     */
     private int repeattype;
 
+    /**
+     * 提醒: 0 不提醒,1 10分钟前，2 15分钟前，3 30分钟前，4 1小时前，5 2小时前，6 24小时前，7 2天前
+     */
     private int remind;
 
     private int important;
 
+    /**
+     * id用逗号隔开
+     */
     private String related;
-
+    /**
+     * id用逗号隔开
+     */
     private String share;
 
 

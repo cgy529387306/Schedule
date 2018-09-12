@@ -28,7 +28,7 @@
                 android:background="@null"
                 android:hint="请输入日程名称"
                 android:textColorHint="@color/gray_a5"
-                android:textColor="@color/text_color"
+                android:textColor="@color/edit_color"
                 android:textSize="15sp" />
         </LinearLayout>
         <LinearLayout
@@ -83,10 +83,11 @@
                 android:id="@+id/et_schedule_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:maxLength="400"
                 android:minLines="3"
                 android:background="@null"
                 android:textColorHint="@color/gray_a5"
-                android:textColor="@color/text_color"
+                android:textColor="@color/edit_color"
                 android:textSize="15sp" />
         </LinearLayout>
         <include layout="@layout/common_divider" />
@@ -151,7 +152,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="周一"
+                    android:text="10:00"
                     android:textColor="@color/text_color"
                     android:textSize="15sp" />
             </LinearLayout>
@@ -187,7 +188,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="周五"
+                    android:text="10:00"
                     android:textColor="@color/text_color"
                     android:textSize="15sp" />
             </LinearLayout>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/ly_myinfo_changeaddress"
+    android:id="@+id/lly_all"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="bottom"
@@ -26,7 +26,7 @@
         <include layout="@layout/common_divider" />
 
         <LinearLayout
-            android:id="@+id/lly_onlyone"
+            android:id="@+id/lly_only_one"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:background="@color/white"
@@ -34,7 +34,7 @@
             android:padding="10dp">
 
             <TextView
-                android:id="@+id/tv_onlyone"
+                android:id="@+id/tv_only_one"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -44,7 +44,7 @@
                 android:textSize="14sp" />
 
             <ImageView
-                android:id="@+id/iv_onlyone"
+                android:id="@+id/iv_only_one"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/icon_checked" />
@@ -54,7 +54,7 @@
         <include layout="@layout/common_divider" />
 
         <LinearLayout
-            android:id="@+id/lly_everyday"
+            android:id="@+id/lly_every_day"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:background="@color/white"
@@ -62,7 +62,7 @@
             android:padding="10dp">
 
             <TextView
-                android:id="@+id/tv_everyday"
+                android:id="@+id/tv_every_day"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -72,7 +72,7 @@
                 android:textSize="14sp" />
 
             <ImageView
-                android:id="@+id/iv_everyday"
+                android:id="@+id/iv_every_day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/icon_checked"
@@ -83,7 +83,7 @@
         <include layout="@layout/common_divider" />
 
         <LinearLayout
-            android:id="@+id/lly_everyweek"
+            android:id="@+id/lly_every_week"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:background="@color/white"
@@ -91,7 +91,7 @@
             android:padding="10dp">
 
             <TextView
-                android:id="@+id/tv_everyweek"
+                android:id="@+id/tv_every_week"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -101,7 +101,34 @@
                 android:textSize="14sp" />
 
             <ImageView
-                android:id="@+id/iv_everyweek"
+                android:id="@+id/iv_every_week"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/icon_checked"
+                android:visibility="gone"/>
+        </LinearLayout>
+        <include layout="@layout/common_divider" />
+
+        <LinearLayout
+            android:id="@+id/lly_every_month"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/tv_every_month"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawablePadding="10dp"
+                android:text="每月"
+                android:textColor="@color/text_color"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/iv_every_month"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/icon_checked"

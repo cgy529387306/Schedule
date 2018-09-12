@@ -70,6 +70,12 @@ public class NewScheduleActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void initTitle() {
         setTitleText("新建日程");
+        setRightImage(R.mipmap.icon_checked);
+    }
+
+    @Override
+    protected void onRightAction() {
+        super.onRightAction();
     }
 
     @Override
@@ -121,7 +127,9 @@ public class NewScheduleActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.tv_location){
+
         }else  if (id == R.id.tv_upload_document){
+
         }else  if (id == R.id.iv_remind){
             isRemind = !isRemind;
             mIvRemind.setImageResource(isRemind?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
@@ -157,14 +165,17 @@ public class NewScheduleActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onSelected(int type) {
                 switch (type){
-                    case 0:
+                    case 1:
                         mTvRepeat.setText("一次性");
                         break;
-                    case 1:
+                    case 2:
                         mTvRepeat.setText("每天");
                         break;
-                    case 2:
+                    case 3:
                         mTvRepeat.setText("每周");
+                        break;
+                    case 4:
+                        mTvRepeat.setText("每月");
                         break;
                     default:
                         break;
@@ -176,22 +187,28 @@ public class NewScheduleActivity extends BaseActivity implements View.OnClickLis
             public void onSelected(int type) {
                 switch (type){
                     case 0:
-                        mTvWhenRemind.setText("5分钟前");
+                        mTvWhenRemind.setText("不在提醒");
                         break;
                     case 1:
                         mTvWhenRemind.setText("10分钟前");
                         break;
                     case 2:
-                        mTvWhenRemind.setText("1小时前");
+                        mTvWhenRemind.setText("15分钟前");
                         break;
                     case 3:
-                        mTvWhenRemind.setText("2小时前");
+                        mTvWhenRemind.setText("30分钟前");
                         break;
                     case 4:
-                        mTvWhenRemind.setText("24小时前");
+                        mTvWhenRemind.setText("1小时前");
                         break;
                     case 5:
-                        mTvWhenRemind.setText("不在提醒");
+                        mTvWhenRemind.setText("2小时前");
+                        break;
+                    case 6:
+                        mTvWhenRemind.setText("24小时前");
+                        break;
+                    case 7:
+                        mTvWhenRemind.setText("2天前");
                         break;
                     default:
                         break;

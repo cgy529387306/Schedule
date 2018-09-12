@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/ly_myinfo_changeaddress"
+    android:id="@+id/lly_all"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="bottom"
@@ -26,7 +26,7 @@
         <include layout="@layout/common_divider" />
 
         <LinearLayout
-            android:id="@+id/lly_beforefive"
+            android:id="@+id/lly_before_ten"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:background="@color/white"
@@ -34,17 +34,17 @@
             android:padding="10dp">
 
             <TextView
-                android:id="@+id/tv_beforefive"
+                android:id="@+id/tv_before_ten"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:drawablePadding="10dp"
-                android:text="5分钟前"
+                android:text="10分钟前"
                 android:textColor="@color/base_blue"
                 android:textSize="14sp" />
 
             <ImageView
-                android:id="@+id/iv_beforefive"
+                android:id="@+id/iv_before_ten"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/icon_checked" />
@@ -54,7 +54,7 @@
         <include layout="@layout/common_divider" />
 
         <LinearLayout
-            android:id="@+id/lly_beforeten"
+            android:id="@+id/lly_before_fifteen"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:background="@color/white"
@@ -62,28 +62,28 @@
             android:padding="10dp">
 
             <TextView
-                android:id="@+id/tv_beforeten"
+                android:id="@+id/tv_before_fifteen"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:drawablePadding="10dp"
-                android:text="10分钟前"
+                android:text="15分钟前"
                 android:textColor="@color/text_color"
                 android:textSize="14sp" />
 
             <ImageView
-                android:id="@+id/iv_beforeten"
+                android:id="@+id/iv_before_fifteen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/icon_checked"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                android:src="@mipmap/icon_checked" />
 
         </LinearLayout>
 
         <include layout="@layout/common_divider" />
 
         <LinearLayout
-            android:id="@+id/lly_beforeonehour"
+            android:id="@+id/lly_before_half_hour"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:background="@color/white"
@@ -91,7 +91,36 @@
             android:padding="10dp">
 
             <TextView
-                android:id="@+id/tv_beforeonehour"
+                android:id="@+id/tv_before_half_hour"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawablePadding="10dp"
+                android:text="30分钟前"
+                android:textColor="@color/text_color"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/iv_before_half_hour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:src="@mipmap/icon_checked" />
+
+        </LinearLayout>
+
+        <include layout="@layout/common_divider" />
+
+        <LinearLayout
+            android:id="@+id/lly_before_one_hour"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/tv_before_one_hour"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -101,7 +130,7 @@
                 android:textSize="14sp" />
 
             <ImageView
-                android:id="@+id/iv_beforeonehour"
+                android:id="@+id/iv_before_one_hour"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/icon_checked"
@@ -112,7 +141,7 @@
         <include layout="@layout/common_divider" />
 
         <LinearLayout
-            android:id="@+id/lly_beforetwohour"
+            android:id="@+id/lly_before_two_hour"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:background="@color/white"
@@ -120,7 +149,7 @@
             android:padding="10dp">
 
             <TextView
-                android:id="@+id/tv_beforetwohour"
+                android:id="@+id/tv_before_two_hour"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -130,18 +159,17 @@
                 android:textSize="14sp" />
 
             <ImageView
-                android:id="@+id/iv_beforetwohour"
+                android:id="@+id/iv_before_two_hour"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/icon_checked"
                 android:visibility="gone"/>
 
         </LinearLayout>
-
         <include layout="@layout/common_divider" />
 
         <LinearLayout
-            android:id="@+id/lly_beforeoneday"
+            android:id="@+id/lly_before_one_day"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:background="@color/white"
@@ -149,7 +177,7 @@
             android:padding="10dp">
 
             <TextView
-                android:id="@+id/tv_beforeoneday"
+                android:id="@+id/tv_before_one_day"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -159,18 +187,17 @@
                 android:textSize="14sp" />
 
             <ImageView
-                android:id="@+id/iv_beforeoneday"
+                android:id="@+id/iv_before_one_day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/icon_checked"
                 android:visibility="gone"/>
 
         </LinearLayout>
-
         <include layout="@layout/common_divider" />
 
         <LinearLayout
-            android:id="@+id/lly_noremind"
+            android:id="@+id/lly_before_two_day"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:background="@color/white"
@@ -178,7 +205,35 @@
             android:padding="10dp">
 
             <TextView
-                android:id="@+id/tv_noremind"
+                android:id="@+id/tv_before_two_day"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawablePadding="10dp"
+                android:text="2天前"
+                android:textColor="@color/text_color"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/iv_before_two_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/icon_checked"
+                android:visibility="gone"/>
+
+        </LinearLayout>
+        <include layout="@layout/common_divider" />
+
+        <LinearLayout
+            android:id="@+id/lly_no_remind"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/tv_no_remind"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -188,7 +243,7 @@
                 android:textSize="14sp" />
 
             <ImageView
-                android:id="@+id/iv_noremind"
+                android:id="@+id/iv_no_remind"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/icon_checked"
