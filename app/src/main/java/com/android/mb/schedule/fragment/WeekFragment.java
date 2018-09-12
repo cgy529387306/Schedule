@@ -7,6 +7,7 @@ import android.widget.Toast;
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.app.MBApplication;
 import com.android.mb.schedule.base.BaseFragment;
+import com.android.mb.schedule.view.MainActivity;
 import com.android.mb.schedule.widget.ScheduleView;
 import com.android.mb.schedule.widget.ScheduleViewEvent;
 import com.haibin.calendarview.CalendarLayout;
@@ -56,5 +57,18 @@ public class WeekFragment extends BaseFragment {
                 Toast.makeText(MBApplication.getInstance(), event.getContent(), Toast.LENGTH_LONG).show();
             }
         });
+        mCalendarView.setOnMonthChangeListener(new CalendarView.OnMonthChangeListener() {
+            @Override
+            public void onMonthChange(int year, int month) {
+                String title = year+"年"+month+"月";
+                ((MainActivity)getActivity()).setTitle(title);
+            }
+        });
+    }
+
+    public void toToday(){
+        if (mCalendarView!=null){
+            mCalendarView.scrollToCurrent();
+        }
     }
 }

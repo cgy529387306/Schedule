@@ -50,18 +50,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ImageView mIvOpenDrawerLayout;
     private FragmentViewPager mFragmentViewPager;
     private ArrayList<Fragment> mFragmentArrayList;
+    private MonthFragment mMonthFragment;
+    private WeekFragment mWeekFragment;
+    private ScheduleFragment mScheduleFragment;
+    private RelatedMeFragment mRelatedMeFragment;
     private CircleImageView mIvHead; //头像
     private TextView mTvName;  // 名字
     private TextView mTvJob;  //职位
     private TextView mTvTitle; // 标题
-    private ImageView mIvRight; // 右边图标
-
+    private ImageView mIvRefresh; // 右边图标
+    private ImageView mIvToday; // 右边图标
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initStatusBar();
         initView();
+        initTabViewPager();
         initListener();
     }
 
@@ -80,16 +85,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mTvName = findViewById(R.id.tv_name);
         mTvJob = findViewById(R.id.tv_job);
         mTvTitle = findViewById(R.id.tv_title);
-        mIvRight = findViewById(R.id.iv_right);
+        mIvRefresh = findViewById(R.id.iv_refresh);
+        mIvToday = findViewById(R.id.iv_today);
+    }
+
+    private void initTabViewPager(){
         mFragmentArrayList = new ArrayList<>();
-        mFragmentArrayList.add(new MonthFragment());
-        mFragmentArrayList.add(new WeekFragment());
-        mFragmentArrayList.add(new ScheduleFragment());
-        mFragmentArrayList.add(new RelatedMeFragment());
+        mMonthFragment = new MonthFragment();
+        mWeekFragment = new WeekFragment();
+        mScheduleFragment = new ScheduleFragment();
+        mRelatedMeFragment = new RelatedMeFragment();
+        mFragmentArrayList.add(mMonthFragment);
+        mFragmentArrayList.add(mWeekFragment);
+        mFragmentArrayList.add(mScheduleFragment);
+        mFragmentArrayList.add(mRelatedMeFragment);
         mFragmentViewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), mFragmentArrayList));
         mFragmentViewPager.setOffscreenPageLimit(mFragmentArrayList.size());
         mFragmentViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
-        setTabs();
+        setViewTabs();
     }
 
     private void initStatusBar(){
@@ -105,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     /**
      * @description: 设置添加Tab
      */
-    private void setTabs(){
+    private void setViewTabs(){
         int[] tabTitles = new int[]{R.string.tab_month,R.string.tab_week,R.string.tab_add,R.string.tab_day,R.string.tab_user};
         int[] tabImages = new int[]{R.drawable.btn_tab_month,R.drawable.btn_tab_week,R.color.transparent,R.drawable.btn_tab_day,R.drawable.btn_tab_user};
         for (int i = 0; i < tabImages.length; i++) {
@@ -127,6 +140,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mCoordinatorLayout.setOnTouchListener(mOnTouchListener);
         mDrawerLayout.setDrawerListener(mDrawerListener);
         findViewById(R.id.tv_add).setOnClickListener(this);
+        mIvRefresh.setOnClickListener(this);
+        mIvToday.setOnClickListener(this);
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -219,6 +234,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }else if (id == R.id.tv_add){
             NavigationHelper.startActivity(MainActivity.this,NewScheduleActivity.class,null,false);
+        }else if (id == R.id.iv_refresh){
+
+        }else if (id == R.id.iv_today){
+            if (mFragmentViewPager.getCurrentItem()==0 && mMonthFragment!=null){
+                mMonthFragment.toToday();
+            }
+            if (mFragmentViewPager.getCurrentItem()==1 && mWeekFragment!=null){
+                mWeekFragment.toToday();
+            }
         }
     }
 
@@ -226,11 +250,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (mTvTitle!=null && !TextUtils.isEmpty(title)){
             mTvTitle.setText(title);
         }
-    }
-    public void setRightImage(int resId) {
-        if (mIvRight != null && mIvRight.getVisibility()==View.GONE)
-            mIvRight.setVisibility(View.VISIBLE);
-        mIvRight.setImageResource(resId);
     }
 
     private static final long DOUBLE_CLICK_INTERVAL = 2000;

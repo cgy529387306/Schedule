@@ -163,4 +163,10 @@ public class MonthFragment extends BaseFragment {
         return list;
     }
 
+    public void toToday(){
+        if (mCalendarView!=null){
+            mCalendarView.scrollToCurrent();
+        }
+    }
+
 }

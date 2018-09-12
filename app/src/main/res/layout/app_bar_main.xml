@@ -27,7 +27,7 @@
             android:textColor="@color/black"
             android:textSize="20sp" />
         <ImageView
-            android:id="@+id/iv_right"
+            android:id="@+id/iv_today"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="end"
@@ -35,7 +35,7 @@
             android:paddingRight="10dp"
             android:src="@mipmap/ic_home_today" />
         <ImageView
-            android:id="@+id/iv_action"
+            android:id="@+id/iv_refresh"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="end"
