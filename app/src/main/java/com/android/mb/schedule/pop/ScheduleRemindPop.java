@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -78,6 +79,7 @@ public class ScheduleRemindPop extends PopupWindow implements View.OnClickListen
         setWidth(ViewPager.LayoutParams.MATCH_PARENT);
         setHeight(ViewPager.LayoutParams.MATCH_PARENT);
         setBackgroundDrawable(new BitmapDrawable());
+        setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         initView();
         initListener();
     }

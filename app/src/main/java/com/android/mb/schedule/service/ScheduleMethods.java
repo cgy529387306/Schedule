@@ -1,12 +1,11 @@
 package com.android.mb.schedule.service;
 
-import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.entitys.CurrentUser;
 import com.android.mb.schedule.entitys.LoginData;
+import com.android.mb.schedule.entitys.ScheduleRequest;
 import com.android.mb.schedule.retrofit.cache.transformer.CacheTransformer;
 import com.android.mb.schedule.retrofit.http.RetrofitHttpClient;
-import com.android.mb.schedule.retrofit.http.util.RequestBodyUtil;
-import com.android.mb.schedule.utils.PreferencesHelper;
+import com.android.mb.schedule.utils.ProjectHelper;
 
 import java.io.File;
 import java.util.HashMap;
@@ -90,5 +89,27 @@ public class ScheduleMethods extends BaseHttp {
         return getService().getUserInfo(requestMap)
                 .compose(CacheTransformer.emptyTransformer())
                 .map(new HttpCacheResultFunc<LoginData>());
+    }
+
+    public Observable addSchedule(ScheduleRequest scheduleRequest){
+        Map<String,Object> requestMap = ProjectHelper.objectToMap(scheduleRequest);
+        if (CurrentUser.getInstance().isLogin()){
+            requestMap.put("token_id",CurrentUser.getInstance().getToken_id());
+            requestMap.put("token",CurrentUser.getInstance().getToken());
+        }
+        return getService().addSchedule(requestMap)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<Object>());
+    }
+
+    public Observable editSchedule(ScheduleRequest scheduleRequest){
+        Map<String,Object> requestMap = ProjectHelper.objectToMap(scheduleRequest);
+        if (CurrentUser.getInstance().isLogin()){
+            requestMap.put("token_id",CurrentUser.getInstance().getToken_id());
+            requestMap.put("token",CurrentUser.getInstance().getToken());
+        }
+        return getService().editSchedule(requestMap)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<Object>());
     }
 }

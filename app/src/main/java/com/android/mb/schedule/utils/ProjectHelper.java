@@ -13,6 +13,9 @@ import android.view.ViewParent;
 
 import com.google.gson.Gson;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -267,6 +270,23 @@ public class ProjectHelper {
 
     public static String getLunarMonth(int month){
         return month<0?"":CHINESE_NUMBER[month-1];
+    }
+
+
+    public static Map<String, Object> objectToMap(Object obj)  {
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (obj != null) {
+            try {
+                Field[] declaredFields = obj.getClass().getDeclaredFields();
+                for (Field field : declaredFields) {
+                    field.setAccessible(true);
+                    map.put(field.getName(), field.get(obj));
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return map;
     }
 
 }

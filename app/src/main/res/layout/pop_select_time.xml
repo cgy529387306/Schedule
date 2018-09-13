@@ -13,6 +13,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:background="@drawable/border_shape_bg_color"
+		android:layout_gravity="center_horizontal"
 		android:padding="20dp"
 		android:orientation="horizontal">
 

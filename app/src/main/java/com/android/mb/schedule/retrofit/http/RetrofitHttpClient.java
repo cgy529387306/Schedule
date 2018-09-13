@@ -8,6 +8,7 @@ import com.android.mb.schedule.retrofit.cache.intercept.CacheForceInterceptorNoN
 import com.android.mb.schedule.retrofit.cache.intercept.CacheInterceptorOnNet;
 import com.android.mb.schedule.retrofit.http.interceptor.HeaderInterceptor;
 import com.android.mb.schedule.retrofit.http.interceptor.LogInterceptor;
+import com.android.mb.schedule.retrofit.http.interceptor.NoNetWorkInterceptor;
 import com.android.mb.schedule.retrofit.http.interceptor.ParameterInterceptor;
 import com.android.mb.schedule.retrofit.http.util.ArrayUtil;
 import java.io.File;
@@ -91,7 +92,8 @@ public class RetrofitHttpClient {
         builder.readTimeout(readTime, TimeUnit.SECONDS);
         //错误重连
         builder.retryOnConnectionFailure(true);
-
+        // 无网络状态统一提示
+        builder.addInterceptor(new NoNetWorkInterceptor());
         //请求头
         builder.addInterceptor(new ParameterInterceptor(commonParams));
         //设置公共参数

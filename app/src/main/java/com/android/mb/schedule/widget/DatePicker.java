@@ -19,14 +19,14 @@ import com.android.mb.schedule.widget.wheelview.WheelView;
  */
 public class DatePicker extends LinearLayout {
 
-	private Calendar calendar = Calendar.getInstance(); //������
+	private Calendar calendar = Calendar.getInstance();
 	private WheelView newDays;
 	private ArrayList<DateObject> dateList ;
 	private OnChangeListener onChangeListener; //onChangeListener
 	private final int MARGIN_RIGHT = 20;
 	private DateObject dateObject;		//日期数据对象
 	private int day1;
-	int year,month,day;
+	private int year,month,day;
 	//Constructors
 	public DatePicker(Context context) {
 		super(context);
@@ -164,11 +164,11 @@ public class DatePicker extends LinearLayout {
 	 * @param year1
 	 */
 	public int calDays(int year1, int month1) {
-		boolean leayyear = false;
+		boolean learYear = false;
 		if (year % 4 == 0 && year % 100 != 0) {
-			leayyear = true;
+			learYear = true;
 		} else {
-			leayyear = false;
+			learYear = false;
 		}
 		for (int i = 1; i <= 12; i++) {
 			switch (month) {
@@ -182,7 +182,7 @@ public class DatePicker extends LinearLayout {
 					this.day1 = 31;
 					break;
 				case 2:
-					if (leayyear) {
+					if (learYear) {
 						this.day1 = 29;
 					} else {
 						this.day1 = 28;
@@ -196,9 +196,6 @@ public class DatePicker extends LinearLayout {
 					break;
 			}
 		}
-//		if (year1 == year && month1 == month) {
-//			this.day1  = day;
-//		}
 		return day1;
 	}
 }

@@ -21,14 +21,6 @@ public class DateObject extends Object{
 	public DateObject(int year2, int month2, int day2,int week2) {
 		super();
 		this.year = year2;
-		int maxDayOfMonth = Calendar.getInstance().getActualMaximum(Calendar.DAY_OF_MONTH);
-//		if(day2 > maxDayOfMonth){
-//			this.month = month2 + 1;
-//			this.day = day2 % maxDayOfMonth;
-//		}else{
-//			this.month = month2;
-//			this.day = day2;
-//		}
 		this.month = month2;
 		this.day = day2;
 		this.week = week2 % 7 == 0 ? 7 : week2 % 7;
@@ -52,18 +44,18 @@ public class DateObject extends Object{
 	 */
 	public DateObject(int hour2,int minute2,boolean isHourType) {
 		super();
-		if(isHourType == true && hour2 != -1){		//设置小时
+		if(isHourType && hour2 != -1){		//设置小时
 			if(hour2 > 24){
 				this.hour = hour2 % 24;
 			}else
 				this.hour = hour2;
-			this.listItem =  this.hour + "时";
-		}else if(isHourType == false && minute2 != -1){	//设置分钟
+			this.listItem =  hour<10?"0"+this.hour:""+this.hour;
+		}else if(!isHourType && minute2 != -1){	//设置分钟
 			if(minute2 > 60)
 				this.minute = minute2 % 60;
 			else
 				this.minute = minute2;
-			this.listItem =  this.minute + "分";
+			this.listItem =  minute<10?"0"+this.minute:""+this.minute;
 		}
 	}
 	

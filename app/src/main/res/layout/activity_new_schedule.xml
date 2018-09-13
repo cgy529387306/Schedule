@@ -209,7 +209,7 @@
                 android:textColor="@color/text_color"
                 android:textSize="15sp" />
             <ImageView
-                android:id="@+id/iv_remind"
+                android:id="@+id/iv_all_day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/ic_vibrate_close" />

@@ -20,9 +20,8 @@ import com.android.mb.schedule.widget.wheelview.WheelView;
 public class TimePicker extends LinearLayout{
 	
 	private Calendar calendar = Calendar.getInstance(); 
-	private WheelView hours, mins; //Wheel picker
+	private WheelView hours, minute; //Wheel picker
 	private OnChangeListener onChangeListener; //onChangeListener
-	private final int MARGIN_RIGHT = 15;		//调整文字右端距离
 	private ArrayList<DateObject> hourList,minuteList;
 	private DateObject dateObject;		//时间数据对象
 	//Constructors
@@ -41,26 +40,21 @@ public class TimePicker extends LinearLayout{
 	 * @param context
 	 */
 	private void init(Context context){
-		int hour = calendar.get(Calendar.HOUR_OF_DAY);
-		int minute = calendar.get(Calendar.MINUTE);
 		hourList = new ArrayList<DateObject>();
 		minuteList = new ArrayList<DateObject>();
-		
 		for (int i = 0; i < 24; i++) {
-			dateObject = new DateObject(hour+i,-1,true);
+			dateObject = new DateObject(i,-1,true);
 			hourList.add(dateObject);
 		}
-		
-		for (int j = 0; j < 60; j++) {
-			dateObject = new DateObject(-1,minute+j,false);
+		for (int j = 0; j < 12; j++) {
+			dateObject = new DateObject(-1,(5*j),false);
 			minuteList.add(dateObject);
 		}
-		
 		//小时选择器
 		hours = new WheelView(context);
-		LayoutParams lparams_hours = new LayoutParams(80,LayoutParams.WRAP_CONTENT);
-		lparams_hours.setMargins(0, 0, MARGIN_RIGHT, 0);
-		hours.setLayoutParams(lparams_hours);
+		LayoutParams hourParams = new LayoutParams(80,LayoutParams.WRAP_CONTENT);
+		hourParams.setMargins(0, 0, 0, 0);
+		hours.setLayoutParams(hourParams);
 		hours.setAdapter(new StringWheelAdapter(hourList, 24));
 		hours.setVisibleItems(7);
 		hours.setCyclic(true);
@@ -68,13 +62,13 @@ public class TimePicker extends LinearLayout{
 		addView(hours);		
 	
 		//分钟选择器
-		mins = new WheelView(context);
-		mins.setLayoutParams(new LayoutParams(80,LayoutParams.WRAP_CONTENT));
-		mins.setAdapter(new StringWheelAdapter(minuteList,60));
-		mins.setVisibleItems(7);
-		mins.setCyclic(true);
-		mins.addChangingListener(onMinsChangedListener);		
-		addView(mins);		
+		minute = new WheelView(context);
+		minute.setLayoutParams(new LayoutParams(80,LayoutParams.WRAP_CONTENT));
+		minute.setAdapter(new StringWheelAdapter(minuteList,60));
+		minute.setVisibleItems(7);
+		minute.setCyclic(true);
+		minute.addChangingListener(onMinChangedListener);
+		addView(minute);
 	}
 	
 	
@@ -87,9 +81,9 @@ public class TimePicker extends LinearLayout{
 			change();
 		}
 	};
-	private OnWheelChangedListener onMinsChangedListener = new OnWheelChangedListener(){
+	private OnWheelChangedListener onMinChangedListener = new OnWheelChangedListener(){
 		@Override
-		public void onChanged(WheelView mins, int oldValue, int newValue) {
+		public void onChanged(WheelView minute, int oldValue, int newValue) {
 			calendar.set(Calendar.MINUTE, newValue);
 			change();
 		}
@@ -99,7 +93,7 @@ public class TimePicker extends LinearLayout{
 	 * 滑动改变监听器回调的接口
 	 */
 	public interface OnChangeListener {
-		void onChange(int hour, int munite);
+		void onChange(int hour, int minute);
 	}
 	
 	/**
@@ -133,11 +127,21 @@ public class TimePicker extends LinearLayout{
 	 * @return
 	 */
 	public int getMinute(){
-		return minuteList.get(mins.getCurrentItem()).getMinute();
+		return minuteList.get(minute.getCurrentItem()).getMinute();
 	}
+
+
 		
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+	}
+
+	public void setCurrentTime(Calendar calendar){
+		int hour = calendar.get(Calendar.HOUR_OF_DAY)+1;
+		int realHour = hour % 24;
+		if (hourList.size()>realHour && hours!=null){
+			hours.setCurrentItem(realHour);
+		}
 	}
 }

@@ -39,4 +39,12 @@ public interface IScheduleService {
     @FormUrlEncoded
     Observable<HttpResult<LoginData>> getUserInfo(@FieldMap Map<String,Object> requestMap);
 
+    @POST("app/schedule/add")
+    @FormUrlEncoded
+    Observable<HttpResult<LoginData>> addSchedule(@FieldMap Map<String,Object> requestMap);
+
+    @POST("app/schedule/edit")
+    @FormUrlEncoded
+    Observable<HttpResult<LoginData>> editSchedule(@FieldMap Map<String,Object> requestMap);
+
 }
