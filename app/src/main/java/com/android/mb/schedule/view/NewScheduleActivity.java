@@ -1,14 +1,12 @@
 package com.android.mb.schedule.view;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.base.BaseActivity;
@@ -16,12 +14,7 @@ import com.android.mb.schedule.entitys.ScheduleRequest;
 import com.android.mb.schedule.pop.ScheduleRemindPop;
 import com.android.mb.schedule.pop.ScheduleRepeatPop;
 import com.android.mb.schedule.pop.ScheduleTimePop;
-import com.android.mb.schedule.utils.ToastHelper;
-import com.android.mb.schedule.utils.ToastUtils;
-import com.android.mb.schedule.widget.DatePicker;
-import com.android.mb.schedule.widget.TimePicker;
-
-import java.util.Calendar;
+import com.android.mb.schedule.utils.NavigationHelper;
 
 
 /**
@@ -127,7 +120,7 @@ public class NewScheduleActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.tv_location){
-
+            NavigationHelper.startActivityForResult(NewScheduleActivity.this,AddressActivity.class,null,1);
         }else  if (id == R.id.tv_upload_document){
 
         }else  if (id == R.id.iv_remind){
@@ -229,5 +222,10 @@ public class NewScheduleActivity extends BaseActivity implements View.OnClickLis
                 mTvEndTime.setText(selectTime);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
