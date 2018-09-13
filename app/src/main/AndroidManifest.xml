@@ -49,6 +49,9 @@
         <activity
             android:name=".view.ScheduleShareActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".view.AddressActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
