@@ -297,11 +297,12 @@ public class NewScheduleActivity extends BaseMvpActivity<SchedulePresenter,ISche
 
     @Override
     public void addSuccess(Object result) {
-
+        showToastMessage("保存成功");
+        finish();
     }
 
     @Override
     public void editSuccess(Object result) {
-
+        showToastMessage("修改成功");
     }
 }
