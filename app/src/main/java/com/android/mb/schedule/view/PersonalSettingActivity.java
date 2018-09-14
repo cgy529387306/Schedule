@@ -3,31 +3,33 @@ package com.android.mb.schedule.view;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.app.MBApplication;
-import com.android.mb.schedule.base.BaseActivity;
 import com.android.mb.schedule.base.BaseMvpActivity;
+import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.entitys.CurrentUser;
 import com.android.mb.schedule.entitys.LoginData;
-import com.android.mb.schedule.presenter.SetPwdPresenter;
 import com.android.mb.schedule.presenter.UserPresenter;
+import com.android.mb.schedule.utils.ImageUtils;
 import com.android.mb.schedule.utils.ProjectHelper;
-import com.android.mb.schedule.view.interfaces.ISetPwdView;
 import com.android.mb.schedule.view.interfaces.IUserView;
 import com.android.mb.schedule.widget.BottomMenuDialog;
 import com.android.mb.schedule.widget.CircleImageView;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2018\8\20 0020.
@@ -99,6 +101,16 @@ public class PersonalSettingActivity extends BaseMvpActivity<UserPresenter,IUser
                     return;
                 }
                 cropPickedImage(Uri.parse("file://".concat(mTempFilePath)));
+                break;
+            case 3:
+                // 上传图片
+                Bitmap bitmap = BitmapFactory.decodeFile(mTempFilePath);
+                if (bitmap!=null){
+                    mIvHead.setImageBitmap(bitmap);
+                    Map<String,Object> requestMap = new HashMap<>();
+                    requestMap.put("avatar", ImageUtils.bitmap2Base64(bitmap));
+                    mPresenter.setProfile(requestMap);
+                }
                 break;
             default:
                 break;
@@ -225,12 +237,14 @@ public class PersonalSettingActivity extends BaseMvpActivity<UserPresenter,IUser
         if (result!=null && result.getUserinfo()!=null){
             CurrentUser.getInstance().login(result.getUserinfo(),false);
             initUserInfo(result.getUserinfo());
+            sendMsg(ProjectConstants.EVENT_UPDATE_USER_INFO,null);
         }
     }
 
     @Override
     public void setSuccess() {
-
+        showToastMessage("修改成功");
+        mPresenter.getUserInfo();
     }
 
     private void initUserInfo(CurrentUser currentUser){

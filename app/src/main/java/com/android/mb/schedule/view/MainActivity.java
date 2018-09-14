@@ -36,6 +36,7 @@ import com.android.mb.schedule.fragment.RelatedMeFragment;
 import com.android.mb.schedule.fragment.ScheduleFragment;
 import com.android.mb.schedule.fragment.WeekFragment;
 import com.android.mb.schedule.presenter.HomePresenter;
+import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.utils.PreferencesHelper;
 import com.android.mb.schedule.utils.ProjectHelper;
@@ -47,6 +48,8 @@ import com.android.mb.schedule.widget.FragmentViewPager;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+
+import rx.functions.Action1;
 
 public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> implements IHomeView, NavigationView.OnNavigationItemSelectedListener ,View.OnClickListener{
 
@@ -91,9 +94,16 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
         initTabViewPager();
     }
 
+
     @Override
     protected void processLogic(Bundle savedInstanceState) {
         mPresenter.getUserInfo();
+        regiestEvent(ProjectConstants.EVENT_UPDATE_USER_INFO, new Action1<Events<?>>() {
+            @Override
+            public void call(Events<?> events) {
+               initUserInfo(CurrentUser.getInstance());
+            }
+        });
     }
 
     @Override
@@ -124,7 +134,7 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
     }
 
     private void initView() {
-        mTvTitle = findViewById(R.id.tv_title);
+        mTvTitle = findViewById(R.id.tv_main_title);
         mIvRefresh = findViewById(R.id.iv_refresh);
         mIvToday = findViewById(R.id.iv_today);
         mTabLayout = findViewById(R.id.tab_layout);

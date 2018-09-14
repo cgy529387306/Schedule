@@ -10,7 +10,6 @@ import com.android.mb.schedule.retrofit.http.exception.NoNetWorkException;
 import com.android.mb.schedule.service.ScheduleMethods;
 import com.android.mb.schedule.view.interfaces.IUserView;
 
-import java.io.File;
 import java.util.Map;
 
 import rx.Observable;
@@ -48,8 +47,8 @@ public class UserPresenter extends BaseMvpPresenter<IUserView> implements IUserP
     }
 
     @Override
-    public void setProfile(Map<String, Object> requestMap, File file) {
-        Observable observable = ScheduleMethods.getInstance().setProfile(requestMap,file);
+    public void setProfile(Map<String, Object> requestMap) {
+        Observable observable = ScheduleMethods.getInstance().setProfile(requestMap);
         toSubscribe(observable,  new Subscriber<Object>() {
             @Override
             public void onCompleted() {

@@ -1,34 +1,33 @@
 package com.android.mb.schedule.view;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.mb.schedule.R;
-import com.android.mb.schedule.base.BaseActivity;
 import com.android.mb.schedule.base.BaseMvpActivity;
 import com.android.mb.schedule.entitys.ScheduleRequest;
 import com.android.mb.schedule.pop.ScheduleRemindPop;
 import com.android.mb.schedule.pop.ScheduleRepeatPop;
 import com.android.mb.schedule.pop.ScheduleTimePop;
-import com.android.mb.schedule.presenter.LoginPresenter;
 import com.android.mb.schedule.presenter.SchedulePresenter;
+import com.android.mb.schedule.retrofit.cache.util.Utils;
+import com.android.mb.schedule.utils.FileUtils;
 import com.android.mb.schedule.utils.Helper;
+import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.utils.ToastHelper;
-import com.android.mb.schedule.utils.ToastUtils;
-import com.android.mb.schedule.view.interfaces.ILoginView;
 import com.android.mb.schedule.view.interfaces.IScheduleView;
-import com.android.mb.schedule.widget.DatePicker;
-import com.android.mb.schedule.widget.TimePicker;
 
+import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -51,7 +50,7 @@ public class NewScheduleActivity extends BaseMvpActivity<SchedulePresenter,ISche
     private TextView mTvEndTime ; //结束时间
     private ImageView mIvAllDay ; //全天提醒
     private boolean mIsAllDay = false;
-    private TextView mBtnAdd;// 添加相关人员
+    private ImageView mIvAddPerson;// 添加相关人员
     private ImageView mIvNoRemind; // 是否提醒相关人员
     private boolean mIsNoRemind = false;
     private ImageView mIvShareToOther; //分享给其他人
@@ -87,6 +86,7 @@ public class NewScheduleActivity extends BaseMvpActivity<SchedulePresenter,ISche
         super.onRightAction();
         String name = mEdtScheduleName.getText().toString().trim();
         String content = mEdtScheduleContent.getText().toString().trim();
+        String address = mTvAddress.getText().toString().trim();
         String startDate = mTvStartDate.getText().toString().trim();
         String startTime = mTvStartTime.getText().toString().trim();
         String endDate = mTvEndDate.getText().toString().trim();
@@ -107,7 +107,7 @@ public class NewScheduleActivity extends BaseMvpActivity<SchedulePresenter,ISche
         }
         mScheduleRequest.setTitle(name);
         mScheduleRequest.setDescription(content);
-        mScheduleRequest.setAddress("亚太中心");
+        mScheduleRequest.setAddress(address);
         mScheduleRequest.setImportant(mIsImport?1:0);
         mScheduleRequest.setAllDay(mIsAllDay?1:0);
         mScheduleRequest.setRelated("");
@@ -134,12 +134,12 @@ public class NewScheduleActivity extends BaseMvpActivity<SchedulePresenter,ISche
         mTvEndDate = findViewById(R.id.tv_end_date);
         mTvEndTime = findViewById(R.id.tv_end_time);
         mIvAllDay = findViewById(R.id.iv_all_day);
-        mBtnAdd = findViewById(R.id.tv_add);
+        mIvAddPerson = findViewById(R.id.iv_add_person);
         mIvNoRemind = findViewById(R.id.iv_no_remind);
         mIvShareToOther = findViewById(R.id.iv_share_other);
         mTvRepeat = findViewById(R.id.tv_repeat);
         mTvWhenRemind = findViewById(R.id.tv_when_remind);
-        mIvImport = findViewById(R.id.iv_importment);
+        mIvImport = findViewById(R.id.iv_import);
         choosePop();
     }
 
@@ -155,7 +155,7 @@ public class NewScheduleActivity extends BaseMvpActivity<SchedulePresenter,ISche
     protected void setListener() {
         mBtnLocation.setOnClickListener(this);
         mIvAllDay.setOnClickListener(this);
-        mBtnAdd.setOnClickListener(this);
+        mIvAddPerson.setOnClickListener(this);
         mIvNoRemind.setOnClickListener(this);
         mIvShareToOther.setOnClickListener(this);
         mTvRepeat.setOnClickListener(this);
@@ -170,13 +170,14 @@ public class NewScheduleActivity extends BaseMvpActivity<SchedulePresenter,ISche
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.tv_location){
-
+            NavigationHelper.startActivity(NewScheduleActivity.this,SelectAddressActivity.class,null,false);
         }else  if (id == R.id.tv_upload_document){
-
+            handlerFileIntent();
         }else  if (id == R.id.iv_all_day){
             mIsAllDay = !mIsAllDay;
             mIvAllDay.setImageResource(mIsAllDay?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
-        }else  if (id == R.id.tv_add){
+        }else  if (id == R.id.iv_add_person){
+            NavigationHelper.startActivity(NewScheduleActivity.this,SelectPersonActivity.class,null,false);
         }else  if (id == R.id.iv_no_remind){
             mIsNoRemind = !mIsNoRemind;
             mIvNoRemind.setImageResource(mIsNoRemind?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
@@ -189,7 +190,7 @@ public class NewScheduleActivity extends BaseMvpActivity<SchedulePresenter,ISche
             if(mScheduleRemindPop != null){
                 mScheduleRemindPop.showPopupWindow(view);
             }
-        }else  if (id == R.id.iv_importment){
+        }else  if (id == R.id.iv_import){
             mIsImport = !mIsImport;
             mIvImport.setImageResource(mIsImport?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
         }else  if (id == R.id.lly_start_date){
@@ -305,4 +306,37 @@ public class NewScheduleActivity extends BaseMvpActivity<SchedulePresenter,ISche
     public void editSuccess(Object result) {
         showToastMessage("修改成功");
     }
+
+    @Override
+    public void uploadSuccess(Object result) {
+
+    }
+
+    private void handlerFileIntent() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        startActivityForResult(intent, 1001);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        if (1001 == requestCode) {
+            final Uri uri = data.getData();
+            if (uri != null){
+                String filePath;
+                if ("file".equalsIgnoreCase(uri.getScheme())) {
+                    filePath = uri.getPath();
+                } else {
+                    filePath = FileUtils.getPath(this, uri);
+                }
+                mPresenter.uploadFile(new File(filePath));
+            }
+        }
+    }
+
 }

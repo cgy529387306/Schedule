@@ -9,14 +9,13 @@
         android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
             android:background="@color/white"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="10dp">
+            android:padding="10dp">
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="top"
                 android:text="日程名称"
                 android:textColor="@color/text_color"
                 android:textSize="15sp" />
@@ -24,68 +23,63 @@
                 android:id="@+id/et_schedule_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
+                android:gravity="top"
+                android:minLines="2"
                 android:background="@null"
-                android:hint="请输入日程名称"
+                android:hint="点击输入日程名称"
                 android:textColorHint="@color/gray_a5"
                 android:textColor="@color/edit_color"
                 android:textSize="15sp" />
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/lly_address"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
             android:background="@color/white"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp">
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp">
             <TextView
                 android:id="@+id/tv_location"
-                android:layout_width="wrap_content"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@mipmap/icon_location"
                 android:drawablePadding="5dp"
                 android:text="地点"
                 android:textColor="@color/gray_a5"
                 android:textSize="15sp" />
+            <TextView
+                android:id="@+id/tv_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="马尾造船集团"
+                android:textColor="@color/gray_a5"
+                android:textSize="15sp" />
         </LinearLayout>
         <include layout="@layout/common_divider" />
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
             android:background="@color/white"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="10dp">
+            android:padding="10dp">
             <TextView
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="left|top"
                 android:text="日程内容"
                 android:textColor="@color/text_color"
                 android:textSize="15sp" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:background="@null"
-                android:hint="点击输入日程(字数不超过400字)"
-                android:textColor="@color/text_color"
-                android:textSize="15sp" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="10dp">
             <EditText
                 android:id="@+id/et_schedule_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="top"
                 android:maxLength="400"
-                android:minLines="3"
+                android:minLines="2"
                 android:background="@null"
+                android:hint="点击输入日程(字数不超过400字)"
                 android:textColorHint="@color/gray_a5"
                 android:textColor="@color/edit_color"
                 android:textSize="15sp" />
@@ -99,8 +93,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp">
             <TextView
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:text="附件"
                 android:textColor="@color/text_color"
@@ -227,22 +220,28 @@
             android:paddingRight="10dp">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="选择相关人员"
                 android:textColor="@color/text_color"
                 android:textSize="15sp" />
 
             <TextView
-                android:id="@+id/tv_add"
-                android:layout_width="wrap_content"
+                android:id="@+id/tv_persons"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:drawablePadding="10dp"
-                android:drawableRight="@mipmap/icon_right"
-                android:text="添加人员自动提醒"
-                android:textColor="@color/text_color"
-                android:textSize="13sp" />
+                android:gravity="right"
+                android:layout_weight="1"
+                android:text="张三、李四、王五等六人"
+                android:textColor="@color/edit_color"
+                android:textSize="15sp" />
+            <ImageView
+                android:id="@+id/iv_add_person"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:padding="10dp"
+                android:src="@mipmap/ic_tab_add"/>
+
         </LinearLayout>
 
         <include layout="@layout/common_divider" />
@@ -324,8 +323,8 @@
                 android:paddingLeft="20dp"
                 android:drawableRight="@mipmap/icon_right"
                 android:text="一次性日程"
-                android:textColor="@color/text_color"
-                android:textSize="13sp" />
+                android:textColor="@color/gray_a5"
+                android:textSize="15sp" />
         </LinearLayout>
 
         <include layout="@layout/common_divider" />
@@ -354,8 +353,8 @@
                 android:paddingLeft="20dp"
                 android:drawableRight="@mipmap/icon_right"
                 android:text="日程开始前10分钟"
-                android:textColor="@color/text_color"
-                android:textSize="13sp" />
+                android:textColor="@color/gray_a5"
+                android:textSize="15sp" />
         </LinearLayout>
 
         <include layout="@layout/common_divider" />
@@ -376,7 +375,7 @@
                 android:textSize="15sp" />
 
             <ImageView
-                android:id="@+id/iv_importment"
+                android:id="@+id/iv_import"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/ic_vibrate_close" />

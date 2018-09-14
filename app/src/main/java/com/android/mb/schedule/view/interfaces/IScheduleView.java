@@ -6,4 +6,6 @@ public interface IScheduleView extends BaseMvpView{
     void addSuccess(Object result);
 
     void editSuccess(Object result);
+
+    void uploadSuccess(Object result);
 }

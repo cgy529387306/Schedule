@@ -15,7 +15,9 @@ import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 import rx.Observable;
 
 /**
@@ -30,14 +32,17 @@ public interface IScheduleService {
     @FormUrlEncoded
     Observable<HttpResult<Object>> resetPwd(@FieldMap Map<String,Object> requestMap);
 
-    @Multipart
     @POST("/app/user/profile")
     @FormUrlEncoded
-    Observable<HttpResult<Object>> setProfile(@FieldMap Map<String,Object> requestMap,@Part MultipartBody.Part file);
+    Observable<HttpResult<Object>> setProfile(@FieldMap Map<String,Object> requestMap);
 
     @POST("/app/user/get")
     @FormUrlEncoded
     Observable<HttpResult<LoginData>> getUserInfo(@FieldMap Map<String,Object> requestMap);
+
+    @POST("/app/schedule/upload")
+    @Multipart
+    Observable<HttpResult<Object>> upload(@QueryMap Map<String,Object> data, @Part MultipartBody.Part file);
 
     @POST("app/schedule/add")
     @FormUrlEncoded
@@ -46,5 +51,13 @@ public interface IScheduleService {
     @POST("app/schedule/edit")
     @FormUrlEncoded
     Observable<HttpResult<Object>> editSchedule(@FieldMap Map<String,Object> requestMap);
+
+    @POST("/app/common/area")
+    @FormUrlEncoded
+    Observable<HttpResult<Object>> getAreaList(@FieldMap Map<String,Object> requestMap);
+
+    @POST("/app/common/office")
+    @FormUrlEncoded
+    Observable<HttpResult<Object>> getOfficeList(@FieldMap Map<String,Object> requestMap);
 
 }

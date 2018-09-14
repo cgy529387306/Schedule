@@ -7,11 +7,15 @@ import android.widget.TextView;
 
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.base.BaseActivity;
+import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.entitys.CurrentUser;
+import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.widget.CircleImageView;
 import com.bumptech.glide.Glide;
+
+import rx.functions.Action1;
 
 /**
  * Created by Administrator on 2018\8\20 0020.
@@ -54,6 +58,12 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     @Override
     protected void processLogic(Bundle savedInstanceState) {
         initUserInfo();
+        regiestEvent(ProjectConstants.EVENT_UPDATE_USER_INFO, new Action1<Events<?>>() {
+            @Override
+            public void call(Events<?> events) {
+                initUserInfo();
+            }
+        });
     }
 
     @Override

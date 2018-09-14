@@ -7,8 +7,8 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.android.mb.myapplication"
-        minSdkVersion 15
-        targetSdkVersion 27
+        minSdkVersion 16
+        targetSdkVersion 21
         versionCode 1
         versionName "1.0"
     }
@@ -51,7 +51,7 @@ dependencies {
     implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
 
     // 权限管理
-    implementation ('com.tbruyelle.rxpermissions:rxpermissions:0.7.0@aar')
+//    implementation ('com.tbruyelle.rxpermissions:rxpermissions:0.7.0@aar')
 
     // 简化版 Adapter
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.42'

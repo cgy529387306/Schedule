@@ -11,6 +11,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -66,16 +67,26 @@ public class ScheduleMethods extends BaseHttp {
                 .map(new HttpCacheResultFunc<Object>());
     }
 
-    public Observable setProfile(Map<String,Object> requestMap,File file){
-        RequestBody requestFile =
-                RequestBody.create(MediaType.parse("multipart/form-data"), file);
+    public Observable setProfile(Map<String,Object> requestMap){
+        if (CurrentUser.getInstance().isLogin()){
+            requestMap.put("token_id",CurrentUser.getInstance().getToken_id());
+            requestMap.put("token",CurrentUser.getInstance().getToken());
+        }
+        return getService().setProfile(requestMap)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<Object>());
+    }
+
+    public Observable upload(File file){
+        Map<String,Object> requestMap = new HashMap<>();
+        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         MultipartBody.Part requestBody =
                 MultipartBody.Part.createFormData("file", file.getName(), requestFile);
         if (CurrentUser.getInstance().isLogin()){
             requestMap.put("token_id",CurrentUser.getInstance().getToken_id());
             requestMap.put("token",CurrentUser.getInstance().getToken());
         }
-        return getService().setProfile(requestMap,requestBody)
+        return getService().upload(requestMap,requestBody)
                 .compose(CacheTransformer.emptyTransformer())
                 .map(new HttpCacheResultFunc<Object>());
     }
@@ -109,6 +120,28 @@ public class ScheduleMethods extends BaseHttp {
             requestMap.put("token",CurrentUser.getInstance().getToken());
         }
         return getService().editSchedule(requestMap)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<Object>());
+    }
+
+    public Observable getAreaList(){
+        Map<String,Object> requestMap = new HashMap<>();
+        if (CurrentUser.getInstance().isLogin()){
+            requestMap.put("token_id",CurrentUser.getInstance().getToken_id());
+            requestMap.put("token",CurrentUser.getInstance().getToken());
+        }
+        return getService().getAreaList(requestMap)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<Object>());
+    }
+
+    public Observable getOfficeList(){
+        Map<String,Object> requestMap = new HashMap<>();
+        if (CurrentUser.getInstance().isLogin()){
+            requestMap.put("token_id",CurrentUser.getInstance().getToken_id());
+            requestMap.put("token",CurrentUser.getInstance().getToken());
+        }
+        return getService().getOfficeList(requestMap)
                 .compose(CacheTransformer.emptyTransformer())
                 .map(new HttpCacheResultFunc<Object>());
     }

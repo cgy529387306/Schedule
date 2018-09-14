@@ -24,7 +24,7 @@ import java.util.List;
 
 public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.MyViewHolder> {
 
-    private Context context;
+    private Context mContext;
     private List<String> mList;
     private OnItemClickListener mListener;
     private int index;
@@ -34,7 +34,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.MyViewHo
     }
 
     public AddressAdapter(Context context, List<String> mList) {
-        this.context = context;
+        this.mContext = context;
         this.mList = mList;
     }
     public void setCurrentIndex(int index) {
@@ -44,7 +44,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.MyViewHo
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_address, parent,false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_address, parent,false);
         return new MyViewHolder(view,mListener);
     }
 

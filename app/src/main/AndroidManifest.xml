@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
     <application
         android:allowBackup="true"
         android:name=".app.MBApplication"
@@ -50,7 +51,10 @@
             android:name=".view.ScheduleShareActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".view.AddressActivity"
+            android:name=".view.SelectAddressActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".view.SelectPersonActivity"
             android:screenOrientation="portrait"/>
     </application>
 
