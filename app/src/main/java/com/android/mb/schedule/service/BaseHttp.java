@@ -1,6 +1,7 @@
 package com.android.mb.schedule.service;
 
 
+import com.android.mb.schedule.entitys.CurrentUser;
 import com.android.mb.schedule.retrofit.http.entity.HttpResult;
 import com.android.mb.schedule.retrofit.http.exception.ApiException;
 
@@ -60,6 +61,10 @@ public class BaseHttp {
      */
     Map<String, String> getHead() {
         Map<String, String> cloudOfficeHeader = new HashMap<String, String>();
+        if (CurrentUser.getInstance().isLogin()){
+            cloudOfficeHeader.put("token_id",CurrentUser.getInstance().getToken_id()+"");
+            cloudOfficeHeader.put("token",CurrentUser.getInstance().getToken());
+        }
         return cloudOfficeHeader;
     }
 

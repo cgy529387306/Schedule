@@ -87,7 +87,7 @@ public class ScheduleShareActivity extends BaseActivity implements View.OnClickL
     public List getData() {
         List<String> dataList = new ArrayList<>();
         for (int i=0;i<10;i++){
-            dataList.add(Helper.date2String(new Date()));
+            dataList.add(Helper.date2String(new Date(),"MM-dd"));
         }
         return dataList;
     }

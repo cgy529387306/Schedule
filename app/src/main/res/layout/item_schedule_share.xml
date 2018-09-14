@@ -2,33 +2,38 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/white">
     <TextView
         android:id="@+id/tv_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
+        android:layout_width="wrap_content"
+        android:minWidth="70dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center_horizontal"
         android:layout_margin="10dp"
+        android:singleLine="true"
+        android:textSize="14sp"
         android:text="07-29"
-        android:textColor="@color/base_gray"
+        android:textColor="@color/gray_a5"
+        android:background="@drawable/shape_circle_gray"
         android:gravity="center"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:singleLine="true"
         android:drawableLeft="@mipmap/ic_warn"
         android:drawablePadding="6dp"
         android:text="到集团信息公司沟通问题"
-        android:textSize="16sp"
+        android:textSize="18sp"
         android:textColor="@color/base_blue" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal">
         <TextView
             android:id="@+id/tv_address"
@@ -38,9 +43,9 @@
             android:layout_height="wrap_content"
             android:drawableLeft="@mipmap/ic_address"
             android:drawablePadding="6dp"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:text="马尾造船厂"
-            android:textColor="@color/base_gray" />
+            android:textColor="@color/gray_a5" />
         <TextView
             android:id="@+id/tv_time"
             android:layout_width="wrap_content"
@@ -48,9 +53,9 @@
             android:singleLine="true"
             android:drawableLeft="@mipmap/ic_time"
             android:drawablePadding="6dp"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:text="08-25  18:56"
-            android:textColor="@color/base_gray" />
+            android:textColor="@color/gray_a5" />
     </LinearLayout>
     <TextView
         android:id="@+id/tv_share"
@@ -60,9 +65,9 @@
         android:layout_height="wrap_content"
         android:drawableLeft="@mipmap/ic_share"
         android:drawablePadding="6dp"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:text="分享给张三丰，李四，万五，陈六等12人"
-        android:textColor="@color/base_gray" />
+        android:textColor="@color/gray_a5" />
     <View
         android:layout_width="match_parent"
         android:layout_height="10dp"

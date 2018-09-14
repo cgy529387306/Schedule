@@ -3,6 +3,7 @@ package com.android.mb.schedule.fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 
 import com.android.mb.schedule.R;
@@ -72,7 +73,7 @@ public class RelatedMeFragment extends BaseFragment {
     public List getData() {
         List<String> dataList = new ArrayList<>();
         for (int i=0;i<10;i++){
-            dataList.add(Helper.date2String(new Date()));
+            dataList.add(Helper.date2String(new Date(),"MM-dd"));
         }
         return dataList;
     }

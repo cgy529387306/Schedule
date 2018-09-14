@@ -42,7 +42,7 @@ public interface IScheduleService {
 
     @POST("/app/schedule/upload")
     @Multipart
-    Observable<HttpResult<Object>> upload(@QueryMap Map<String,Object> data, @Part MultipartBody.Part file);
+    Observable<HttpResult<Object>> upload(@PartMap Map<String,RequestBody> requestMap, @Part MultipartBody.Part file);
 
     @POST("app/schedule/add")
     @FormUrlEncoded

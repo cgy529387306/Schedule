@@ -54,6 +54,7 @@ public class MonthFragment extends BaseFragment {
         List<MultipleItem> data = getMultipleItemData();
         mAdapter = new MultipleItemQuickAdapter(getActivity(), data);
         mAdapter.addHeaderView(getHeaderView());
+        mAdapter.addFooterView(LayoutInflater.from(getActivity()).inflate(R.layout.footer_home, null));
         mRecyclerView.setAdapter(mAdapter);
     }
 

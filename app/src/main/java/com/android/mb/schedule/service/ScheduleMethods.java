@@ -77,20 +77,6 @@ public class ScheduleMethods extends BaseHttp {
                 .map(new HttpCacheResultFunc<Object>());
     }
 
-    public Observable upload(File file){
-        Map<String,Object> requestMap = new HashMap<>();
-        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        MultipartBody.Part requestBody =
-                MultipartBody.Part.createFormData("file", file.getName(), requestFile);
-        if (CurrentUser.getInstance().isLogin()){
-            requestMap.put("token_id",CurrentUser.getInstance().getToken_id());
-            requestMap.put("token",CurrentUser.getInstance().getToken());
-        }
-        return getService().upload(requestMap,requestBody)
-                .compose(CacheTransformer.emptyTransformer())
-                .map(new HttpCacheResultFunc<Object>());
-    }
-
     public Observable getUserInfo(){
         Map<String,Object> requestMap = new HashMap<>();
         if (CurrentUser.getInstance().isLogin()){
@@ -100,6 +86,24 @@ public class ScheduleMethods extends BaseHttp {
         return getService().getUserInfo(requestMap)
                 .compose(CacheTransformer.emptyTransformer())
                 .map(new HttpCacheResultFunc<LoginData>());
+    }
+
+    public Observable upload(File file){
+        Map<String,RequestBody> requestMap = new HashMap<>();
+        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        MultipartBody.Part requestBody =
+                MultipartBody.Part.createFormData("file", file.getName(), requestFile);
+        if (CurrentUser.getInstance().isLogin()){
+            requestMap.put("token_id",convertToRequestBody(String.valueOf(CurrentUser.getInstance().getToken_id())));
+            requestMap.put("token",convertToRequestBody(CurrentUser.getInstance().getToken()));
+        }
+        return getService().upload(requestMap,requestBody)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<Object>());
+    }
+
+    private RequestBody convertToRequestBody(String param){
+        return RequestBody.create(MediaType.parse("text/plain"), param);
     }
 
     public Observable addSchedule(ScheduleRequest scheduleRequest){
