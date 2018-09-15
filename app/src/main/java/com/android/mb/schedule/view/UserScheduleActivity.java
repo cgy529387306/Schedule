@@ -7,14 +7,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.android.mb.schedule.R;
-import com.android.mb.schedule.adapter.ScheduleRelateAdapter;
-import com.android.mb.schedule.base.BaseActivity;
+import com.android.mb.schedule.adapter.ScheduleShareAdapter;
+import com.android.mb.schedule.adapter.SectionAdapter;
+import com.android.mb.schedule.adapter.UserScheduleAdapter;
 import com.android.mb.schedule.base.BaseMvpActivity;
-import com.android.mb.schedule.presenter.RelatedPresenter;
-import com.android.mb.schedule.presenter.SchedulePresenter;
+import com.android.mb.schedule.entitys.MySection;
+import com.android.mb.schedule.entitys.ScheduleRequest;
+import com.android.mb.schedule.presenter.MySharePresenter;
 import com.android.mb.schedule.utils.Helper;
-import com.android.mb.schedule.view.interfaces.IRelatedView;
-import com.android.mb.schedule.view.interfaces.IScheduleView;
+import com.android.mb.schedule.view.interfaces.IMyShareView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
 import java.util.ArrayList;
@@ -25,9 +26,9 @@ import java.util.List;
  * Created by Administrator on 2018\8\20 0020.
  */
 
-public class ScheduleRelateActivity extends BaseMvpActivity<RelatedPresenter,IRelatedView> implements IRelatedView, View.OnClickListener{
+public class UserScheduleActivity extends BaseMvpActivity<MySharePresenter,IMyShareView> implements IMyShareView,  View.OnClickListener{
     private RecyclerView mRecyclerView;
-    private ScheduleRelateAdapter mAdapter;
+    private SectionAdapter mAdapter;
     private int mCurrentPage = 0;
 
     @Override
@@ -42,7 +43,7 @@ public class ScheduleRelateActivity extends BaseMvpActivity<RelatedPresenter,IRe
 
     @Override
     protected void initTitle() {
-        setTitleText("与我相关的日程");
+        setTitleText("我的日程");
     }
 
     @Override
@@ -50,13 +51,13 @@ public class ScheduleRelateActivity extends BaseMvpActivity<RelatedPresenter,IRe
         mRecyclerView =  findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mAdapter = new ScheduleRelateAdapter(R.layout.item_schedule_relate,getData());
+        mAdapter = new SectionAdapter(R.layout.item_section_content,R.layout.item_section_head,getData());
         mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
-        mPresenter.getRelated();
+        mPresenter.getMyShare();
     }
 
     @Override
@@ -89,11 +90,13 @@ public class ScheduleRelateActivity extends BaseMvpActivity<RelatedPresenter,IRe
     }
 
     public List getData() {
-        List<String> dataList = new ArrayList<>();
+        List<MySection> list = new ArrayList<>();
         for (int i=0;i<10;i++){
-            dataList.add(Helper.date2String(new Date(),"MM-dd"));
+            list.add(new MySection(true, "Section"+i, true));
+            list.add(new MySection(new ScheduleRequest()));
+            list.add(new MySection(new ScheduleRequest()));
         }
-        return dataList;
+        return list;
     }
 
     @Override
@@ -102,7 +105,7 @@ public class ScheduleRelateActivity extends BaseMvpActivity<RelatedPresenter,IRe
     }
 
     @Override
-    protected RelatedPresenter createPresenter() {
-        return new RelatedPresenter();
+    protected MySharePresenter createPresenter() {
+        return new MySharePresenter();
     }
 }

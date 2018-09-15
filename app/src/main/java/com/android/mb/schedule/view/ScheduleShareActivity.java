@@ -10,7 +10,12 @@ import com.android.mb.schedule.R;
 import com.android.mb.schedule.adapter.ScheduleRelateAdapter;
 import com.android.mb.schedule.adapter.ScheduleShareAdapter;
 import com.android.mb.schedule.base.BaseActivity;
+import com.android.mb.schedule.base.BaseMvpActivity;
+import com.android.mb.schedule.presenter.MySharePresenter;
+import com.android.mb.schedule.presenter.RelatedPresenter;
 import com.android.mb.schedule.utils.Helper;
+import com.android.mb.schedule.view.interfaces.IMyShareView;
+import com.android.mb.schedule.view.interfaces.IRelatedView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
 import java.util.ArrayList;
@@ -21,7 +26,7 @@ import java.util.List;
  * Created by Administrator on 2018\8\20 0020.
  */
 
-public class ScheduleShareActivity extends BaseActivity implements View.OnClickListener{
+public class ScheduleShareActivity extends BaseMvpActivity<MySharePresenter,IMyShareView> implements IMyShareView,  View.OnClickListener{
     private RecyclerView mRecyclerView;
     private ScheduleShareAdapter mAdapter;
     private int mCurrentPage = 0;
@@ -52,7 +57,7 @@ public class ScheduleShareActivity extends BaseActivity implements View.OnClickL
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
-
+        mPresenter.getMyShare();
     }
 
     @Override
@@ -90,5 +95,15 @@ public class ScheduleShareActivity extends BaseActivity implements View.OnClickL
             dataList.add(Helper.date2String(new Date(),"MM-dd"));
         }
         return dataList;
+    }
+
+    @Override
+    public void getSuccess() {
+
+    }
+
+    @Override
+    protected MySharePresenter createPresenter() {
+        return new MySharePresenter();
     }
 }

@@ -5,6 +5,8 @@ import android.content.DialogInterface.OnKeyListener;
 import android.os.Bundle;
 import android.view.KeyEvent;
 
+import com.android.mb.schedule.utils.Helper;
+import com.android.mb.schedule.utils.ProgressDialogHelper;
 import com.android.mb.schedule.utils.ToastUtils;
 
 
@@ -48,15 +50,8 @@ public abstract class BaseMvpActivity<P extends Presenter<V>,V extends BaseMvpVi
 
 
     @Override
-    public void showProgressDialog() {
-//        if(mProgressDialog == null) {
-//            mProgressDialog = new CustomProgressDialog(this);
-//            mProgressDialog.setCancelable(false);
-//        }
-//
-//        mProgressDialog.show();
-//        //为进度条添加一个事件.
-//        mProgressDialog.setOnKeyListener(onKeyListener);
+    public void showProgressDialog(String message) {
+        ProgressDialogHelper.showProgressDialog(this, Helper.isEmpty(message)?"加载中...":message);
     }
 
     @Override
@@ -64,9 +59,7 @@ public abstract class BaseMvpActivity<P extends Presenter<V>,V extends BaseMvpVi
         if (isFinishing()) {
             return;
         }
-//        if (null != mProgressDialog && mProgressDialog.isShowing()) {
-//            mProgressDialog.dismiss();
-//        }
+        ProgressDialogHelper.dismissProgressDialog();
     }
 
     /**

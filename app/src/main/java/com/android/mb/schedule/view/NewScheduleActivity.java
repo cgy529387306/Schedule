@@ -12,12 +12,15 @@ import android.widget.TextView;
 
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.base.BaseMvpActivity;
+import com.android.mb.schedule.constants.ProjectConstants;
+import com.android.mb.schedule.entitys.FileData;
 import com.android.mb.schedule.entitys.ScheduleRequest;
 import com.android.mb.schedule.pop.ScheduleRemindPop;
 import com.android.mb.schedule.pop.ScheduleRepeatPop;
 import com.android.mb.schedule.pop.ScheduleTimePop;
 import com.android.mb.schedule.presenter.SchedulePresenter;
 import com.android.mb.schedule.retrofit.cache.util.Utils;
+import com.android.mb.schedule.utils.AppHelper;
 import com.android.mb.schedule.utils.FileUtils;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.NavigationHelper;
@@ -41,7 +44,7 @@ public class NewScheduleActivity extends BaseMvpActivity<SchedulePresenter,ISche
     private TextView mTvAddress ; //位置
     private TextView mEdtScheduleContent; // 日程内容
     private TextView mTvUploadDocument; // 点击上传文件
-//    private TextView mBtnChangeDocument ; //点击替换附件
+    private TextView mTvFileName;//文件名称
     private LinearLayout mLlyStartDate ;
     private TextView mTvStartDate ; //开始日期
     private TextView mTvStartTime ; //开始时间
@@ -113,8 +116,8 @@ public class NewScheduleActivity extends BaseMvpActivity<SchedulePresenter,ISche
         mScheduleRequest.setRelated("");
         mScheduleRequest.setSummary("");
         mScheduleRequest.setShare("");
-        mScheduleRequest.setStart(start.getTime());
-        mScheduleRequest.setEnd(end.getTime());
+        mScheduleRequest.setStart(start.getTime()/1000);
+        mScheduleRequest.setEnd(end.getTime()/1000);
         mScheduleRequest.setRemind(mScheduleRemindPop.getType());
         mScheduleRequest.setRepeattype(mScheduleRepeatPop.getType());
         mPresenter.addSchedule(mScheduleRequest);
@@ -127,6 +130,7 @@ public class NewScheduleActivity extends BaseMvpActivity<SchedulePresenter,ISche
         mTvAddress = findViewById(R.id.tv_address);
         mEdtScheduleContent = findViewById(R.id.et_schedule_content);
         mTvUploadDocument = findViewById(R.id.tv_upload_document);
+        mTvFileName = findViewById(R.id.tv_file_name);
         mLlyStartDate = findViewById(R.id.lly_start_date);
         mTvStartDate = findViewById(R.id.tv_start_date);
         mTvStartTime = findViewById(R.id.tv_start_time);
@@ -299,6 +303,7 @@ public class NewScheduleActivity extends BaseMvpActivity<SchedulePresenter,ISche
     @Override
     public void addSuccess(Object result) {
         showToastMessage("保存成功");
+        sendMsg(ProjectConstants.EVENT_UPDATE_SCHEDULE_LIST,null);
         finish();
     }
 
@@ -308,8 +313,19 @@ public class NewScheduleActivity extends BaseMvpActivity<SchedulePresenter,ISche
     }
 
     @Override
-    public void uploadSuccess(Object result) {
-
+    public void uploadSuccess(FileData result) {
+        if (result!=null){
+            showToastMessage("上传成功");
+            String fileUrl = result.getFile();
+            if (Helper.isNotEmpty(fileUrl)){
+                String fileName = fileUrl.substring(fileUrl.lastIndexOf("/")+1);
+                if (Helper.isNotEmpty(fileName)){
+                    mTvFileName.setVisibility(View.VISIBLE);
+                    mTvFileName.setText(fileName);
+                    mTvUploadDocument.setText("点击替换附件");
+                }
+            }
+        }
     }
 
     private void handlerFileIntent() {
@@ -338,5 +354,4 @@ public class NewScheduleActivity extends BaseMvpActivity<SchedulePresenter,ISche
             }
         }
     }
-
 }

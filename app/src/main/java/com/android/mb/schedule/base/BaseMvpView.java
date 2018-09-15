@@ -22,7 +22,7 @@ public interface BaseMvpView {
     /**
      * 显示进度加载框
      */
-    void showProgressDialog();
+    void showProgressDialog(String message);
 
     /**
      * 隐藏进度加载框.

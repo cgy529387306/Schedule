@@ -9,10 +9,15 @@ import android.widget.TextView;
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.adapter.MultipleItemQuickAdapter;
 import com.android.mb.schedule.base.BaseFragment;
+import com.android.mb.schedule.base.BaseMvpFragment;
+import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.entitys.MultipleItem;
+import com.android.mb.schedule.presenter.MonthPresenter;
+import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.LunarUtil;
 import com.android.mb.schedule.view.MainActivity;
+import com.android.mb.schedule.view.interfaces.IMonthView;
 import com.haibin.calendarview.Calendar;
 import com.haibin.calendarview.CalendarLayout;
 import com.haibin.calendarview.CalendarView;
@@ -23,17 +28,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import rx.functions.Action1;
+
 
 /**
  * 月视图
  * Created by cgy on 16/7/18.
  */
-public class MonthFragment extends BaseFragment {
+public class MonthFragment extends BaseMvpFragment<MonthPresenter,IMonthView> implements IMonthView {
     private CalendarLayout mCalendarLayout;
     private CalendarView mCalendarView;
     private RecyclerView mRecyclerView;
     private MultipleItemQuickAdapter mAdapter;
     private TextView mTvDate;
+    private String mMonthDate;
     @Override
     protected int getLayoutId() {
         return R.layout.frg_month;
@@ -50,7 +58,6 @@ public class MonthFragment extends BaseFragment {
     protected void processLogic() {
         initData();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         List<MultipleItem> data = getMultipleItemData();
         mAdapter = new MultipleItemQuickAdapter(getActivity(), data);
         mAdapter.addHeaderView(getHeaderView());
@@ -125,13 +132,29 @@ public class MonthFragment extends BaseFragment {
         return calendar;
     }
 
+    private void getScheduleList(){
+        Map<String,Object> requestMap = new HashMap<>();
+        requestMap.put("date",mMonthDate);
+        mPresenter.getMonthSchedule(requestMap);
+    }
+
     @Override
     protected void setListener() {
+        regiestEvent(ProjectConstants.EVENT_UPDATE_SCHEDULE_LIST, new Action1<Events<?>>() {
+            @Override
+            public void call(Events<?> events) {
+                getScheduleList();
+            }
+        });
         mCalendarView.setOnMonthChangeListener(new CalendarView.OnMonthChangeListener() {
             @Override
             public void onMonthChange(int year, int month) {
-                String title = year+"年"+month+"月";
+                String monthStr = month<10?"0"+month:month+"";
+                String title = year+"年"+monthStr+"月";
+                assert ((MainActivity)getActivity()) != null;
                 ((MainActivity)getActivity()).setTitle(title);
+                mMonthDate = year+"-"+monthStr+"-"+"01";
+                getScheduleList();
             }
         });
         mCalendarView.setOnCalendarSelectListener(new CalendarView.OnCalendarSelectListener() {
@@ -170,4 +193,13 @@ public class MonthFragment extends BaseFragment {
         }
     }
 
+    @Override
+    public void getSuccess() {
+
+    }
+
+    @Override
+    protected MonthPresenter createPresenter() {
+        return new MonthPresenter();
+    }
 }

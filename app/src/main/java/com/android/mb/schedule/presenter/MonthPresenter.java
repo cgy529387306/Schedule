@@ -3,14 +3,11 @@ package com.android.mb.schedule.presenter;
 import android.text.TextUtils;
 
 import com.android.mb.schedule.base.BaseMvpPresenter;
-import com.android.mb.schedule.entitys.LoginData;
-import com.android.mb.schedule.presenter.interfaces.ILoginPresenter;
+import com.android.mb.schedule.presenter.interfaces.IMonthPresenter;
 import com.android.mb.schedule.retrofit.http.exception.ApiException;
 import com.android.mb.schedule.retrofit.http.exception.NoNetWorkException;
-import com.android.mb.schedule.service.RequestUtils;
 import com.android.mb.schedule.service.ScheduleMethods;
-import com.android.mb.schedule.view.interfaces.IHomeView;
-import com.android.mb.schedule.view.interfaces.ILoginView;
+import com.android.mb.schedule.view.interfaces.IMonthView;
 
 import java.util.Map;
 
@@ -20,14 +17,13 @@ import rx.Subscriber;
 /**
  * Created by cgy on 2018/2/11 0011.
  */
-
-public class LoginPresenter extends BaseMvpPresenter<ILoginView> implements ILoginPresenter {
+public class MonthPresenter extends BaseMvpPresenter<IMonthView> implements IMonthPresenter {
 
 
     @Override
-    public void userLogin(Map<String,Object> requestMap) {
-        Observable observable = ScheduleMethods.getInstance().userLogin(requestMap);
-        toSubscribe(observable,  new Subscriber<LoginData>() {
+    public void getMonthSchedule(Map<String, Object> requestMap) {
+        Observable observable = ScheduleMethods.getInstance().getMonthSchedule(requestMap);
+        toSubscribe(observable,  new Subscriber<Object>() {
             @Override
             public void onCompleted() {
 
@@ -45,9 +41,9 @@ public class LoginPresenter extends BaseMvpPresenter<ILoginView> implements ILog
             }
 
             @Override
-            public void onNext(LoginData result) {
+            public void onNext(Object result) {
                 if (mMvpView!=null){
-                    mMvpView.loginSuccess(result);
+                    mMvpView.getSuccess();
                 }
             }
         });

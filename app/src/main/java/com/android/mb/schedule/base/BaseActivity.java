@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.rxbus.RxBus;
+import com.android.mb.schedule.utils.AppHelper;
 import com.android.mb.schedule.utils.KeyBoardUtils;
 import com.android.mb.schedule.utils.StatusBarUtil;
 import com.android.mb.schedule.utils.ToastUtils;
@@ -157,7 +158,6 @@ public abstract class BaseActivity extends AppCompatActivity{
         public void onClick(View v) {
             int id = v.getId();
             if (id == R.id.iv_back){
-                finish();
                 onLeftBack();
             }else if (id == R.id.iv_action){
                 onRightAction();
@@ -168,6 +168,11 @@ public abstract class BaseActivity extends AppCompatActivity{
     };
 
     protected void onLeftBack(){
+        if (mIvBack!=null && AppHelper.isShowKeyboard(mIvBack)){
+            AppHelper.hideSoftInputFromWindow(mIvBack);
+        }else{
+            finish();
+        }
     }
 
     protected void onRightAction(){

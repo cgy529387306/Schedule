@@ -12,7 +12,7 @@
         <item
             android:id="@+id/nav_subordinate_log"
             android:icon="@mipmap/ic_subordinate_schedule"
-            android:title="下属日志" />
+            android:title="下属日程" />
         <item
             android:id="@+id/nav_relatedme_log"
             android:icon="@mipmap/ic_my_schedule"

@@ -1,5 +1,6 @@
 package com.android.mb.schedule.service;
 
+import com.android.mb.schedule.entitys.FileData;
 import com.android.mb.schedule.entitys.LoginData;
 import com.android.mb.schedule.retrofit.http.entity.HttpResult;
 
@@ -42,7 +43,7 @@ public interface IScheduleService {
 
     @POST("/app/schedule/upload")
     @Multipart
-    Observable<HttpResult<Object>> upload(@PartMap Map<String,RequestBody> requestMap, @Part MultipartBody.Part file);
+    Observable<HttpResult<FileData>> upload(@QueryMap Map<String,Object> requestMap, @Part MultipartBody.Part file);
 
     @POST("app/schedule/add")
     @FormUrlEncoded
@@ -51,6 +52,35 @@ public interface IScheduleService {
     @POST("app/schedule/edit")
     @FormUrlEncoded
     Observable<HttpResult<Object>> editSchedule(@FieldMap Map<String,Object> requestMap);
+
+    @POST("/app/schedule/get")
+    @FormUrlEncoded
+    Observable<HttpResult<Object>> getSchedule(@FieldMap Map<String,Object> requestMap);
+
+    @POST("/app/schedule/day")
+    @FormUrlEncoded
+    Observable<HttpResult<Object>> getDaySchedule(@FieldMap Map<String,Object> requestMap);
+
+    @POST("/app/schedule/month")
+    @FormUrlEncoded
+    Observable<HttpResult<Object>> getMonthSchedule(@FieldMap Map<String,Object> requestMap);
+
+    @POST("/app/schedule/week")
+    @FormUrlEncoded
+    Observable<HttpResult<Object>> getWeekSchedule(@FieldMap Map<String,Object> requestMap);
+
+    @POST("/app/schedule/ishare")
+    @FormUrlEncoded
+    Observable<HttpResult<LoginData>> getIShare(@FieldMap Map<String,Object> requestMap);
+
+    @POST("/app/schedule/share")
+    @FormUrlEncoded
+    Observable<HttpResult<LoginData>> getShare(@FieldMap Map<String,Object> requestMap);
+
+    @POST("/app/schedule/related")
+    @FormUrlEncoded
+    Observable<HttpResult<LoginData>> getRelated(@FieldMap Map<String,Object> requestMap);
+
 
     @POST("/app/common/area")
     @FormUrlEncoded

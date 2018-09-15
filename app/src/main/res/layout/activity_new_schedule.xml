@@ -99,9 +99,23 @@
                 android:textColor="@color/text_color"
                 android:textSize="15sp" />
             <TextView
+                android:id="@+id/tv_file_name"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:ellipsize="middle"
+                android:visibility="gone"
+                android:layout_marginRight="12dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="文件XXX.word"
+                android:textColor="@color/base_blue"
+                android:textSize="15sp" />
+            <TextView
                 android:id="@+id/tv_upload_document"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:gravity="center"
                 android:text="点击可上传(文件大小小于100M)"
                 android:textColor="@color/gray_a5"

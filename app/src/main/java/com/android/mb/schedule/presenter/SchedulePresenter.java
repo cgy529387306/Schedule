@@ -3,6 +3,7 @@ package com.android.mb.schedule.presenter;
 import android.text.TextUtils;
 
 import com.android.mb.schedule.base.BaseMvpPresenter;
+import com.android.mb.schedule.entitys.FileData;
 import com.android.mb.schedule.entitys.ScheduleRequest;
 import com.android.mb.schedule.presenter.interfaces.ISchedulePresenter;
 import com.android.mb.schedule.retrofit.http.exception.ApiException;
@@ -78,16 +79,20 @@ public class SchedulePresenter extends BaseMvpPresenter<IScheduleView> implement
 
     @Override
     public void uploadFile(File file) {
+        mMvpView.showProgressDialog("上传中...");
         Observable observable = ScheduleMethods.getInstance().upload(file);
-        toSubscribe(observable,  new Subscriber<Object>() {
+        toSubscribe(observable,  new Subscriber<FileData>() {
             @Override
             public void onCompleted() {
-
+                if (mMvpView!=null){
+                    mMvpView.dismissProgressDialog();
+                }
             }
 
             @Override
             public void onError(Throwable e) {
                 if(mMvpView!=null){
+                    mMvpView.dismissProgressDialog();
                     if (e instanceof ApiException && !TextUtils.isEmpty(e.getMessage())){
                         mMvpView.showToastMessage(e.getMessage());
                     }else if (e instanceof NoNetWorkException && !TextUtils.isEmpty(e.getMessage())){
@@ -97,8 +102,9 @@ public class SchedulePresenter extends BaseMvpPresenter<IScheduleView> implement
             }
 
             @Override
-            public void onNext(Object result) {
+            public void onNext(FileData result) {
                 if (mMvpView!=null){
+                    mMvpView.dismissProgressDialog();
                     mMvpView.uploadSuccess(result);
                 }
             }

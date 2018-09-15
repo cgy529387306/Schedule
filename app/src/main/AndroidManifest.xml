@@ -51,6 +51,9 @@
             android:name=".view.ScheduleShareActivity"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".view.UserScheduleActivity"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".view.SelectAddressActivity"
             android:screenOrientation="portrait"/>
         <activity

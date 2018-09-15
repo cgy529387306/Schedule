@@ -13,6 +13,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.util.DisplayMetrics;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.android.mb.schedule.app.MBApplication;
 
@@ -395,7 +397,36 @@ public class AppHelper {
         }
     }
     // endregion ExternalStorage
+    /**
+     * 判断软键盘是否弹出
+     */
+    public static boolean isShowKeyboard( View v) {
+        InputMethodManager imm = (InputMethodManager) MBApplication.getInstance()
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm!=null && imm.hideSoftInputFromWindow(v.getWindowToken(), 0)) {
+            imm.showSoftInput(v, 0);
+            return true;
+            //软键盘已弹出
+        } else {
+            return false;
+            //软键盘未弹出
+        }
+    }
 
+    /**
+     * 隐藏软键盘
+     *
+     * @param view the view you want to hide keyboard
+     */
+    public static void hideSoftInputFromWindow(View view) {
+        if (Helper.isNotNull(view)) {
+            InputMethodManager imm = (InputMethodManager) MBApplication.getInstance()
+                    .getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
+        }
+    }
 
 
 }

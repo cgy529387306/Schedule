@@ -63,8 +63,6 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
     private ArrayList<Fragment> mFragmentArrayList;
     private MonthFragment mMonthFragment;
     private WeekFragment mWeekFragment;
-    private ScheduleFragment mScheduleFragment;
-    private RelatedMeFragment mRelatedMeFragment;
     private CircleImageView mIvHead; //头像
     private TextView mTvName;  // 名字
     private TextView mTvJob;  //职位
@@ -118,7 +116,17 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                mFragmentViewPager.setCurrentItem(tab.getPosition(),true);
+                if (tab.getPosition()<2){
+                    //月和周
+                    mFragmentViewPager.setCurrentItem(tab.getPosition(),true);
+                }else if (tab.getPosition()==3){
+                    //我的日程
+                    NavigationHelper.startActivity(MainActivity.this,UserScheduleActivity.class,null,false);
+                }else if (tab.getPosition()==4){
+                    //与我相关
+                    NavigationHelper.startActivity(MainActivity.this,ScheduleRelateActivity.class,null,false);
+                }
+
             }
 
             @Override
@@ -157,12 +165,8 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
         mFragmentArrayList = new ArrayList<>();
         mMonthFragment = new MonthFragment();
         mWeekFragment = new WeekFragment();
-        mScheduleFragment = new ScheduleFragment();
-        mRelatedMeFragment = new RelatedMeFragment();
         mFragmentArrayList.add(mMonthFragment);
         mFragmentArrayList.add(mWeekFragment);
-        mFragmentArrayList.add(mScheduleFragment);
-        mFragmentArrayList.add(mRelatedMeFragment);
         mFragmentViewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), mFragmentArrayList));
         mFragmentViewPager.setOffscreenPageLimit(mFragmentArrayList.size());
         mFragmentViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
