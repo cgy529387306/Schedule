@@ -9,6 +9,7 @@ import com.android.mb.schedule.retrofit.http.exception.NoNetWorkException;
 import com.android.mb.schedule.service.ScheduleMethods;
 import com.android.mb.schedule.view.interfaces.IAddressView;
 
+import java.util.List;
 import java.util.Map;
 
 import rx.Observable;
@@ -23,9 +24,9 @@ public class AddressPresenter extends BaseMvpPresenter<IAddressView> implements 
 
 
     @Override
-    public void getAreaList() {
-        Observable observable = ScheduleMethods.getInstance().getAreaList();
-        toSubscribe(observable,  new Subscriber<Object>() {
+    public void getAddress() {
+        Observable observable = ScheduleMethods.getInstance().getAddress();
+        toSubscribe(observable,  new Subscriber<List<String>>() {
             @Override
             public void onCompleted() {
 
@@ -43,9 +44,9 @@ public class AddressPresenter extends BaseMvpPresenter<IAddressView> implements 
             }
 
             @Override
-            public void onNext(Object result) {
+            public void onNext(List<String> result) {
                 if (mMvpView!=null){
-                    mMvpView.getSuccess();
+                    mMvpView.getSuccess(result);
                 }
             }
         });

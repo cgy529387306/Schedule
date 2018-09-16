@@ -1,14 +1,14 @@
 package com.android.mb.schedule.adapter;
 
-import java.util.ArrayList;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import java.util.List;
+
 public class MyFragmentPagerAdapter extends FragmentPagerAdapter{
-    ArrayList<Fragment> list;
-    public MyFragmentPagerAdapter(FragmentManager fm,ArrayList<Fragment> list) {
+    private List<Fragment> list;
+    public MyFragmentPagerAdapter(FragmentManager fm,List<Fragment> list) {
         super(fm);
         this.list = list;
 

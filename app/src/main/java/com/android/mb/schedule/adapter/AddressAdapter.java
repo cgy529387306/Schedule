@@ -6,40 +6,44 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.mb.schedule.R;
-import com.android.mb.schedule.entitys.RingBean;
-import com.android.mb.schedule.utils.ToastHelper;
 import com.android.mb.schedule.view.interfaces.OnItemClickListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 /**
- * Created by necer on 2017/6/7.
+ * Created by chenqm on 2017/6/7.
  */
 
 public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.MyViewHolder> {
 
     private Context mContext;
-    private List<String> mList;
+    private List<String> mDataList = new ArrayList<>();
     private OnItemClickListener mListener;
-    private int index;
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         mListener = listener;
     }
 
-    public AddressAdapter(Context context, List<String> mList) {
-        this.mContext = context;
-        this.mList = mList;
+    public List<String> getDataList() {
+        if (mDataList == null) {
+            return new ArrayList<>();
+        }
+        return mDataList;
     }
-    public void setCurrentIndex(int index) {
-        this.index = index;
-        notifyDataSetChanged();
+
+    public AddressAdapter(Context context) {
+        this.mContext = context;
+    }
+    public void setDataList(List<String> list){
+        if (list!=null){
+            mDataList = list;
+            notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -50,40 +54,30 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        holder.mTvAddress.setText(mList.get(position));
-        if (index == position){
-            holder.mIvDelete.setImageResource(R.mipmap.icon_checked);
-        }else {
-            holder.mIvDelete.setImageResource(R.mipmap.icon_delete);
-        }
-        holder.mIvDelete.setOnClickListener(new View.OnClickListener() {
+        holder.mTvAddress.setText(mDataList.get(position));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ToastHelper.showLongToast("position"+ position);
+                holder.mIvChecked.setVisibility(View.VISIBLE);
+                holder.mTvAddress.setTextColor(mContext.getResources().getColor(R.color.base_blue));
+                mListener.onItemClick(view,position);
             }
         });
-
     }
 
     @Override
     public int getItemCount() {
-        return mList.size();
+        return mDataList==null?0:mDataList.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView mTvAddress;
-        ImageView mIvDelete;
+        ImageView mIvChecked;
         public MyViewHolder(View itemView, OnItemClickListener onItemClickListener) {
             super(itemView);
             mListener = onItemClickListener;
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mListener.onItemClick(view,getPosition());
-                }
-            });
             mTvAddress =itemView.findViewById(R.id.tv_address);
-            mIvDelete = itemView.findViewById(R.id.iv_delete);
+            mIvChecked = itemView.findViewById(R.id.iv_checked);
         }
     }
 }

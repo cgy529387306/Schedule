@@ -11,9 +11,11 @@
         android:drawableLeft="@mipmap/icon_address"
         android:drawablePadding="10dp"
         android:layout_marginLeft="10dp"
+        android:lines="1"
         android:background="@null"
-        android:text="请输入地址"
+        android:hint="请输入地址"
         android:gravity="center"
+        android:textColorHint="@color/text_color"
         android:textColor="@color/text_color"
         android:textSize="16sp" />
     <View

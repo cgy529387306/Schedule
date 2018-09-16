@@ -24,6 +24,7 @@ import com.android.mb.schedule.utils.AppHelper;
 import com.android.mb.schedule.utils.FileUtils;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.NavigationHelper;
+import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.utils.ToastHelper;
 import com.android.mb.schedule.view.interfaces.IScheduleView;
 
@@ -40,7 +41,6 @@ import java.util.List;
 public class NewScheduleActivity extends BaseMvpActivity<SchedulePresenter,IScheduleView> implements IScheduleView, View.OnClickListener{
 
     private EditText mEdtScheduleName; //日程名称
-    private TextView mBtnLocation; //定位
     private TextView mTvAddress ; //位置
     private TextView mEdtScheduleContent; // 日程内容
     private TextView mTvUploadDocument; // 点击上传文件
@@ -113,9 +113,9 @@ public class NewScheduleActivity extends BaseMvpActivity<SchedulePresenter,ISche
         mScheduleRequest.setAddress(address);
         mScheduleRequest.setImportant(mIsImport?1:0);
         mScheduleRequest.setAllDay(mIsAllDay?1:0);
-        mScheduleRequest.setRelated("");
+        mScheduleRequest.setRelated("2000,2001");
         mScheduleRequest.setSummary("");
-        mScheduleRequest.setShare("");
+        mScheduleRequest.setShare("2000,2001");
         mScheduleRequest.setStart(start.getTime()/1000);
         mScheduleRequest.setEnd(end.getTime()/1000);
         mScheduleRequest.setRemind(mScheduleRemindPop.getType());
@@ -126,7 +126,6 @@ public class NewScheduleActivity extends BaseMvpActivity<SchedulePresenter,ISche
     @Override
     protected void bindViews() {
         mEdtScheduleName = findViewById(R.id.et_schedule_name);
-        mBtnLocation = findViewById(R.id.tv_location);
         mTvAddress = findViewById(R.id.tv_address);
         mEdtScheduleContent = findViewById(R.id.et_schedule_content);
         mTvUploadDocument = findViewById(R.id.tv_upload_document);
@@ -157,7 +156,7 @@ public class NewScheduleActivity extends BaseMvpActivity<SchedulePresenter,ISche
 
     @Override
     protected void setListener() {
-        mBtnLocation.setOnClickListener(this);
+        findViewById(R.id.lly_address).setOnClickListener(this);
         mIvAllDay.setOnClickListener(this);
         mIvAddPerson.setOnClickListener(this);
         mIvNoRemind.setOnClickListener(this);
@@ -173,8 +172,8 @@ public class NewScheduleActivity extends BaseMvpActivity<SchedulePresenter,ISche
     @Override
     public void onClick(View view) {
         int id = view.getId();
-        if (id == R.id.tv_location){
-            NavigationHelper.startActivity(NewScheduleActivity.this,SelectAddressActivity.class,null,false);
+        if (id == R.id.lly_address){
+            NavigationHelper.startActivityForResult(NewScheduleActivity.this,SelectAddressActivity.class,null,ProjectConstants.REQUEST_SELECT_ADDRESS);
         }else  if (id == R.id.tv_upload_document){
             handlerFileIntent();
         }else  if (id == R.id.iv_all_day){
@@ -332,7 +331,7 @@ public class NewScheduleActivity extends BaseMvpActivity<SchedulePresenter,ISche
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("*/*");
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        startActivityForResult(intent, 1001);
+        startActivityForResult(intent, ProjectConstants.REQUEST_SELECT_FILE);
     }
 
     @Override
@@ -341,7 +340,7 @@ public class NewScheduleActivity extends BaseMvpActivity<SchedulePresenter,ISche
         if (resultCode != Activity.RESULT_OK) {
             return;
         }
-        if (1001 == requestCode) {
+        if (ProjectConstants.REQUEST_SELECT_FILE == requestCode) {
             final Uri uri = data.getData();
             if (uri != null){
                 String filePath;
@@ -352,6 +351,11 @@ public class NewScheduleActivity extends BaseMvpActivity<SchedulePresenter,ISche
                 }
                 mPresenter.uploadFile(new File(filePath));
             }
+        }else if (ProjectConstants.REQUEST_SELECT_ADDRESS == requestCode){
+            String address = data.getStringExtra("address");
+            mTvAddress.setText(ProjectHelper.getCommonText(address));
         }
     }
+
+
 }

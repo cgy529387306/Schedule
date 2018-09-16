@@ -6,6 +6,7 @@ import com.android.mb.schedule.base.BaseMvpView;
  * Created by cgy on 2018/2/11 0011.
  */
 public interface IPersonView extends BaseMvpView {
-    void getSuccess();
+    void getOrgSuccess();
 
+    void getPersonSuccess();
 }

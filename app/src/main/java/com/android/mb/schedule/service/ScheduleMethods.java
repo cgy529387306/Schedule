@@ -10,6 +10,7 @@ import com.android.mb.schedule.utils.ProjectHelper;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.MediaType;
@@ -88,6 +89,28 @@ public class ScheduleMethods extends BaseHttp {
                 .map(new HttpCacheResultFunc<LoginData>());
     }
 
+    public Observable getAddress(){
+        Map<String,Object> requestMap = new HashMap<>();
+        if (CurrentUser.getInstance().isLogin()){
+            requestMap.put("token_id",CurrentUser.getInstance().getToken_id());
+            requestMap.put("token",CurrentUser.getInstance().getToken());
+        }
+        return getService().getAddress(requestMap)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<List<String>>());
+    }
+
+    public Observable getPersons(){
+        Map<String,Object> requestMap = new HashMap<>();
+        if (CurrentUser.getInstance().isLogin()){
+            requestMap.put("token_id",CurrentUser.getInstance().getToken_id());
+            requestMap.put("token",CurrentUser.getInstance().getToken());
+        }
+        return getService().getPersons(requestMap)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<Object>());
+    }
+
     public Observable upload(File file){
         Map<String,Object> requestMap = new HashMap<>();
         RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
@@ -134,6 +157,16 @@ public class ScheduleMethods extends BaseHttp {
             requestMap.put("token",CurrentUser.getInstance().getToken());
         }
         return getService().getSchedule(requestMap)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<Object>());
+    }
+
+    public Observable getDaySchedule(Map<String,Object> requestMap){
+        if (CurrentUser.getInstance().isLogin()){
+            requestMap.put("token_id",CurrentUser.getInstance().getToken_id());
+            requestMap.put("token",CurrentUser.getInstance().getToken());
+        }
+        return getService().getDaySchedule(requestMap)
                 .compose(CacheTransformer.emptyTransformer())
                 .map(new HttpCacheResultFunc<Object>());
     }

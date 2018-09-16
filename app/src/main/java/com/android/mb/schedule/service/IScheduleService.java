@@ -4,6 +4,7 @@ import com.android.mb.schedule.entitys.FileData;
 import com.android.mb.schedule.entitys.LoginData;
 import com.android.mb.schedule.retrofit.http.entity.HttpResult;
 
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.MultipartBody;
@@ -40,6 +41,14 @@ public interface IScheduleService {
     @POST("/app/user/get")
     @FormUrlEncoded
     Observable<HttpResult<LoginData>> getUserInfo(@FieldMap Map<String,Object> requestMap);
+
+    @POST("/app/user/getadr")
+    @FormUrlEncoded
+    Observable<HttpResult<List<String>>> getAddress(@FieldMap Map<String,Object> requestMap);
+
+    @POST("/app/user/getman")
+    @FormUrlEncoded
+    Observable<HttpResult<Object>> getPersons(@FieldMap Map<String,Object> requestMap);
 
     @POST("/app/schedule/upload")
     @Multipart

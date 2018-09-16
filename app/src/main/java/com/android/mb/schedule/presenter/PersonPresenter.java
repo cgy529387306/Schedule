@@ -44,7 +44,36 @@ public class PersonPresenter extends BaseMvpPresenter<IPersonView> implements IP
             @Override
             public void onNext(Object result) {
                 if (mMvpView!=null){
-                    mMvpView.getSuccess();
+                    mMvpView.getOrgSuccess();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void getPersons() {
+        Observable observable = ScheduleMethods.getInstance().getPersons();
+        toSubscribe(observable,  new Subscriber<Object>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                if(mMvpView!=null){
+                    if (e instanceof ApiException && !TextUtils.isEmpty(e.getMessage())){
+                        mMvpView.showToastMessage(e.getMessage());
+                    }else if (e instanceof NoNetWorkException && !TextUtils.isEmpty(e.getMessage())){
+                        mMvpView.showToastMessage(e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onNext(Object result) {
+                if (mMvpView!=null){
+                    mMvpView.getPersonSuccess();
                 }
             }
         });
