@@ -4,10 +4,13 @@ import android.text.TextUtils;
 
 import com.android.mb.schedule.base.BaseMvpPresenter;
 import com.android.mb.schedule.entitys.ScheduleData;
+import com.android.mb.schedule.entitys.ScheduleDetailData;
+import com.android.mb.schedule.presenter.interfaces.IDetailPresenter;
 import com.android.mb.schedule.presenter.interfaces.IMonthPresenter;
 import com.android.mb.schedule.retrofit.http.exception.ApiException;
 import com.android.mb.schedule.retrofit.http.exception.NoNetWorkException;
 import com.android.mb.schedule.service.ScheduleMethods;
+import com.android.mb.schedule.view.interfaces.IDetailView;
 import com.android.mb.schedule.view.interfaces.IMonthView;
 
 import java.util.List;
@@ -19,13 +22,14 @@ import rx.Subscriber;
 /**
  * Created by cgy on 2018/2/11 0011.
  */
-public class MonthPresenter extends BaseMvpPresenter<IMonthView> implements IMonthPresenter {
+public class DetailPresenter extends BaseMvpPresenter<IDetailView> implements IDetailPresenter {
+
 
 
     @Override
-    public void getMonthSchedule(Map<String, Object> requestMap) {
-        Observable observable = ScheduleMethods.getInstance().getMonthSchedule(requestMap);
-        toSubscribe(observable,  new Subscriber<List<ScheduleData>>() {
+    public void getSchedule(Map<String, Object> requestMap) {
+        Observable observable = ScheduleMethods.getInstance().getSchedule(requestMap);
+        toSubscribe(observable,  new Subscriber<ScheduleDetailData>() {
             @Override
             public void onCompleted() {
 
@@ -43,7 +47,7 @@ public class MonthPresenter extends BaseMvpPresenter<IMonthView> implements IMon
             }
 
             @Override
-            public void onNext(List<ScheduleData> result) {
+            public void onNext(ScheduleDetailData result) {
                 if (mMvpView!=null){
                     mMvpView.getSuccess(result);
                 }

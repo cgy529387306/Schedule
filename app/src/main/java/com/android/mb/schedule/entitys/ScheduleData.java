@@ -1,8 +1,9 @@
 package com.android.mb.schedule.entitys;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ScheduleData {
+public class ScheduleData implements Serializable {
     private String date;
 
     private List<ScheduleBean> list;

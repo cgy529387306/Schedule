@@ -11,14 +11,19 @@ import android.provider.MediaStore.MediaColumns;
 import android.view.View;
 import android.view.ViewParent;
 
+import com.android.mb.schedule.entitys.ScheduleBean;
+import com.android.mb.schedule.entitys.ScheduleData;
 import com.google.gson.Gson;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -292,5 +297,72 @@ public class ProjectHelper {
         return map;
     }
 
+    public static List<ScheduleBean> getScheduleList(String currentDate, List<ScheduleData> dataList)  {
+        List<ScheduleBean> result = new ArrayList<>();
+        for (int i=0; i<dataList.size();i++){
+            ScheduleData scheduleData = dataList.get(i);
+            String date = scheduleData.getDate();
+            if (currentDate.equals(date)){
+                result = scheduleData.getList();
+                break;
+            }
+        }
+        return result;
+    }
 
+    public static String getRepeatStr(int type){
+        String result;
+        switch (type){
+            case 1:
+                result = "一次性";
+                break;
+            case 2:
+                result = "每天";
+                break;
+            case 3:
+                result = "每周";
+                break;
+            case 4:
+                result = "每月";
+                break;
+            default:
+                result = "一次性";
+                break;
+        }
+        return result;
+    }
+
+    public static String getRemindStr(int type){
+        String result;
+        switch (type){
+            case 0:
+                result = "不在提醒";
+                break;
+            case 1:
+                result = "10分钟前";
+                break;
+            case 2:
+                result = "15分钟前";
+                break;
+            case 3:
+                result = "30分钟前";
+                break;
+            case 4:
+                result = "1小时前";
+                break;
+            case 5:
+                result = "2小时前";
+                break;
+            case 6:
+                result = "24小时前";
+                break;
+            case 7:
+                result = "2天前";
+                break;
+            default:
+                result = "不在提醒";
+                break;
+        }
+        return result;
+    }
 }

@@ -3,6 +3,8 @@ package com.android.mb.schedule.service;
 import com.android.mb.schedule.entitys.CurrentUser;
 import com.android.mb.schedule.entitys.FileData;
 import com.android.mb.schedule.entitys.LoginData;
+import com.android.mb.schedule.entitys.ScheduleData;
+import com.android.mb.schedule.entitys.ScheduleDetailData;
 import com.android.mb.schedule.entitys.ScheduleRequest;
 import com.android.mb.schedule.retrofit.cache.transformer.CacheTransformer;
 import com.android.mb.schedule.retrofit.http.RetrofitHttpClient;
@@ -158,7 +160,7 @@ public class ScheduleMethods extends BaseHttp {
         }
         return getService().getSchedule(requestMap)
                 .compose(CacheTransformer.emptyTransformer())
-                .map(new HttpCacheResultFunc<Object>());
+                .map(new HttpCacheResultFunc<ScheduleDetailData>());
     }
 
     public Observable getDaySchedule(Map<String,Object> requestMap){
@@ -178,7 +180,7 @@ public class ScheduleMethods extends BaseHttp {
         }
         return getService().getMonthSchedule(requestMap)
                 .compose(CacheTransformer.emptyTransformer())
-                .map(new HttpCacheResultFunc<Object>());
+                .map(new HttpCacheResultFunc<List<ScheduleData>>());
     }
 
     public Observable getWeekSchedule(Map<String,Object> requestMap){

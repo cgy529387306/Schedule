@@ -1,6 +1,8 @@
 package com.android.mb.schedule.entitys;
 
-public class UserInfoBean {
+import java.io.Serializable;
+
+public class UserInfoBean implements Serializable {
     private String username;
     private String nickname;
     private String mobile;

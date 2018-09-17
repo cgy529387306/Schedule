@@ -66,6 +66,7 @@ public class NewScheduleActivity extends BaseMvpActivity<SchedulePresenter,ISche
     private ScheduleTimePop mScheduleStartTimePop;
     private ScheduleTimePop mScheduleEndTimePop;
     private ScheduleRequest mScheduleRequest;
+    private long mFileId = -1;
     public static final String mDateFormat = "yyyy年MM月dd日";
     public static final String mTimeFormat = "HH:mm";
     @Override
@@ -107,6 +108,9 @@ public class NewScheduleActivity extends BaseMvpActivity<SchedulePresenter,ISche
         if (start.getTime()>=end.getTime()){
             showToastMessage("开始时间必须大于结束时间");
             return;
+        }
+        if (mFileId!=-1){
+            mScheduleRequest.setFid(mFileId);
         }
         mScheduleRequest.setTitle(name);
         mScheduleRequest.setDescription(content);
@@ -211,55 +215,13 @@ public class NewScheduleActivity extends BaseMvpActivity<SchedulePresenter,ISche
         mScheduleRepeatPop = new ScheduleRepeatPop(this, new ScheduleRepeatPop.SelectListener() {
             @Override
             public void onSelected(int type) {
-                switch (type){
-                    case 1:
-                        mTvRepeat.setText("一次性");
-                        break;
-                    case 2:
-                        mTvRepeat.setText("每天");
-                        break;
-                    case 3:
-                        mTvRepeat.setText("每周");
-                        break;
-                    case 4:
-                        mTvRepeat.setText("每月");
-                        break;
-                    default:
-                        break;
-                }
+                mTvRepeat.setText(ProjectHelper.getRepeatStr(type));
             }
         });
         mScheduleRemindPop = new ScheduleRemindPop(this, new ScheduleRemindPop.SelectListener() {
             @Override
             public void onSelected(int type) {
-                switch (type){
-                    case 0:
-                        mTvWhenRemind.setText("不在提醒");
-                        break;
-                    case 1:
-                        mTvWhenRemind.setText("10分钟前");
-                        break;
-                    case 2:
-                        mTvWhenRemind.setText("15分钟前");
-                        break;
-                    case 3:
-                        mTvWhenRemind.setText("30分钟前");
-                        break;
-                    case 4:
-                        mTvWhenRemind.setText("1小时前");
-                        break;
-                    case 5:
-                        mTvWhenRemind.setText("2小时前");
-                        break;
-                    case 6:
-                        mTvWhenRemind.setText("24小时前");
-                        break;
-                    case 7:
-                        mTvWhenRemind.setText("2天前");
-                        break;
-                    default:
-                        break;
-                }
+             mTvWhenRemind.setText(ProjectHelper.getRemindStr(type));
             }
         });
         mScheduleStartTimePop = new ScheduleTimePop(this, new ScheduleTimePop.SelectListener() {
@@ -319,6 +281,7 @@ public class NewScheduleActivity extends BaseMvpActivity<SchedulePresenter,ISche
             if (Helper.isNotEmpty(fileUrl)){
                 String fileName = fileUrl.substring(fileUrl.lastIndexOf("/")+1);
                 if (Helper.isNotEmpty(fileName)){
+                    mFileId = result.getId();
                     mTvFileName.setVisibility(View.VISIBLE);
                     mTvFileName.setText(fileName);
                     mTvUploadDocument.setText("点击替换附件");

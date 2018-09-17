@@ -1,10 +1,12 @@
 package com.android.mb.schedule.entitys;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2018\9\15 0015.
  */
 
-public class FileData {
+public class FileData implements Serializable {
     private String file;
 
     private long id;

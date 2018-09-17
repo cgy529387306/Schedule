@@ -1,8 +1,10 @@
 package com.android.mb.schedule.entitys;
 
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+
 import java.io.Serializable;
 
-public class ScheduleBean implements Serializable{
+public class ScheduleBean implements MultiItemEntity,Serializable{
 
     private long id;
     private String title;
@@ -30,7 +32,7 @@ public class ScheduleBean implements Serializable{
     }
 
     public String getTitle() {
-        return title;
+        return title == null ? "" : title;
     }
 
     public void setTitle(String title) {
@@ -38,7 +40,7 @@ public class ScheduleBean implements Serializable{
     }
 
     public String getDescription() {
-        return description;
+        return description == null ? "" : description;
     }
 
     public void setDescription(String description) {
@@ -70,7 +72,7 @@ public class ScheduleBean implements Serializable{
     }
 
     public String getAddress() {
-        return address;
+        return address == null ? "" : address;
     }
 
     public void setAddress(String address) {
@@ -78,7 +80,7 @@ public class ScheduleBean implements Serializable{
     }
 
     public String getStartTime() {
-        return startTime;
+        return startTime == null ? "" : startTime;
     }
 
     public void setStartTime(String startTime) {
@@ -86,7 +88,7 @@ public class ScheduleBean implements Serializable{
     }
 
     public String getEndTime() {
-        return endTime;
+        return endTime == null ? "" : endTime;
     }
 
     public void setEndTime(String endTime) {
@@ -134,7 +136,7 @@ public class ScheduleBean implements Serializable{
     }
 
     public String getSummary() {
-        return summary;
+        return summary == null ? "" : summary;
     }
 
     public void setSummary(String summary) {
@@ -142,10 +144,15 @@ public class ScheduleBean implements Serializable{
     }
 
     public String getNot_remind_related() {
-        return not_remind_related;
+        return not_remind_related == null ? "" : not_remind_related;
     }
 
     public void setNot_remind_related(String not_remind_related) {
         this.not_remind_related = not_remind_related;
+    }
+
+    @Override
+    public int getItemType() {
+        return allDay;
     }
 }

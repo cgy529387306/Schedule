@@ -2,6 +2,8 @@ package com.android.mb.schedule.service;
 
 import com.android.mb.schedule.entitys.FileData;
 import com.android.mb.schedule.entitys.LoginData;
+import com.android.mb.schedule.entitys.ScheduleData;
+import com.android.mb.schedule.entitys.ScheduleDetailData;
 import com.android.mb.schedule.retrofit.http.entity.HttpResult;
 
 import java.util.List;
@@ -64,7 +66,7 @@ public interface IScheduleService {
 
     @POST("/app/schedule/get")
     @FormUrlEncoded
-    Observable<HttpResult<Object>> getSchedule(@FieldMap Map<String,Object> requestMap);
+    Observable<HttpResult<ScheduleDetailData>> getSchedule(@FieldMap Map<String,Object> requestMap);
 
     @POST("/app/schedule/day")
     @FormUrlEncoded
@@ -72,7 +74,7 @@ public interface IScheduleService {
 
     @POST("/app/schedule/month")
     @FormUrlEncoded
-    Observable<HttpResult<Object>> getMonthSchedule(@FieldMap Map<String,Object> requestMap);
+    Observable<HttpResult<List<ScheduleData>>> getMonthSchedule(@FieldMap Map<String,Object> requestMap);
 
     @POST("/app/schedule/week")
     @FormUrlEncoded

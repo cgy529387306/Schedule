@@ -1,23 +1,32 @@
 package com.android.mb.schedule.fragment;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.adapter.MultipleItemQuickAdapter;
-import com.android.mb.schedule.base.BaseFragment;
 import com.android.mb.schedule.base.BaseMvpFragment;
 import com.android.mb.schedule.constants.ProjectConstants;
-import com.android.mb.schedule.entitys.MultipleItem;
+import com.android.mb.schedule.entitys.ScheduleBean;
+import com.android.mb.schedule.entitys.ScheduleData;
 import com.android.mb.schedule.presenter.MonthPresenter;
 import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.LunarUtil;
+import com.android.mb.schedule.utils.NavigationHelper;
+import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.view.MainActivity;
+import com.android.mb.schedule.view.ScheduleDetailActivity;
+import com.android.mb.schedule.view.ScheduleShareActivity;
 import com.android.mb.schedule.view.interfaces.IMonthView;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.haibin.calendarview.Calendar;
 import com.haibin.calendarview.CalendarLayout;
 import com.haibin.calendarview.CalendarView;
@@ -42,6 +51,9 @@ public class MonthFragment extends BaseMvpFragment<MonthPresenter,IMonthView> im
     private MultipleItemQuickAdapter mAdapter;
     private TextView mTvDate;
     private String mMonthDate;
+    private String mSelectDate;
+    private List<ScheduleBean> mDataList = new ArrayList<>();
+    private List<ScheduleData> mScheduleDataList = new ArrayList<>();
     @Override
     protected int getLayoutId() {
         return R.layout.frg_month;
@@ -56,12 +68,11 @@ public class MonthFragment extends BaseMvpFragment<MonthPresenter,IMonthView> im
 
     @Override
     protected void processLogic() {
-        initData();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        List<MultipleItem> data = getMultipleItemData();
-        mAdapter = new MultipleItemQuickAdapter(getActivity(), data);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL));
+        mAdapter = new MultipleItemQuickAdapter(getActivity(), mDataList);
+        mAdapter.setEmptyView(R.layout.empty_home_month, (ViewGroup) mRecyclerView.getParent());
         mAdapter.addHeaderView(getHeaderView());
-        mAdapter.addFooterView(LayoutInflater.from(getActivity()).inflate(R.layout.footer_home, null));
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -71,52 +82,14 @@ public class MonthFragment extends BaseMvpFragment<MonthPresenter,IMonthView> im
         return view;
     }
 
-    protected void initData() {
-        List<Calendar> schemes = new ArrayList<>();
-        int year = mCalendarView.getCurYear();
-        int month = mCalendarView.getCurMonth();
-
-        schemes.add(getSchemeCalendar(year, month, 3, 0xFF40db25, "假"));
-        schemes.add(getSchemeCalendar(year, month, 6, 0xFFe69138, "事"));
-        schemes.add(getSchemeCalendar(year, month, 10, 0xFFdf1356, "议"));
-        schemes.add(getSchemeCalendar(year, month, 11, 0xFFedc56d, "记"));
-        schemes.add(getSchemeCalendar(year, month, 14, 0xFFedc56d, "记"));
-        schemes.add(getSchemeCalendar(year, month, 15, 0xFFaacc44, "假"));
-        schemes.add(getSchemeCalendar(year, month, 18, 0xFFbc13f0, "记"));
-        schemes.add(getSchemeCalendar(year, month, 25, 0xFF13acf0, "假"));
-        schemes.add(getSchemeCalendar(year, month, 27, 0xFF13acf0, "多"));
-
-
-        /*
-         * 此方法现在弃用，但不影响原来的效果，原因：数据量大时 size()>10000 ，遍历性能太差，超过Android限制的16ms响应，造成卡顿
-         * 现在推荐使用 setSchemeDate(Map<String, Calendar> mSchemeDates)，Map查找性能非常好，经测试，50000以上数据，1ms解决
-         */
-        mCalendarView.setSchemeDate(schemes);
-
-
+    protected void addSchemeCalendar(String date) {
+        Date date1 = Helper.string2Date(date,"yyyy-MM-dd");
+        java.util.Calendar calendar = java.util.Calendar.getInstance();
+        calendar.setTime(date1);
         Map<String, Calendar> map = new HashMap<>();
-        map.put(getSchemeCalendar(year, month, 3, 0xFF40db25, "假").toString(),
-                getSchemeCalendar(year, month, 3, 0xFF40db25, "假"));
-        map.put(getSchemeCalendar(year, month, 6, 0xFFe69138, "事").toString(),
-                getSchemeCalendar(year, month, 6, 0xFFe69138, "事"));
-        map.put(getSchemeCalendar(year, month, 9, 0xFFdf1356, "议").toString(),
-                getSchemeCalendar(year, month, 9, 0xFFdf1356, "议"));
-        map.put(getSchemeCalendar(year, month, 13, 0xFFedc56d, "记").toString(),
-                getSchemeCalendar(year, month, 13, 0xFFedc56d, "记"));
-        map.put(getSchemeCalendar(year, month, 14, 0xFFedc56d, "记").toString(),
-                getSchemeCalendar(year, month, 14, 0xFFedc56d, "记"));
-        map.put(getSchemeCalendar(year, month, 15, 0xFFaacc44, "假").toString(),
-                getSchemeCalendar(year, month, 15, 0xFFaacc44, "假"));
-        map.put(getSchemeCalendar(year, month, 18, 0xFFbc13f0, "记").toString(),
-                getSchemeCalendar(year, month, 18, 0xFFbc13f0, "记"));
-        map.put(getSchemeCalendar(year, month, 25, 0xFF13acf0, "假").toString(),
-                getSchemeCalendar(year, month, 25, 0xFF13acf0, "假"));
-        map.put(getSchemeCalendar(year, month, 27, 0xFF13acf0, "多").toString(),
-                getSchemeCalendar(year, month, 27, 0xFF13acf0, "多"));
-        //此方法在巨大的数据量上不影响遍历性能，推荐使用
+        map.put(getSchemeCalendar(calendar.get(java.util.Calendar.YEAR), calendar.get(java.util.Calendar.MONTH), calendar.get(java.util.Calendar.DAY_OF_MONTH), 0xFF13acf0, "多").toString(),
+                getSchemeCalendar(calendar.get(java.util.Calendar.YEAR), calendar.get(java.util.Calendar.MONTH), calendar.get(java.util.Calendar.DAY_OF_MONTH), 0xFF13acf0, "多"));
         mCalendarView.setSchemeDate(map);
-
-
     }
 
     private Calendar getSchemeCalendar(int year, int month, int day, int color, String text) {
@@ -127,8 +100,6 @@ public class MonthFragment extends BaseMvpFragment<MonthPresenter,IMonthView> im
         calendar.setSchemeColor(color);//如果单独标记颜色、则会使用这个颜色
         calendar.setScheme(text);
         calendar.addScheme(new Calendar.Scheme());
-        calendar.addScheme(0xFF008800, "假");
-        calendar.addScheme(0xFF008800, "节");
         return calendar;
     }
 
@@ -144,6 +115,16 @@ public class MonthFragment extends BaseMvpFragment<MonthPresenter,IMonthView> im
             @Override
             public void call(Events<?> events) {
                 getScheduleList();
+            }
+        });
+        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                if (mAdapter.getItem(position)!=null){
+                    Bundle bundle = new Bundle();
+                    bundle.putLong("id",mAdapter.getItem(position).getId());
+                    NavigationHelper.startActivity(getActivity(),ScheduleDetailActivity.class,bundle,false);
+                }
             }
         });
         mCalendarView.setOnMonthChangeListener(new CalendarView.OnMonthChangeListener() {
@@ -165,6 +146,8 @@ public class MonthFragment extends BaseMvpFragment<MonthPresenter,IMonthView> im
 
             @Override
             public void onCalendarSelect(Calendar calendar, boolean isClick) {
+                String dateStr = calendar.toString();
+                mSelectDate = Helper.date2String(Helper.string2Date(dateStr,"yyyyMMdd"),"yyyy-MM-dd");
                 java.util.Calendar calendar1 = java.util.Calendar.getInstance();
                 Date date = Helper.string2Date(calendar.toString(),"yyyyMMdd");
                 calendar1.setTime(date);
@@ -174,18 +157,16 @@ public class MonthFragment extends BaseMvpFragment<MonthPresenter,IMonthView> im
                 }else{
                     mTvDate.setText("农历  "+lunar.toString());
                 }
+                if (Helper.isNotEmpty(mScheduleDataList)){
+                    mDataList = ProjectHelper.getScheduleList(mSelectDate,mScheduleDataList);
+                    mAdapter.setNewData(mDataList);
+                }
+
             }
         });
     }
 
-    public static List<MultipleItem> getMultipleItemData() {
-        List<MultipleItem> list = new ArrayList<>();
-        for (int i = 0; i <= 4; i++) {
-            list.add(new MultipleItem(MultipleItem.DAY));
-            list.add(new MultipleItem(MultipleItem.AM));
-        }
-        return list;
-    }
+
 
     public void toToday(){
         if (mCalendarView!=null){
@@ -194,8 +175,21 @@ public class MonthFragment extends BaseMvpFragment<MonthPresenter,IMonthView> im
     }
 
     @Override
-    public void getSuccess() {
-
+    public void getSuccess(List<ScheduleData> result) {
+        mScheduleDataList = result;
+        if (Helper.isNotEmpty(mScheduleDataList)){
+            for (int i=0; i<mScheduleDataList.size();i++){
+                ScheduleData scheduleData = mScheduleDataList.get(i);
+                String date = scheduleData.getDate();
+                if (Helper.isNotEmpty(scheduleData.getList())){
+                    addSchemeCalendar(date);
+                }
+                if (mSelectDate.equals(date)){
+                    mDataList = scheduleData.getList();
+                }
+            }
+            mAdapter.setNewData(mDataList);
+        }
     }
 
     @Override

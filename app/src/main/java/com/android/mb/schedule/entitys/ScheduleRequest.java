@@ -41,6 +41,8 @@ public class ScheduleRequest implements Serializable{
      */
     private String share;
 
+    private long fid;
+
 
     public long getId() {
         return id;
@@ -144,5 +146,13 @@ public class ScheduleRequest implements Serializable{
 
     public void setShare(String share) {
         this.share = share;
+    }
+
+    public long getFid() {
+        return fid;
+    }
+
+    public void setFid(long fid) {
+        this.fid = fid;
     }
 }

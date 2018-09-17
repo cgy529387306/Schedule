@@ -7,14 +7,17 @@
         android:id="@+id/fragmentViewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="-30dp"
+        android:layout_marginBottom="-10dp"
         android:layout_above="@+id/fl_bottom"/>
     <FrameLayout
         android:id="@+id/fl_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@mipmap/bg_home_bottom">
+        android:layout_alignParentBottom="true">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/bg_home_bottom"/>
         <android.support.design.widget.TabLayout
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"
@@ -25,7 +28,7 @@
             android:id="@+id/tv_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="10dp"
+            android:paddingTop="4dp"
             android:layout_gravity="center"
             android:paddingBottom="5dp"
             android:drawablePadding="3dp"
