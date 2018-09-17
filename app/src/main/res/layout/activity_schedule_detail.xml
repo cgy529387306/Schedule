@@ -1,0 +1,342 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lly_root"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:padding="10dp">
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:text="日程名称"
+                android:textColor="@color/text_color"
+                android:textSize="15sp" />
+            <TextView
+                android:id="@+id/tv_schedule_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:minLines="2"
+                android:text="集团每周晨会，集团每周晨会，集团每周晨会，集团每周晨会"
+                android:textColor="@color/edit_color"
+                android:textSize="15sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/lly_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp">
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@mipmap/icon_location"
+                android:drawablePadding="5dp"
+                android:text="地点"
+                android:textColor="@color/gray_a5"
+                android:textSize="15sp" />
+            <TextView
+                android:id="@+id/tv_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="马尾造船集团"
+                android:textColor="@color/gray_a5"
+                android:textSize="15sp" />
+        </LinearLayout>
+        <include layout="@layout/common_divider" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="10dp">
+            <LinearLayout
+                android:id="@+id/lly_start_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:padding="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="开始"
+                    android:textColor="@color/gray_a5"
+                    android:textSize="15sp" />
+                <TextView
+                    android:id="@+id/tv_start_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="2018年8月22日"
+                    android:textColor="@color/gray_a5"
+                    android:textSize="15sp" />
+                <TextView
+                    android:id="@+id/tv_start_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="10:00"
+                    android:textColor="@color/text_color"
+                    android:textSize="15sp" />
+            </LinearLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@mipmap/ic_arrow_right_big" />
+            <LinearLayout
+                android:id="@+id/lly_end_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:padding="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="结束"
+                    android:textColor="@color/gray_a5"
+                    android:textSize="15sp" />
+                <TextView
+                    android:id="@+id/tv_end_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="2018年8月22日"
+                    android:textColor="@color/gray_a5"
+                    android:textSize="15sp" />
+                <TextView
+                    android:id="@+id/tv_end_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="10:00"
+                    android:textColor="@color/text_color"
+                    android:textSize="15sp" />
+            </LinearLayout>
+        </LinearLayout>
+        <include layout="@layout/common_divider" />
+        <TextView
+            android:id="@+id/tv_import"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:drawableLeft="@mipmap/ic_warn"
+            android:drawablePadding="5dp"
+            android:text="重要日程"
+            android:textColor="@color/text_color"
+            android:textSize="15sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@color/bg_color" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:padding="10dp">
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|top"
+                android:text="日程内容"
+                android:textColor="@color/text_color"
+                android:textSize="15sp" />
+            <TextView
+                android:id="@+id/tv_schedule_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:minLines="2"
+                android:text="集团每周晨会，集团每周晨会，集团每周晨会，集团每周晨会"
+                android:textColor="@color/edit_color"
+                android:textSize="15sp" />
+        </LinearLayout>
+        <include layout="@layout/common_divider" />
+        <TextView
+            android:id="@+id/tv_repeat"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:drawableLeft="@mipmap/ic_repeat"
+            android:drawablePadding="5dp"
+            android:text="每天"
+            android:textColor="@color/text_color"
+            android:textSize="15sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@color/bg_color" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="附件"
+                android:textColor="@color/text_color"
+                android:textSize="15sp" />
+            <TextView
+                android:id="@+id/tv_file_name"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:ellipsize="middle"
+                android:layout_marginRight="12dp"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="文件XXX.word"
+                android:textColor="@color/base_blue"
+                android:textSize="15sp" />
+            <TextView
+                android:id="@+id/tv_download_document"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:gravity="center"
+                android:text="点击下载附件"
+                android:textColor="@color/gray_a5"
+                android:textSize="15sp" />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@color/bg_color" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="相关人员"
+                android:textColor="@color/text_color"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/tv_persons"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:singleLine="true"
+                android:text="张三、李四、王五等六人"
+                android:textColor="@color/edit_color"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@color/bg_color" />
+
+        <include layout="@layout/common_divider" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="提醒"
+                android:textColor="@color/text_color"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/tv_when_remind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="10dp"
+                android:layout_marginLeft="10dp"
+                android:singleLine="true"
+                android:text="日程开始前10分钟"
+                android:textColor="@color/edit_color"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="10dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@color/white"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_edit"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingLeft="25dp"
+                android:paddingRight="25dp"
+                android:gravity="center"
+                android:drawableLeft="@mipmap/ic_detail_edit"
+                android:text="编辑"
+                android:textColor="@color/base_blue"
+                android:textSize="16sp" />
+            <TextView
+                android:id="@+id/tv_share"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingLeft="25dp"
+                android:paddingRight="25dp"
+                android:gravity="center"
+                android:drawableLeft="@mipmap/ic_detail_share"
+                android:text="分享"
+                android:textColor="@color/base_blue"
+                android:textSize="16sp" />
+            <TextView
+                android:id="@+id/tv_delete"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingLeft="25dp"
+                android:paddingRight="25dp"
+                android:gravity="center"
+                android:drawableLeft="@mipmap/ic_detail_delete"
+                android:text="删除"
+                android:textColor="@color/base_blue"
+                android:textSize="16sp" />
+        </LinearLayout>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="60dp" />
+    </LinearLayout>
+</ScrollView>

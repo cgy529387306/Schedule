@@ -14,6 +14,7 @@ import com.android.mb.schedule.base.BaseMvpActivity;
 import com.android.mb.schedule.presenter.MySharePresenter;
 import com.android.mb.schedule.presenter.RelatedPresenter;
 import com.android.mb.schedule.utils.Helper;
+import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.view.interfaces.IMyShareView;
 import com.android.mb.schedule.view.interfaces.IRelatedView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -62,6 +63,12 @@ public class ScheduleShareActivity extends BaseMvpActivity<MySharePresenter,IMyS
 
     @Override
     protected void setListener() {
+        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                NavigationHelper.startActivity(ScheduleShareActivity.this,ScheduleDetailActivity.class,null,false);
+            }
+        });
         mAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {

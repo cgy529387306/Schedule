@@ -2,9 +2,8 @@ package com.android.mb.schedule.app;
 
 import android.app.Application;
 import android.content.Context;
-import android.util.Log;
 
-import com.android.mb.schedule.retrofit.http.exception.ApiException;
+import com.android.mb.schedule.retrofit.download.HttpMethods;
 
 /**
  * 主要用来获取全局的Context
@@ -42,6 +41,7 @@ public class MBApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 		sInstance = this;
+		HttpMethods.getInstance().init();
 	}
 	
 }
