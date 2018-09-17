@@ -19,26 +19,22 @@ import com.android.mb.schedule.pop.ScheduleRemindPop;
 import com.android.mb.schedule.pop.ScheduleRepeatPop;
 import com.android.mb.schedule.pop.ScheduleTimePop;
 import com.android.mb.schedule.presenter.SchedulePresenter;
-import com.android.mb.schedule.retrofit.cache.util.Utils;
-import com.android.mb.schedule.utils.AppHelper;
 import com.android.mb.schedule.utils.FileUtils;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.utils.ProjectHelper;
-import com.android.mb.schedule.utils.ToastHelper;
 import com.android.mb.schedule.view.interfaces.IScheduleView;
 
 import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 
 /**
  * 新增日程
  * Created by cgy on 16/7/18.
  */
-public class NewScheduleActivity extends BaseMvpActivity<SchedulePresenter,IScheduleView> implements IScheduleView, View.OnClickListener{
+public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,IScheduleView> implements IScheduleView, View.OnClickListener{
 
     private EditText mEdtScheduleName; //日程名称
     private TextView mTvAddress ; //位置
@@ -76,7 +72,7 @@ public class NewScheduleActivity extends BaseMvpActivity<SchedulePresenter,ISche
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_new_schedule;
+        return R.layout.activity_schedule_add;
     }
 
     @Override
@@ -177,14 +173,14 @@ public class NewScheduleActivity extends BaseMvpActivity<SchedulePresenter,ISche
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.lly_address){
-            NavigationHelper.startActivityForResult(NewScheduleActivity.this,SelectAddressActivity.class,null,ProjectConstants.REQUEST_SELECT_ADDRESS);
+            NavigationHelper.startActivityForResult(ScheduleAddActivity.this,SelectAddressActivity.class,null,ProjectConstants.REQUEST_SELECT_ADDRESS);
         }else  if (id == R.id.tv_upload_document){
             handlerFileIntent();
         }else  if (id == R.id.iv_all_day){
             mIsAllDay = !mIsAllDay;
             mIvAllDay.setImageResource(mIsAllDay?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
         }else  if (id == R.id.iv_add_person){
-            NavigationHelper.startActivity(NewScheduleActivity.this,SelectPersonActivity.class,null,false);
+            NavigationHelper.startActivity(ScheduleAddActivity.this,SelectPersonActivity.class,null,false);
         }else  if (id == R.id.iv_no_remind){
             mIsNoRemind = !mIsNoRemind;
             mIvNoRemind.setImageResource(mIsNoRemind?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);

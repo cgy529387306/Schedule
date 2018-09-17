@@ -1,10 +1,8 @@
 package com.android.mb.schedule.view;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -12,7 +10,6 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Display;
 import android.view.Gravity;
@@ -26,21 +23,16 @@ import android.widget.TextView;
 
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.adapter.MyFragmentPagerAdapter;
-import com.android.mb.schedule.base.BaseActivity;
 import com.android.mb.schedule.base.BaseMvpActivity;
 import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.entitys.CurrentUser;
 import com.android.mb.schedule.entitys.LoginData;
 import com.android.mb.schedule.fragment.MonthFragment;
-import com.android.mb.schedule.fragment.RelatedMeFragment;
-import com.android.mb.schedule.fragment.ScheduleFragment;
 import com.android.mb.schedule.fragment.WeekFragment;
 import com.android.mb.schedule.presenter.HomePresenter;
 import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.utils.NavigationHelper;
-import com.android.mb.schedule.utils.PreferencesHelper;
 import com.android.mb.schedule.utils.ProjectHelper;
-import com.android.mb.schedule.utils.StatusBarUtil;
 import com.android.mb.schedule.utils.ToastHelper;
 import com.android.mb.schedule.view.interfaces.IHomeView;
 import com.android.mb.schedule.widget.CircleImageView;
@@ -264,7 +256,7 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
                 mDrawerLayout.closeDrawer(Gravity.LEFT);
             }
         }else if (id == R.id.tv_add){
-            NavigationHelper.startActivity(MainActivity.this,NewScheduleActivity.class,null,false);
+            NavigationHelper.startActivity(MainActivity.this,ScheduleAddActivity.class,null,false);
         }else if (id == R.id.iv_refresh){
 
         }else if (id == R.id.iv_today){

@@ -42,7 +42,7 @@
             android:name=".view.RingActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".view.NewScheduleActivity"
+            android:name=".view.ScheduleAddActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".view.ScheduleRelateActivity"
