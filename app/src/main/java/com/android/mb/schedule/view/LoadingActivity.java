@@ -7,10 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 
 import com.android.mb.schedule.R;
-import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.entitys.CurrentUser;
 import com.android.mb.schedule.utils.NavigationHelper;
-import com.android.mb.schedule.utils.PreferencesHelper;
 
 
 /**
@@ -19,7 +17,7 @@ import com.android.mb.schedule.utils.PreferencesHelper;
  */
 
 public class LoadingActivity extends AppCompatActivity {
-    private static final int LOADING_TIME_OUT = 0;
+    private static final int LOADING_TIME_OUT = 1500;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // 去除信号栏

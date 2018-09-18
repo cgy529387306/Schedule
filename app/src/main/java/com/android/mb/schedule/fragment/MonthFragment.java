@@ -1,6 +1,5 @@
 package com.android.mb.schedule.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,7 +23,6 @@ import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.view.MainActivity;
 import com.android.mb.schedule.view.ScheduleDetailActivity;
-import com.android.mb.schedule.view.ScheduleShareActivity;
 import com.android.mb.schedule.view.interfaces.IMonthView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.haibin.calendarview.Calendar;
@@ -54,6 +52,7 @@ public class MonthFragment extends BaseMvpFragment<MonthPresenter,IMonthView> im
     private String mSelectDate;
     private List<ScheduleBean> mDataList = new ArrayList<>();
     private List<ScheduleData> mScheduleDataList = new ArrayList<>();
+    private List<String> mSchemeList = new ArrayList<>();
     @Override
     protected int getLayoutId() {
         return R.layout.frg_month;
@@ -82,15 +81,19 @@ public class MonthFragment extends BaseMvpFragment<MonthPresenter,IMonthView> im
         return view;
     }
 
-    protected void addSchemeCalendar(String date) {
-        Date date1 = Helper.string2Date(date,"yyyy-MM-dd");
-        java.util.Calendar calendar = java.util.Calendar.getInstance();
-        calendar.setTime(date1);
+    private void addSchemeList(List<String> dataList){
         Map<String, Calendar> map = new HashMap<>();
-        map.put(getSchemeCalendar(calendar.get(java.util.Calendar.YEAR), calendar.get(java.util.Calendar.MONTH), calendar.get(java.util.Calendar.DAY_OF_MONTH), 0xFF13acf0, "多").toString(),
-                getSchemeCalendar(calendar.get(java.util.Calendar.YEAR), calendar.get(java.util.Calendar.MONTH), calendar.get(java.util.Calendar.DAY_OF_MONTH), 0xFF13acf0, "多"));
+        for (String date:dataList) {
+            Date date1 = Helper.string2Date(date,"yyyy-MM-dd");
+            java.util.Calendar calendar = java.util.Calendar.getInstance();
+            calendar.setTime(date1);
+            map.put(getSchemeCalendar(calendar.get(java.util.Calendar.YEAR), calendar.get(java.util.Calendar.MONTH)+1, calendar.get(java.util.Calendar.DAY_OF_MONTH), 0x2aaeff, "议").toString(),
+                    getSchemeCalendar(calendar.get(java.util.Calendar.YEAR), calendar.get(java.util.Calendar.MONTH)+1, calendar.get(java.util.Calendar.DAY_OF_MONTH), 0x2aaeff, "议"));
+
+        }
         mCalendarView.setSchemeDate(map);
     }
+
 
     private Calendar getSchemeCalendar(int year, int month, int day, int color, String text) {
         Calendar calendar = new Calendar();
@@ -182,12 +185,13 @@ public class MonthFragment extends BaseMvpFragment<MonthPresenter,IMonthView> im
                 ScheduleData scheduleData = mScheduleDataList.get(i);
                 String date = scheduleData.getDate();
                 if (Helper.isNotEmpty(scheduleData.getList())){
-                    addSchemeCalendar(date);
+                    mSchemeList.add(date);
                 }
                 if (mSelectDate.equals(date)){
                     mDataList = scheduleData.getList();
                 }
             }
+            addSchemeList(mSchemeList);
             mAdapter.setNewData(mDataList);
         }
     }

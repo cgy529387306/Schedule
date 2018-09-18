@@ -13,6 +13,9 @@ import android.view.ViewParent;
 
 import com.android.mb.schedule.entitys.ScheduleBean;
 import com.android.mb.schedule.entitys.ScheduleData;
+import com.android.mb.schedule.entitys.ScheduleDetailBean;
+import com.android.mb.schedule.entitys.ScheduleDetailData;
+import com.android.mb.schedule.entitys.ScheduleRequest;
 import com.google.gson.Gson;
 
 import java.lang.reflect.Field;
@@ -364,5 +367,27 @@ public class ProjectHelper {
                 break;
         }
         return result;
+    }
+
+    public static ScheduleRequest transBean(ScheduleDetailData scheduleData){
+        ScheduleRequest scheduleRequest = new ScheduleRequest();
+        if (scheduleData!=null && scheduleData.getInfo()!=null){
+            ScheduleDetailBean detailBean = scheduleData.getInfo();
+            scheduleRequest.setId(detailBean.getId());
+            scheduleRequest.setTitle(detailBean.getTitle());
+            scheduleRequest.setDescription(detailBean.getDescription());
+            scheduleRequest.setSummary(detailBean.getSummary());
+            scheduleRequest.setAddress(detailBean.getAddress());
+            scheduleRequest.setStart(detailBean.getTime_s());
+            scheduleRequest.setEnd(detailBean.getTime_e());
+            scheduleRequest.setAllDay(detailBean.getAllDay());
+            scheduleRequest.setRepeattype(detailBean.getRepeattype());
+            scheduleRequest.setRemind(detailBean.getRemind());
+            scheduleRequest.setImportant(detailBean.getImportant());
+//            scheduleRequest.setFid(0);
+//            scheduleRequest.setShare("");
+//            scheduleRequest.setRelated("");
+        }
+        return scheduleRequest;
     }
 }

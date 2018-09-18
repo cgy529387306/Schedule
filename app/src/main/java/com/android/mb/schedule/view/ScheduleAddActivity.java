@@ -35,10 +35,9 @@ import java.util.Date;
  * Created by cgy on 16/7/18.
  */
 public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,IScheduleView> implements IScheduleView, View.OnClickListener{
-
     private EditText mEdtScheduleName; //日程名称
     private TextView mTvAddress ; //位置
-    private TextView mEdtScheduleContent; // 日程内容
+    private EditText mEdtScheduleContent; // 日程内容
     private TextView mTvUploadDocument; // 点击上传文件
     private TextView mTvFileName;//文件名称
     private LinearLayout mLlyStartDate ;
@@ -48,7 +47,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
     private TextView mTvEndDate ; //结束日期
     private TextView mTvEndTime ; //结束时间
     private ImageView mIvAllDay ; //全天提醒
-    private boolean mIsAllDay = false;
+    private int mIsAllDay = 0;
     private ImageView mIvAddPerson;// 添加相关人员
     private ImageView mIvNoRemind; // 是否提醒相关人员
     private boolean mIsNoRemind = false;
@@ -56,18 +55,23 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
     private TextView mTvRepeat; //重复
     private TextView mTvWhenRemind; // 日程什么时候开始提醒
     private ImageView mIvImport; //是否重要
-    private boolean mIsImport = false;
+    private int mIsImport = 0;
     private ScheduleRepeatPop mScheduleRepeatPop;
     private ScheduleRemindPop mScheduleRemindPop;
     private ScheduleTimePop mScheduleStartTimePop;
     private ScheduleTimePop mScheduleEndTimePop;
     private ScheduleRequest mScheduleRequest;
     private long mFileId = -1;
+    private int mType;//0:新建 1:编辑
     public static final String mDateFormat = "yyyy年MM月dd日";
     public static final String mTimeFormat = "HH:mm";
+
     @Override
     protected void loadIntent() {
-        
+        mType = getIntent().getIntExtra("type",0);
+        if (mType==1){
+            mScheduleRequest = (ScheduleRequest) getIntent().getSerializableExtra("schedule");
+        }
     }
 
     @Override
@@ -77,7 +81,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
 
     @Override
     protected void initTitle() {
-        setTitleText("新建日程");
+        setTitleText(mType==1?"编辑日程":"新建日程");
         setRightImage(R.mipmap.icon_checked);
     }
 
@@ -97,10 +101,6 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
             showToastMessage("请输入日程名称");
             return;
         }
-        if (Helper.isEmpty(content)){
-            showToastMessage("请输入日程内容");
-            return;
-        }
         if (start.getTime()>=end.getTime()){
             showToastMessage("开始时间必须大于结束时间");
             return;
@@ -111,8 +111,8 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         mScheduleRequest.setTitle(name);
         mScheduleRequest.setDescription(content);
         mScheduleRequest.setAddress(address);
-        mScheduleRequest.setImportant(mIsImport?1:0);
-        mScheduleRequest.setAllDay(mIsAllDay?1:0);
+        mScheduleRequest.setImportant(mIsImport);
+        mScheduleRequest.setAllDay(mIsAllDay);
         mScheduleRequest.setRelated("2000,2001");
         mScheduleRequest.setSummary("");
         mScheduleRequest.setShare("2000,2001");
@@ -120,7 +120,12 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         mScheduleRequest.setEnd(end.getTime()/1000);
         mScheduleRequest.setRemind(mScheduleRemindPop.getType());
         mScheduleRequest.setRepeattype(mScheduleRepeatPop.getType());
-        mPresenter.addSchedule(mScheduleRequest);
+        if (mType==1){
+            mPresenter.editSchedule(mScheduleRequest);
+        }else{
+            mPresenter.addSchedule(mScheduleRequest);
+        }
+
     }
 
     @Override
@@ -146,13 +151,39 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         choosePop();
     }
 
-    @Override
-    protected void processLogic(Bundle savedInstanceState) {
-        initData();
-        if (mScheduleRequest == null){
-            mScheduleRequest = new ScheduleRequest();
+    private void initData(){
+        if (mScheduleRequest!=null){
+            mEdtScheduleName.setText(ProjectHelper.getCommonText(mScheduleRequest.getTitle()));
+            mEdtScheduleName.setSelection(ProjectHelper.getCommonSelection(mScheduleRequest.getTitle()));
+            mTvAddress.setText(ProjectHelper.getCommonText(mScheduleRequest.getAddress()));
+            mEdtScheduleContent.setText(ProjectHelper.getCommonText(mScheduleRequest.getDescription()));
+            mEdtScheduleContent.setSelection(ProjectHelper.getCommonSelection(mScheduleRequest.getDescription()));
+            mTvStartDate.setText(Helper.long2DateString(mScheduleRequest.getStart()*1000,mDateFormat));
+            mTvStartTime.setText(Helper.long2DateString(mScheduleRequest.getStart()*1000,mTimeFormat));
+            mTvEndDate.setText(Helper.long2DateString(mScheduleRequest.getEnd()*1000,mDateFormat));
+            mTvEndTime.setText(Helper.long2DateString(mScheduleRequest.getEnd()*1000,mTimeFormat));
+            mIsAllDay = mScheduleRequest.getAllDay();
+            mIvAllDay.setImageResource(mIsAllDay==1?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
+            mIsImport = mScheduleRequest.getImportant();
+            mIvImport.setImageResource(mIsImport==1?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
+            mScheduleRepeatPop.setType(mScheduleRequest.getRepeattype());
+            mTvRepeat.setText(ProjectHelper.getRepeatStr(mScheduleRequest.getRepeattype()));
+            mScheduleRemindPop.setType(mScheduleRequest.getRemind());
+            mTvWhenRemind.setText(ProjectHelper.getRemindStr(mScheduleRequest.getRemind()));
+//            mTvFileName.setText(mScheduleEndTimePop);
         }
     }
+
+    @Override
+    protected void processLogic(Bundle savedInstanceState) {
+        if (mType == 1){
+            initData();
+        }else{
+            mScheduleRequest = new ScheduleRequest();
+            initDate();
+        }
+    }
+
 
     @Override
     protected void setListener() {
@@ -177,14 +208,15 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         }else  if (id == R.id.tv_upload_document){
             handlerFileIntent();
         }else  if (id == R.id.iv_all_day){
-            mIsAllDay = !mIsAllDay;
-            mIvAllDay.setImageResource(mIsAllDay?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
+            mIsAllDay = mIsAllDay==0?1:0;
+            mIvAllDay.setImageResource(mIsAllDay==1?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
         }else  if (id == R.id.iv_add_person){
             NavigationHelper.startActivity(ScheduleAddActivity.this,SelectPersonActivity.class,null,false);
         }else  if (id == R.id.iv_no_remind){
             mIsNoRemind = !mIsNoRemind;
             mIvNoRemind.setImageResource(mIsNoRemind?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
         }else  if (id == R.id.iv_share_other){
+
         }else  if (id == R.id.tv_repeat){
             if(mScheduleRepeatPop != null){
                 mScheduleRepeatPop.showPopupWindow(view);
@@ -194,8 +226,8 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
                 mScheduleRemindPop.showPopupWindow(view);
             }
         }else  if (id == R.id.iv_import){
-            mIsImport = !mIsImport;
-            mIvImport.setImageResource(mIsImport?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
+            mIsImport = mIsImport==0?1:0;
+            mIvImport.setImageResource(mIsImport==1?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
         }else  if (id == R.id.lly_start_date){
             if(mScheduleStartTimePop != null){
                 mScheduleStartTimePop.showPopupWindow(view);
@@ -238,7 +270,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         mScheduleEndTimePop.setType(1);
     }
 
-    private void initData(){
+    private void initDate(){
         Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY)+1;
         String hourStr = hour<10?("0"+hour):""+hour;
@@ -267,6 +299,9 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
     @Override
     public void editSuccess(Object result) {
         showToastMessage("修改成功");
+        sendMsg(ProjectConstants.EVENT_UPDATE_SCHEDULE_LIST,null);
+        sendMsg(ProjectConstants.EVENT_UPDATE_SCHEDULE,null);
+        finish();
     }
 
     @Override

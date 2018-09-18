@@ -142,4 +142,8 @@ public class ScheduleRepeatPop extends PopupWindow implements View.OnClickListen
     public int getType() {
         return type;
     }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 }

@@ -10,12 +10,15 @@ import android.widget.TextView;
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.base.BaseActivity;
 import com.android.mb.schedule.base.BaseMvpActivity;
+import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.entitys.ScheduleDetailBean;
 import com.android.mb.schedule.entitys.ScheduleDetailData;
 import com.android.mb.schedule.presenter.DetailPresenter;
 import com.android.mb.schedule.retrofit.download.DownloadHelper;
 import com.android.mb.schedule.retrofit.download.FileDownloadCallback;
+import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.utils.Helper;
+import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.utils.ProgressDialogHelper;
 import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.view.interfaces.IDetailView;
@@ -23,6 +26,8 @@ import com.android.mb.schedule.view.interfaces.IDetailView;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+
+import rx.functions.Action1;
 
 
 /**
@@ -50,9 +55,7 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
     private LinearLayout mLinFile;
     public static final String mDateFormat = "yyyy年MM月dd日";
     private ProgressDialog mProgressDialog;//创建ProgressDialog
-
     private long mId;
-
     private ScheduleDetailData mDetailData;
     @Override
     protected void loadIntent() {
@@ -93,6 +96,10 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
+        getDetail();
+    }
+
+    private void getDetail(){
         Map<String,Object> requestMap = new HashMap<>();
         requestMap.put("id",mId);
         mPresenter.getSchedule(requestMap);
@@ -100,6 +107,12 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
 
     @Override
     protected void setListener() {
+        regiestEvent(ProjectConstants.EVENT_UPDATE_SCHEDULE, new Action1<Events<?>>() {
+            @Override
+            public void call(Events<?> events) {
+                getDetail();
+            }
+        });
         mTvDownDocument.setOnClickListener(this);
         mTvEdit.setOnClickListener(this);
         mTvShare.setOnClickListener(this);
@@ -112,7 +125,10 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
         if (id == R.id.tv_download_document){
             downloadFile();
         }else if (id == R.id.tv_edit){
-            //TODO
+            Bundle bundle = new Bundle();
+            bundle.putInt("type",1);
+            bundle.putSerializable("schedule",ProjectHelper.transBean(mDetailData));
+            NavigationHelper.startActivity(ScheduleDetailActivity.this,ScheduleAddActivity.class,bundle,false);
         }else if (id == R.id.tv_share){
             //TODO
         }else if (id == R.id.tv_delete){
@@ -145,37 +161,40 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
     }
 
     private void downloadFile(){
-        mProgressDialog =  new ProgressDialog(ScheduleDetailActivity.this);//实例化ProgressDialog
-        mProgressDialog.setTitle("文件下载");//设置标题
-        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);//设置样式为横向显示进度的样式
-        mProgressDialog.setMessage("正在下载，请稍后...");
-        mProgressDialog.setMax(100);//设置最大值
-        mProgressDialog.setProgress(0);//设置初始值为0，其实可以不用设置，默认就是0
-        mProgressDialog.setIndeterminate(false);//是否精确显示对话框，flase为是，反之为否
-        mProgressDialog.show();
-        DownloadHelper.getInstance()
-                .downloadFile("https://shop.5979wenhua.com/uploads/sd/d9e1ba7a2788b6efc325ac0fb46bbcdb.jpg", Environment.getExternalStorageDirectory() + File.separator + "/file", "test.jpg",
-                        new FileDownloadCallback<File>() {
-                            @Override
-                            public void onDownLoadSuccess(File file) {
-                                showToastMessage("下载完成");
-                                mProgressDialog.dismiss();
-                            }
+        if (Helper.isNotEmpty(mDetailData.getFile())){
+            ScheduleDetailData.FileBean fileBean = mDetailData.getFile().get(0);
+            mTvFileName.setText(fileBean.getFilename());
+            mProgressDialog =  new ProgressDialog(ScheduleDetailActivity.this);//实例化ProgressDialog
+            mProgressDialog.setTitle("文件下载");//设置标题
+            mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);//设置样式为横向显示进度的样式
+            mProgressDialog.setMessage("正在下载，请稍后...");
+            mProgressDialog.setMax(100);//设置最大值
+            mProgressDialog.setProgress(0);//设置初始值为0，其实可以不用设置，默认就是0
+            mProgressDialog.setIndeterminate(false);//是否精确显示对话框，flase为是，反之为否
+            mProgressDialog.show();
+            DownloadHelper.getInstance()
+                    .downloadFile(fileBean.getUrl(), Environment.getExternalStorageDirectory() + File.separator + "/file", fileBean.getFilename(),
+                            new FileDownloadCallback<File>() {
+                                @Override
+                                public void onDownLoadSuccess(File file) {
+                                    showToastMessage("下载完成");
+                                    mProgressDialog.dismiss();
+                                }
 
-                            @Override
-                            public void onDownLoadFail(Throwable e) {
-                                showToastMessage("下载失败");
-                                mProgressDialog.dismiss();
-                            }
+                                @Override
+                                public void onDownLoadFail(Throwable e) {
+                                    showToastMessage("下载失败");
+                                    mProgressDialog.dismiss();
+                                }
 
-                            @Override
-                            public void onProgress(int progress, int total) {
-                                float percent = progress/total*1f;
-                                int currentProgress = (int)(percent*100);
-                                mProgressDialog.setMax(total);//设置最大值
-                                mProgressDialog.setProgress(progress);//设置初始值为0，其实可以不用设置，默认就是0
-                            }
-                        });
+                                @Override
+                                public void onProgress(int progress, int total) {
+                                    float percent = progress/total*1f;
+                                    int currentProgress = (int)(percent*100);
+                                    mProgressDialog.setProgress(currentProgress);
+                                }
+                            });
+        }
     }
 
     @Override

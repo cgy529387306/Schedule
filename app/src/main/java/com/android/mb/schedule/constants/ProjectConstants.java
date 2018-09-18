@@ -7,6 +7,8 @@ public class ProjectConstants {
 
     public static final int EVENT_UPDATE_SCHEDULE_LIST = 10002;
 
+    public static final int EVENT_UPDATE_SCHEDULE = 10003;
+
 
     //REQUEST
     public static final int REQUEST_SELECT_ADDRESS = 0x01;

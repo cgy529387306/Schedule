@@ -256,7 +256,9 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
                 mDrawerLayout.closeDrawer(Gravity.LEFT);
             }
         }else if (id == R.id.tv_add){
-            NavigationHelper.startActivity(MainActivity.this,ScheduleAddActivity.class,null,false);
+            Bundle bundle = new Bundle();
+            bundle.putInt("type",0);
+            NavigationHelper.startActivity(MainActivity.this,ScheduleAddActivity.class,bundle,false);
         }else if (id == R.id.iv_refresh){
 
         }else if (id == R.id.iv_today){
