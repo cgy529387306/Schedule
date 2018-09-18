@@ -6,6 +6,8 @@ import com.android.mb.schedule.entitys.LoginData;
 import com.android.mb.schedule.entitys.ScheduleData;
 import com.android.mb.schedule.entitys.ScheduleDetailData;
 import com.android.mb.schedule.entitys.ScheduleRequest;
+import com.android.mb.schedule.entitys.TreeData;
+import com.android.mb.schedule.entitys.UserBean;
 import com.android.mb.schedule.retrofit.cache.transformer.CacheTransformer;
 import com.android.mb.schedule.retrofit.http.RetrofitHttpClient;
 import com.android.mb.schedule.utils.ProjectHelper;
@@ -110,7 +112,7 @@ public class ScheduleMethods extends BaseHttp {
         }
         return getService().getPersons(requestMap)
                 .compose(CacheTransformer.emptyTransformer())
-                .map(new HttpCacheResultFunc<Object>());
+                .map(new HttpCacheResultFunc<List<UserBean>>());
     }
 
     public Observable upload(File file){
@@ -161,6 +163,16 @@ public class ScheduleMethods extends BaseHttp {
         return getService().getSchedule(requestMap)
                 .compose(CacheTransformer.emptyTransformer())
                 .map(new HttpCacheResultFunc<ScheduleDetailData>());
+    }
+
+    public Observable deleteSchedule(Map<String,Object> requestMap){
+        if (CurrentUser.getInstance().isLogin()){
+            requestMap.put("token_id",CurrentUser.getInstance().getToken_id());
+            requestMap.put("token",CurrentUser.getInstance().getToken());
+        }
+        return getService().deleteSchedule(requestMap)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<Object>());
     }
 
     public Observable getDaySchedule(Map<String,Object> requestMap){
@@ -245,6 +257,6 @@ public class ScheduleMethods extends BaseHttp {
         }
         return getService().getOfficeList(requestMap)
                 .compose(CacheTransformer.emptyTransformer())
-                .map(new HttpCacheResultFunc<Object>());
+                .map(new HttpCacheResultFunc<TreeData>());
     }
 }

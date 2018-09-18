@@ -1,6 +1,7 @@
 package com.android.mb.schedule.view;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -8,7 +9,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.mb.schedule.R;
-import com.android.mb.schedule.base.BaseActivity;
 import com.android.mb.schedule.base.BaseMvpActivity;
 import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.entitys.ScheduleDetailBean;
@@ -17,9 +17,9 @@ import com.android.mb.schedule.presenter.DetailPresenter;
 import com.android.mb.schedule.retrofit.download.DownloadHelper;
 import com.android.mb.schedule.retrofit.download.FileDownloadCallback;
 import com.android.mb.schedule.rxbus.Events;
+import com.android.mb.schedule.utils.DialogHelper;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.NavigationHelper;
-import com.android.mb.schedule.utils.ProgressDialogHelper;
 import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.view.interfaces.IDetailView;
 
@@ -132,7 +132,14 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
         }else if (id == R.id.tv_share){
             //TODO
         }else if (id == R.id.tv_delete){
-            //TODO
+            DialogHelper.showConfirmDialog(ScheduleDetailActivity.this, "提示", "确定删除改日程吗？", true, "确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Map<String,Object> requestMap = new HashMap<>();
+                    requestMap.put("id",mId);
+                    mPresenter.deleteSchedule(requestMap);
+                }
+            },"取消",null);
         }
     }
 
@@ -203,6 +210,13 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
             mDetailData = result;
             initData(mDetailData);
         }
+    }
+
+    @Override
+    public void deleteSuccess(Object result) {
+        showToastMessage("删除成功");
+        sendMsg(ProjectConstants.EVENT_UPDATE_SCHEDULE_LIST,null);
+        finish();
     }
 
     @Override

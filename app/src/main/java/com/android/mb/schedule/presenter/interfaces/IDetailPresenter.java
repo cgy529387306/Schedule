@@ -4,4 +4,6 @@ import java.util.Map;
 
 public interface IDetailPresenter {
     void getSchedule(Map<String, Object> requestMap);
+
+    void deleteSchedule(Map<String, Object> requestMap);
 }

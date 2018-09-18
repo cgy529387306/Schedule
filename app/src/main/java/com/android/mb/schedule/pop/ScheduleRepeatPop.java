@@ -37,7 +37,7 @@ public class ScheduleRepeatPop extends PopupWindow implements View.OnClickListen
     private TextView mTvEveryMonth;
     private ImageView mIvEveryMonth;
     private SelectListener mSelectListener;
-    private int type = 1;//1 - 一次性活动，2 - 每天重复，3 - 周重复，4 月重复
+    private int mType = 1;//1 - 一次性活动，2 - 每天重复，3 - 周重复，4 月重复
 
     public void setSelectListener(SelectListener selectListener) {
         this.mSelectListener = selectListener;
@@ -47,8 +47,9 @@ public class ScheduleRepeatPop extends PopupWindow implements View.OnClickListen
         void onSelected(int type);
     }
 
-    public ScheduleRepeatPop(Activity context,SelectListener selectListener) {
-        mContext = context;
+    public ScheduleRepeatPop(Activity context,int type,SelectListener selectListener) {
+        this.mContext = context;
+        this.mType = type;
         this.mSelectListener = selectListener;
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -79,7 +80,7 @@ public class ScheduleRepeatPop extends PopupWindow implements View.OnClickListen
         mLlyEveryMonth = mContentView.findViewById(R.id.lly_every_month);
         mTvEveryMonth = mContentView.findViewById(R.id.tv_every_month);
         mIvEveryMonth = mContentView.findViewById(R.id.iv_every_month);
-        refresh(1);
+        refresh(mType);
     }
 
     private void initListener() {
@@ -111,20 +112,20 @@ public class ScheduleRepeatPop extends PopupWindow implements View.OnClickListen
         if (id == R.id.lly_all){
             dismiss();
         }else if (id == R.id.tv_choose){
-            mSelectListener.onSelected(type);
+            mSelectListener.onSelected(mType);
             dismiss();
         }else if (id == R.id.lly_only_one){
-            type = 1;
-            refresh(type);
+            mType = 1;
+            refresh(mType);
         }else if (id == R.id.lly_every_day){
-            type = 2;
-            refresh(type);
+            mType = 2;
+            refresh(mType);
         }else if (id == R.id.lly_every_week){
-            type = 3;
-            refresh(type);
+            mType = 3;
+            refresh(mType);
         }else if (id == R.id.lly_every_month){
-            type = 4;
-            refresh(type);
+            mType = 4;
+            refresh(mType);
         }
     }
     private void refresh(int type){
@@ -140,10 +141,10 @@ public class ScheduleRepeatPop extends PopupWindow implements View.OnClickListen
     }
 
     public int getType() {
-        return type;
+        return mType;
     }
 
     public void setType(int type) {
-        this.type = type;
+        this.mType = type;
     }
 }

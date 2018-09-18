@@ -11,4 +11,6 @@ import java.util.List;
  */
 public interface IDetailView extends BaseMvpView {
     void getSuccess(ScheduleDetailData result);
+
+    void deleteSuccess(Object result);
 }

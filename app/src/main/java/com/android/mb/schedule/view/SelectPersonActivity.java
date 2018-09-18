@@ -9,6 +9,8 @@ import android.widget.EditText;
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.adapter.MyTabPagerAdapter;
 import com.android.mb.schedule.base.BaseMvpActivity;
+import com.android.mb.schedule.entitys.TreeData;
+import com.android.mb.schedule.entitys.UserBean;
 import com.android.mb.schedule.fragment.OrgFragment;
 import com.android.mb.schedule.fragment.PersonFragment;
 import com.android.mb.schedule.presenter.PersonPresenter;
@@ -93,12 +95,16 @@ public class SelectPersonActivity extends BaseMvpActivity<PersonPresenter,IPerso
 
 
     @Override
-    public void getOrgSuccess() {
-
+    public void getOrgSuccess(TreeData result) {
+        if (result!=null){
+            result.getTree();
+        }
     }
 
     @Override
-    public void getPersonSuccess() {
-
+    public void getPersonSuccess(List<UserBean> result) {
+        if (result!=null){
+            result.size();
+        }
     }
 }

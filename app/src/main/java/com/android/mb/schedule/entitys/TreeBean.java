@@ -5,19 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Administrator on 2018\9\16 0016.
+ * Created by Administrator on 2018\9\18 0018.
  */
 
-public class OrgBean implements Serializable{
+public class TreeBean implements Serializable{
     private long id;
-
-    private long parent_id;
-
     private String name;
-
-    private List<OrgBean> childlist;
-
-    private List<PersonBean> man;
+    private long parent_id;
+    private List<TreeBean> childlist;
+    private List<UserBean> man;
 
     public long getId() {
         return id;
@@ -25,14 +21,6 @@ public class OrgBean implements Serializable{
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public long getParent_id() {
-        return parent_id;
-    }
-
-    public void setParent_id(long parent_id) {
-        this.parent_id = parent_id;
     }
 
     public String getName() {
@@ -43,25 +31,33 @@ public class OrgBean implements Serializable{
         this.name = name;
     }
 
-    public List<OrgBean> getChildlist() {
+    public long getParent_id() {
+        return parent_id;
+    }
+
+    public void setParent_id(long parent_id) {
+        this.parent_id = parent_id;
+    }
+
+    public List<TreeBean> getChildlist() {
         if (childlist == null) {
             return new ArrayList<>();
         }
         return childlist;
     }
 
-    public void setChildlist(List<OrgBean> childlist) {
+    public void setChildlist(List<TreeBean> childlist) {
         this.childlist = childlist;
     }
 
-    public List<PersonBean> getMan() {
+    public List<UserBean> getMan() {
         if (man == null) {
             return new ArrayList<>();
         }
         return man;
     }
 
-    public void setMan(List<PersonBean> man) {
+    public void setMan(List<UserBean> man) {
         this.man = man;
     }
 }

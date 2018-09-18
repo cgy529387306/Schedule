@@ -70,7 +70,7 @@ public class MonthFragment extends BaseMvpFragment<MonthPresenter,IMonthView> im
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL));
         mAdapter = new MultipleItemQuickAdapter(getActivity(), mDataList);
-        mAdapter.setEmptyView(R.layout.empty_home_month, (ViewGroup) mRecyclerView.getParent());
+        mAdapter.setEmptyView(R.layout.empty_schedule, (ViewGroup) mRecyclerView.getParent());
         mAdapter.addHeaderView(getHeaderView());
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -163,6 +163,9 @@ public class MonthFragment extends BaseMvpFragment<MonthPresenter,IMonthView> im
                 if (Helper.isNotEmpty(mScheduleDataList)){
                     mDataList = ProjectHelper.getScheduleList(mSelectDate,mScheduleDataList);
                     mAdapter.setNewData(mDataList);
+                }else{
+                    mDataList = new ArrayList<ScheduleBean>();
+                    mAdapter.setNewData(mDataList);
                 }
 
             }
@@ -179,6 +182,8 @@ public class MonthFragment extends BaseMvpFragment<MonthPresenter,IMonthView> im
 
     @Override
     public void getSuccess(List<ScheduleData> result) {
+        mDataList = new ArrayList<>();
+        mSchemeList = new ArrayList<>();
         mScheduleDataList = result;
         if (Helper.isNotEmpty(mScheduleDataList)){
             for (int i=0; i<mScheduleDataList.size();i++){
@@ -191,9 +196,9 @@ public class MonthFragment extends BaseMvpFragment<MonthPresenter,IMonthView> im
                     mDataList = scheduleData.getList();
                 }
             }
-            addSchemeList(mSchemeList);
-            mAdapter.setNewData(mDataList);
         }
+        addSchemeList(mSchemeList);
+        mAdapter.setNewData(mDataList);
     }
 
     @Override

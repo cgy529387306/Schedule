@@ -3,15 +3,14 @@ package com.android.mb.schedule.entitys;
 import java.io.Serializable;
 
 /**
- * Created by Administrator on 2018\9\16 0016.
+ * Created by Administrator on 2018\9\18 0018.
  */
 
-public class PersonBean implements Serializable{
+public class UserBean implements Serializable{
     private long id;
-
     private String nickname;
-
     private long office_id;
+    private String avatar;
 
     public long getId() {
         return id;
@@ -35,5 +34,13 @@ public class PersonBean implements Serializable{
 
     public void setOffice_id(long office_id) {
         this.office_id = office_id;
+    }
+
+    public String getAvatar() {
+        return avatar == null ? "" : avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

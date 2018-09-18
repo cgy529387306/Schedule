@@ -4,6 +4,8 @@ import com.android.mb.schedule.entitys.FileData;
 import com.android.mb.schedule.entitys.LoginData;
 import com.android.mb.schedule.entitys.ScheduleData;
 import com.android.mb.schedule.entitys.ScheduleDetailData;
+import com.android.mb.schedule.entitys.TreeData;
+import com.android.mb.schedule.entitys.UserBean;
 import com.android.mb.schedule.retrofit.http.entity.HttpResult;
 
 import java.util.List;
@@ -50,7 +52,7 @@ public interface IScheduleService {
 
     @POST("/app/user/getman")
     @FormUrlEncoded
-    Observable<HttpResult<Object>> getPersons(@FieldMap Map<String,Object> requestMap);
+    Observable<HttpResult<List<UserBean>>> getPersons(@FieldMap Map<String,Object> requestMap);
 
     @POST("/app/schedule/upload")
     @Multipart
@@ -67,6 +69,10 @@ public interface IScheduleService {
     @POST("/app/schedule/get")
     @FormUrlEncoded
     Observable<HttpResult<ScheduleDetailData>> getSchedule(@FieldMap Map<String,Object> requestMap);
+
+    @POST("/app/schedule/del")
+    @FormUrlEncoded
+    Observable<HttpResult<Object>> deleteSchedule(@FieldMap Map<String,Object> requestMap);
 
     @POST("/app/schedule/day")
     @FormUrlEncoded
@@ -99,6 +105,6 @@ public interface IScheduleService {
 
     @POST("/app/common/office")
     @FormUrlEncoded
-    Observable<HttpResult<Object>> getOfficeList(@FieldMap Map<String,Object> requestMap);
+    Observable<HttpResult<TreeData>> getOfficeList(@FieldMap Map<String,Object> requestMap);
 
 }

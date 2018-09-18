@@ -56,7 +56,7 @@ public class ScheduleRemindPop extends PopupWindow implements View.OnClickListen
     private TextView mTvNoRemind;
     private ImageView mIvNoRemind;
     private SelectListener mSelectListener;
-    private int type = 1;//0 不提醒,1 10分钟前，2 15分钟前，3 30分钟前，4 1小时前，5 2小时前，6 24小时前，7 2天前
+    private int mType = 1;//0 不提醒,1 10分钟前，2 15分钟前，3 30分钟前，4 1小时前，5 2小时前，6 24小时前，7 2天前
 
     public void setSelectListener(SelectListener selectListener) {
         this.mSelectListener = selectListener;
@@ -66,8 +66,9 @@ public class ScheduleRemindPop extends PopupWindow implements View.OnClickListen
         void onSelected(int type);
     }
 
-    public ScheduleRemindPop(Activity context, SelectListener selectListener) {
-        mContext = context;
+    public ScheduleRemindPop(Activity context, int type,SelectListener selectListener) {
+        this.mContext = context;
+        this.mType = type;
         this.mSelectListener = selectListener;
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -121,7 +122,7 @@ public class ScheduleRemindPop extends PopupWindow implements View.OnClickListen
         mLlyNoRemind = mContentView.findViewById(R.id.lly_no_remind);
         mTvNoRemind = mContentView.findViewById(R.id.tv_no_remind);
         mIvNoRemind = mContentView.findViewById(R.id.iv_no_remind);
-        refresh(0);
+        refresh(mType);
     }
 
     private void initListener() {
@@ -157,32 +158,32 @@ public class ScheduleRemindPop extends PopupWindow implements View.OnClickListen
         if (id == R.id.lly_all){
             dismiss();
         }else if (id == R.id.tv_choose){
-            mSelectListener.onSelected(type);
+            mSelectListener.onSelected(mType);
             dismiss();
         }else if (id == R.id.lly_no_remind){
-            type = 0;
-            refresh(type);
+            mType = 0;
+            refresh(mType);
         }else if (id == R.id.lly_before_ten){
-            type = 1;
-            refresh(type);
+            mType = 1;
+            refresh(mType);
         }else if (id == R.id.lly_before_fifteen){
-            type = 2;
-            refresh(type);
+            mType = 2;
+            refresh(mType);
         }else if (id == R.id.lly_before_half_hour){
-            type = 3;
-            refresh(type);
+            mType = 3;
+            refresh(mType);
         }else if (id == R.id.lly_before_one_hour){
-            type = 4;
-            refresh(type);
+            mType = 4;
+            refresh(mType);
         }else if (id == R.id.lly_before_two_hour){
-            type = 5;
-            refresh(type);
+            mType = 5;
+            refresh(mType);
         }else if (id == R.id.lly_before_one_day){
-            type = 6;
-            refresh(type);
+            mType = 6;
+            refresh(mType);
         }else if (id == R.id.lly_before_two_day){
-            type = 7;
-            refresh(type);
+            mType = 7;
+            refresh(mType);
         }
     }
     private void refresh(int type){
@@ -206,10 +207,10 @@ public class ScheduleRemindPop extends PopupWindow implements View.OnClickListen
     }
 
     public int getType() {
-        return type;
+        return mType = 7;
     }
 
     public void setType(int type) {
-        this.type = type;
+        this.mType = type;
     }
 }

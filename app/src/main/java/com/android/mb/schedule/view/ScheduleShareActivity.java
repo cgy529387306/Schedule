@@ -5,6 +5,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.adapter.ScheduleRelateAdapter;
@@ -53,6 +54,7 @@ public class ScheduleShareActivity extends BaseMvpActivity<MySharePresenter,IMyS
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mAdapter = new ScheduleShareAdapter(R.layout.item_schedule_share,getData());
+        mAdapter.setEmptyView(R.layout.empty_share, (ViewGroup) mRecyclerView.getParent());
         mRecyclerView.setAdapter(mAdapter);
     }
 

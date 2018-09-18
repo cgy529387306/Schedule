@@ -166,9 +166,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
             mIvAllDay.setImageResource(mIsAllDay==1?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
             mIsImport = mScheduleRequest.getImportant();
             mIvImport.setImageResource(mIsImport==1?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
-            mScheduleRepeatPop.setType(mScheduleRequest.getRepeattype());
             mTvRepeat.setText(ProjectHelper.getRepeatStr(mScheduleRequest.getRepeattype()));
-            mScheduleRemindPop.setType(mScheduleRequest.getRemind());
             mTvWhenRemind.setText(ProjectHelper.getRemindStr(mScheduleRequest.getRemind()));
 //            mTvFileName.setText(mScheduleEndTimePop);
         }
@@ -240,13 +238,15 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
     }
 
     private void choosePop() {
-        mScheduleRepeatPop = new ScheduleRepeatPop(this, new ScheduleRepeatPop.SelectListener() {
+        int repeatType = mType==1?mScheduleRequest.getRepeattype():1;
+        int remindType = mType==1?mScheduleRequest.getRemind():1;
+        mScheduleRepeatPop = new ScheduleRepeatPop(this, repeatType,new ScheduleRepeatPop.SelectListener() {
             @Override
             public void onSelected(int type) {
                 mTvRepeat.setText(ProjectHelper.getRepeatStr(type));
             }
         });
-        mScheduleRemindPop = new ScheduleRemindPop(this, new ScheduleRemindPop.SelectListener() {
+        mScheduleRemindPop = new ScheduleRemindPop(this, remindType,new ScheduleRemindPop.SelectListener() {
             @Override
             public void onSelected(int type) {
              mTvWhenRemind.setText(ProjectHelper.getRemindStr(type));
