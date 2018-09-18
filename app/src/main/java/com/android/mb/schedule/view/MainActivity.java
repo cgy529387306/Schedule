@@ -31,13 +31,13 @@ import com.android.mb.schedule.fragment.MonthFragment;
 import com.android.mb.schedule.fragment.WeekFragment;
 import com.android.mb.schedule.presenter.HomePresenter;
 import com.android.mb.schedule.rxbus.Events;
+import com.android.mb.schedule.utils.ImageUtils;
 import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.utils.ToastHelper;
 import com.android.mb.schedule.view.interfaces.IHomeView;
 import com.android.mb.schedule.widget.CircleImageView;
 import com.android.mb.schedule.widget.FragmentViewPager;
-import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -275,7 +275,7 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
         if (currentUser!=null){
             mTvName.setText(ProjectHelper.getCommonText(currentUser.getNickname()));
             mTvJob.setText(ProjectHelper.getCommonText(currentUser.getOffice_name()));
-            Glide.with(this).load(currentUser.getAvatar()).into(mIvHead);
+            ImageUtils.displayAvatar(this,currentUser.getAvatar(),mIvHead);
         }
     }
 

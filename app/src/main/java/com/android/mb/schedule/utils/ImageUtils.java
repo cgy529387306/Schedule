@@ -7,6 +7,12 @@ import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.ImageView;
+
+import com.android.mb.schedule.R;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -113,5 +119,13 @@ public class ImageUtils {
         return Base64.encodeToString(bytes, Base64.DEFAULT);
     }
 
+
+    public static void displayAvatar(Context context, String url, ImageView imageView){
+        RequestOptions options = new RequestOptions()
+                .placeholder(R.mipmap.ic_avatar_default)// 正在加载中的图片
+                .error(R.mipmap.ic_avatar_default) // 加载失败的图片
+                .diskCacheStrategy(DiskCacheStrategy.ALL); // 磁盘缓存策略
+        Glide.with(context).load(url).apply(options).into(imageView);
+    }
 
 }

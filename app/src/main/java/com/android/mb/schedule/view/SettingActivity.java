@@ -10,10 +10,10 @@ import com.android.mb.schedule.base.BaseActivity;
 import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.entitys.CurrentUser;
 import com.android.mb.schedule.rxbus.Events;
+import com.android.mb.schedule.utils.ImageUtils;
 import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.widget.CircleImageView;
-import com.bumptech.glide.Glide;
 
 import rx.functions.Action1;
 
@@ -93,7 +93,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         if (CurrentUser.getInstance()!=null){
             mTvName.setText(ProjectHelper.getCommonText(CurrentUser.getInstance().getNickname()));
             mTvJob.setText(ProjectHelper.getCommonText(CurrentUser.getInstance().getOffice_name()));
-            Glide.with(this).load(CurrentUser.getInstance().getAvatar()).into(mIvHead);
+            ImageUtils.displayAvatar(this,CurrentUser.getInstance().getAvatar(),mIvHead);
         }
     }
 }

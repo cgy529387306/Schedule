@@ -25,7 +25,6 @@ import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.view.interfaces.IUserView;
 import com.android.mb.schedule.widget.BottomMenuDialog;
 import com.android.mb.schedule.widget.CircleImageView;
-import com.bumptech.glide.Glide;
 
 import java.io.File;
 import java.util.HashMap;
@@ -251,7 +250,7 @@ public class PersonalSettingActivity extends BaseMvpActivity<UserPresenter,IUser
         if (currentUser!=null){
             mTvName.setText(ProjectHelper.getCommonText(currentUser.getNickname()));
             mTvJob.setText(ProjectHelper.getCommonText(currentUser.getOffice_name()));
-            Glide.with(this).load(currentUser.getAvatar()).into(mIvHead);
+            ImageUtils.displayAvatar(this,currentUser.getAvatar(),mIvHead);
         }
     }
 }
