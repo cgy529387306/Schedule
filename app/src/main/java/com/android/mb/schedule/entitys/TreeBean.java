@@ -14,6 +14,33 @@ public class TreeBean implements Serializable{
     private long parent_id;
     private List<TreeBean> childlist;
     private List<UserBean> man;
+    private int levelCnt;//当前层级
+    /** 是否展开了 */
+    private boolean isExpand;
+
+    public boolean isExpand() {
+        return isExpand;
+    }
+
+    public void setExpand(boolean isExpand) {
+        this.isExpand = isExpand;
+    }
+
+    public int getChildCount() {
+        if (childlist == null) {
+            return 0;
+        } else {
+            return childlist.size();
+        }
+    }
+
+    public int getLevelCnt() {
+        return levelCnt;
+    }
+
+    public void setLevelCnt(int levelCnt) {
+        this.levelCnt = levelCnt;
+    }
 
     public long getId() {
         return id;

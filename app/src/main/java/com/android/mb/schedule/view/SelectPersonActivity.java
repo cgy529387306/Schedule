@@ -30,8 +30,6 @@ public class SelectPersonActivity extends BaseMvpActivity<PersonPresenter,IPerso
     private ViewPager mVp;
     private List<Fragment> mFragmentList;
     private List<String> mTitleList;
-    private PersonFragment mPersonFragment;
-    private OrgFragment mOrgFragment;
     @Override
     protected void loadIntent() {
     }
@@ -70,11 +68,9 @@ public class SelectPersonActivity extends BaseMvpActivity<PersonPresenter,IPerso
         mTb.addTab(mTb.newTab().setText(mTitleList.get(2)));
 
         mFragmentList = new ArrayList<>();
-        mPersonFragment = new PersonFragment();
-        mOrgFragment = new OrgFragment();
-        mFragmentList.add(mPersonFragment);
-        mFragmentList.add(mOrgFragment);
-        mFragmentList.add(mPersonFragment);
+        mFragmentList.add(new PersonFragment());
+        mFragmentList.add(new OrgFragment());
+        mFragmentList.add(new Fragment());
 
         mVp.setAdapter(new MyTabPagerAdapter(getSupportFragmentManager(), mFragmentList,mTitleList));
         mTb.setupWithViewPager(mVp);
@@ -100,14 +96,16 @@ public class SelectPersonActivity extends BaseMvpActivity<PersonPresenter,IPerso
     @Override
     public void getOrgSuccess(TreeData result) {
         if (result!=null){
-            result.getTree();
+            OrgFragment orgFragment = (OrgFragment) mFragmentList.get(1);
+            orgFragment.setDataList(result.getTree());
         }
     }
 
     @Override
     public void getPersonSuccess(List<UserBean> result) {
         if (result!=null){
-            mPersonFragment.setDataList(result,mVp.getCurrentItem()==0);
+            PersonFragment personFragment = (PersonFragment) mFragmentList.get(0);
+            personFragment.setDataList(result);
         }
     }
 }

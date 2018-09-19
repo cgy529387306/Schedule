@@ -55,17 +55,9 @@ public class PersonFragment extends BaseFragment {
 
     }
 
-    @Override
-    protected void lazyLoad() {
-        super.lazyLoad();
-        mAdapter.setNewData(mDataList);
-    }
-
-    public void setDataList(List<UserBean> list, boolean isRefresh){
+    public void setDataList(List<UserBean> list){
         mDataList = list;
-        if (isRefresh){
-            mAdapter.setNewData(mDataList);
-        }
+        mAdapter.setNewData(mDataList);
     }
 
 
