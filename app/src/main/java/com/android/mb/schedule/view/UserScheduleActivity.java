@@ -14,6 +14,7 @@ import com.android.mb.schedule.adapter.UserScheduleAdapter;
 import com.android.mb.schedule.base.BaseMvpActivity;
 import com.android.mb.schedule.entitys.MySection;
 import com.android.mb.schedule.entitys.ScheduleRequest;
+import com.android.mb.schedule.entitys.ShareData;
 import com.android.mb.schedule.presenter.MySharePresenter;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.view.interfaces.IMyShareView;
@@ -102,7 +103,7 @@ public class UserScheduleActivity extends BaseMvpActivity<MySharePresenter,IMySh
     }
 
     @Override
-    public void getSuccess() {
+    public void getSuccess(List<ShareData> result) {
 
     }
 

@@ -12,6 +12,7 @@ import com.android.mb.schedule.adapter.ScheduleRelateAdapter;
 import com.android.mb.schedule.adapter.ScheduleShareAdapter;
 import com.android.mb.schedule.base.BaseActivity;
 import com.android.mb.schedule.base.BaseMvpActivity;
+import com.android.mb.schedule.entitys.ShareData;
 import com.android.mb.schedule.presenter.MySharePresenter;
 import com.android.mb.schedule.presenter.RelatedPresenter;
 import com.android.mb.schedule.utils.Helper;
@@ -28,7 +29,7 @@ import java.util.List;
  * Created by Administrator on 2018\8\20 0020.
  */
 
-public class ScheduleShareActivity extends BaseMvpActivity<MySharePresenter,IMyShareView> implements IMyShareView,  View.OnClickListener{
+public class ScheduleShareActivity extends BaseMvpActivity<MySharePresenter,IMyShareView> implements IMyShareView, View.OnClickListener{
     private RecyclerView mRecyclerView;
     private ScheduleShareAdapter mAdapter;
     private int mCurrentPage = 0;
@@ -107,7 +108,7 @@ public class ScheduleShareActivity extends BaseMvpActivity<MySharePresenter,IMyS
     }
 
     @Override
-    public void getSuccess() {
+    public void getSuccess(List<ShareData> result) {
 
     }
 
