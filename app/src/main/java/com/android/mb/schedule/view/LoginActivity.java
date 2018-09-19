@@ -23,7 +23,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Administrator on 2018\8\20 0020.
+ * 登录
+ * Created by cgy on 2018\8\20 0020.
  */
 
 public class LoginActivity extends BaseMvpActivity<LoginPresenter,ILoginView> implements ILoginView, View.OnClickListener{

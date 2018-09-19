@@ -3,14 +3,15 @@ package com.android.mb.schedule.presenter;
 import android.text.TextUtils;
 
 import com.android.mb.schedule.base.BaseMvpPresenter;
-import com.android.mb.schedule.presenter.interfaces.IMonthPresenter;
-import com.android.mb.schedule.presenter.interfaces.ISharePresenter;
+import com.android.mb.schedule.entitys.RelatedBean;
+import com.android.mb.schedule.entitys.ShareBean;
+import com.android.mb.schedule.presenter.interfaces.IOtherSharePresenter;
 import com.android.mb.schedule.retrofit.http.exception.ApiException;
 import com.android.mb.schedule.retrofit.http.exception.NoNetWorkException;
 import com.android.mb.schedule.service.ScheduleMethods;
-import com.android.mb.schedule.view.interfaces.IMonthView;
-import com.android.mb.schedule.view.interfaces.IShareView;
+import com.android.mb.schedule.view.interfaces.IOtherShareView;
 
+import java.util.List;
 import java.util.Map;
 
 import rx.Observable;
@@ -19,12 +20,12 @@ import rx.Subscriber;
 /**
  * Created by cgy on 2018/2/11 0011.
  */
-public class SharePresenter extends BaseMvpPresenter<IShareView> implements ISharePresenter {
+public class OtherSharePresenter extends BaseMvpPresenter<IOtherShareView> implements IOtherSharePresenter {
 
     @Override
-    public void getShare() {
-        Observable observable = ScheduleMethods.getInstance().getShare();
-        toSubscribe(observable,  new Subscriber<Object>() {
+    public void getOtherShare(Map<String, Object> requestMap) {
+        Observable observable = ScheduleMethods.getInstance().getOtherShare(requestMap);
+        toSubscribe(observable,  new Subscriber<List<RelatedBean>>() {
             @Override
             public void onCompleted() {
 
@@ -42,9 +43,9 @@ public class SharePresenter extends BaseMvpPresenter<IShareView> implements ISha
             }
 
             @Override
-            public void onNext(Object result) {
+            public void onNext(List<RelatedBean> result) {
                 if (mMvpView!=null){
-                    mMvpView.getSuccess();
+                    mMvpView.getSuccess(result);
                 }
             }
         });

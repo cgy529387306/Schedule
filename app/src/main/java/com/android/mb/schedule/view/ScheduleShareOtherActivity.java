@@ -10,12 +10,16 @@ import android.view.ViewGroup;
 
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.adapter.ScheduleShareAdapter;
+import com.android.mb.schedule.adapter.ScheduleShareOtherAdapter;
 import com.android.mb.schedule.base.BaseMvpActivity;
+import com.android.mb.schedule.entitys.RelatedBean;
 import com.android.mb.schedule.entitys.ShareBean;
 import com.android.mb.schedule.presenter.MySharePresenter;
+import com.android.mb.schedule.presenter.OtherSharePresenter;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.view.interfaces.IMyShareView;
+import com.android.mb.schedule.view.interfaces.IOtherShareView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
 import java.util.ArrayList;
@@ -24,15 +28,15 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 我分享的日程
+ * 分享给我的日程
  * Created by cgy on 2018\8\20 0020.
  */
 
-public class ScheduleShareActivity extends BaseMvpActivity<MySharePresenter,IMyShareView> implements IMyShareView, View.OnClickListener
+public class ScheduleShareOtherActivity extends BaseMvpActivity<OtherSharePresenter,IOtherShareView> implements IOtherShareView, View.OnClickListener
         ,SwipeRefreshLayout.OnRefreshListener,BaseQuickAdapter.RequestLoadMoreListener,BaseQuickAdapter.OnItemClickListener{
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
-    private ScheduleShareAdapter mAdapter;
+    private ScheduleShareOtherAdapter mAdapter;
     private int mCurrentPage = 1;
     @Override
     protected void loadIntent() {
@@ -46,7 +50,7 @@ public class ScheduleShareActivity extends BaseMvpActivity<MySharePresenter,IMyS
 
     @Override
     protected void initTitle() {
-        setTitleText("我分享的日程");
+        setTitleText("他人分享的日程");
     }
 
     @Override
@@ -56,7 +60,7 @@ public class ScheduleShareActivity extends BaseMvpActivity<MySharePresenter,IMyS
         mRecyclerView =  findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mAdapter = new ScheduleShareAdapter(R.layout.item_schedule_share,new ArrayList());
+        mAdapter = new ScheduleShareOtherAdapter(R.layout.item_schedule_share_other,new ArrayList());
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -69,7 +73,7 @@ public class ScheduleShareActivity extends BaseMvpActivity<MySharePresenter,IMyS
     private void getListFormServer(){
         Map<String, Object> requestMap = new HashMap<>();
         requestMap.put("page",mCurrentPage);
-        mPresenter.getMyShare(requestMap);
+        mPresenter.getOtherShare(requestMap);
     }
 
     @Override
@@ -85,7 +89,7 @@ public class ScheduleShareActivity extends BaseMvpActivity<MySharePresenter,IMyS
     }
 
     @Override
-    public void getSuccess(List<ShareBean> result) {
+    public void getSuccess(List<RelatedBean> result) {
         if (result!=null){
             if (mCurrentPage == 1){
                 //首页
@@ -104,8 +108,8 @@ public class ScheduleShareActivity extends BaseMvpActivity<MySharePresenter,IMyS
     }
 
     @Override
-    protected MySharePresenter createPresenter() {
-        return new MySharePresenter();
+    protected OtherSharePresenter createPresenter() {
+        return new OtherSharePresenter();
     }
 
     @Override
@@ -125,7 +129,7 @@ public class ScheduleShareActivity extends BaseMvpActivity<MySharePresenter,IMyS
         if (mAdapter.getItem(position)!=null){
             Bundle bundle = new Bundle();
             bundle.putLong("id",mAdapter.getItem(position).getId());
-            NavigationHelper.startActivity(ScheduleShareActivity.this,ScheduleDetailActivity.class,bundle,false);
+            NavigationHelper.startActivity(ScheduleShareOtherActivity.this,ScheduleDetailActivity.class,bundle,false);
         }
     }
 }

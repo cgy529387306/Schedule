@@ -18,7 +18,8 @@ import com.android.mb.schedule.widget.CircleImageView;
 import rx.functions.Action1;
 
 /**
- * Created by Administrator on 2018\8\20 0020.
+ *  设置
+ * Created by cgy on 2018\8\20 0020.
  */
 
 public class SettingActivity extends BaseActivity implements View.OnClickListener{

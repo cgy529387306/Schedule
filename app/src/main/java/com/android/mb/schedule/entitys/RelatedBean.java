@@ -1,17 +1,21 @@
 package com.android.mb.schedule.entitys;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
-public class ShareBean implements Serializable{
+/**
+ * Created by Administrator on 2018\9\19 0019.
+ */
+
+public class RelatedBean implements Serializable{
 
     private long id;
     private String title;
     private String address;
     private String time;
     private String create_date;
-    private List<UserBean> share;
+    private String user_avatar;
+    private String user_name;
+    private String user_office;
 
     public long getId() {
         return id;
@@ -53,14 +57,27 @@ public class ShareBean implements Serializable{
         this.create_date = create_date;
     }
 
-    public List<UserBean> getShare() {
-        if (share == null) {
-            return new ArrayList<>();
-        }
-        return share;
+    public String getUser_avatar() {
+        return user_avatar == null ? "" : user_avatar;
     }
 
-    public void setShare(List<UserBean> share) {
-        this.share = share;
+    public void setUser_avatar(String user_avatar) {
+        this.user_avatar = user_avatar;
+    }
+
+    public String getUser_name() {
+        return user_name == null ? "" : user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
+    }
+
+    public String getUser_office() {
+        return user_office == null ? "" : user_office;
+    }
+
+    public void setUser_office(String user_office) {
+        this.user_office = user_office;
     }
 }

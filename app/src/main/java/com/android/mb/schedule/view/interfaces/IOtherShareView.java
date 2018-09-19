@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by cgy on 2018/2/11 0011.
  */
-public interface IRelatedView extends BaseMvpView {
+public interface IOtherShareView extends BaseMvpView {
     void getSuccess(List<RelatedBean> result);
 
 }

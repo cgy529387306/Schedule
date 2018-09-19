@@ -3,13 +3,15 @@ package com.android.mb.schedule.presenter;
 import android.text.TextUtils;
 
 import com.android.mb.schedule.base.BaseMvpPresenter;
+import com.android.mb.schedule.entitys.RelatedBean;
 import com.android.mb.schedule.presenter.interfaces.IRelatedPresenter;
-import com.android.mb.schedule.presenter.interfaces.ISharePresenter;
 import com.android.mb.schedule.retrofit.http.exception.ApiException;
 import com.android.mb.schedule.retrofit.http.exception.NoNetWorkException;
 import com.android.mb.schedule.service.ScheduleMethods;
 import com.android.mb.schedule.view.interfaces.IRelatedView;
-import com.android.mb.schedule.view.interfaces.IShareView;
+
+import java.util.List;
+import java.util.Map;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -20,9 +22,9 @@ import rx.Subscriber;
 public class RelatedPresenter extends BaseMvpPresenter<IRelatedView> implements IRelatedPresenter {
 
     @Override
-    public void getRelated() {
-        Observable observable = ScheduleMethods.getInstance().getRelated();
-        toSubscribe(observable,  new Subscriber<Object>() {
+    public void getRelated(Map<String, Object> requestMap) {
+        Observable observable = ScheduleMethods.getInstance().getRelated(requestMap);
+        toSubscribe(observable,  new Subscriber<List<RelatedBean>>() {
             @Override
             public void onCompleted() {
 
@@ -40,9 +42,9 @@ public class RelatedPresenter extends BaseMvpPresenter<IRelatedView> implements 
             }
 
             @Override
-            public void onNext(Object result) {
+            public void onNext(List<RelatedBean> result) {
                 if (mMvpView!=null){
-                    mMvpView.getSuccess();
+                    mMvpView.getSuccess(result);
                 }
             }
         });

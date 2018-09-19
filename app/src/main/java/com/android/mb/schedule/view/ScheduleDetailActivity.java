@@ -31,7 +31,7 @@ import rx.functions.Action1;
 
 
 /**
- * 新增日程
+ * 日程详情
  * Created by cgy on 16/7/18.
  */
 public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView> implements IDetailView, View.OnClickListener{

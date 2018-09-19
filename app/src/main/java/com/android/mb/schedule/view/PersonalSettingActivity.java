@@ -31,7 +31,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Administrator on 2018\8\20 0020.
+ * 个人信息
+ * Created by cgy on 2018\8\20 0020.
  */
 
 public class PersonalSettingActivity extends BaseMvpActivity<UserPresenter,IUserView> implements IUserView, View.OnClickListener{

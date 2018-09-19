@@ -6,15 +6,14 @@ import com.android.mb.schedule.R;
 import com.android.mb.schedule.entitys.RelatedBean;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.ImageUtils;
-import com.android.mb.schedule.utils.ProjectHelper;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
 import java.util.List;
 
-public class ScheduleRelateAdapter extends BaseQuickAdapter<RelatedBean, BaseViewHolder> {
+public class ScheduleShareOtherAdapter extends BaseQuickAdapter<RelatedBean, BaseViewHolder> {
 
-    public ScheduleRelateAdapter(int layoutResId, List data) {
+    public ScheduleShareOtherAdapter(int layoutResId, List data) {
         super(layoutResId, data);
     }
 

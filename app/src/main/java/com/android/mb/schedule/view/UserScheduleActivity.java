@@ -8,24 +8,23 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.mb.schedule.R;
-import com.android.mb.schedule.adapter.ScheduleShareAdapter;
 import com.android.mb.schedule.adapter.SectionAdapter;
-import com.android.mb.schedule.adapter.UserScheduleAdapter;
 import com.android.mb.schedule.base.BaseMvpActivity;
 import com.android.mb.schedule.entitys.MySection;
 import com.android.mb.schedule.entitys.ScheduleRequest;
-import com.android.mb.schedule.entitys.ShareData;
+import com.android.mb.schedule.entitys.ShareBean;
 import com.android.mb.schedule.presenter.MySharePresenter;
-import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.view.interfaces.IMyShareView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
- * Created by Administrator on 2018\8\20 0020.
+ * 我的日程
+ * Created by cgy on 2018\8\20 0020.
  */
 
 public class UserScheduleActivity extends BaseMvpActivity<MySharePresenter,IMyShareView> implements IMyShareView,  View.OnClickListener{
@@ -40,7 +39,7 @@ public class UserScheduleActivity extends BaseMvpActivity<MySharePresenter,IMySh
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_relate_schedule;
+        return R.layout.common_recycleview;
     }
 
     @Override
@@ -60,7 +59,8 @@ public class UserScheduleActivity extends BaseMvpActivity<MySharePresenter,IMySh
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
-        mPresenter.getMyShare();
+        Map<String, Object> requestMap = new HashMap<>();
+        mPresenter.getMyShare(requestMap);
     }
 
     @Override
@@ -103,7 +103,7 @@ public class UserScheduleActivity extends BaseMvpActivity<MySharePresenter,IMySh
     }
 
     @Override
-    public void getSuccess(List<ShareData> result) {
+    public void getSuccess(List<ShareBean> result) {
 
     }
 

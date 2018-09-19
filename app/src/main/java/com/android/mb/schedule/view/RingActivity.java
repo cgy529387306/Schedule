@@ -1,35 +1,26 @@
 package com.android.mb.schedule.view;
 
-import android.content.ContentUris;
 import android.database.Cursor;
-import android.media.Ringtone;
 import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.adapter.RingAdapter;
 import com.android.mb.schedule.base.BaseActivity;
 import com.android.mb.schedule.entitys.RingBean;
-import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.view.interfaces.OnItemClickListener;
-import com.android.mb.schedule.widget.CircleImageView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
- * Created by Administrator on 2018\8\20 0020.
+ * 铃声选择
+ * Created by cgy on 2018\8\20 0020.
  */
 
 public class RingActivity extends BaseActivity {

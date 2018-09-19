@@ -3,16 +3,15 @@ package com.android.mb.schedule.presenter;
 import android.text.TextUtils;
 
 import com.android.mb.schedule.base.BaseMvpPresenter;
-import com.android.mb.schedule.entitys.ShareData;
+import com.android.mb.schedule.entitys.ShareBean;
 import com.android.mb.schedule.presenter.interfaces.IMySharePresenter;
-import com.android.mb.schedule.presenter.interfaces.ISharePresenter;
 import com.android.mb.schedule.retrofit.http.exception.ApiException;
 import com.android.mb.schedule.retrofit.http.exception.NoNetWorkException;
 import com.android.mb.schedule.service.ScheduleMethods;
 import com.android.mb.schedule.view.interfaces.IMyShareView;
-import com.android.mb.schedule.view.interfaces.IShareView;
 
 import java.util.List;
+import java.util.Map;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -23,9 +22,9 @@ import rx.Subscriber;
 public class MySharePresenter extends BaseMvpPresenter<IMyShareView> implements IMySharePresenter {
 
     @Override
-    public void getMyShare() {
-        Observable observable = ScheduleMethods.getInstance().getIShare();
-        toSubscribe(observable,  new Subscriber<List<ShareData>>() {
+    public void getMyShare(Map<String, Object> requestMap) {
+        Observable observable = ScheduleMethods.getInstance().getIShare(requestMap);
+        toSubscribe(observable,  new Subscriber<List<ShareBean>>() {
             @Override
             public void onCompleted() {
 
@@ -43,7 +42,7 @@ public class MySharePresenter extends BaseMvpPresenter<IMyShareView> implements 
             }
 
             @Override
-            public void onNext(List<ShareData> result) {
+            public void onNext(List<ShareBean> result) {
                 if (mMvpView!=null){
                     mMvpView.getSuccess(result);
                 }

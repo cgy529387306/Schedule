@@ -2,8 +2,11 @@ package com.android.mb.schedule.service;
 
 import com.android.mb.schedule.entitys.FileData;
 import com.android.mb.schedule.entitys.LoginData;
+import com.android.mb.schedule.entitys.RelatedBean;
 import com.android.mb.schedule.entitys.ScheduleData;
 import com.android.mb.schedule.entitys.ScheduleDetailData;
+import com.android.mb.schedule.entitys.ShareBean;
+import com.android.mb.schedule.entitys.ShareData;
 import com.android.mb.schedule.entitys.TreeData;
 import com.android.mb.schedule.entitys.UserBean;
 import com.android.mb.schedule.retrofit.http.entity.HttpResult;
@@ -88,15 +91,15 @@ public interface IScheduleService {
 
     @POST("/app/schedule/ishare")
     @FormUrlEncoded
-    Observable<HttpResult<LoginData>> getIShare(@FieldMap Map<String,Object> requestMap);
+    Observable<HttpResult<List<ShareBean>>> getIShare(@FieldMap Map<String,Object> requestMap);
 
     @POST("/app/schedule/share")
     @FormUrlEncoded
-    Observable<HttpResult<LoginData>> getShare(@FieldMap Map<String,Object> requestMap);
+    Observable<HttpResult<List<RelatedBean>>> getOtherShare(@FieldMap Map<String,Object> requestMap);
 
     @POST("/app/schedule/related")
     @FormUrlEncoded
-    Observable<HttpResult<LoginData>> getRelated(@FieldMap Map<String,Object> requestMap);
+    Observable<HttpResult<List<RelatedBean>>> getRelated(@FieldMap Map<String,Object> requestMap);
 
 
     @POST("/app/common/area")

@@ -1,6 +1,7 @@
 package com.android.mb.schedule.view;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,30 +10,30 @@ import android.view.ViewGroup;
 
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.adapter.ScheduleRelateAdapter;
-import com.android.mb.schedule.base.BaseActivity;
 import com.android.mb.schedule.base.BaseMvpActivity;
+import com.android.mb.schedule.entitys.RelatedBean;
 import com.android.mb.schedule.presenter.RelatedPresenter;
-import com.android.mb.schedule.presenter.SchedulePresenter;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.view.interfaces.IRelatedView;
-import com.android.mb.schedule.view.interfaces.IScheduleView;
-import com.android.mb.schedule.view.interfaces.OnItemClickListener;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
- * Created by Administrator on 2018\8\20 0020.
+ * 与我相关的日程
+ * Created by cgy on 2018\8\20 0020.
  */
 
-public class ScheduleRelateActivity extends BaseMvpActivity<RelatedPresenter,IRelatedView> implements IRelatedView, View.OnClickListener{
+public class ScheduleRelateActivity extends BaseMvpActivity<RelatedPresenter,IRelatedView> implements IRelatedView,
+        View.OnClickListener,SwipeRefreshLayout.OnRefreshListener,BaseQuickAdapter.RequestLoadMoreListener,BaseQuickAdapter.OnItemClickListener{
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
     private ScheduleRelateAdapter mAdapter;
-    private int mCurrentPage = 0;
-
+    private int mCurrentPage = 1;
     @Override
     protected void loadIntent() {
 
@@ -40,7 +41,7 @@ public class ScheduleRelateActivity extends BaseMvpActivity<RelatedPresenter,IRe
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_relate_schedule;
+        return R.layout.common_recycleview;
     }
 
     @Override
@@ -50,47 +51,32 @@ public class ScheduleRelateActivity extends BaseMvpActivity<RelatedPresenter,IRe
 
     @Override
     protected void bindViews() {
+        mSwipeRefreshLayout = findViewById(R.id.swipeLayout);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent,R.color.colorPrimaryDark);
         mRecyclerView =  findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mAdapter = new ScheduleRelateAdapter(R.layout.item_schedule_relate,getData());
-        mAdapter.setEmptyView(R.layout.empty_schedule, (ViewGroup) mRecyclerView.getParent());
+        mAdapter = new ScheduleRelateAdapter(R.layout.item_schedule_relate,new ArrayList());
         mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
-        mPresenter.getRelated();
+        mSwipeRefreshLayout.setRefreshing(true);
+        getListFormServer();
+    }
+
+    private void getListFormServer(){
+        Map<String, Object> requestMap = new HashMap<>();
+        requestMap.put("page",mCurrentPage);
+        mPresenter.getRelated(requestMap);
     }
 
     @Override
     protected void setListener() {
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                NavigationHelper.startActivity(ScheduleRelateActivity.this,ScheduleDetailActivity.class,null,false);
-            }
-        });
-        mAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
-            @Override
-            public void onLoadMoreRequested() {
-                mRecyclerView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (mCurrentPage >= 10) {
-                            //数据全部加载完毕
-                            mAdapter.loadMoreEnd();
-                        } else {
-                            mAdapter.addData(getData());
-                            mAdapter.loadMoreComplete();
-                            mCurrentPage++;
-                        }
-                    }
-
-                }, 1000);
-
-            }
-        },mRecyclerView);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mAdapter.setOnItemClickListener(this);
+        mAdapter.setOnLoadMoreListener(this);
     }
 
     @Override
@@ -98,21 +84,48 @@ public class ScheduleRelateActivity extends BaseMvpActivity<RelatedPresenter,IRe
         int id = v.getId();
     }
 
-    public List getData() {
-        List<String> dataList = new ArrayList<>();
-        for (int i=0;i<10;i++){
-            dataList.add(Helper.date2String(new Date(),"MM-dd"));
-        }
-        return dataList;
-    }
-
     @Override
-    public void getSuccess() {
-
+    public void getSuccess(List<RelatedBean> result) {
+        if (result!=null){
+            if (mCurrentPage == 1){
+                //首页
+                mSwipeRefreshLayout.setRefreshing(false);
+                mAdapter.setNewData(result);
+                mAdapter.setEmptyView(R.layout.empty_schedule, (ViewGroup) mRecyclerView.getParent());
+            }else{
+                if (Helper.isEmpty(result)){
+                    mAdapter.loadMoreEnd();
+                }else{
+                    mAdapter.addData(result);
+                    mAdapter.loadMoreComplete();
+                }
+            }
+        }
     }
 
     @Override
     protected RelatedPresenter createPresenter() {
         return new RelatedPresenter();
+    }
+
+    @Override
+    public void onRefresh() {
+        mCurrentPage = 1;
+        getListFormServer();
+    }
+
+    @Override
+    public void onLoadMoreRequested() {
+        mCurrentPage++;
+        getListFormServer();
+    }
+
+    @Override
+    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+        if (mAdapter.getItem(position)!=null){
+            Bundle bundle = new Bundle();
+            bundle.putLong("id",mAdapter.getItem(position).getId());
+            NavigationHelper.startActivity(ScheduleRelateActivity.this,ScheduleDetailActivity.class,bundle,false);
+        }
     }
 }

@@ -16,6 +16,7 @@ import com.android.mb.schedule.entitys.ScheduleData;
 import com.android.mb.schedule.entitys.ScheduleDetailBean;
 import com.android.mb.schedule.entitys.ScheduleDetailData;
 import com.android.mb.schedule.entitys.ScheduleRequest;
+import com.android.mb.schedule.entitys.UserBean;
 import com.google.gson.Gson;
 
 import java.lang.reflect.Field;
@@ -389,5 +390,31 @@ public class ProjectHelper {
 //            scheduleRequest.setRelated("");
         }
         return scheduleRequest;
+    }
+
+    public static String getSharePersonStr(List<UserBean> userList){
+        StringBuilder shareStr = new StringBuilder();
+        if (Helper.isNotEmpty(userList)){
+            if (userList.size()>3){
+                for (int i=0;i<4;i++) {
+                    UserBean userBean = userList.get(i);
+                    if (i==3){
+                        shareStr.append(userBean.getNickname());
+                    }else{
+                        shareStr.append(userBean.getNickname()).append(",");
+                    }
+                }
+            }else{
+                for (int i=0;i<userList.size();i++) {
+                    UserBean userBean = userList.get(i);
+                    if (i==userList.size()-1){
+                        shareStr.append(userBean.getNickname());
+                    }else{
+                        shareStr.append(userBean.getNickname()).append(",");
+                    }
+                }
+            }
+        }
+        return shareStr.toString();
     }
 }

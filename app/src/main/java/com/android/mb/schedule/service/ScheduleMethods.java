@@ -3,9 +3,11 @@ package com.android.mb.schedule.service;
 import com.android.mb.schedule.entitys.CurrentUser;
 import com.android.mb.schedule.entitys.FileData;
 import com.android.mb.schedule.entitys.LoginData;
+import com.android.mb.schedule.entitys.RelatedBean;
 import com.android.mb.schedule.entitys.ScheduleData;
 import com.android.mb.schedule.entitys.ScheduleDetailData;
 import com.android.mb.schedule.entitys.ScheduleRequest;
+import com.android.mb.schedule.entitys.ShareBean;
 import com.android.mb.schedule.entitys.TreeData;
 import com.android.mb.schedule.entitys.UserBean;
 import com.android.mb.schedule.retrofit.cache.transformer.CacheTransformer;
@@ -205,37 +207,34 @@ public class ScheduleMethods extends BaseHttp {
                 .map(new HttpCacheResultFunc<Object>());
     }
 
-    public Observable getIShare(){
-        Map<String,Object> requestMap = new HashMap<>();
+    public Observable getIShare(Map<String, Object> requestMap){
         if (CurrentUser.getInstance().isLogin()){
             requestMap.put("token_id",CurrentUser.getInstance().getToken_id());
             requestMap.put("token",CurrentUser.getInstance().getToken());
         }
         return getService().getIShare(requestMap)
                 .compose(CacheTransformer.emptyTransformer())
-                .map(new HttpCacheResultFunc<LoginData>());
+                .map(new HttpCacheResultFunc<List<ShareBean>>());
     }
 
-    public Observable getShare(){
-        Map<String,Object> requestMap = new HashMap<>();
+    public Observable getOtherShare(Map<String, Object> requestMap){
         if (CurrentUser.getInstance().isLogin()){
             requestMap.put("token_id",CurrentUser.getInstance().getToken_id());
             requestMap.put("token",CurrentUser.getInstance().getToken());
         }
-        return getService().getShare(requestMap)
+        return getService().getOtherShare(requestMap)
                 .compose(CacheTransformer.emptyTransformer())
-                .map(new HttpCacheResultFunc<LoginData>());
+                .map(new HttpCacheResultFunc<List<RelatedBean>>());
     }
 
-    public Observable getRelated(){
-        Map<String,Object> requestMap = new HashMap<>();
+    public Observable getRelated(Map<String, Object> requestMap){
         if (CurrentUser.getInstance().isLogin()){
             requestMap.put("token_id",CurrentUser.getInstance().getToken_id());
             requestMap.put("token",CurrentUser.getInstance().getToken());
         }
         return getService().getRelated(requestMap)
                 .compose(CacheTransformer.emptyTransformer())
-                .map(new HttpCacheResultFunc<LoginData>());
+                .map(new HttpCacheResultFunc<List<RelatedBean>>());
     }
 
     public Observable getAreaList(){

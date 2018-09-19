@@ -43,6 +43,9 @@ import java.util.ArrayList;
 
 import rx.functions.Action1;
 
+/**
+ * 首页
+ */
 public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> implements IHomeView, NavigationView.OnNavigationItemSelectedListener ,View.OnClickListener{
 
     private DrawerLayout mDrawerLayout;
@@ -230,7 +233,7 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
         if (id == R.id.nav_my_share){ //我的分享
             NavigationHelper.startActivity(MainActivity.this,ScheduleShareActivity.class,null,false);
         }else if (id == R.id.nav_other_share){  //他人分享
-            NavigationHelper.startActivity(MainActivity.this,ScheduleRelateActivity.class,null,false);
+            NavigationHelper.startActivity(MainActivity.this,ScheduleShareOtherActivity.class,null,false);
         }else if (id == R.id.nav_subordinate_log){  // 下属日志
 
         }else if (id == R.id.nav_relatedme_log){  // 与我相关的日志

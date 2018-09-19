@@ -1,5 +1,7 @@
 package com.android.mb.schedule.presenter.interfaces;
 
+import java.util.Map;
+
 public interface IRelatedPresenter {
-    void getRelated();
+    void getRelated(Map<String, Object> requestMap);
 }

@@ -20,7 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Administrator on 2018\8\20 0020.
+ * 设置密码
+ * Created by cgy on 2018\8\20 0020.
  */
 
 public class SetPwdActivity extends BaseMvpActivity<SetPwdPresenter,ISetPwdView> implements ISetPwdView,View.OnClickListener{

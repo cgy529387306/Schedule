@@ -20,7 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Administrator on 2018\8\20 0020.
+ * 选择人员
+ * Created by cgy on 2018\8\20 0020.
  */
 
 public class SelectPersonActivity extends BaseMvpActivity<PersonPresenter,IPersonView> implements IPersonView {

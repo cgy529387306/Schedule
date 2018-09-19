@@ -101,6 +101,10 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
             showToastMessage("请输入日程名称");
             return;
         }
+        if (Helper.isEmpty(address)){
+            showToastMessage("请输入地点");
+            return;
+        }
         if (start.getTime()>=end.getTime()){
             showToastMessage("开始时间必须大于结束时间");
             return;
