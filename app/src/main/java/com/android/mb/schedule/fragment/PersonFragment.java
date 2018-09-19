@@ -5,11 +5,13 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.adapter.PersonAdapter;
 import com.android.mb.schedule.adapter.ScheduleRelateAdapter;
 import com.android.mb.schedule.base.BaseFragment;
+import com.android.mb.schedule.entitys.UserBean;
 import com.android.mb.schedule.utils.Helper;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
@@ -26,7 +28,7 @@ public class PersonFragment extends BaseFragment {
 
     private RecyclerView mRecyclerView;
     private PersonAdapter mAdapter;
-    private int mCurrentPage = 0;
+    private List<UserBean> mDataList = new ArrayList<>();
     @Override
     protected int getLayoutId() {
         return R.layout.frg_person;
@@ -38,7 +40,8 @@ public class PersonFragment extends BaseFragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL));
-        mAdapter = new PersonAdapter(R.layout.item_person,getData());
+        mAdapter = new PersonAdapter(R.layout.item_person,mDataList);
+//        mAdapter.setEmptyView(R.layout.empty_data, (ViewGroup) mRecyclerView.getParent());
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -49,34 +52,21 @@ public class PersonFragment extends BaseFragment {
 
     @Override
     protected void setListener() {
-        mAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
-            @Override
-            public void onLoadMoreRequested() {
-                mRecyclerView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (mCurrentPage >= 10) {
-                            //数据全部加载完毕
-                            mAdapter.loadMoreEnd();
-                        } else {
-                            mAdapter.addData(getData());
-                            mAdapter.loadMoreComplete();
-                            mCurrentPage++;
-                        }
-                    }
 
-                }, 1000);
-
-            }
-        },mRecyclerView);
     }
 
+    @Override
+    protected void lazyLoad() {
+        super.lazyLoad();
+        mAdapter.setNewData(mDataList);
+    }
 
-    public List getData() {
-        List<String> dataList = new ArrayList<>();
-        for (int i=0;i<10;i++){
-            dataList.add(Helper.date2String(new Date(),"MM-dd"));
+    public void setDataList(List<UserBean> list, boolean isRefresh){
+        mDataList = list;
+        if (isRefresh){
+            mAdapter.setNewData(mDataList);
         }
-        return dataList;
     }
+
+
 }

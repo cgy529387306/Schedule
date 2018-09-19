@@ -26,11 +26,12 @@ import java.util.List;
 public class SelectPersonActivity extends BaseMvpActivity<PersonPresenter,IPersonView> implements IPersonView {
 
     private EditText mEtSearch;
-
     private TabLayout mTb;
     private ViewPager mVp;
     private List<Fragment> mFragmentList;
     private List<String> mTitleList;
+    private PersonFragment mPersonFragment;
+    private OrgFragment mOrgFragment;
     @Override
     protected void loadIntent() {
     }
@@ -69,9 +70,11 @@ public class SelectPersonActivity extends BaseMvpActivity<PersonPresenter,IPerso
         mTb.addTab(mTb.newTab().setText(mTitleList.get(2)));
 
         mFragmentList = new ArrayList<>();
-        mFragmentList.add(new PersonFragment());
-        mFragmentList.add(new OrgFragment());
-        mFragmentList.add(new PersonFragment());
+        mPersonFragment = new PersonFragment();
+        mOrgFragment = new OrgFragment();
+        mFragmentList.add(mPersonFragment);
+        mFragmentList.add(mOrgFragment);
+        mFragmentList.add(mPersonFragment);
 
         mVp.setAdapter(new MyTabPagerAdapter(getSupportFragmentManager(), mFragmentList,mTitleList));
         mTb.setupWithViewPager(mVp);
@@ -104,7 +107,7 @@ public class SelectPersonActivity extends BaseMvpActivity<PersonPresenter,IPerso
     @Override
     public void getPersonSuccess(List<UserBean> result) {
         if (result!=null){
-            result.size();
+            mPersonFragment.setDataList(result,mVp.getCurrentItem()==0);
         }
     }
 }
