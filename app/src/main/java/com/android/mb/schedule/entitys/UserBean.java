@@ -1,16 +1,20 @@
 package com.android.mb.schedule.entitys;
 
+import com.android.mb.schedule.R;
+import com.android.mb.schedule.widget.treeview.LayoutItemType;
+
 import java.io.Serializable;
 
 /**
  * Created by Administrator on 2018\9\18 0018.
  */
 
-public class UserBean implements Serializable{
+public class UserBean implements Serializable,LayoutItemType{
     private long id;
     private String nickname;
     private long office_id;
     private String avatar;
+    private boolean isSelect;
 
     public long getId() {
         return id;
@@ -42,5 +46,18 @@ public class UserBean implements Serializable{
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.item_tree_user;
+    }
+
+    public boolean isSelect() {
+        return isSelect;
+    }
+
+    public void setSelect(boolean select) {
+        isSelect = select;
     }
 }

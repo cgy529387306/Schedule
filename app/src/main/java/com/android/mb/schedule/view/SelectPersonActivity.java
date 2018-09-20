@@ -11,7 +11,7 @@ import com.android.mb.schedule.adapter.MyTabPagerAdapter;
 import com.android.mb.schedule.base.BaseMvpActivity;
 import com.android.mb.schedule.entitys.TreeData;
 import com.android.mb.schedule.entitys.UserBean;
-import com.android.mb.schedule.fragment.OrgFragment;
+import com.android.mb.schedule.fragment.OrgFragment1;
 import com.android.mb.schedule.fragment.PersonFragment;
 import com.android.mb.schedule.presenter.PersonPresenter;
 import com.android.mb.schedule.view.interfaces.IPersonView;
@@ -70,7 +70,7 @@ public class SelectPersonActivity extends BaseMvpActivity<PersonPresenter,IPerso
 
         mFragmentList = new ArrayList<>();
         mFragmentList.add(new PersonFragment());
-        mFragmentList.add(new OrgFragment());
+        mFragmentList.add(new OrgFragment1());
         mFragmentList.add(new Fragment());
 
         mVp.setAdapter(new MyTabPagerAdapter(getSupportFragmentManager(), mFragmentList,mTitleList));
@@ -97,7 +97,7 @@ public class SelectPersonActivity extends BaseMvpActivity<PersonPresenter,IPerso
     @Override
     public void getOrgSuccess(TreeData result) {
         if (result!=null){
-            OrgFragment orgFragment = (OrgFragment) mFragmentList.get(1);
+            OrgFragment1 orgFragment = (OrgFragment1) mFragmentList.get(1);
             orgFragment.setDataList(result.getTree());
         }
     }

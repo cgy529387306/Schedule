@@ -52,7 +52,14 @@ public class PersonFragment extends BaseFragment {
 
     @Override
     protected void setListener() {
-
+        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                UserBean userBean = mAdapter.getItem(position);
+                userBean.setSelect(!userBean.isSelect());
+                mAdapter.setData(position,userBean);
+            }
+        });
     }
 
     public void setDataList(List<UserBean> list){

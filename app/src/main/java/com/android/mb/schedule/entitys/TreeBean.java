@@ -1,5 +1,8 @@
 package com.android.mb.schedule.entitys;
 
+import com.android.mb.schedule.R;
+import com.android.mb.schedule.widget.treeview.LayoutItemType;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +11,7 @@ import java.util.List;
  * Created by Administrator on 2018\9\18 0018.
  */
 
-public class TreeBean implements Serializable{
+public class TreeBean implements Serializable,LayoutItemType {
     private long id;
     private String name;
     private long parent_id;
@@ -86,5 +89,10 @@ public class TreeBean implements Serializable{
 
     public void setMan(List<UserBean> man) {
         this.man = man;
+    }
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.item_tree_org;
     }
 }

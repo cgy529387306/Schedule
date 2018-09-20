@@ -20,6 +20,7 @@ public class PersonAdapter extends BaseQuickAdapter<UserBean, BaseViewHolder> {
     protected void convert(BaseViewHolder helper, UserBean item) {
         helper.setText(R.id.tv_name,item.getNickname());
         ImageUtils.displayAvatar(mContext,item.getAvatar(), (ImageView) helper.getView(R.id.iv_avatar));
+        helper.setImageResource(R.id.iv_check,item.isSelect()?R.mipmap.ic_item_checked:R.mipmap.ic_item_check);
     }
 
 }
