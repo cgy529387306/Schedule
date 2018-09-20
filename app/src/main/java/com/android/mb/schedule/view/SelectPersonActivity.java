@@ -9,11 +9,14 @@ import android.widget.EditText;
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.adapter.MyTabPagerAdapter;
 import com.android.mb.schedule.base.BaseMvpActivity;
+import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.entitys.TreeData;
 import com.android.mb.schedule.entitys.UserBean;
-import com.android.mb.schedule.fragment.OrgFragment1;
+import com.android.mb.schedule.fragment.OrgFragment;
 import com.android.mb.schedule.fragment.PersonFragment;
+import com.android.mb.schedule.fragment.SelectedFragment;
 import com.android.mb.schedule.presenter.PersonPresenter;
+import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.view.interfaces.IPersonView;
 
 import java.util.ArrayList;
@@ -31,6 +34,7 @@ public class SelectPersonActivity extends BaseMvpActivity<PersonPresenter,IPerso
     private ViewPager mVp;
     private List<Fragment> mFragmentList;
     private List<String> mTitleList;
+    public static List<UserBean> mSelectList;
     @Override
     protected void loadIntent() {
     }
@@ -49,11 +53,19 @@ public class SelectPersonActivity extends BaseMvpActivity<PersonPresenter,IPerso
     @Override
     protected void onRightAction() {
         super.onRightAction();
-        //TODO
+        if (Helper.isEmpty(mSelectList)){
+            showToastMessage("请选择人员");
+        }else{
+            setResult(RESULT_OK);
+            finish();
+        }
     }
 
     @Override
     protected void bindViews() {
+        if (mSelectList==null){
+            mSelectList = new ArrayList<>();
+        }
         mEtSearch = findViewById(R.id.et_search);
         mTb = (TabLayout) findViewById(R.id.tabLayout);
         mVp = (ViewPager) findViewById(R.id.viewPager);
@@ -70,8 +82,8 @@ public class SelectPersonActivity extends BaseMvpActivity<PersonPresenter,IPerso
 
         mFragmentList = new ArrayList<>();
         mFragmentList.add(new PersonFragment());
-        mFragmentList.add(new OrgFragment1());
-        mFragmentList.add(new Fragment());
+        mFragmentList.add(new OrgFragment());
+        mFragmentList.add(new SelectedFragment());
 
         mVp.setAdapter(new MyTabPagerAdapter(getSupportFragmentManager(), mFragmentList,mTitleList));
         mTb.setupWithViewPager(mVp);
@@ -86,6 +98,22 @@ public class SelectPersonActivity extends BaseMvpActivity<PersonPresenter,IPerso
 
     @Override
     protected void setListener() {
+        mVp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                sendMsg(ProjectConstants.EVENT_UPDATE_SELECT,null);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     @Override
@@ -97,7 +125,7 @@ public class SelectPersonActivity extends BaseMvpActivity<PersonPresenter,IPerso
     @Override
     public void getOrgSuccess(TreeData result) {
         if (result!=null){
-            OrgFragment1 orgFragment = (OrgFragment1) mFragmentList.get(1);
+            OrgFragment orgFragment = (OrgFragment) mFragmentList.get(1);
             orgFragment.setDataList(result.getTree());
         }
     }

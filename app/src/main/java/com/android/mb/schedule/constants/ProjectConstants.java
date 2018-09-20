@@ -9,9 +9,13 @@ public class ProjectConstants {
 
     public static final int EVENT_UPDATE_SCHEDULE = 10003;
 
+    public static final int EVENT_UPDATE_SELECT = 10004;
+
 
     //REQUEST
     public static final int REQUEST_SELECT_ADDRESS = 0x01;
 
     public static final int REQUEST_SELECT_FILE = 0x02;
+
+    public static final int REQUEST_SELECT_PERSON = 0x03;
 }

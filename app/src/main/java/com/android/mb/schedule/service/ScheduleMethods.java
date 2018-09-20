@@ -204,7 +204,7 @@ public class ScheduleMethods extends BaseHttp {
         }
         return getService().getWeekSchedule(requestMap)
                 .compose(CacheTransformer.emptyTransformer())
-                .map(new HttpCacheResultFunc<Object>());
+                .map(new HttpCacheResultFunc<List<ScheduleData>>());
     }
 
     public Observable getIShare(Map<String, Object> requestMap){

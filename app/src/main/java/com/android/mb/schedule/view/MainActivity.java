@@ -65,7 +65,6 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
     private ImageView mIvRefresh; // 右边图标
     private ImageView mIvToday; // 右边图标
 
-
     @Override
     protected void loadIntent() {
 
@@ -86,7 +85,6 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
         initView();
         initTabViewPager();
     }
-
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
@@ -116,12 +114,19 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
                     mFragmentViewPager.setCurrentItem(tab.getPosition(),true);
                 }else if (tab.getPosition()==3){
                     //我的日程
-                    NavigationHelper.startActivity(MainActivity.this,UserScheduleActivity.class,null,false);
+                    NavigationHelper.startActivity(MainActivity.this,ScheduleUserActivity.class,null,false);
+                    TabLayout.Tab tab1 = mTabLayout.getTabAt(mFragmentViewPager.getCurrentItem());
+                    if (tab1!=null){
+                        tab1.select();
+                    }
                 }else if (tab.getPosition()==4){
                     //与我相关
                     NavigationHelper.startActivity(MainActivity.this,ScheduleRelateActivity.class,null,false);
+                    TabLayout.Tab tab1 = mTabLayout.getTabAt(mFragmentViewPager.getCurrentItem());
+                    if (tab1!=null){
+                        tab1.select();
+                    }
                 }
-
             }
 
             @Override

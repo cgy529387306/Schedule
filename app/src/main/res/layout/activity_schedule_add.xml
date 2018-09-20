@@ -245,7 +245,6 @@
                 android:layout_height="wrap_content"
                 android:gravity="right"
                 android:layout_weight="1"
-                android:text="张三、李四、王五等六人"
                 android:textColor="@color/edit_color"
                 android:textSize="15sp" />
             <ImageView

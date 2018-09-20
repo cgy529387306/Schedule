@@ -5,9 +5,9 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.android.mb.schedule.R;
@@ -16,8 +16,9 @@ import com.android.mb.schedule.base.BaseMvpActivity;
 import com.android.mb.schedule.presenter.AddressPresenter;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.view.interfaces.IAddressView;
-import com.android.mb.schedule.view.interfaces.OnItemClickListener;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,7 +29,7 @@ import java.util.List;
 public class SelectAddressActivity extends BaseMvpActivity<AddressPresenter,IAddressView> implements IAddressView {
 
     private EditText mEtAddress;
-    private AddressAdapter mAddressAdapter;
+    private AddressAdapter mAdapter;
     private RecyclerView mRecyclerView;
 
     @Override
@@ -67,8 +68,8 @@ public class SelectAddressActivity extends BaseMvpActivity<AddressPresenter,IAdd
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this ));
         mRecyclerView.setItemAnimator( new DefaultItemAnimator());
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
-        mAddressAdapter = new AddressAdapter(SelectAddressActivity.this);
-        mRecyclerView.setAdapter(mAddressAdapter);
+        mAdapter = new AddressAdapter(R.layout.item_address,new ArrayList());
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
@@ -78,16 +79,14 @@ public class SelectAddressActivity extends BaseMvpActivity<AddressPresenter,IAdd
 
     @Override
     protected void setListener() {
-        mAddressAdapter.setOnItemClickListener(new OnItemClickListener() {
+        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(View view, int postion) {
-                if (mAddressAdapter.getDataList().size()>postion){
-                    String address = mAddressAdapter.getDataList().get(postion);
-                    Intent intent = new Intent();
-                    intent.putExtra("address",address);
-                    setResult(RESULT_OK,intent);
-                    finish();
-                }
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                String address = mAdapter.getItem(position);
+                Intent intent = new Intent();
+                intent.putExtra("address",address);
+                setResult(RESULT_OK,intent);
+                finish();
             }
         });
     }
@@ -100,7 +99,8 @@ public class SelectAddressActivity extends BaseMvpActivity<AddressPresenter,IAdd
     @Override
     public void getSuccess(List<String> result) {
         if (result!=null){
-            mAddressAdapter.setDataList(result);
+            mAdapter.setNewData(result);
+            mAdapter.setEmptyView(R.layout.empty_data, (ViewGroup) mRecyclerView.getParent());
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.android.mb.schedule.fragment;
 
 import android.graphics.RectF;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
@@ -8,10 +9,13 @@ import com.android.mb.schedule.R;
 import com.android.mb.schedule.app.MBApplication;
 import com.android.mb.schedule.base.BaseFragment;
 import com.android.mb.schedule.base.BaseMvpFragment;
+import com.android.mb.schedule.entitys.ScheduleData;
 import com.android.mb.schedule.presenter.MonthPresenter;
 import com.android.mb.schedule.presenter.WeekPresenter;
 import com.android.mb.schedule.utils.Helper;
+import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.view.MainActivity;
+import com.android.mb.schedule.view.ScheduleAddActivity;
 import com.android.mb.schedule.view.interfaces.IMonthView;
 import com.android.mb.schedule.view.interfaces.IWeekView;
 import com.android.mb.schedule.widget.ScheduleView;
@@ -57,15 +61,15 @@ public class WeekFragment  extends BaseMvpFragment<WeekPresenter,IWeekView> impl
         mScheduleView.setOnEventAddClickListener(new ScheduleView.OnEventAddClickListener() {
             @Override
             public void onEventAddClicked(Calendar time) {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd E hh:mm");
-                String date = dateFormat.format(time.getTime());
-                Toast.makeText(MBApplication.getInstance(),date, Toast.LENGTH_LONG).show();
+                Bundle bundle = new Bundle();
+                bundle.putInt("type",0);
+                NavigationHelper.startActivity(getActivity(),ScheduleAddActivity.class,bundle,false);
             }
         });
         mScheduleView.setOnEventClickListener(new ScheduleView.OnEventClickListener() {
             @Override
             public void onEventClick(ScheduleViewEvent event, RectF eventRectF) {
-                Toast.makeText(MBApplication.getInstance(), event.getContent(), Toast.LENGTH_LONG).show();
+//                Toast.makeText(MBApplication.getInstance(), event.getContent(), Toast.LENGTH_LONG).show();
             }
         });
         mCalendarView.setOnMonthChangeListener(new CalendarView.OnMonthChangeListener() {
@@ -95,7 +99,7 @@ public class WeekFragment  extends BaseMvpFragment<WeekPresenter,IWeekView> impl
     }
 
     @Override
-    public void getSuccess() {
+    public void getSuccess(List<ScheduleData> result) {
 
     }
 

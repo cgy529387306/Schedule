@@ -1,6 +1,8 @@
 package com.android.mb.schedule.adapter;
 
+import com.android.mb.schedule.R;
 import com.android.mb.schedule.entitys.MySection;
+import com.android.mb.schedule.entitys.ScheduleBean;
 import com.chad.library.adapter.base.BaseSectionQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
@@ -25,26 +27,16 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection, BaseViewH
     //section 头部
     @Override
     protected void convertHead(BaseViewHolder helper, final MySection item) {
-//        helper.setText(R.id.header, item.header);
-//        helper.setVisible(R.id.more, item.isMore());
-//        helper.addOnClickListener(R.id.more);
+        helper.setText(R.id.header, item.header);
     }
 
 
     //item 项
     @Override
     protected void convert(BaseViewHolder helper, MySection item) {
-//        Video video = (Video) item.t;
-//        switch (helper.getLayoutPosition() %
-//                2) {
-//            case 0:
-//                helper.setImageResource(R.id.iv, R.mipmap.m_img1);
-//                break;
-//            case 1:
-//                helper.setImageResource(R.id.iv, R.mipmap.m_img2);
-//                break;
-//
-//        }
-//        helper.setText(R.id.tv, video.getName());
+        ScheduleBean scheduleBean = item.t;
+        helper.setText(R.id.tv_name, scheduleBean.getTitle());
+        helper.setText(R.id.tv_time, scheduleBean.getEndTime());
+        helper.setText(R.id.tv_address, scheduleBean.getAddress());
     }
 }

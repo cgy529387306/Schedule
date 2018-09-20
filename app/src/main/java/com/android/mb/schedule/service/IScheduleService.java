@@ -87,7 +87,7 @@ public interface IScheduleService {
 
     @POST("/app/schedule/week")
     @FormUrlEncoded
-    Observable<HttpResult<Object>> getWeekSchedule(@FieldMap Map<String,Object> requestMap);
+    Observable<HttpResult<List<ScheduleData>>> getWeekSchedule(@FieldMap Map<String,Object> requestMap);
 
     @POST("/app/schedule/ishare")
     @FormUrlEncoded

@@ -9,31 +9,28 @@ import android.view.ViewGroup;
 
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.adapter.PersonAdapter;
-import com.android.mb.schedule.adapter.ScheduleRelateAdapter;
+import com.android.mb.schedule.adapter.SelectAdapter;
 import com.android.mb.schedule.base.BaseFragment;
 import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.entitys.UserBean;
 import com.android.mb.schedule.rxbus.Events;
-import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.view.SelectPersonActivity;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import rx.functions.Action1;
 
 
 /**
- * 常用联系人
+ * 已选联系人
  * Created by cgy on 16/7/18.
  */
-public class PersonFragment extends BaseFragment {
+public class SelectedFragment extends BaseFragment {
 
     private RecyclerView mRecyclerView;
-    private PersonAdapter mAdapter;
-    private List<UserBean> mDataList = new ArrayList<>();
+    private SelectAdapter mAdapter;
     @Override
     protected int getLayoutId() {
         return R.layout.frg_person;
@@ -41,11 +38,12 @@ public class PersonFragment extends BaseFragment {
 
     @Override
     protected void bindViews(View view) {
-        mRecyclerView =  view.findViewById(R.id.recyclerView);
+        mRecyclerView = view.findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL));
-        mAdapter = new PersonAdapter(R.layout.item_person,mDataList);
+        mAdapter = new SelectAdapter(R.layout.item_person,SelectPersonActivity.mSelectList);
+        mAdapter.setEmptyView(R.layout.empty_data, (ViewGroup) mRecyclerView.getParent());
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -62,39 +60,12 @@ public class PersonFragment extends BaseFragment {
                 refreshData();
             }
         });
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                UserBean userBean = mAdapter.getItem(position);
-                userBean.setSelect(!userBean.isSelect());
-                mAdapter.setData(position,userBean);
-                if (userBean.isSelect()){
-                    SelectPersonActivity.mSelectList.add(userBean);
-                }else{
-                    SelectPersonActivity.mSelectList.remove(userBean);
-                }
-            }
-        });
-    }
-
-    public void setDataList(List<UserBean> list){
-        mDataList = list;
-        mAdapter.setEmptyView(R.layout.empty_data, (ViewGroup) mRecyclerView.getParent());
-        mAdapter.setNewData(mDataList);
-        refreshData();
     }
 
 
     private void refreshData() {
-        if (mAdapter!=null && mDataList!=null){
-            for (UserBean selectUser:SelectPersonActivity.mSelectList) {
-                for (UserBean userBean:mDataList) {
-                    if (userBean.getId() == selectUser.getId()){
-                        userBean.setSelect(true);
-                    }
-                }
-            }
-            mAdapter.setNewData(mDataList);
+        if (mAdapter!=null){
+            mAdapter.setNewData(SelectPersonActivity.mSelectList);
         }
     }
 }

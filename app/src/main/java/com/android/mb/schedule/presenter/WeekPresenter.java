@@ -3,6 +3,7 @@ package com.android.mb.schedule.presenter;
 import android.text.TextUtils;
 
 import com.android.mb.schedule.base.BaseMvpPresenter;
+import com.android.mb.schedule.entitys.ScheduleData;
 import com.android.mb.schedule.presenter.interfaces.IMonthPresenter;
 import com.android.mb.schedule.presenter.interfaces.IWeekPresenter;
 import com.android.mb.schedule.retrofit.http.exception.ApiException;
@@ -11,6 +12,7 @@ import com.android.mb.schedule.service.ScheduleMethods;
 import com.android.mb.schedule.view.interfaces.IMonthView;
 import com.android.mb.schedule.view.interfaces.IWeekView;
 
+import java.util.List;
 import java.util.Map;
 
 import rx.Observable;
@@ -25,7 +27,7 @@ public class WeekPresenter extends BaseMvpPresenter<IWeekView> implements IWeekP
     @Override
     public void getWeekSchedule(Map<String, Object> requestMap) {
         Observable observable = ScheduleMethods.getInstance().getWeekSchedule(requestMap);
-        toSubscribe(observable,  new Subscriber<Object>() {
+        toSubscribe(observable,  new Subscriber<List<ScheduleData>>() {
             @Override
             public void onCompleted() {
 
@@ -43,9 +45,9 @@ public class WeekPresenter extends BaseMvpPresenter<IWeekView> implements IWeekP
             }
 
             @Override
-            public void onNext(Object result) {
+            public void onNext(List<ScheduleData> result) {
                 if (mMvpView!=null){
-                    mMvpView.getSuccess();
+                    mMvpView.getSuccess(result);
                 }
             }
         });

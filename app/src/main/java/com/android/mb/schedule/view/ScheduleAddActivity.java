@@ -15,6 +15,7 @@ import com.android.mb.schedule.base.BaseMvpActivity;
 import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.entitys.FileData;
 import com.android.mb.schedule.entitys.ScheduleRequest;
+import com.android.mb.schedule.entitys.UserBean;
 import com.android.mb.schedule.pop.ScheduleRemindPop;
 import com.android.mb.schedule.pop.ScheduleRepeatPop;
 import com.android.mb.schedule.pop.ScheduleTimePop;
@@ -46,6 +47,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
     private LinearLayout mLlyEndDate;
     private TextView mTvEndDate ; //结束日期
     private TextView mTvEndTime ; //结束时间
+    private TextView mTvPersons;
     private ImageView mIvAllDay ; //全天提醒
     private int mIsAllDay = 0;
     private ImageView mIvAddPerson;// 添加相关人员
@@ -117,9 +119,21 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         mScheduleRequest.setAddress(address);
         mScheduleRequest.setImportant(mIsImport);
         mScheduleRequest.setAllDay(mIsAllDay);
-        mScheduleRequest.setRelated("2000,2001");
+        if (Helper.isNotEmpty(SelectPersonActivity.mSelectList)){
+            StringBuilder shareIds = new StringBuilder();
+            for (int i=0;i<SelectPersonActivity.mSelectList.size();i++) {
+                UserBean userBean = SelectPersonActivity.mSelectList.get(i);
+                if (i==SelectPersonActivity.mSelectList.size()-1){
+                    shareIds.append(userBean.getId());
+                }else{
+                    shareIds.append(userBean.getId()).append(",");
+                }
+            }
+            mScheduleRequest.setRelated(shareIds.toString());
+            mScheduleRequest.setShare(shareIds.toString());
+        }
+
         mScheduleRequest.setSummary("");
-        mScheduleRequest.setShare("2000,2001");
         mScheduleRequest.setStart(start.getTime()/1000);
         mScheduleRequest.setEnd(end.getTime()/1000);
         mScheduleRequest.setRemind(mScheduleRemindPop.getType());
@@ -146,6 +160,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         mTvEndDate = findViewById(R.id.tv_end_date);
         mTvEndTime = findViewById(R.id.tv_end_time);
         mIvAllDay = findViewById(R.id.iv_all_day);
+        mTvPersons = findViewById(R.id.tv_persons);
         mIvAddPerson = findViewById(R.id.iv_add_person);
         mIvNoRemind = findViewById(R.id.iv_no_remind);
         mIvShareToOther = findViewById(R.id.iv_share_other);
@@ -213,7 +228,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
             mIsAllDay = mIsAllDay==0?1:0;
             mIvAllDay.setImageResource(mIsAllDay==1?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
         }else  if (id == R.id.iv_add_person){
-            NavigationHelper.startActivity(ScheduleAddActivity.this,SelectPersonActivity.class,null,false);
+            NavigationHelper.startActivityForResult(ScheduleAddActivity.this,SelectPersonActivity.class,null,ProjectConstants.REQUEST_SELECT_PERSON);
         }else  if (id == R.id.iv_no_remind){
             mIsNoRemind = !mIsNoRemind;
             mIvNoRemind.setImageResource(mIsNoRemind?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
@@ -352,6 +367,9 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         }else if (ProjectConstants.REQUEST_SELECT_ADDRESS == requestCode){
             String address = data.getStringExtra("address");
             mTvAddress.setText(ProjectHelper.getCommonText(address));
+        }else if (ProjectConstants.REQUEST_SELECT_PERSON == requestCode){
+            String shareStr = String.format(mContext.getString(R.string.share_person), ProjectHelper.getSharePersonStr(SelectPersonActivity.mSelectList),SelectPersonActivity.mSelectList.size());
+            mTvPersons.setText(shareStr);
         }
     }
 

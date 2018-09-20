@@ -7,6 +7,7 @@ import android.widget.TextView;
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.entitys.UserBean;
 import com.android.mb.schedule.utils.ImageUtils;
+import com.android.mb.schedule.view.SelectPersonActivity;
 import com.android.mb.schedule.widget.treeview.TreeNode;
 import com.android.mb.schedule.widget.treeview.TreeViewBinder;
 
@@ -32,6 +33,11 @@ public class UserNodeBinder extends TreeViewBinder<UserNodeBinder.ViewHolder> {
             public void onClick(View v) {
                 userNode.setSelect(!userNode.isSelect());
                 holder.ivCheck.setImageResource(userNode.isSelect()?R.mipmap.ic_item_checked:R.mipmap.ic_item_check);
+                if (userNode.isSelect()){
+                    SelectPersonActivity.mSelectList.add(userNode);
+                }else{
+                    SelectPersonActivity.mSelectList.remove(userNode);
+                }
             }
         });
     }

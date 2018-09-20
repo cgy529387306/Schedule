@@ -10,8 +10,11 @@ import com.android.mb.schedule.R;
 import com.android.mb.schedule.base.BaseFragment;
 import com.android.mb.schedule.binder.OrgNodeBinder;
 import com.android.mb.schedule.binder.UserNodeBinder;
+import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.entitys.TreeBean;
 import com.android.mb.schedule.entitys.UserBean;
+import com.android.mb.schedule.rxbus.Events;
+import com.android.mb.schedule.view.SelectPersonActivity;
 import com.android.mb.schedule.widget.treeview.TreeNode;
 import com.android.mb.schedule.widget.treeview.TreeViewAdapter;
 
@@ -19,19 +22,22 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import rx.functions.Action1;
+
 
 /**
  * 组织树
  * Created by cgy on 16/7/18.
  */
-public class OrgFragment1 extends BaseFragment {
+public class OrgFragment extends BaseFragment {
 
     private RecyclerView mRecyclerView;
     private TreeViewAdapter mTreeAdapter;
     private List<TreeNode> mTreeNodes = new ArrayList<>();
+    private List<TreeBean> mDataList = new ArrayList<>();
     @Override
     protected int getLayoutId() {
-        return R.layout.frg_org1;
+        return R.layout.frg_org;
     }
 
     @Override
@@ -48,12 +54,23 @@ public class OrgFragment1 extends BaseFragment {
 
     @Override
     protected void setListener() {
-
-
+        regiestEvent(ProjectConstants.EVENT_UPDATE_SELECT, new Action1<Events<?>>() {
+            @Override
+            public void call(Events<?> events) {
+                refreshData();
+            }
+        });
     }
 
     public void setDataList(List<TreeBean> list){
-        for (TreeBean treeBean:list) {
+        if (list!=null){
+            mDataList = list;
+            refreshData();
+        }
+    }
+
+    private void refreshData(){
+        for (TreeBean treeBean:mDataList) {
             TreeNode<TreeBean> root = new TreeNode<>(treeBean);
             mTreeNodes.add(root);
             addChild(treeBean,root);
@@ -84,6 +101,11 @@ public class OrgFragment1 extends BaseFragment {
 
     private void addChild(TreeBean treeBean,TreeNode<TreeBean> parent){
         for (UserBean userBean:treeBean.getMan()){
+            for (UserBean selectUser:SelectPersonActivity.mSelectList) {
+                if (userBean.getId() == selectUser.getId()){
+                    userBean.setSelect(true);
+                }
+            }
             TreeNode<UserBean> userNode = new TreeNode(userBean);
             parent.addChild(userNode);
         }
@@ -93,4 +115,5 @@ public class OrgFragment1 extends BaseFragment {
             addChild(child,childNode);
         }
     }
+
 }
