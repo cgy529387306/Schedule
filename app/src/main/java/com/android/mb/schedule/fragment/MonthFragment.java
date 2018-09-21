@@ -73,7 +73,6 @@ public class MonthFragment extends BaseMvpFragment<MonthPresenter,IMonthView> im
     protected void processLogic() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new SectionMyAdapter(R.layout.item_section_content_my,R.layout.item_section_header_my,new ArrayList());
-        mAdapter.setEmptyView(R.layout.empty_schedule, (ViewGroup) mRecyclerView.getParent());
         mAdapter.addHeaderView(getHeaderView());
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -203,6 +202,7 @@ public class MonthFragment extends BaseMvpFragment<MonthPresenter,IMonthView> im
         }
         addSchemeList(mSchemeList);
         mAdapter.setNewData(ProjectHelper.getSectionData(mDataList));
+        mAdapter.setEmptyView(R.layout.empty_schedule, (ViewGroup) mRecyclerView.getParent());
     }
 
     @Override
