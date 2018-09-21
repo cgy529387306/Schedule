@@ -207,7 +207,7 @@ public class ScheduleRemindPop extends PopupWindow implements View.OnClickListen
     }
 
     public int getType() {
-        return mType = 7;
+        return mType;
     }
 
     public void setType(int type) {

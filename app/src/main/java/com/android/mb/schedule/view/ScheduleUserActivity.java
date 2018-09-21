@@ -3,7 +3,6 @@ package com.android.mb.schedule.view;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -11,23 +10,18 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.android.mb.schedule.R;
-import com.android.mb.schedule.adapter.ScheduleRelateAdapter;
 import com.android.mb.schedule.adapter.SectionAdapter;
-import com.android.mb.schedule.adapter.UserScheduleAdapter;
 import com.android.mb.schedule.base.BaseMvpActivity;
-import com.android.mb.schedule.entitys.MySection;
-import com.android.mb.schedule.entitys.RelatedBean;
+import com.android.mb.schedule.entitys.ScheduleSection;
 import com.android.mb.schedule.entitys.ScheduleBean;
 import com.android.mb.schedule.entitys.ScheduleData;
-import com.android.mb.schedule.presenter.RelatedPresenter;
 import com.android.mb.schedule.presenter.WeekPresenter;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.NavigationHelper;
-import com.android.mb.schedule.view.interfaces.IRelatedView;
 import com.android.mb.schedule.view.interfaces.IWeekView;
+import com.android.mb.schedule.widget.MyDividerItemDecoration;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -71,7 +65,7 @@ public class ScheduleUserActivity extends BaseMvpActivity<WeekPresenter,IWeekVie
         mRecyclerView =  findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+        mRecyclerView.addItemDecoration(new MyDividerItemDecoration(mContext, LinearLayoutManager.VERTICAL));
         mAdapter = new SectionAdapter(R.layout.item_section_content,R.layout.item_section_head,new ArrayList());
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -96,7 +90,7 @@ public class ScheduleUserActivity extends BaseMvpActivity<WeekPresenter,IWeekVie
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                MySection mySection = mAdapter.getItem(position);
+                ScheduleSection mySection = mAdapter.getItem(position);
                 if (!mySection.isHeader){
                     Bundle bundle = new Bundle();
                     bundle.putLong("id",mySection.t.getId());
@@ -162,12 +156,12 @@ public class ScheduleUserActivity extends BaseMvpActivity<WeekPresenter,IWeekVie
         }
     }
 
-    public static List<MySection> getSectionData(List<ScheduleData> dataList) {
-        List<MySection> list = new ArrayList<>();
+    public static List<ScheduleSection> getSectionData(List<ScheduleData> dataList) {
+        List<ScheduleSection> list = new ArrayList<>();
         for (ScheduleData scheduleData:dataList) {
-            list.add(new MySection(true, scheduleData.getDate()));
+            list.add(new ScheduleSection(true, scheduleData.getDate()));
             for (ScheduleBean scheduleBean:scheduleData.getList()){
-                list.add(new MySection(scheduleBean));
+                list.add(new ScheduleSection(scheduleBean));
             }
         }
         return list;

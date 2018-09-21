@@ -1,0 +1,23 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:background="@drawable/bg_list_bottom_border_normal"
+    android:orientation="horizontal">
+    <View
+        android:layout_width="6dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="10dp"
+        android:background="@color/base_blue"/>
+    <TextView
+        android:id="@+id/tvHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:gravity="left|center_vertical"
+        android:text="上午"
+        android:textColor="@color/base_blue"
+        android:textSize="16sp"
+        />
+</LinearLayout>

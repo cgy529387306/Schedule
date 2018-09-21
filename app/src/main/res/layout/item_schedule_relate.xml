@@ -69,7 +69,6 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:singleLine="true"
-        android:drawableLeft="@mipmap/ic_warn"
         android:drawablePadding="6dp"
         android:text="到集团信息公司沟通问题"
         android:textSize="18sp"

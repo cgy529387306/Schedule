@@ -27,8 +27,11 @@ import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.view.interfaces.IScheduleView;
 
 import java.io.File;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -53,7 +56,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
     private ImageView mIvAddPerson;// 添加相关人员
     private ImageView mIvNoRemind; // 是否提醒相关人员
     private boolean mIsNoRemind = false;
-    private ImageView mIvShareToOther; //分享给其他人
+    private TextView mTvShare; //分享给其他人
     private TextView mTvRepeat; //重复
     private TextView mTvWhenRemind; // 日程什么时候开始提醒
     private ImageView mIvImport; //是否重要
@@ -67,7 +70,8 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
     private int mType;//0:新建 1:编辑
     public static final String mDateFormat = "yyyy年MM月dd日";
     public static final String mTimeFormat = "HH:mm";
-
+    private List<UserBean> mRelatePersons = new ArrayList<>();
+    private List<UserBean> mSharePersons = new ArrayList<>();
     @Override
     protected void loadIntent() {
         mType = getIntent().getIntExtra("type",0);
@@ -119,20 +123,8 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         mScheduleRequest.setAddress(address);
         mScheduleRequest.setImportant(mIsImport);
         mScheduleRequest.setAllDay(mIsAllDay);
-        if (Helper.isNotEmpty(SelectPersonActivity.mSelectList)){
-            StringBuilder shareIds = new StringBuilder();
-            for (int i=0;i<SelectPersonActivity.mSelectList.size();i++) {
-                UserBean userBean = SelectPersonActivity.mSelectList.get(i);
-                if (i==SelectPersonActivity.mSelectList.size()-1){
-                    shareIds.append(userBean.getId());
-                }else{
-                    shareIds.append(userBean.getId()).append(",");
-                }
-            }
-            mScheduleRequest.setRelated(shareIds.toString());
-            mScheduleRequest.setShare(shareIds.toString());
-        }
-
+        mScheduleRequest.setRelated(Helper.isEmpty(mRelatePersons)?"":ProjectHelper.getIdStr(mRelatePersons));
+        mScheduleRequest.setShare(Helper.isEmpty(mSharePersons)?"":ProjectHelper.getIdStr(mSharePersons));
         mScheduleRequest.setSummary("");
         mScheduleRequest.setStart(start.getTime()/1000);
         mScheduleRequest.setEnd(end.getTime()/1000);
@@ -163,7 +155,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         mTvPersons = findViewById(R.id.tv_persons);
         mIvAddPerson = findViewById(R.id.iv_add_person);
         mIvNoRemind = findViewById(R.id.iv_no_remind);
-        mIvShareToOther = findViewById(R.id.iv_share_other);
+        mTvShare = findViewById(R.id.tv_share);
         mTvRepeat = findViewById(R.id.tv_repeat);
         mTvWhenRemind = findViewById(R.id.tv_when_remind);
         mIvImport = findViewById(R.id.iv_import);
@@ -204,11 +196,11 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
 
     @Override
     protected void setListener() {
+        findViewById(R.id.lin_share).setOnClickListener(this);
         findViewById(R.id.lly_address).setOnClickListener(this);
         mIvAllDay.setOnClickListener(this);
         mIvAddPerson.setOnClickListener(this);
         mIvNoRemind.setOnClickListener(this);
-        mIvShareToOther.setOnClickListener(this);
         mTvRepeat.setOnClickListener(this);
         mTvWhenRemind.setOnClickListener(this);
         mIvImport.setOnClickListener(this);
@@ -227,13 +219,24 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         }else  if (id == R.id.iv_all_day){
             mIsAllDay = mIsAllDay==0?1:0;
             mIvAllDay.setImageResource(mIsAllDay==1?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(calendar.DATE,1);
+            mTvStartDate.setText(Helper.date2String(new Date(),mDateFormat));
+            mTvStartTime.setText("00:00");
+            mTvEndDate.setText(Helper.date2String(calendar.getTime(),mDateFormat));
+            mTvEndTime.setText("23:59");
         }else  if (id == R.id.iv_add_person){
-            NavigationHelper.startActivityForResult(ScheduleAddActivity.this,SelectPersonActivity.class,null,ProjectConstants.REQUEST_SELECT_PERSON);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("selectPerson", (Serializable) mRelatePersons);
+            NavigationHelper.startActivityForResult(ScheduleAddActivity.this,SelectPersonActivity.class,bundle,ProjectConstants.REQUEST_SELECT_PERSON);
         }else  if (id == R.id.iv_no_remind){
             mIsNoRemind = !mIsNoRemind;
             mIvNoRemind.setImageResource(mIsNoRemind?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
-        }else  if (id == R.id.iv_share_other){
-
+        }else  if (id == R.id.lin_share){
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("selectPerson", (Serializable) mSharePersons);
+            NavigationHelper.startActivityForResult(ScheduleAddActivity.this,SelectPersonActivity.class,bundle,ProjectConstants.REQUEST_SELECT_SHARE);
         }else  if (id == R.id.tv_repeat){
             if(mScheduleRepeatPop != null){
                 mScheduleRepeatPop.showPopupWindow(view);
@@ -368,8 +371,13 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
             String address = data.getStringExtra("address");
             mTvAddress.setText(ProjectHelper.getCommonText(address));
         }else if (ProjectConstants.REQUEST_SELECT_PERSON == requestCode){
-            String shareStr = String.format(mContext.getString(R.string.share_person), ProjectHelper.getSharePersonStr(SelectPersonActivity.mSelectList),SelectPersonActivity.mSelectList.size());
-            mTvPersons.setText(shareStr);
+            mRelatePersons = (List<UserBean>) data.getSerializableExtra("selectPerson");
+            String relateStr = String.format(mContext.getString(R.string.relate_person), ProjectHelper.getSharePersonStr(mRelatePersons),mRelatePersons.size());
+            mTvPersons.setText(relateStr);
+        }else if (ProjectConstants.REQUEST_SELECT_SHARE == requestCode){
+            mSharePersons = (List<UserBean>) data.getSerializableExtra("selectPerson");
+            String shareStr = String.format(mContext.getString(R.string.relate_person), ProjectHelper.getSharePersonStr(mSharePersons),mSharePersons.size());
+            mTvShare.setText(shareStr);
         }
     }
 

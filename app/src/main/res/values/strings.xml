@@ -10,6 +10,8 @@
     <string name="tab_user">与我相关</string>
 
     <string name="share_person">分享给%1$s等%2$d人</string>
+    <string name="relate_person">%1$s等%2$d人</string>
+    <string name="update_time">最后操作时间%1$s 来自手机</string>
 
     <string-array name="chinese_week_string_array">
         <item>周日</item>

@@ -83,4 +83,33 @@ public class DetailPresenter extends BaseMvpPresenter<IDetailView> implements ID
             }
         });
     }
+
+    @Override
+    public void shareTo(Map<String, Object> requestMap) {
+        Observable observable = ScheduleMethods.getInstance().shareTo(requestMap);
+        toSubscribe(observable,  new Subscriber<Object>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                if(mMvpView!=null){
+                    if (e instanceof ApiException && !TextUtils.isEmpty(e.getMessage())){
+                        mMvpView.showToastMessage(e.getMessage());
+                    }else if (e instanceof NoNetWorkException && !TextUtils.isEmpty(e.getMessage())){
+                        mMvpView.showToastMessage(e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onNext(Object result) {
+                if (mMvpView!=null){
+                    mMvpView.shareSuccess(result);
+                }
+            }
+        });
+    }
 }

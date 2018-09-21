@@ -6,14 +6,14 @@ import com.chad.library.adapter.base.entity.SectionEntity;
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public class MySection extends SectionEntity<ScheduleBean> {
+public class ScheduleSection extends SectionEntity<ScheduleBean> {
     private boolean isMore;
-    public MySection(boolean isHeader, String header) {
+    public ScheduleSection(boolean isHeader, String header) {
         super(isHeader, header);
         this.isMore = isMore;
     }
 
-    public MySection(ScheduleBean t) {
+    public ScheduleSection(ScheduleBean t) {
         super(t);
     }
 

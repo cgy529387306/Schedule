@@ -18,4 +18,6 @@ public class ProjectConstants {
     public static final int REQUEST_SELECT_FILE = 0x02;
 
     public static final int REQUEST_SELECT_PERSON = 0x03;
+
+    public static final int REQUEST_SELECT_SHARE = 0x04;
 }

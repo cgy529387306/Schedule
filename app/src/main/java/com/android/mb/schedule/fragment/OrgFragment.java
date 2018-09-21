@@ -1,6 +1,5 @@
 package com.android.mb.schedule.fragment;
 
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -14,7 +13,8 @@ import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.entitys.TreeBean;
 import com.android.mb.schedule.entitys.UserBean;
 import com.android.mb.schedule.rxbus.Events;
-import com.android.mb.schedule.view.SelectPersonActivity;
+import com.android.mb.schedule.utils.ProjectHelper;
+import com.android.mb.schedule.widget.MyDividerItemDecoration;
 import com.android.mb.schedule.widget.treeview.TreeNode;
 import com.android.mb.schedule.widget.treeview.TreeViewAdapter;
 
@@ -25,7 +25,7 @@ import java.util.List;
 import rx.functions.Action1;
 
 
-/**
+/**s
  * 组织树
  * Created by cgy on 16/7/18.
  */
@@ -43,7 +43,7 @@ public class OrgFragment extends BaseFragment {
     @Override
     protected void bindViews(View view) {
         mRecyclerView = view.findViewById(R.id.recyclerView);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL));
+        mRecyclerView.addItemDecoration(new MyDividerItemDecoration(mContext, LinearLayoutManager.VERTICAL));
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
@@ -65,7 +65,6 @@ public class OrgFragment extends BaseFragment {
     public void setDataList(List<TreeBean> list){
         if (list!=null){
             mDataList = list;
-            refreshData();
         }
     }
 
@@ -101,11 +100,7 @@ public class OrgFragment extends BaseFragment {
 
     private void addChild(TreeBean treeBean,TreeNode<TreeBean> parent){
         for (UserBean userBean:treeBean.getMan()){
-            for (UserBean selectUser:SelectPersonActivity.mSelectList) {
-                if (userBean.getId() == selectUser.getId()){
-                    userBean.setSelect(true);
-                }
-            }
+            userBean.setSelect(ProjectHelper.getSelectIdList().contains(userBean.getId()));
             TreeNode<UserBean> userNode = new TreeNode(userBean);
             parent.addChild(userNode);
         }

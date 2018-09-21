@@ -1,7 +1,6 @@
 package com.android.mb.schedule.fragment;
 
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -9,17 +8,16 @@ import android.view.ViewGroup;
 
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.adapter.PersonAdapter;
-import com.android.mb.schedule.adapter.ScheduleRelateAdapter;
 import com.android.mb.schedule.base.BaseFragment;
 import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.entitys.UserBean;
 import com.android.mb.schedule.rxbus.Events;
-import com.android.mb.schedule.utils.Helper;
+import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.view.SelectPersonActivity;
+import com.android.mb.schedule.widget.MyDividerItemDecoration;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import rx.functions.Action1;
@@ -44,7 +42,7 @@ public class PersonFragment extends BaseFragment {
         mRecyclerView =  view.findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL));
+        mRecyclerView.addItemDecoration(new MyDividerItemDecoration(mContext, LinearLayoutManager.VERTICAL));
         mAdapter = new PersonAdapter(R.layout.item_person,mDataList);
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -80,19 +78,14 @@ public class PersonFragment extends BaseFragment {
     public void setDataList(List<UserBean> list){
         mDataList = list;
         mAdapter.setEmptyView(R.layout.empty_data, (ViewGroup) mRecyclerView.getParent());
-        mAdapter.setNewData(mDataList);
         refreshData();
     }
 
 
     private void refreshData() {
         if (mAdapter!=null && mDataList!=null){
-            for (UserBean selectUser:SelectPersonActivity.mSelectList) {
-                for (UserBean userBean:mDataList) {
-                    if (userBean.getId() == selectUser.getId()){
-                        userBean.setSelect(true);
-                    }
-                }
+            for (UserBean userBean:mDataList) {
+                userBean.setSelect(ProjectHelper.getSelectIdList().contains(userBean.getId()));
             }
             mAdapter.setNewData(mDataList);
         }

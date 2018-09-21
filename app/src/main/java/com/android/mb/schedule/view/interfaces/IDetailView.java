@@ -13,4 +13,6 @@ public interface IDetailView extends BaseMvpView {
     void getSuccess(ScheduleDetailData result);
 
     void deleteSuccess(Object result);
+
+    void shareSuccess(Object result);
 }

@@ -291,6 +291,7 @@
             android:layout_height="10dp" />
 
         <LinearLayout
+            android:id="@+id/lin_edit"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:background="@color/white"
@@ -332,8 +333,17 @@
                 android:textColor="@color/base_blue"
                 android:textSize="16sp" />
         </LinearLayout>
+        <TextView
+            android:id="@+id/tv_update_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:singleLine="true"
+            android:gravity="center"
+            android:textColor="@color/edit_color"
+            android:textSize="15sp" />
         <View
             android:layout_width="0dp"
-            android:layout_height="60dp" />
+            android:layout_height="40dp" />
     </LinearLayout>
 </ScrollView>

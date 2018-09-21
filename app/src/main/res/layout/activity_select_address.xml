@@ -6,7 +6,7 @@
 
     <EditText
         android:id="@+id/et_address"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="48dp"
         android:drawableLeft="@mipmap/icon_address"
         android:drawablePadding="10dp"
@@ -14,7 +14,7 @@
         android:lines="1"
         android:background="@null"
         android:hint="请输入地址"
-        android:gravity="center"
+        android:gravity="left|center_vertical"
         android:textColorHint="@color/text_color"
         android:textColor="@color/text_color"
         android:textSize="16sp" />

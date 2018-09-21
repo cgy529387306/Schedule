@@ -1,7 +1,6 @@
 package com.android.mb.schedule.fragment;
 
 import android.os.Bundle;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,10 +10,13 @@ import android.widget.TextView;
 
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.adapter.MultipleItemQuickAdapter;
+import com.android.mb.schedule.adapter.SectionAdapter;
+import com.android.mb.schedule.adapter.SectionMyAdapter;
 import com.android.mb.schedule.base.BaseMvpFragment;
 import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.entitys.ScheduleBean;
 import com.android.mb.schedule.entitys.ScheduleData;
+import com.android.mb.schedule.entitys.ScheduleSection;
 import com.android.mb.schedule.presenter.MonthPresenter;
 import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.utils.Helper;
@@ -23,7 +25,9 @@ import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.view.MainActivity;
 import com.android.mb.schedule.view.ScheduleDetailActivity;
+import com.android.mb.schedule.view.ScheduleUserActivity;
 import com.android.mb.schedule.view.interfaces.IMonthView;
+import com.android.mb.schedule.widget.MyDividerItemDecoration;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.haibin.calendarview.Calendar;
 import com.haibin.calendarview.CalendarLayout;
@@ -46,7 +50,7 @@ public class MonthFragment extends BaseMvpFragment<MonthPresenter,IMonthView> im
     private CalendarLayout mCalendarLayout;
     private CalendarView mCalendarView;
     private RecyclerView mRecyclerView;
-    private MultipleItemQuickAdapter mAdapter;
+    private SectionMyAdapter mAdapter;
     private TextView mTvDate;
     private String mMonthDate;
     private String mSelectDate;
@@ -68,8 +72,7 @@ public class MonthFragment extends BaseMvpFragment<MonthPresenter,IMonthView> im
     @Override
     protected void processLogic() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL));
-        mAdapter = new MultipleItemQuickAdapter(getActivity(), mDataList);
+        mAdapter = new SectionMyAdapter(R.layout.item_section_content_my,R.layout.item_section_header_my,new ArrayList());
         mAdapter.setEmptyView(R.layout.empty_schedule, (ViewGroup) mRecyclerView.getParent());
         mAdapter.addHeaderView(getHeaderView());
         mRecyclerView.setAdapter(mAdapter);
@@ -123,10 +126,11 @@ public class MonthFragment extends BaseMvpFragment<MonthPresenter,IMonthView> im
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (mAdapter.getItem(position)!=null){
+                ScheduleSection mySection = mAdapter.getItem(position);
+                if (!mySection.isHeader){
                     Bundle bundle = new Bundle();
-                    bundle.putLong("id",mAdapter.getItem(position).getId());
-                    NavigationHelper.startActivity(getActivity(),ScheduleDetailActivity.class,bundle,false);
+                    bundle.putLong("id",mySection.t.getId());
+                    NavigationHelper.startActivity(mContext,ScheduleDetailActivity.class,bundle,false);
                 }
             }
         });
@@ -162,10 +166,10 @@ public class MonthFragment extends BaseMvpFragment<MonthPresenter,IMonthView> im
                 }
                 if (Helper.isNotEmpty(mScheduleDataList)){
                     mDataList = ProjectHelper.getScheduleList(mSelectDate,mScheduleDataList);
-                    mAdapter.setNewData(mDataList);
+                    mAdapter.setNewData(ProjectHelper.getSectionData(mDataList));
                 }else{
                     mDataList = new ArrayList<ScheduleBean>();
-                    mAdapter.setNewData(mDataList);
+                    mAdapter.setNewData( ProjectHelper.getSectionData(mDataList));
                 }
 
             }
@@ -198,11 +202,14 @@ public class MonthFragment extends BaseMvpFragment<MonthPresenter,IMonthView> im
             }
         }
         addSchemeList(mSchemeList);
-        mAdapter.setNewData(mDataList);
+        mAdapter.setNewData(ProjectHelper.getSectionData(mDataList));
     }
 
     @Override
     protected MonthPresenter createPresenter() {
         return new MonthPresenter();
     }
+
+
+
 }

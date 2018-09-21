@@ -22,6 +22,16 @@ public class ScheduleBean implements MultiItemEntity,Serializable{
     private int important;
     private String summary;
     private String not_remind_related;
+    private int timeType;//0:全天  1:上午 2:下午
+
+
+    public int getTimeType() {
+        return timeType;
+    }
+
+    public void setTimeType(int timeType) {
+        this.timeType = timeType;
+    }
 
     public long getId() {
         return id;

@@ -63,7 +63,7 @@ public class WeekFragment  extends BaseMvpFragment<WeekPresenter,IWeekView> impl
             public void onEventAddClicked(Calendar time) {
                 Bundle bundle = new Bundle();
                 bundle.putInt("type",0);
-                NavigationHelper.startActivity(getActivity(),ScheduleAddActivity.class,bundle,false);
+                NavigationHelper.startActivity(mContext,ScheduleAddActivity.class,bundle,false);
             }
         });
         mScheduleView.setOnEventClickListener(new ScheduleView.OnEventClickListener() {

@@ -1,5 +1,6 @@
 package com.android.mb.schedule.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,7 @@ import com.android.mb.schedule.presenter.PersonPresenter;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.view.interfaces.IPersonView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +39,7 @@ public class SelectPersonActivity extends BaseMvpActivity<PersonPresenter,IPerso
     public static List<UserBean> mSelectList;
     @Override
     protected void loadIntent() {
+        mSelectList = (List<UserBean>) getIntent().getSerializableExtra("selectPerson");
     }
 
     @Override
@@ -56,7 +59,9 @@ public class SelectPersonActivity extends BaseMvpActivity<PersonPresenter,IPerso
         if (Helper.isEmpty(mSelectList)){
             showToastMessage("请选择人员");
         }else{
-            setResult(RESULT_OK);
+            Intent intent = new Intent();
+            intent.putExtra("selectPerson", (Serializable) mSelectList);
+            setResult(RESULT_OK,intent);
             finish();
         }
     }

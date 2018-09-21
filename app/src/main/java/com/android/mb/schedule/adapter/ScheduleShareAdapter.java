@@ -1,5 +1,8 @@
 package com.android.mb.schedule.adapter;
 
+import android.graphics.drawable.Drawable;
+import android.widget.TextView;
+
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.entitys.ShareBean;
 import com.android.mb.schedule.entitys.UserBean;
@@ -17,8 +20,13 @@ public class ScheduleShareAdapter extends BaseQuickAdapter<ShareBean, BaseViewHo
 
     @Override
     protected void convert(BaseViewHolder helper, ShareBean item) {
+        TextView tvTitle = helper.getView(R.id.tv_title);
+        Drawable drawableLeft = mContext.getResources().getDrawable(
+                R.mipmap.ic_warn);
+        tvTitle.setCompoundDrawablesWithIntrinsicBounds(drawableLeft,
+                null, null, null);
+        tvTitle.setText(item.getTitle());
         helper.setText(R.id.tv_date, Helper.date2String(Helper.string2Date(item.getCreate_date()),"MM-dd"));
-        helper.setText(R.id.tv_title,item.getTitle());
         helper.setText(R.id.tv_address,item.getAddress());
         helper.setText(R.id.tv_time,item.getTime());
         if (Helper.isEmpty(item.getShare())){

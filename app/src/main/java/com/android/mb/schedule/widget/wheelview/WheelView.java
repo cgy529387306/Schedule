@@ -44,6 +44,7 @@ import android.view.animation.Interpolator;
 import android.widget.Scroller;
 
 import com.android.mb.schedule.R;
+import com.android.mb.schedule.utils.AppHelper;
 
 /**
  * Numeric wheel view.
@@ -109,7 +110,7 @@ public class WheelView extends View {
 	 *  </br>
 	 * �ֺ�
 	 */
-	private static final int TEXT_SIZE = 28;
+	private static final int TEXT_SIZE = AppHelper.calDpi2px(16);
 
 	/** 
 	 * Top and bottom items offset (to hide that) 

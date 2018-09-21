@@ -73,6 +73,10 @@ public interface IScheduleService {
     @FormUrlEncoded
     Observable<HttpResult<ScheduleDetailData>> getSchedule(@FieldMap Map<String,Object> requestMap);
 
+    @POST("/app/schedule/toshare")
+    @FormUrlEncoded
+    Observable<HttpResult<Object>> shareTo(@FieldMap Map<String,Object> requestMap);
+
     @POST("/app/schedule/del")
     @FormUrlEncoded
     Observable<HttpResult<Object>> deleteSchedule(@FieldMap Map<String,Object> requestMap);

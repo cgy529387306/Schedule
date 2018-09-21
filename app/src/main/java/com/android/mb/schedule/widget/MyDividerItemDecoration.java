@@ -9,13 +9,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.android.mb.schedule.utils.AppHelper;
+
 /**
  * @author chenqm on 2017/6/21.
  */
 
-public class DividerItemDecoration extends RecyclerView.ItemDecoration {
+public class MyDividerItemDecoration extends RecyclerView.ItemDecoration {
     private static final int[] ATTRS = new int[]{
-            android.R.attr. listDivider
+            android.R.attr.listDivider
     };
 
     public static final int HORIZONTAL_LIST = LinearLayoutManager.HORIZONTAL;
@@ -26,7 +28,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
     private int mOrientation;
 
-    public DividerItemDecoration(Context context, int orientation) {
+    public MyDividerItemDecoration(Context context, int orientation) {
         final TypedArray a = context.obtainStyledAttributes(ATTRS );
         mDivider = a.getDrawable(0);
         a.recycle();
@@ -84,9 +86,9 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
     @Override
     public void getItemOffsets(Rect outRect, int itemPosition, RecyclerView parent) {
         if (mOrientation == VERTICAL_LIST) {
-            outRect.set(0, 0, 0, mDivider.getIntrinsicHeight());
+            outRect.set(0, 0, 0,1);
         }else{
-            outRect.set(0, 0, mDivider.getIntrinsicWidth(), 0);
+            outRect.set(0, 0, 1, 0);
         }
     }
 }

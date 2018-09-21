@@ -1,24 +1,18 @@
 package com.android.mb.schedule.fragment;
 
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.mb.schedule.R;
-import com.android.mb.schedule.adapter.PersonAdapter;
 import com.android.mb.schedule.adapter.SelectAdapter;
 import com.android.mb.schedule.base.BaseFragment;
 import com.android.mb.schedule.constants.ProjectConstants;
-import com.android.mb.schedule.entitys.UserBean;
 import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.view.SelectPersonActivity;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.android.mb.schedule.widget.MyDividerItemDecoration;
 
 import rx.functions.Action1;
 
@@ -41,7 +35,7 @@ public class SelectedFragment extends BaseFragment {
         mRecyclerView = view.findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL));
+        mRecyclerView.addItemDecoration(new MyDividerItemDecoration(mContext, LinearLayoutManager.VERTICAL));
         mAdapter = new SelectAdapter(R.layout.item_person,SelectPersonActivity.mSelectList);
         mAdapter.setEmptyView(R.layout.empty_data, (ViewGroup) mRecyclerView.getParent());
         mRecyclerView.setAdapter(mAdapter);

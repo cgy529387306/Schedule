@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ScheduleDetailData implements Serializable{
     private ScheduleDetailBean info;
-//    private List<Object> related;
+    private List<UserBean> related;
     private List<FileBean> file;
 
     public ScheduleDetailBean getInfo() {
@@ -21,16 +21,16 @@ public class ScheduleDetailData implements Serializable{
         this.info = info;
     }
 
-//    public List<Object> getRelated() {
-//        if (related == null) {
-//            return new ArrayList<>();
-//        }
-//        return related;
-//    }
-//
-//    public void setRelated(List<Object> related) {
-//        this.related = related;
-//    }
+    public List<UserBean> getRelated() {
+        if (related == null) {
+            return new ArrayList<>();
+        }
+        return related;
+    }
+
+    public void setRelated(List<UserBean> related) {
+        this.related = related;
+    }
 
     public List<FileBean> getFile() {
         if (file == null) {

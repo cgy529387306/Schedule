@@ -3,10 +3,8 @@ package com.android.mb.schedule.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
@@ -16,7 +14,7 @@ import com.android.mb.schedule.base.BaseMvpActivity;
 import com.android.mb.schedule.presenter.AddressPresenter;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.view.interfaces.IAddressView;
-import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.android.mb.schedule.widget.MyDividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +65,7 @@ public class SelectAddressActivity extends BaseMvpActivity<AddressPresenter,IAdd
         mRecyclerView = findViewById(R.id.recyclerView_address);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this ));
         mRecyclerView.setItemAnimator( new DefaultItemAnimator());
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+        mRecyclerView.addItemDecoration(new MyDividerItemDecoration(mContext, LinearLayoutManager.VERTICAL));
         mAdapter = new AddressAdapter(R.layout.item_address,new ArrayList());
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -79,12 +77,11 @@ public class SelectAddressActivity extends BaseMvpActivity<AddressPresenter,IAdd
 
     @Override
     protected void setListener() {
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        mAdapter.setOnMyItemClickListener(new AddressAdapter.OnMyItemClickListener() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                String address = mAdapter.getItem(position);
+            public void onItemClick(String item) {
                 Intent intent = new Intent();
-                intent.putExtra("address",address);
+                intent.putExtra("address",item);
                 setResult(RESULT_OK,intent);
                 finish();
             }

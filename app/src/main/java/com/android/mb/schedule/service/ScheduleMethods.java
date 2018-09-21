@@ -167,6 +167,16 @@ public class ScheduleMethods extends BaseHttp {
                 .map(new HttpCacheResultFunc<ScheduleDetailData>());
     }
 
+    public Observable shareTo(Map<String,Object> requestMap){
+        if (CurrentUser.getInstance().isLogin()){
+            requestMap.put("token_id",CurrentUser.getInstance().getToken_id());
+            requestMap.put("token",CurrentUser.getInstance().getToken());
+        }
+        return getService().shareTo(requestMap)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<Object>());
+    }
+
     public Observable deleteSchedule(Map<String,Object> requestMap){
         if (CurrentUser.getInstance().isLogin()){
             requestMap.put("token_id",CurrentUser.getInstance().getToken_id());

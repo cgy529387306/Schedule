@@ -16,7 +16,9 @@ import com.android.mb.schedule.entitys.ScheduleData;
 import com.android.mb.schedule.entitys.ScheduleDetailBean;
 import com.android.mb.schedule.entitys.ScheduleDetailData;
 import com.android.mb.schedule.entitys.ScheduleRequest;
+import com.android.mb.schedule.entitys.ScheduleSection;
 import com.android.mb.schedule.entitys.UserBean;
+import com.android.mb.schedule.view.SelectPersonActivity;
 import com.google.gson.Gson;
 
 import java.lang.reflect.Field;
@@ -416,5 +418,76 @@ public class ProjectHelper {
             }
         }
         return shareStr.toString();
+    }
+
+    public static String getIdStr(List<UserBean> userList){
+        StringBuilder shareIds = new StringBuilder();
+        for (int i=0;i<userList.size();i++) {
+            UserBean userBean = userList.get(i);
+            if (i==userList.size()-1){
+                shareIds.append(userBean.getId());
+            }else{
+                shareIds.append(userBean.getId()).append(",");
+            }
+        }
+        return shareIds.toString();
+    }
+
+    public static List<Long> getSelectIdList(){
+        List<Long> selectIdList = new ArrayList<>();
+        if (Helper.isNotEmpty(SelectPersonActivity.mSelectList)){
+            for (UserBean user:SelectPersonActivity.mSelectList) {
+                selectIdList.add(user.getId());
+            }
+        }
+        return selectIdList;
+    }
+
+    public static boolean isAmTime(String time){
+        if (Helper.isEmpty(time)){
+            return false;
+        }
+        Date date = Helper.string2Date(time,"HH:mm");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.get(Calendar.HOUR_OF_DAY)<12;
+    }
+
+    public static List<ScheduleSection> getSectionData(List<ScheduleBean> dataList) {
+        List<ScheduleSection> sectionList = new ArrayList<>();
+        List<ScheduleBean> allDayList = new ArrayList<>();
+        List<ScheduleBean> amList = new ArrayList<>();
+        List<ScheduleBean> pmList = new ArrayList<>();
+        for (ScheduleBean scheduleBean:dataList) {
+            if (scheduleBean.getAllDay()==1){
+                scheduleBean.setTimeType(0);
+                allDayList.add(scheduleBean);
+            }else if (ProjectHelper.isAmTime(scheduleBean.getStartTime())){
+                scheduleBean.setTimeType(1);
+                amList.add(scheduleBean);
+            }else{
+                scheduleBean.setTimeType(2);
+                pmList.add(scheduleBean);
+            }
+        }
+        if (Helper.isNotEmpty(allDayList)){
+            sectionList.add(new ScheduleSection(true, "全天"));
+            for (ScheduleBean scheduleBean:allDayList){
+                sectionList.add(new ScheduleSection(scheduleBean));
+            }
+        }
+        if (Helper.isNotEmpty(amList)){
+            sectionList.add(new ScheduleSection(true, "上午"));
+            for (ScheduleBean scheduleBean:amList){
+                sectionList.add(new ScheduleSection(scheduleBean));
+            }
+        }
+        if (Helper.isNotEmpty(pmList)){
+            sectionList.add(new ScheduleSection(true, "下午"));
+            for (ScheduleBean scheduleBean:pmList){
+                sectionList.add(new ScheduleSection(scheduleBean));
+            }
+        }
+        return sectionList;
     }
 }

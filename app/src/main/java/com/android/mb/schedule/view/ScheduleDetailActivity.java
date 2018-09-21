@@ -1,7 +1,10 @@
 package com.android.mb.schedule.view;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -11,20 +14,26 @@ import android.widget.TextView;
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.base.BaseMvpActivity;
 import com.android.mb.schedule.constants.ProjectConstants;
+import com.android.mb.schedule.entitys.CurrentUser;
 import com.android.mb.schedule.entitys.ScheduleDetailBean;
 import com.android.mb.schedule.entitys.ScheduleDetailData;
+import com.android.mb.schedule.entitys.UserBean;
 import com.android.mb.schedule.presenter.DetailPresenter;
 import com.android.mb.schedule.retrofit.download.DownloadHelper;
 import com.android.mb.schedule.retrofit.download.FileDownloadCallback;
 import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.utils.DialogHelper;
+import com.android.mb.schedule.utils.FileUtils;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.view.interfaces.IDetailView;
 
 import java.io.File;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import rx.functions.Action1;
@@ -52,7 +61,9 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
     private TextView mTvEdit;
     private TextView mTvShare;
     private TextView mTvDelete;
+    private TextView mTvUpdateTime;
     private LinearLayout mLinFile;
+    private LinearLayout mLinEdit;
     public static final String mDateFormat = "yyyy年MM月dd日";
     private ProgressDialog mProgressDialog;//创建ProgressDialog
     private long mId;
@@ -89,9 +100,11 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
         mTvDownDocument = findViewById(R.id.tv_download_document);
         mTvPersons = findViewById(R.id.tv_persons);
         mTvWhenRemind = findViewById(R.id.tv_when_remind);
+        mTvUpdateTime = findViewById(R.id.tv_update_time);
         mTvEdit = findViewById(R.id.tv_edit);
         mTvShare = findViewById(R.id.tv_share);
         mTvDelete = findViewById(R.id.tv_delete);
+        mLinEdit = findViewById(R.id.lin_edit);
     }
 
     @Override
@@ -130,7 +143,7 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
             bundle.putSerializable("schedule",ProjectHelper.transBean(mDetailData));
             NavigationHelper.startActivity(ScheduleDetailActivity.this,ScheduleAddActivity.class,bundle,false);
         }else if (id == R.id.tv_share){
-            //TODO
+            NavigationHelper.startActivityForResult(ScheduleDetailActivity.this,SelectPersonActivity.class,null,ProjectConstants.REQUEST_SELECT_PERSON);
         }else if (id == R.id.tv_delete){
             DialogHelper.showConfirmDialog(ScheduleDetailActivity.this, "提示", "确定删除改日程吗？", true, "确定", new DialogInterface.OnClickListener() {
                 @Override
@@ -157,6 +170,8 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
             mTvScheduleContent.setText(detailBean.getDescription());
             mTvRepeat.setText(ProjectHelper.getRepeatStr(detailBean.getRepeattype()));
             mTvWhenRemind.setText(ProjectHelper.getRemindStr(detailBean.getRemind()));
+            String updateTime = Helper.long2DateString(detailBean.getUpdatetime()*1000,"MM-dd HH:mm");
+            mTvUpdateTime.setText(String.format(mContext.getString(R.string.update_time),updateTime));
             if (Helper.isNotEmpty(detailData.getFile())){
                 mLinFile.setVisibility(View.VISIBLE);
                 ScheduleDetailData.FileBean fileBean = detailData.getFile().get(0);
@@ -164,6 +179,11 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
             }else{
                 mLinFile.setVisibility(View.GONE);
             }
+            if (Helper.isNotEmpty(detailData.getRelated())){
+                String shareStr = String.format(mContext.getString(R.string.relate_person), ProjectHelper.getSharePersonStr(detailData.getRelated()),detailData.getRelated().size());
+                mTvPersons.setText(shareStr);
+            }
+//            mLinEdit.setVisibility(detailBean.getCreate_by() == CurrentUser.getInstance().getOffice_id()?View.VISIBLE:View.GONE);
         }
     }
 
@@ -220,7 +240,27 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
     }
 
     @Override
+    public void shareSuccess(Object result) {
+        showToastMessage("分享成功");
+    }
+
+    @Override
     protected DetailPresenter createPresenter() {
         return new DetailPresenter();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        if (ProjectConstants.REQUEST_SELECT_PERSON == requestCode){
+            List<UserBean> list = (List<UserBean>) data.getSerializableExtra("selectPerson");
+            Map<String,Object> requestMap = new HashMap<>();
+            requestMap.put("sid",mId);
+            requestMap.put("share", ProjectHelper.getIdStr(list));
+            mPresenter.shareTo(requestMap);
+        }
     }
 }
