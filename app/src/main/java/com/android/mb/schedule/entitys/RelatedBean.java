@@ -16,6 +16,7 @@ public class RelatedBean implements Serializable{
     private String user_avatar;
     private String user_name;
     private String user_office;
+    private int important;
 
     public long getId() {
         return id;
@@ -79,5 +80,13 @@ public class RelatedBean implements Serializable{
 
     public void setUser_office(String user_office) {
         this.user_office = user_office;
+    }
+
+    public int getImportant() {
+        return important;
+    }
+
+    public void setImportant(int important) {
+        this.important = important;
     }
 }

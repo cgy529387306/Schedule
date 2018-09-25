@@ -2,6 +2,7 @@ package com.android.mb.schedule.view;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.base.BaseMvpActivity;
 import com.android.mb.schedule.constants.ProjectConstants;
+import com.android.mb.schedule.entitys.CurrentUser;
 import com.android.mb.schedule.entitys.FileData;
 import com.android.mb.schedule.entitys.ScheduleRequest;
 import com.android.mb.schedule.entitys.UserBean;
@@ -20,9 +22,13 @@ import com.android.mb.schedule.pop.ScheduleRemindPop;
 import com.android.mb.schedule.pop.ScheduleRepeatPop;
 import com.android.mb.schedule.pop.ScheduleTimePop;
 import com.android.mb.schedule.presenter.SchedulePresenter;
+import com.android.mb.schedule.utils.AppHelper;
 import com.android.mb.schedule.utils.FileUtils;
 import com.android.mb.schedule.utils.Helper;
+import com.android.mb.schedule.utils.JsonHelper;
 import com.android.mb.schedule.utils.NavigationHelper;
+import com.android.mb.schedule.utils.NetworkHelper;
+import com.android.mb.schedule.utils.PreferencesHelper;
 import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.view.interfaces.IScheduleView;
 
@@ -72,12 +78,22 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
     public static final String mTimeFormat = "HH:mm";
     private List<UserBean> mRelatePersons = new ArrayList<>();
     private List<UserBean> mSharePersons = new ArrayList<>();
+    private String mDateStr;
+    private String mLocalKey;
     @Override
     protected void loadIntent() {
+        mLocalKey = "ScheduleRequest"+ CurrentUser.getInstance().getId();
         mType = getIntent().getIntExtra("type",0);
+        mDateStr = getIntent().getStringExtra("date");
         if (mType==1){
             mScheduleRequest = (ScheduleRequest) getIntent().getSerializableExtra("schedule");
+        }else{
+            String localStr = PreferencesHelper.getInstance().getString(mLocalKey);
+            if (Helper.isNotEmpty(localStr)){
+                mScheduleRequest = JsonHelper.fromJson(localStr,ScheduleRequest.class);
+            }
         }
+
     }
 
     @Override
@@ -115,6 +131,9 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
             showToastMessage("开始时间必须大于结束时间");
             return;
         }
+        if (mScheduleRequest==null){
+            mScheduleRequest=new ScheduleRequest();
+        }
         if (mFileId!=-1){
             mScheduleRequest.setFid(mFileId);
         }
@@ -130,11 +149,17 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         mScheduleRequest.setEnd(end.getTime()/1000);
         mScheduleRequest.setRemind(mScheduleRemindPop.getType());
         mScheduleRequest.setRepeattype(mScheduleRepeatPop.getType());
-        if (mType==1){
-            mPresenter.editSchedule(mScheduleRequest);
+        if (NetworkHelper.isNetworkAvailable(mContext)){
+            if (mType==1){
+                mPresenter.editSchedule(mScheduleRequest);
+            }else{
+                mPresenter.addSchedule(mScheduleRequest);
+            }
         }else{
-            mPresenter.addSchedule(mScheduleRequest);
+            showToastMessage("当前网络不可用，待网络连接后再保存日程");
+            PreferencesHelper.getInstance().putString(mLocalKey, JsonHelper.toJson(mScheduleRequest));
         }
+
 
     }
 
@@ -173,12 +198,20 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
             mTvStartTime.setText(Helper.long2DateString(mScheduleRequest.getStart()*1000,mTimeFormat));
             mTvEndDate.setText(Helper.long2DateString(mScheduleRequest.getEnd()*1000,mDateFormat));
             mTvEndTime.setText(Helper.long2DateString(mScheduleRequest.getEnd()*1000,mTimeFormat));
+            Calendar startCalendar = (Calendar) Calendar.getInstance().clone();
+            startCalendar.setTime(Helper.long2Date(mScheduleRequest.getStart()*1000));
+            mScheduleStartTimePop.setTime(startCalendar);
+            Calendar endCalendar = (Calendar) Calendar.getInstance().clone();
+            endCalendar.setTime(Helper.long2Date(mScheduleRequest.getEnd()*1000));
+            mScheduleEndTimePop.setTime(endCalendar);
+
             mIsAllDay = mScheduleRequest.getAllDay();
             mIvAllDay.setImageResource(mIsAllDay==1?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
             mIsImport = mScheduleRequest.getImportant();
             mIvImport.setImageResource(mIsImport==1?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
             mTvRepeat.setText(ProjectHelper.getRepeatStr(mScheduleRequest.getRepeattype()));
             mTvWhenRemind.setText(ProjectHelper.getRemindStr(mScheduleRequest.getRemind()));
+
 //            mTvFileName.setText(mScheduleEndTimePop);
         }
     }
@@ -188,8 +221,8 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         if (mType == 1){
             initData();
         }else{
-            mScheduleRequest = new ScheduleRequest();
             initDate();
+            initData();
         }
     }
 
@@ -281,7 +314,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
                 mTvStartTime.setText(selectTime);
             }
         });
-        mScheduleStartTimePop.setType(0);
+
         mScheduleEndTimePop = new ScheduleTimePop(this, new ScheduleTimePop.SelectListener() {
             @Override
             public void onSelected(String selectDate, String selectTime) {
@@ -289,21 +322,27 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
                 mTvEndTime.setText(selectTime);
             }
         });
-        mScheduleEndTimePop.setType(1);
     }
 
     private void initDate(){
         Calendar calendar = Calendar.getInstance();
+        if (Helper.isNotEmpty(mDateStr)){
+            calendar.setTime(Helper.string2Date(mDateStr));
+        }
         int hour = calendar.get(Calendar.HOUR_OF_DAY)+1;
         String hourStr = hour<10?("0"+hour):""+hour;
         mTvStartDate.setText(Helper.date2String(calendar.getTime(),mDateFormat));
         mTvStartTime.setText(String.format("%s:%s", hourStr, "00"));
+        mScheduleStartTimePop.setTime(calendar);
+
+
 
         calendar.add(Calendar.HOUR_OF_DAY,1);
         int endHour = calendar.get(Calendar.HOUR_OF_DAY)+1;
         String endHourStr = endHour<10?("0"+endHour):""+endHour;
         mTvEndDate.setText(Helper.date2String(calendar.getTime(),mDateFormat));
         mTvEndTime.setText(String.format("%s:%s", endHourStr, "00"));
+        mScheduleEndTimePop.setTime(calendar);
     }
 
     @Override
@@ -314,6 +353,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
     @Override
     public void addSuccess(Object result) {
         showToastMessage("保存成功");
+        PreferencesHelper.getInstance().putString(mLocalKey, "");
         sendMsg(ProjectConstants.EVENT_UPDATE_SCHEDULE_LIST,null);
         finish();
     }
@@ -321,6 +361,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
     @Override
     public void editSuccess(Object result) {
         showToastMessage("修改成功");
+        PreferencesHelper.getInstance().putString(mLocalKey, "");
         sendMsg(ProjectConstants.EVENT_UPDATE_SCHEDULE_LIST,null);
         sendMsg(ProjectConstants.EVENT_UPDATE_SCHEDULE,null);
         finish();

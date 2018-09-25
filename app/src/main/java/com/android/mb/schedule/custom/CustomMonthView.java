@@ -137,9 +137,11 @@ public class CustomMonthView extends MonthView {
         if (calendar.isCurrentDay()){
             if (isSelected){
                 canvas.drawCircle(cx, cy, mRadius, mCurrentDayPaint);
+                onDrawScheme(canvas,calendar,x,y);
             }else{
                 canvas.drawCircle(cx, cy, mRadius, mCurrentDayPaint);
                 canvas.drawCircle(cx, cy, mRadius-dipToPx(getContext(),1), mHollowCirclePaint);
+                onDrawScheme(canvas,calendar,x,y);
             }
         }
 

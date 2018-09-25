@@ -25,6 +25,7 @@ import com.haibin.calendarview.CalendarView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +40,7 @@ public class WeekFragment  extends BaseMvpFragment<WeekPresenter,IWeekView> impl
     private CalendarView mCalendarView;
     private ScheduleView mScheduleView;
     private String mWeekDate;
+    private String mClickTime;
     @Override
     protected int getLayoutId() {
         return R.layout.frg_week;
@@ -63,6 +65,9 @@ public class WeekFragment  extends BaseMvpFragment<WeekPresenter,IWeekView> impl
             public void onEventAddClicked(Calendar time) {
                 Bundle bundle = new Bundle();
                 bundle.putInt("type",0);
+                if (Helper.isNotEmpty(mClickTime)){
+                    bundle.putString("date",mClickTime);
+                }
                 NavigationHelper.startActivity(mContext,ScheduleAddActivity.class,bundle,false);
             }
         });
@@ -82,6 +87,7 @@ public class WeekFragment  extends BaseMvpFragment<WeekPresenter,IWeekView> impl
         mCalendarView.setOnWeekChangeListener(new CalendarView.OnWeekChangeListener() {
             @Override
             public void onWeekChange(List<com.haibin.calendarview.Calendar> weekCalendars) {
+
                 getWeekData(weekCalendars);
             }
         });

@@ -31,6 +31,7 @@ import com.android.mb.schedule.fragment.MonthFragment;
 import com.android.mb.schedule.fragment.WeekFragment;
 import com.android.mb.schedule.presenter.HomePresenter;
 import com.android.mb.schedule.rxbus.Events;
+import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.ImageUtils;
 import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.utils.ProjectHelper;
@@ -40,6 +41,8 @@ import com.android.mb.schedule.widget.CircleImageView;
 import com.android.mb.schedule.widget.FragmentViewPager;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import rx.functions.Action1;
 
@@ -64,7 +67,6 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
     private TextView mTvTitle; // 标题
     private ImageView mIvRefresh; // 右边图标
     private ImageView mIvToday; // 右边图标
-
     @Override
     protected void loadIntent() {
 
@@ -239,9 +241,11 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
             NavigationHelper.startActivity(MainActivity.this,ScheduleShareActivity.class,null,false);
         }else if (id == R.id.nav_other_share){  //他人分享
             NavigationHelper.startActivity(MainActivity.this,ScheduleShareOtherActivity.class,null,false);
-        }else if (id == R.id.nav_subordinate_log){  // 下属日志
-
-        }else if (id == R.id.nav_relatedme_log){  // 与我相关的日志
+        }
+//        else if (id == R.id.nav_subordinate_log){  // 下属日志
+//
+//        }
+        else if (id == R.id.nav_relatedme_log){  // 与我相关的日志
             NavigationHelper.startActivity(MainActivity.this,ScheduleRelateActivity.class,null,false);
         }else if (id == R.id.nav_setting){  //设置
             NavigationHelper.startActivity(MainActivity.this,SettingActivity.class,null,false);
@@ -266,6 +270,11 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
         }else if (id == R.id.tv_add){
             Bundle bundle = new Bundle();
             bundle.putInt("type",0);
+            if (mFragmentViewPager.getCurrentItem()==0 && mMonthFragment!=null){
+                String time = Helper.date2String(new Date(),"HH:mm:ss");
+                String date = mMonthFragment.mSelectDate+" "+time;
+                bundle.putString("date",date);
+            }
             NavigationHelper.startActivity(MainActivity.this,ScheduleAddActivity.class,bundle,false);
         }else if (id == R.id.iv_refresh){
 

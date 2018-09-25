@@ -41,8 +41,8 @@ public class SectionMyAdapter extends BaseSectionQuickAdapter<ScheduleSection, B
     protected void convert(BaseViewHolder helper, ScheduleSection item) {
         ScheduleBean scheduleBean = item.t;
         TextView tvTitle = helper.getView(R.id.tv_title);
-        Drawable drawableLeft = mContext.getResources().getDrawable(
-                R.mipmap.ic_warn);
+        Drawable drawableLeft = scheduleBean.getImportant()==1?mContext.getResources().getDrawable(
+                R.mipmap.ic_warn):mContext.getResources().getDrawable(R.drawable.shape_circle_dot_blue);
         tvTitle.setCompoundDrawablesWithIntrinsicBounds(drawableLeft,
                 null, null, null);
         tvTitle.setText(scheduleBean.getTitle());

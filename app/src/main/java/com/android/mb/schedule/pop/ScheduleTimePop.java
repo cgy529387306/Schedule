@@ -132,14 +132,10 @@ public class ScheduleTimePop extends PopupWindow implements View.OnClickListener
         }
     };
 
-    /**
-     * @param type 0：开始时间  1：结束时间
-     */
-    public void setType(int type){
-        Calendar calendar = Calendar.getInstance();
-        if (type == 1){
-            calendar.add(Calendar.HOUR_OF_DAY,1);
+    public void setTime(Calendar calendar){
+        if(mDpDate!=null && mTpTime!=null && calendar!=null){
+            mDpDate.setCurrentTime(calendar);
+            mTpTime.setCurrentTime(calendar);
         }
-        mTpTime.setCurrentTime(calendar);
     }
 }

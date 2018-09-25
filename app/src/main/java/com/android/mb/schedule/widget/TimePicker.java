@@ -58,9 +58,9 @@ public class TimePicker extends LinearLayout{
 		hours.setAdapter(new StringWheelAdapter(hourList, 24));
 		hours.setVisibleItems(7);
 		hours.setCyclic(true);
-		hours.addChangingListener(onHoursChangedListener);		
-		addView(hours);		
-	
+		hours.addChangingListener(onHoursChangedListener);
+		addView(hours);
+
 		//分钟选择器
 		minute = new WheelView(context);
 		minute.setLayoutParams(new LayoutParams(80,LayoutParams.WRAP_CONTENT));
@@ -138,7 +138,7 @@ public class TimePicker extends LinearLayout{
 	}
 
 	public void setCurrentTime(Calendar calendar){
-		int hour = calendar.get(Calendar.HOUR_OF_DAY)+1;
+		int hour = calendar.get(Calendar.HOUR_OF_DAY);
 		int realHour = hour % 24;
 		if (hourList.size()>realHour && hours!=null){
 			hours.setCurrentItem(realHour);

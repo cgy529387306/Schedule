@@ -110,7 +110,7 @@ public class WheelView extends View {
 	 *  </br>
 	 * �ֺ�
 	 */
-	private static final int TEXT_SIZE = AppHelper.calDpi2px(16);
+	private static final int TEXT_SIZE = AppHelper.calDpi2px(14);
 
 	/** 
 	 * Top and bottom items offset (to hide that) 

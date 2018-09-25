@@ -183,7 +183,7 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
                 String shareStr = String.format(mContext.getString(R.string.relate_person), ProjectHelper.getSharePersonStr(detailData.getRelated()),detailData.getRelated().size());
                 mTvPersons.setText(shareStr);
             }
-//            mLinEdit.setVisibility(detailBean.getCreate_by() == CurrentUser.getInstance().getOffice_id()?View.VISIBLE:View.GONE);
+            mLinEdit.setVisibility(detailBean.getCreate_by() == CurrentUser.getInstance().getId()?View.VISIBLE:View.GONE);
         }
     }
 

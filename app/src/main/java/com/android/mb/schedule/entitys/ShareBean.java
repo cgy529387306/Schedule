@@ -12,6 +12,7 @@ public class ShareBean implements Serializable{
     private String time;
     private String create_date;
     private List<UserBean> share;
+    private int important;
 
     public long getId() {
         return id;
@@ -62,5 +63,13 @@ public class ShareBean implements Serializable{
 
     public void setShare(List<UserBean> share) {
         this.share = share;
+    }
+
+    public int getImportant() {
+        return important;
+    }
+
+    public void setImportant(int important) {
+        this.important = important;
     }
 }

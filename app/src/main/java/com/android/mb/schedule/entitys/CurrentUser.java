@@ -22,6 +22,7 @@ public class CurrentUser {
     private String token;
     private long expiretime;
     private long token_id;
+    private long id;
 
     public String getUsername() {
         return username;
@@ -107,6 +108,14 @@ public class CurrentUser {
         this.token_id = token_id;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     //region 单例
     private static final String TAG = CurrentUser.class.getSimpleName();
     private static final String USER = "CurrentUser";
@@ -144,8 +153,8 @@ public class CurrentUser {
             me.setOffice_id(entity.getOffice_id());
             me.setOffice_name(entity.getOffice_name());
             me.setAvatar(entity.getAvatar());
-
             if (isLogin){
+                me.setId(entity.getId());
                 me.setToken(entity.getToken());
                 me.setToken_id(entity.getToken_id());
                 me.setExpiretime(entity.getExpiretime());

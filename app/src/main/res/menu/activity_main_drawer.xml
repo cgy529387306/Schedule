@@ -9,10 +9,10 @@
             android:id="@+id/nav_other_share"
             android:icon="@mipmap/ic_other_share"
             android:title="他人分享" />
-        <item
-            android:id="@+id/nav_subordinate_log"
-            android:icon="@mipmap/ic_subordinate_schedule"
-            android:title="下属日程" />
+        <!--<item-->
+            <!--android:id="@+id/nav_subordinate_log"-->
+            <!--android:icon="@mipmap/ic_subordinate_schedule"-->
+            <!--android:title="下属日程" />-->
         <item
             android:id="@+id/nav_relatedme_log"
             android:icon="@mipmap/ic_my_schedule"

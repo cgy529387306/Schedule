@@ -23,8 +23,8 @@ public class ScheduleRelateAdapter extends BaseQuickAdapter<RelatedBean, BaseVie
     @Override
     protected void convert(BaseViewHolder helper, RelatedBean item) {
         TextView tvTitle = helper.getView(R.id.tv_title);
-        Drawable drawableLeft = mContext.getResources().getDrawable(
-                R.mipmap.ic_warn);
+        Drawable drawableLeft = item.getImportant()==1?mContext.getResources().getDrawable(
+                R.mipmap.ic_warn):mContext.getResources().getDrawable(R.drawable.shape_circle_dot_blue);
         tvTitle.setCompoundDrawablesWithIntrinsicBounds(drawableLeft,
                 null, null, null);
         tvTitle.setText(item.getTitle());

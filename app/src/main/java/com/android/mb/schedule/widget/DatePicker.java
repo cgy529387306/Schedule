@@ -27,6 +27,7 @@ public class DatePicker extends LinearLayout {
 	private DateObject dateObject;		//日期数据对象
 	private int day1;
 	private int year,month,day;
+	private Context mContext;
 	//Constructors
 	public DatePicker(Context context) {
 		super(context);
@@ -43,6 +44,8 @@ public class DatePicker extends LinearLayout {
 	 * @param context
 	 */
 	private void init(Context context){
+		mContext = context;
+		removeAllViews();
 		year = calendar.get(Calendar.YEAR);
 		month = calendar.get(Calendar.MONTH) + 1;
 		day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -197,5 +200,10 @@ public class DatePicker extends LinearLayout {
 			}
 		}
 		return day1;
+	}
+
+	public void setCurrentTime(Calendar calendar){
+		this.calendar = calendar;
+		init(mContext);
 	}
 }

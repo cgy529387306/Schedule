@@ -53,7 +53,7 @@ public class MonthFragment extends BaseMvpFragment<MonthPresenter,IMonthView> im
     private SectionMyAdapter mAdapter;
     private TextView mTvDate;
     private String mMonthDate;
-    private String mSelectDate;
+    public String mSelectDate;
     private List<ScheduleBean> mDataList = new ArrayList<>();
     private List<ScheduleData> mScheduleDataList = new ArrayList<>();
     private List<String> mSchemeList = new ArrayList<>();

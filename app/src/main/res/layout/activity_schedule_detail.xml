@@ -294,6 +294,7 @@
             android:id="@+id/lin_edit"
             android:layout_width="match_parent"
             android:layout_height="56dp"
+            android:visibility="gone"
             android:background="@color/white"
             android:orientation="horizontal">
             <TextView
