@@ -55,7 +55,14 @@ public class WeekFragment  extends BaseMvpFragment<WeekPresenter,IWeekView> impl
 
     @Override
     protected void processLogic() {
-        getWeekData(mCalendarView.getCurrentWeekCalendars());
+        if (Helper.isNotEmpty(mCalendarView.getCurrentWeekCalendars())){
+            String firstDay = mCalendarView.getCurrentWeekCalendars().get(0).toString();
+            Date firstDate = Helper.string2Date(firstDay,"yyyyMMdd");
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(firstDate);
+            mScheduleView.setFirstDay(calendar);
+            getWeekData(firstDate);
+        }
     }
 
     @Override
@@ -63,12 +70,13 @@ public class WeekFragment  extends BaseMvpFragment<WeekPresenter,IWeekView> impl
         mScheduleView.setOnEventAddClickListener(new ScheduleView.OnEventAddClickListener() {
             @Override
             public void onEventAddClicked(Calendar time) {
-                Bundle bundle = new Bundle();
-                bundle.putInt("type",0);
-                if (Helper.isNotEmpty(mClickTime)){
-                    bundle.putString("date",mClickTime);
-                }
-                NavigationHelper.startActivity(mContext,ScheduleAddActivity.class,bundle,false);
+                showToastMessage(Helper.date2String(time.getTime()));
+//                Bundle bundle = new Bundle();
+//                bundle.putInt("type",0);
+//                if (Helper.isNotEmpty(mClickTime)){
+//                    bundle.putString("date",mClickTime);
+//                }
+//                NavigationHelper.startActivity(mContext,ScheduleAddActivity.class,bundle,false);
             }
         });
         mScheduleView.setOnEventClickListener(new ScheduleView.OnEventClickListener() {
@@ -87,8 +95,14 @@ public class WeekFragment  extends BaseMvpFragment<WeekPresenter,IWeekView> impl
         mCalendarView.setOnWeekChangeListener(new CalendarView.OnWeekChangeListener() {
             @Override
             public void onWeekChange(List<com.haibin.calendarview.Calendar> weekCalendars) {
-
-                getWeekData(weekCalendars);
+                if (Helper.isNotEmpty(weekCalendars)){
+                    String firstDay = weekCalendars.get(0).toString();
+                    Date firstDate = Helper.string2Date(firstDay,"yyyyMMdd");
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(firstDate);
+                    mScheduleView.setFirstDay(calendar);
+                    getWeekData(firstDate);
+                }
             }
         });
     }
@@ -109,13 +123,14 @@ public class WeekFragment  extends BaseMvpFragment<WeekPresenter,IWeekView> impl
 
     }
 
-    private void getWeekData(List<com.haibin.calendarview.Calendar> weekCalendars){
-        if (Helper.isNotEmpty(weekCalendars)){
-            String firstDay = weekCalendars.get(0).toString();
-            mWeekDate = Helper.date2String(Helper.string2Date(firstDay,"yyyyMMdd"),"yyyy-MM-dd");
-            Map<String,Object> requestMap = new HashMap<>();
-            requestMap.put("date",mWeekDate);
-            mPresenter.getWeekSchedule(requestMap);
-        }
+    private void getWeekData(Date firstDate){
+        mWeekDate = Helper.date2String(firstDate,"yyyy-MM-dd");
+        Map<String,Object> requestMap = new HashMap<>();
+        requestMap.put("date",mWeekDate);
+        mPresenter.getWeekSchedule(requestMap);
+    }
+
+    private void addScheduleEvent(List<ScheduleData> scheduleDataList){
+
     }
 }

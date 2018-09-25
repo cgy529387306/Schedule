@@ -1416,8 +1416,10 @@ public class ScheduleView extends View {
 
 
     public interface OnEventAddClickListener {
-
         void onEventAddClicked(Calendar time);
     }
 
+    public void setFirstDay(Calendar firstDay) {
+        this.firstDay = firstDay;
+    }
 }
