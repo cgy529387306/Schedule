@@ -16,6 +16,7 @@ import com.android.mb.schedule.base.BaseMvpActivity;
 import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.entitys.CurrentUser;
 import com.android.mb.schedule.entitys.FileData;
+import com.android.mb.schedule.entitys.ScheduleDetailData;
 import com.android.mb.schedule.entitys.ScheduleRequest;
 import com.android.mb.schedule.entitys.UserBean;
 import com.android.mb.schedule.pop.ScheduleRemindPop;
@@ -80,13 +81,15 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
     private List<UserBean> mSharePersons = new ArrayList<>();
     private String mDateStr;
     private String mLocalKey;
+    private ScheduleDetailData mDetailData;
     @Override
     protected void loadIntent() {
         mLocalKey = "ScheduleRequest"+ CurrentUser.getInstance().getId();
         mType = getIntent().getIntExtra("type",0);
         mDateStr = getIntent().getStringExtra("date");
         if (mType==1){
-            mScheduleRequest = (ScheduleRequest) getIntent().getSerializableExtra("schedule");
+            mDetailData = (ScheduleDetailData) getIntent().getSerializableExtra("schedule");
+            mScheduleRequest = ProjectHelper.transBean(mDetailData);
         }else{
             String localStr = PreferencesHelper.getInstance().getString(mLocalKey);
             if (Helper.isNotEmpty(localStr)){
@@ -213,7 +216,9 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
             mTvRepeat.setText(ProjectHelper.getRepeatStr(mScheduleRequest.getRepeattype()));
             mTvWhenRemind.setText(ProjectHelper.getRemindStr(mScheduleRequest.getRemind()));
 
-//            mTvFileName.setText(mScheduleEndTimePop);
+            mRelatePersons = mDetailData.getRelated();
+            String relateStr = String.format(mContext.getString(R.string.relate_person), ProjectHelper.getSharePersonStr(mRelatePersons),mRelatePersons.size());
+            mTvPersons.setText(relateStr);
         }
     }
 
@@ -254,11 +259,9 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
             mIsAllDay = mIsAllDay==0?1:0;
             mIvAllDay.setImageResource(mIsAllDay==1?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
 
-            Calendar calendar = Calendar.getInstance();
-            calendar.add(calendar.DATE,1);
             mTvStartDate.setText(Helper.date2String(new Date(),mDateFormat));
             mTvStartTime.setText("00:00");
-            mTvEndDate.setText(Helper.date2String(calendar.getTime(),mDateFormat));
+            mTvEndDate.setText(Helper.date2String(new Date(),mDateFormat));
             mTvEndTime.setText("23:59");
         }else  if (id == R.id.iv_add_person){
             Bundle bundle = new Bundle();

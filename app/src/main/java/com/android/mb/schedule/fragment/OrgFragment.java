@@ -69,6 +69,7 @@ public class OrgFragment extends BaseFragment {
     }
 
     private void refreshData(){
+        mTreeNodes.clear();
         for (TreeBean treeBean:mDataList) {
             TreeNode<TreeBean> root = new TreeNode<>(treeBean);
             mTreeNodes.add(root);

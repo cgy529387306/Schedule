@@ -20,6 +20,7 @@ import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.rxbus.RxBus;
 import com.android.mb.schedule.utils.AppHelper;
 import com.android.mb.schedule.utils.KeyBoardUtils;
+import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.utils.StatusBarUtil;
 import com.android.mb.schedule.utils.ToastUtils;
 
@@ -157,6 +158,7 @@ public abstract class BaseActivity extends AppCompatActivity{
         @Override
         public void onClick(View v) {
             int id = v.getId();
+            ProjectHelper.disableViewDoubleClick(v);
             if (id == R.id.iv_back){
                 onLeftBack();
             }else if (id == R.id.iv_action){

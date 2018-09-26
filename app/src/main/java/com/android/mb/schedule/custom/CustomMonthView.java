@@ -137,11 +137,15 @@ public class CustomMonthView extends MonthView {
         if (calendar.isCurrentDay()){
             if (isSelected){
                 canvas.drawCircle(cx, cy, mRadius, mCurrentDayPaint);
-                onDrawScheme(canvas,calendar,x,y);
+                if (hasScheme){
+                    onDrawScheme(canvas,calendar,x,y);
+                }
             }else{
                 canvas.drawCircle(cx, cy, mRadius, mCurrentDayPaint);
                 canvas.drawCircle(cx, cy, mRadius-dipToPx(getContext(),1), mHollowCirclePaint);
-                onDrawScheme(canvas,calendar,x,y);
+                if (hasScheme){
+                    onDrawScheme(canvas,calendar,x,y);
+                }
             }
         }
 
@@ -166,12 +170,10 @@ public class CustomMonthView extends MonthView {
                     !TextUtils.isEmpty(calendar.getSolarTerm())  ? mSolarTermTextPaint : mSchemeLunarTextPaint);
         } else {
             canvas.drawText(String.valueOf(calendar.getDay()), cx, mTextBaseLine + top,
-                    calendar.isCurrentDay() ? mCurDayTextPaint :
                             calendar.isCurrentMonth() ? mCurMonthTextPaint : mOtherMonthTextPaint);
 
             boolean isSpecial = !TextUtils.isEmpty(calendar.getSolarTerm()) || !TextUtils.isEmpty(calendar.getGregorianFestival())|| !TextUtils.isEmpty(calendar.getGregorianFestival());
             canvas.drawText(calendar.getLunar(), cx, mTextBaseLine + y + mItemHeight / 10,
-                    calendar.isCurrentDay() ? mCurDayLunarTextPaint :
                             calendar.isCurrentMonth() ? isSpecial ? mSolarTermTextPaint  :
                                     mCurMonthLunarTextPaint : mOtherMonthLunarTextPaint);
         }

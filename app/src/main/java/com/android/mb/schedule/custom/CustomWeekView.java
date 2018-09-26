@@ -136,11 +136,15 @@ public class CustomWeekView extends WeekView {
         if (calendar.isCurrentDay()){
             if (isSelected){
                 canvas.drawCircle(cx, cy, mRadius, mCurrentDayPaint);
-                onDrawScheme(canvas,calendar,x);
+                if (hasScheme){
+                    onDrawScheme(canvas,calendar,x);
+                }
             }else{
                 canvas.drawCircle(cx, cy, mRadius, mCurrentDayPaint);
                 canvas.drawCircle(cx, cy, mRadius-dipToPx(getContext(),1), mHollowCirclePaint);
-                onDrawScheme(canvas,calendar,x);
+                if (hasScheme){
+                    onDrawScheme(canvas,calendar,x);
+                }
             }
         }
         //画标记
@@ -165,13 +169,10 @@ public class CustomWeekView extends WeekView {
                     !TextUtils.isEmpty(calendar.getSolarTerm()) ? mSolarTermTextPaint : mSchemeLunarTextPaint);
         } else {
             canvas.drawText(String.valueOf(calendar.getDay()), cx, mTextBaseLine + top,
-                    calendar.isCurrentDay() ? mCurDayTextPaint :
                             calendar.isCurrentMonth() ? mCurMonthTextPaint : mOtherMonthTextPaint);
             boolean isSpecial = !TextUtils.isEmpty(calendar.getSolarTerm()) || !TextUtils.isEmpty(calendar.getGregorianFestival())|| !TextUtils.isEmpty(calendar.getGregorianFestival());
             canvas.drawText(calendar.getLunar(), cx, mTextBaseLine + mItemHeight / 10,
-                    calendar.isCurrentDay() ? mCurDayLunarTextPaint :
-                            isSpecial ? mSolarTermTextPaint :
-                                    calendar.isCurrentMonth() ?
+                            isSpecial ? mSolarTermTextPaint : calendar.isCurrentMonth() ?
                                             mCurMonthLunarTextPaint : mOtherMonthLunarTextPaint);
         }
     }

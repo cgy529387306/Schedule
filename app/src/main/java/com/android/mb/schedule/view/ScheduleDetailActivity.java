@@ -140,7 +140,7 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
         }else if (id == R.id.tv_edit){
             Bundle bundle = new Bundle();
             bundle.putInt("type",1);
-            bundle.putSerializable("schedule",ProjectHelper.transBean(mDetailData));
+            bundle.putSerializable("schedule",mDetailData);
             NavigationHelper.startActivity(ScheduleDetailActivity.this,ScheduleAddActivity.class,bundle,false);
         }else if (id == R.id.tv_share){
             NavigationHelper.startActivityForResult(ScheduleDetailActivity.this,SelectPersonActivity.class,null,ProjectConstants.REQUEST_SELECT_PERSON);
