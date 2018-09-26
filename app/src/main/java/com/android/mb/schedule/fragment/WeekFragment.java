@@ -18,6 +18,7 @@ import com.android.mb.schedule.widget.ScheduleViewEvent;
 import com.haibin.calendarview.CalendarLayout;
 import com.haibin.calendarview.CalendarView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -121,5 +122,7 @@ public class WeekFragment  extends BaseMvpFragment<WeekPresenter,IWeekView> impl
         requestMap.put("date",mWeekDate);
         mPresenter.getWeekSchedule(requestMap);
     }
+    
+
 
 }

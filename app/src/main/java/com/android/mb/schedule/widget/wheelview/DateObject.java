@@ -24,8 +24,8 @@ public class DateObject extends Object{
 		this.month = month2;
 		this.day = day2;
 		this.week = week2 % 7 == 0 ? 7 : week2 % 7;
-		
-		if(day == Calendar.getInstance().get(Calendar.DAY_OF_MONTH)){
+		Calendar currentCal = Calendar.getInstance();
+		if(year2 == currentCal.get(Calendar.YEAR) && month2 == currentCal.get(Calendar.MONTH)+1 && day == currentCal.get(Calendar.DAY_OF_MONTH)){
 			this.listItem = String.format("%02d", this.month) +"月" + String.format("%02d", this.day)  + 
 					"日      "+ "  今天  ";
 		}else{

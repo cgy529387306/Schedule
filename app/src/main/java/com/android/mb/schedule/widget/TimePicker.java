@@ -7,6 +7,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
+import com.android.mb.schedule.utils.AppHelper;
 import com.android.mb.schedule.widget.wheelview.DateObject;
 import com.android.mb.schedule.widget.wheelview.OnWheelChangedListener;
 import com.android.mb.schedule.widget.wheelview.StringWheelAdapter;
@@ -63,7 +64,7 @@ public class TimePicker extends LinearLayout{
 
 		//分钟选择器
 		minute = new WheelView(context);
-		minute.setLayoutParams(new LayoutParams(80,LayoutParams.WRAP_CONTENT));
+		minute.setLayoutParams(new LayoutParams(AppHelper.calDpi2px(60),LayoutParams.WRAP_CONTENT));
 		minute.setAdapter(new StringWheelAdapter(minuteList,60));
 		minute.setVisibleItems(7);
 		minute.setCyclic(true);

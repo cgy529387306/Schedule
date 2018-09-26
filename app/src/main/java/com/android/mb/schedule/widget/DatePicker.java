@@ -7,6 +7,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
+import com.android.mb.schedule.utils.AppHelper;
 import com.android.mb.schedule.widget.wheelview.DateObject;
 import com.android.mb.schedule.widget.wheelview.OnWheelChangedListener;
 import com.android.mb.schedule.widget.wheelview.StringWheelAdapter;
@@ -23,7 +24,6 @@ public class DatePicker extends LinearLayout {
 	private WheelView newDays;
 	private ArrayList<DateObject> dateList ;
 	private OnChangeListener onChangeListener; //onChangeListener
-	private final int MARGIN_RIGHT = 20;
 	private DateObject dateObject;		//日期数据对象
 	private int day1;
 	private int year,month,day;
@@ -71,8 +71,8 @@ public class DatePicker extends LinearLayout {
 			dateList.add(dateObject);
 		}
 		newDays = new WheelView(context);
-		LayoutParams newDays_param = new LayoutParams(300,LayoutParams.WRAP_CONTENT);
-		newDays_param.setMargins(0, 0, MARGIN_RIGHT, 0);
+		LayoutParams newDays_param = new LayoutParams(AppHelper.calDpi2px(140),LayoutParams.WRAP_CONTENT);
+		newDays_param.setMargins(0, 0, 0, 0);
 		newDays.setLayoutParams(newDays_param);
 		newDays.setAdapter(new StringWheelAdapter(dateList, 7));
 		newDays.setVisibleItems(7);
