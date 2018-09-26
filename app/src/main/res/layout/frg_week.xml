@@ -14,12 +14,12 @@
         app:default_status="shrink"
         app:calendar_show_mode="only_week_view"
         app:calendar_content_view_id="@+id/fl_scheduleView">
-
         <com.haibin.calendarview.CalendarView
             android:id="@+id/calendarView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:background="#fff"
             app:calendar_padding="10dp"
             app:current_month_text_color="#333333"
@@ -47,8 +47,8 @@
             <com.android.mb.schedule.widget.ScheduleView
                 android:id="@+id/scheduleView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingRight="10dp"
+                android:layout_height="match_parent"
+                android:background="#ffffff"
                 app:addBgColor="#dff4ff"
                 app:addTextColor="#47a1f6"
                 app:addTextSize="26sp"

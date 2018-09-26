@@ -28,9 +28,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.OverScroller;
 
-
 import com.android.mb.schedule.R;
-import com.android.mb.schedule.utils.AppHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -39,7 +37,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @创建人 cgy
+ * @创建人 weishukai
  * @创建时间 18/2/1 下午2:55
  * @类描述 一句话说明这个类是干什么的
  */
@@ -517,7 +515,7 @@ public class ScheduleView extends View {
         hourTextPaint.setTextSize(hourTextSize);
         hourTextPaint.setColor(hourTextColor);
         hourTextPaint.setTextAlign(Paint.Align.CENTER);
-        hourTextWidth = AppHelper.calDpi2px(32);
+        hourTextWidth = hourTextPaint.measureText("000时");
         hourTextAmPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         hourTextAmPaint.setTextAlign(Paint.Align.CENTER);
         hourTextAmPaint.setTextSize(hourTextSize);
@@ -589,7 +587,7 @@ public class ScheduleView extends View {
         if (columnNumber == 1) {
             columnWidth = getWidth() - hourTextWidth - lineSize;
         } else {
-            columnWidth = (getWidth() -  hourTextWidth - (columnNumber + 1) * lineSize) / columnNumber;
+            columnWidth = (getWidth() - 2 * hourTextWidth - (columnNumber + 1) * lineSize) / columnNumber;
         }
 
         /**
@@ -701,8 +699,7 @@ public class ScheduleView extends View {
              * 同理，只画屏幕内显示的
              */
             if (y <= getHeight() + hourTextSize && y >= minAllDayEventShowHeight() - hourTextSize) {
-                String hourText = i<10?"0"+i:String.valueOf(i);
-                canvas.drawText(hourText+":00", (float) (hourTextWidth * 0.8) / 2, y+AppHelper.calDpi2px(30), hourTextPaint);
+                canvas.drawText("" + i + ":00", (float) (hourTextWidth * 0.8) / 2, y, hourTextPaint);
             }
 
             // canvas.drawText("时", mHourTextWidth / 2, top + 2 * mHourTextSize
@@ -1416,10 +1413,12 @@ public class ScheduleView extends View {
 
 
     public interface OnEventAddClickListener {
+
         void onEventAddClicked(Calendar time);
     }
 
     public void setFirstDay(Calendar firstDay) {
         this.firstDay = firstDay;
     }
+
 }

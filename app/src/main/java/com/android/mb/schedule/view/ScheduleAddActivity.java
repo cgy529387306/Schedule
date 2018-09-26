@@ -110,6 +110,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
     @Override
     protected void onRightAction() {
         super.onRightAction();
+        AppHelper.hideSoftInputFromWindow(mEdtScheduleName);
         String name = mEdtScheduleName.getText().toString().trim();
         String content = mEdtScheduleContent.getText().toString().trim();
         String address = mTvAddress.getText().toString().trim();

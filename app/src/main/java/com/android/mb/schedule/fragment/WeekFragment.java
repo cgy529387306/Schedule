@@ -1,29 +1,20 @@
 package com.android.mb.schedule.fragment;
 
 import android.graphics.RectF;
-import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import com.android.mb.schedule.R;
-import com.android.mb.schedule.app.MBApplication;
-import com.android.mb.schedule.base.BaseFragment;
 import com.android.mb.schedule.base.BaseMvpFragment;
 import com.android.mb.schedule.entitys.ScheduleData;
-import com.android.mb.schedule.presenter.MonthPresenter;
 import com.android.mb.schedule.presenter.WeekPresenter;
 import com.android.mb.schedule.utils.Helper;
-import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.view.MainActivity;
-import com.android.mb.schedule.view.ScheduleAddActivity;
-import com.android.mb.schedule.view.interfaces.IMonthView;
 import com.android.mb.schedule.view.interfaces.IWeekView;
 import com.android.mb.schedule.widget.ScheduleView;
 import com.android.mb.schedule.widget.ScheduleViewEvent;
 import com.haibin.calendarview.CalendarLayout;
 import com.haibin.calendarview.CalendarView;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -120,7 +111,6 @@ public class WeekFragment  extends BaseMvpFragment<WeekPresenter,IWeekView> impl
 
     @Override
     public void getSuccess(List<ScheduleData> result) {
-
     }
 
     private void getWeekData(Date firstDate){
@@ -130,7 +120,4 @@ public class WeekFragment  extends BaseMvpFragment<WeekPresenter,IWeekView> impl
         mPresenter.getWeekSchedule(requestMap);
     }
 
-    private void addScheduleEvent(List<ScheduleData> scheduleDataList){
-
-    }
 }
