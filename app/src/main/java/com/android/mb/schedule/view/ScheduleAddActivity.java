@@ -327,10 +327,11 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
 
     private void initDate(){
         Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.HOUR_OF_DAY,1);
         if (Helper.isNotEmpty(mDateStr)){
             calendar.setTime(Helper.string2Date(mDateStr));
         }
-        int hour = calendar.get(Calendar.HOUR_OF_DAY)+1;
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
         String hourStr = hour<10?("0"+hour):""+hour;
         mTvStartDate.setText(Helper.date2String(calendar.getTime(),mDateFormat));
         mTvStartTime.setText(String.format("%s:%s", hourStr, "00"));
@@ -339,7 +340,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
 
 
         calendar.add(Calendar.HOUR_OF_DAY,1);
-        int endHour = calendar.get(Calendar.HOUR_OF_DAY)+1;
+        int endHour = calendar.get(Calendar.HOUR_OF_DAY);
         String endHourStr = endHour<10?("0"+endHour):""+endHour;
         mTvEndDate.setText(Helper.date2String(calendar.getTime(),mDateFormat));
         mTvEndTime.setText(String.format("%s:%s", endHourStr, "00"));

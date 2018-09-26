@@ -1,6 +1,7 @@
 package com.android.mb.schedule.fragment;
 
 import android.graphics.RectF;
+import android.os.Bundle;
 import android.view.View;
 
 import com.android.mb.schedule.R;
@@ -8,7 +9,9 @@ import com.android.mb.schedule.base.BaseMvpFragment;
 import com.android.mb.schedule.entitys.ScheduleData;
 import com.android.mb.schedule.presenter.WeekPresenter;
 import com.android.mb.schedule.utils.Helper;
+import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.view.MainActivity;
+import com.android.mb.schedule.view.ScheduleAddActivity;
 import com.android.mb.schedule.view.interfaces.IWeekView;
 import com.android.mb.schedule.widget.ScheduleView;
 import com.android.mb.schedule.widget.ScheduleViewEvent;
@@ -31,7 +34,6 @@ public class WeekFragment  extends BaseMvpFragment<WeekPresenter,IWeekView> impl
     private CalendarView mCalendarView;
     private ScheduleView mScheduleView;
     private String mWeekDate;
-    private String mClickTime;
     @Override
     protected int getLayoutId() {
         return R.layout.frg_week;
@@ -61,13 +63,13 @@ public class WeekFragment  extends BaseMvpFragment<WeekPresenter,IWeekView> impl
         mScheduleView.setOnEventAddClickListener(new ScheduleView.OnEventAddClickListener() {
             @Override
             public void onEventAddClicked(Calendar time) {
-                showToastMessage(Helper.date2String(time.getTime()));
-//                Bundle bundle = new Bundle();
-//                bundle.putInt("type",0);
-//                if (Helper.isNotEmpty(mClickTime)){
-//                    bundle.putString("date",mClickTime);
-//                }
-//                NavigationHelper.startActivity(mContext,ScheduleAddActivity.class,bundle,false);
+                String date = Helper.date2String(time.getTime());
+                Bundle bundle = new Bundle();
+                bundle.putInt("type",0);
+                if (Helper.isNotEmpty(date)){
+                    bundle.putString("date",date);
+                }
+                NavigationHelper.startActivity(mContext,ScheduleAddActivity.class,bundle,false);
             }
         });
         mScheduleView.setOnEventClickListener(new ScheduleView.OnEventClickListener() {
