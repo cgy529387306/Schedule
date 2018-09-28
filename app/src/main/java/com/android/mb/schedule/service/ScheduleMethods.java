@@ -3,6 +3,7 @@ package com.android.mb.schedule.service;
 import com.android.mb.schedule.entitys.CurrentUser;
 import com.android.mb.schedule.entitys.FileData;
 import com.android.mb.schedule.entitys.LoginData;
+import com.android.mb.schedule.entitys.MyScheduleBean;
 import com.android.mb.schedule.entitys.RelatedBean;
 import com.android.mb.schedule.entitys.ScheduleData;
 import com.android.mb.schedule.entitys.ScheduleDetailData;
@@ -245,6 +246,16 @@ public class ScheduleMethods extends BaseHttp {
         return getService().getRelated(requestMap)
                 .compose(CacheTransformer.emptyTransformer())
                 .map(new HttpCacheResultFunc<List<RelatedBean>>());
+    }
+
+    public Observable getMine(Map<String, Object> requestMap){
+        if (CurrentUser.getInstance().isLogin()){
+            requestMap.put("token_id",CurrentUser.getInstance().getToken_id());
+            requestMap.put("token",CurrentUser.getInstance().getToken());
+        }
+        return getService().getMine(requestMap)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<List<MyScheduleBean>>());
     }
 
     public Observable getAreaList(){

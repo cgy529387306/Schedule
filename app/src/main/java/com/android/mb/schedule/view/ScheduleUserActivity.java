@@ -12,12 +12,16 @@ import android.widget.Toast;
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.adapter.SectionAdapter;
 import com.android.mb.schedule.base.BaseMvpActivity;
+import com.android.mb.schedule.entitys.MyScheduleBean;
+import com.android.mb.schedule.entitys.RelatedBean;
 import com.android.mb.schedule.entitys.ScheduleSection;
 import com.android.mb.schedule.entitys.ScheduleBean;
 import com.android.mb.schedule.entitys.ScheduleData;
+import com.android.mb.schedule.presenter.MinePresenter;
 import com.android.mb.schedule.presenter.WeekPresenter;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.NavigationHelper;
+import com.android.mb.schedule.view.interfaces.IMineView;
 import com.android.mb.schedule.view.interfaces.IWeekView;
 import com.android.mb.schedule.widget.MyDividerItemDecoration;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -33,7 +37,7 @@ import java.util.Map;
  * Created by cgy on 2018\8\20 0020.
  */
 
-public class ScheduleUserActivity extends BaseMvpActivity<WeekPresenter,IWeekView> implements IWeekView,
+public class ScheduleUserActivity extends BaseMvpActivity<MinePresenter,IMineView> implements IMineView,
         View.OnClickListener,SwipeRefreshLayout.OnRefreshListener,BaseQuickAdapter.RequestLoadMoreListener,BaseQuickAdapter.OnItemClickListener{
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
@@ -78,8 +82,9 @@ public class ScheduleUserActivity extends BaseMvpActivity<WeekPresenter,IWeekVie
 
     private void getListFormServer(){
         Map<String,Object> requestMap = new HashMap<>();
-        requestMap.put("date",Helper.date2String(mCurCalendar.getTime(),"yyyy-MM-dd"));
-        mPresenter.getWeekSchedule(requestMap);
+        requestMap.put("type",1);
+        requestMap.put("page",1);
+        mPresenter.getMine(requestMap);
     }
 
     @Override
@@ -113,8 +118,8 @@ public class ScheduleUserActivity extends BaseMvpActivity<WeekPresenter,IWeekVie
 
 
     @Override
-    protected WeekPresenter createPresenter() {
-        return new WeekPresenter();
+    protected MinePresenter createPresenter() {
+        return new MinePresenter();
     }
 
     @Override
@@ -137,24 +142,6 @@ public class ScheduleUserActivity extends BaseMvpActivity<WeekPresenter,IWeekVie
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
     }
 
-    @Override
-    public void getSuccess(List<ScheduleData> result) {
-        if (result!=null){
-            if (mIsFirst){
-                //首页
-                mSwipeRefreshLayout.setRefreshing(false);
-                mAdapter.setNewData(getSectionData(result));
-                mAdapter.setEmptyView(R.layout.empty_schedule, (ViewGroup) mRecyclerView.getParent());
-            }else{
-                if (Helper.isEmpty(result)){
-                    mAdapter.loadMoreEnd();
-                }else{
-                    mAdapter.addData(getSectionData(result));
-                    mAdapter.loadMoreComplete();
-                }
-            }
-        }
-    }
 
     public static List<ScheduleSection> getSectionData(List<ScheduleData> dataList) {
         List<ScheduleSection> list = new ArrayList<>();
@@ -165,5 +152,24 @@ public class ScheduleUserActivity extends BaseMvpActivity<WeekPresenter,IWeekVie
             }
         }
         return list;
+    }
+
+    @Override
+    public void getSuccess(List<MyScheduleBean> result) {
+//        if (result!=null){
+//            if (mIsFirst){
+//                //首页
+//                mSwipeRefreshLayout.setRefreshing(false);
+//                mAdapter.setNewData(getSectionData(result));
+//                mAdapter.setEmptyView(R.layout.empty_schedule, (ViewGroup) mRecyclerView.getParent());
+//            }else{
+//                if (Helper.isEmpty(result)){
+//                    mAdapter.loadMoreEnd();
+//                }else{
+//                    mAdapter.addData(getSectionData(result));
+//                    mAdapter.loadMoreComplete();
+//                }
+//            }
+//        }
     }
 }

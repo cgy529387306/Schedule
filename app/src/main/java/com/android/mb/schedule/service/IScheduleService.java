@@ -2,6 +2,7 @@ package com.android.mb.schedule.service;
 
 import com.android.mb.schedule.entitys.FileData;
 import com.android.mb.schedule.entitys.LoginData;
+import com.android.mb.schedule.entitys.MyScheduleBean;
 import com.android.mb.schedule.entitys.RelatedBean;
 import com.android.mb.schedule.entitys.ScheduleData;
 import com.android.mb.schedule.entitys.ScheduleDetailData;
@@ -105,6 +106,9 @@ public interface IScheduleService {
     @FormUrlEncoded
     Observable<HttpResult<List<RelatedBean>>> getRelated(@FieldMap Map<String,Object> requestMap);
 
+    @POST("/app/schedule/mine")
+    @FormUrlEncoded
+    Observable<HttpResult<List<MyScheduleBean>>> getMine(@FieldMap Map<String,Object> requestMap);
 
     @POST("/app/common/area")
     @FormUrlEncoded
