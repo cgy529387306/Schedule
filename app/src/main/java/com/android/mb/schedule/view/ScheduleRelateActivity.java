@@ -11,8 +11,10 @@ import android.view.ViewGroup;
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.adapter.ScheduleRelateAdapter;
 import com.android.mb.schedule.base.BaseMvpActivity;
+import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.entitys.RelatedBean;
 import com.android.mb.schedule.presenter.RelatedPresenter;
+import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.view.interfaces.IRelatedView;
@@ -22,6 +24,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import rx.functions.Action1;
 
 /**
  * 与我相关的日程
@@ -74,6 +78,13 @@ public class ScheduleRelateActivity extends BaseMvpActivity<RelatedPresenter,IRe
 
     @Override
     protected void setListener() {
+        regiestEvent(ProjectConstants.EVENT_UPDATE_SCHEDULE_LIST, new Action1<Events<?>>() {
+            @Override
+            public void call(Events<?> events) {
+                mCurrentPage = 1;
+                getListFormServer();
+            }
+        });
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mAdapter.setOnItemClickListener(this);
         mAdapter.setOnLoadMoreListener(this);

@@ -26,9 +26,10 @@ import java.util.List;
 /**
  * 一些日期辅助计算工具
  */
-final class CalendarUtil {
+public final class CalendarUtil {
 
     private static final long ONE_DAY = 1000 * 3600 * 24;
+    public static Calendar mLastCalendar = new Calendar();
 
     @SuppressLint("SimpleDateFormat")
     static int getDate(String formatStr, Date date) {
@@ -806,6 +807,8 @@ final class CalendarUtil {
     }
 
 
+
+
     /**
      * 从月视图切换获得第一天的日期
      *
@@ -817,7 +820,7 @@ final class CalendarUtil {
         Calendar calendar = new Calendar();
         calendar.setYear((position + delegate.getMinYearMonth() - 1) / 12 + delegate.getMinYear());
         calendar.setMonth((position + delegate.getMinYearMonth() - 1) % 12 + 1);
-        calendar.setDay(1);
+        calendar.setDay(getLastSelectDay(calendar));
         if (!isCalendarInRange(calendar, delegate)) {
             if (isMinRangeEdge(calendar, delegate)) {
                 calendar = delegate.getMinRangeCalendar();
@@ -831,6 +834,18 @@ final class CalendarUtil {
         LunarCalendar.setupLunarCalendar(calendar);
         return calendar;
     }
+
+    static int getLastSelectDay(Calendar calendar){
+        int lastDay;
+        if (mLastCalendar==null){
+            lastDay=1;
+        }else{
+            lastDay = Math.min(mLastCalendar.getDay(),getMonthDaysCount(calendar.getYear(),calendar.getMonth()));
+        }
+        return lastDay;
+    }
+
+
 
 
     /**

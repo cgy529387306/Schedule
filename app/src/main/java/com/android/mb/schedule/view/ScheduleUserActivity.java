@@ -10,8 +10,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.android.mb.schedule.R;
+import com.android.mb.schedule.adapter.ScheduleMineAdapter;
 import com.android.mb.schedule.adapter.SectionAdapter;
 import com.android.mb.schedule.base.BaseMvpActivity;
+import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.entitys.MyScheduleBean;
 import com.android.mb.schedule.entitys.RelatedBean;
 import com.android.mb.schedule.entitys.ScheduleSection;
@@ -19,6 +21,7 @@ import com.android.mb.schedule.entitys.ScheduleBean;
 import com.android.mb.schedule.entitys.ScheduleData;
 import com.android.mb.schedule.presenter.MinePresenter;
 import com.android.mb.schedule.presenter.WeekPresenter;
+import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.view.interfaces.IMineView;
@@ -32,6 +35,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import rx.functions.Action1;
+
 /**
  * 我（或者他人）的日程
  * Created by cgy on 2018\8\20 0020.
@@ -41,9 +46,8 @@ public class ScheduleUserActivity extends BaseMvpActivity<MinePresenter,IMineVie
         View.OnClickListener,SwipeRefreshLayout.OnRefreshListener,BaseQuickAdapter.RequestLoadMoreListener,BaseQuickAdapter.OnItemClickListener{
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
-    private SectionAdapter mAdapter;
-    private Calendar mCurCalendar;
-    private boolean mIsFirst = true;
+    private ScheduleMineAdapter mAdapter;
+    private int mCurrentPage = 1;
     @Override
     protected void loadIntent() {
 
@@ -57,20 +61,24 @@ public class ScheduleUserActivity extends BaseMvpActivity<MinePresenter,IMineVie
     @Override
     protected void initTitle() {
         setTitleText("我的日程");
+        setRightText("历史日程");
+    }
+
+    @Override
+    protected void onRightAction() {
+        super.onRightAction();
+        NavigationHelper.startActivity(ScheduleUserActivity.this,ScheduleUserHistoryActivity.class,null,false);
     }
 
     @Override
     protected void bindViews() {
-        mCurCalendar = (Calendar) Calendar.getInstance().clone();
-        mCurCalendar.set(Calendar.DAY_OF_WEEK, 1);
-        mCurCalendar.getTime();
         mSwipeRefreshLayout = findViewById(R.id.swipeLayout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent,R.color.colorPrimaryDark);
         mRecyclerView =  findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.addItemDecoration(new MyDividerItemDecoration(mContext, LinearLayoutManager.VERTICAL));
-        mAdapter = new SectionAdapter(R.layout.item_section_content,R.layout.item_section_head,new ArrayList());
+        mAdapter = new ScheduleMineAdapter(R.layout.item_schedule_mine,new ArrayList());
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -83,26 +91,22 @@ public class ScheduleUserActivity extends BaseMvpActivity<MinePresenter,IMineVie
     private void getListFormServer(){
         Map<String,Object> requestMap = new HashMap<>();
         requestMap.put("type",1);
-        requestMap.put("page",1);
+        requestMap.put("page",mCurrentPage);
         mPresenter.getMine(requestMap);
     }
 
     @Override
     protected void setListener() {
+        regiestEvent(ProjectConstants.EVENT_UPDATE_SCHEDULE_LIST, new Action1<Events<?>>() {
+            @Override
+            public void call(Events<?> events) {
+                mCurrentPage = 1;
+                getListFormServer();
+            }
+        });
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mAdapter.setOnItemClickListener(this);
         mAdapter.setOnLoadMoreListener(this);
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                ScheduleSection mySection = mAdapter.getItem(position);
-                if (!mySection.isHeader){
-                    Bundle bundle = new Bundle();
-                    bundle.putLong("id",mySection.t.getId());
-                    NavigationHelper.startActivity(ScheduleUserActivity.this,ScheduleDetailActivity.class,bundle,false);
-                }
-            }
-        });
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
@@ -124,52 +128,45 @@ public class ScheduleUserActivity extends BaseMvpActivity<MinePresenter,IMineVie
 
     @Override
     public void onRefresh() {
-        mIsFirst = true;
-        mCurCalendar = (Calendar) Calendar.getInstance().clone();
-        mCurCalendar.set(Calendar.DAY_OF_WEEK, 1);
-        mCurCalendar.getTime();
+        mCurrentPage = 1;
         getListFormServer();
     }
 
     @Override
     public void onLoadMoreRequested() {
-        mCurCalendar = Calendar.getInstance();
-        mCurCalendar.add(Calendar.DATE, - 7);
+        mCurrentPage++;
         getListFormServer();
     }
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-    }
-
-
-    public static List<ScheduleSection> getSectionData(List<ScheduleData> dataList) {
-        List<ScheduleSection> list = new ArrayList<>();
-        for (ScheduleData scheduleData:dataList) {
-            list.add(new ScheduleSection(true, scheduleData.getDate()));
-            for (ScheduleBean scheduleBean:scheduleData.getList()){
-                list.add(new ScheduleSection(scheduleBean));
-            }
+        if (mAdapter.getItem(position)!=null){
+            Bundle bundle = new Bundle();
+            bundle.putLong("id",mAdapter.getItem(position).getId());
+            NavigationHelper.startActivity(ScheduleUserActivity.this,ScheduleDetailActivity.class,bundle,false);
         }
-        return list;
     }
+
+
 
     @Override
     public void getSuccess(List<MyScheduleBean> result) {
-//        if (result!=null){
-//            if (mIsFirst){
-//                //首页
-//                mSwipeRefreshLayout.setRefreshing(false);
-//                mAdapter.setNewData(getSectionData(result));
-//                mAdapter.setEmptyView(R.layout.empty_schedule, (ViewGroup) mRecyclerView.getParent());
-//            }else{
-//                if (Helper.isEmpty(result)){
-//                    mAdapter.loadMoreEnd();
-//                }else{
-//                    mAdapter.addData(getSectionData(result));
-//                    mAdapter.loadMoreComplete();
-//                }
-//            }
-//        }
+        if (result!=null){
+            if (mCurrentPage == 1){
+                //首页
+                mSwipeRefreshLayout.setRefreshing(false);
+                mAdapter.setNewData(result);
+                mAdapter.setEmptyView(R.layout.empty_schedule, (ViewGroup) mRecyclerView.getParent());
+            }else{
+                if (Helper.isEmpty(result)){
+                    mAdapter.loadMoreEnd();
+                }else{
+                    mAdapter.addData(result);
+                    mAdapter.loadMoreComplete();
+                }
+            }
+        }
     }
+
+
 }

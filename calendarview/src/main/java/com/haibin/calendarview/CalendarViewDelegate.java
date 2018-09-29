@@ -316,6 +316,7 @@ final class CalendarViewDelegate {
      */
     Calendar mIndexCalendar;
 
+
     CalendarViewDelegate(Context context, @Nullable AttributeSet attrs) {
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.CalendarView);
 

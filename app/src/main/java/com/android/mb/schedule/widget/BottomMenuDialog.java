@@ -143,7 +143,7 @@ public class BottomMenuDialog extends Dialog {
                 bbm.setPadding(0, spacing, 0, spacing);
                 bbm.setGravity(Gravity.CENTER);
                 bbm.setText(bottomMenu.funName);
-                bbm.setTextColor(0xFF007AFF);
+                bbm.setTextColor(0xff2aaeff);
                 bbm.setTextSize(19);
                 bbm.setOnClickListener(bottomMenu.listener);
                 layContainer.addView(bbm);

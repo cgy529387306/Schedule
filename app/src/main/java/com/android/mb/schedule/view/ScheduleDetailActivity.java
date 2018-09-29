@@ -200,11 +200,11 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
             mProgressDialog.setIndeterminate(false);//是否精确显示对话框，flase为是，反之为否
             mProgressDialog.show();
             DownloadHelper.getInstance()
-                    .downloadFile(fileBean.getUrl(), Environment.getExternalStorageDirectory() + File.separator + "/file", fileBean.getFilename(),
+                    .downloadFile(fileBean.getUrl(), Environment.getExternalStorageDirectory() + File.separator + "/Schedule", fileBean.getFilename(),
                             new FileDownloadCallback<File>() {
                                 @Override
                                 public void onDownLoadSuccess(File file) {
-                                    showToastMessage("下载完成");
+                                    showToastMessage("下载完成,请到sdcard Schedule文件夹下查看下载文件");
                                     mProgressDialog.dismiss();
                                 }
 

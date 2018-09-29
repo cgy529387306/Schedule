@@ -32,6 +32,7 @@ import com.android.mb.schedule.utils.NetworkHelper;
 import com.android.mb.schedule.utils.PreferencesHelper;
 import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.view.interfaces.IScheduleView;
+import com.android.mb.schedule.widget.BottomMenuDialog;
 
 import java.io.File;
 import java.io.Serializable;
@@ -82,6 +83,8 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
     private String mDateStr;
     private String mLocalKey;
     private ScheduleDetailData mDetailData;
+    private BottomMenuDialog mCheckDialog;
+    private boolean mIsRepeatChange;
     @Override
     protected void loadIntent() {
         mLocalKey = "ScheduleRequest"+ CurrentUser.getInstance().getId();
@@ -154,17 +157,16 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         mScheduleRequest.setRemind(mScheduleRemindPop.getType());
         mScheduleRequest.setRepeattype(mScheduleRepeatPop.getType());
         if (NetworkHelper.isNetworkAvailable(mContext)){
-            if (mType==1){
-                mPresenter.editSchedule(mScheduleRequest);
+            if (mIsRepeatChange){
+                checkRepeatChange();
             }else{
-                mPresenter.addSchedule(mScheduleRequest);
+                doRequest();
             }
+
         }else{
             showToastMessage("当前网络不可用，待网络连接后再保存日程");
             PreferencesHelper.getInstance().putString(mLocalKey, JsonHelper.toJson(mScheduleRequest));
         }
-
-
     }
 
     @Override
@@ -216,9 +218,16 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
             mTvRepeat.setText(ProjectHelper.getRepeatStr(mScheduleRequest.getRepeattype()));
             mTvWhenRemind.setText(ProjectHelper.getRemindStr(mScheduleRequest.getRemind()));
 
-            mRelatePersons = mDetailData.getRelated();
-            String relateStr = String.format(mContext.getString(R.string.relate_person), ProjectHelper.getSharePersonStr(mRelatePersons),mRelatePersons.size());
-            mTvPersons.setText(relateStr);
+            if (Helper.isNotEmpty(mDetailData.getRelated())){
+                mRelatePersons = mDetailData.getRelated();
+                String relateStr = String.format(mContext.getString(R.string.relate_person), ProjectHelper.getSharePersonStr(mRelatePersons),mRelatePersons.size());
+                mTvPersons.setText(relateStr);
+            }
+            if (Helper.isNotEmpty(mDetailData.getShare())){
+                mSharePersons = mDetailData.getShare();
+                String shareStr = String.format(mContext.getString(R.string.relate_person), ProjectHelper.getSharePersonStr(mSharePersons),mSharePersons.size());
+                mTvShare.setText(shareStr);
+            }
         }
     }
 
@@ -302,6 +311,9 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         mScheduleRepeatPop = new ScheduleRepeatPop(this, repeatType,new ScheduleRepeatPop.SelectListener() {
             @Override
             public void onSelected(int type) {
+                if (mType==1){
+                    mIsRepeatChange = type!=mScheduleRequest.getRemind();
+                }
                 mTvRepeat.setText(ProjectHelper.getRepeatStr(type));
             }
         });
@@ -424,6 +436,34 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
             mSharePersons = (List<UserBean>) data.getSerializableExtra("selectPerson");
             String shareStr = String.format(mContext.getString(R.string.relate_person), ProjectHelper.getSharePersonStr(mSharePersons),mSharePersons.size());
             mTvShare.setText(shareStr);
+        }
+    }
+
+    private void checkRepeatChange() {
+        if (mCheckDialog == null) {
+            mCheckDialog = new BottomMenuDialog.Builder(ScheduleAddActivity.this)
+                    .addMenu("更改所有重复的活动", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mCheckDialog.dismiss();
+                            doRequest();
+                        }
+                    }).addMenu("更改此活动和所有将来的活动", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mCheckDialog.dismiss();
+                            doRequest();
+                        }
+                    }).create();
+        }
+        mCheckDialog.show();
+    }
+
+    private void doRequest(){
+        if (mType==1){
+            mPresenter.editSchedule(mScheduleRequest);
+        }else{
+            mPresenter.addSchedule(mScheduleRequest);
         }
     }
 

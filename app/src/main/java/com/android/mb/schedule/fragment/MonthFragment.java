@@ -31,6 +31,7 @@ import com.android.mb.schedule.widget.MyDividerItemDecoration;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.haibin.calendarview.Calendar;
 import com.haibin.calendarview.CalendarLayout;
+import com.haibin.calendarview.CalendarUtil;
 import com.haibin.calendarview.CalendarView;
 
 import java.util.ArrayList;
@@ -152,6 +153,7 @@ public class MonthFragment extends BaseMvpFragment<MonthPresenter,IMonthView> im
 
             @Override
             public void onCalendarSelect(Calendar calendar, boolean isClick) {
+                CalendarUtil.mLastCalendar = calendar;
                 String dateStr = calendar.toString();
                 mSelectDate = Helper.date2String(Helper.string2Date(dateStr,"yyyyMMdd"),"yyyy-MM-dd");
                 java.util.Calendar calendar1 = java.util.Calendar.getInstance();

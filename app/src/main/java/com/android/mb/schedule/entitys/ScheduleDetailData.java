@@ -12,6 +12,7 @@ public class ScheduleDetailData implements Serializable{
     private ScheduleDetailBean info;
     private List<UserBean> related;
     private List<FileBean> file;
+    private List<UserBean> share;
 
     public ScheduleDetailBean getInfo() {
         return info;
@@ -30,6 +31,15 @@ public class ScheduleDetailData implements Serializable{
 
     public void setRelated(List<UserBean> related) {
         this.related = related;
+    }
+
+
+    public List<UserBean> getShare() {
+        return share;
+    }
+
+    public void setShare(List<UserBean> share) {
+        this.share = share;
     }
 
     public List<FileBean> getFile() {

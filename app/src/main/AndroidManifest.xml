@@ -57,6 +57,9 @@
             android:name=".view.ScheduleUserActivity"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".view.ScheduleUserHistoryActivity"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".view.SelectAddressActivity"
             android:screenOrientation="portrait"/>
         <activity
