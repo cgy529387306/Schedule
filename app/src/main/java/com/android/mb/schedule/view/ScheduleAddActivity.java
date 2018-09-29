@@ -85,6 +85,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
     private ScheduleDetailData mDetailData;
     private BottomMenuDialog mCheckDialog;
     private boolean mIsRepeatChange;
+    private String mBeginTime,mEndTime;
     @Override
     protected void loadIntent() {
         mLocalKey = "ScheduleRequest"+ CurrentUser.getInstance().getId();
@@ -267,10 +268,10 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         }else  if (id == R.id.iv_all_day){
             mIsAllDay = mIsAllDay==0?1:0;
             mIvAllDay.setImageResource(mIsAllDay==1?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
-
-            mTvStartDate.setText(Helper.date2String(new Date(),mDateFormat));
+            Date date = Helper.isNotEmpty(mDateStr)?Helper.string2Date(mDateStr):new Date();
+            mTvStartDate.setText(Helper.date2String(date,mDateFormat));
             mTvStartTime.setText("00:00");
-            mTvEndDate.setText(Helper.date2String(new Date(),mDateFormat));
+            mTvEndDate.setText(Helper.date2String(date,mDateFormat));
             mTvEndTime.setText("23:59");
         }else  if (id == R.id.iv_add_person){
             Bundle bundle = new Bundle();

@@ -12,6 +12,7 @@ import com.android.mb.schedule.base.BaseFragment;
 import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.entitys.UserBean;
 import com.android.mb.schedule.rxbus.Events;
+import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.view.SelectPersonActivity;
 import com.android.mb.schedule.widget.MyDividerItemDecoration;
@@ -67,12 +68,25 @@ public class PersonFragment extends BaseFragment {
                 userBean.setSelect(!userBean.isSelect());
                 mAdapter.setData(position,userBean);
                 if (userBean.isSelect()){
-                    SelectPersonActivity.mSelectList.add(userBean);
+                    if (!ProjectHelper.getSelectIdList().contains(userBean.getId())){
+                        SelectPersonActivity.mSelectList.add(userBean);
+                    }
                 }else{
-                    SelectPersonActivity.mSelectList.remove(userBean);
+                    removeSelect(userBean.getId());
                 }
             }
         });
+    }
+
+    private void removeSelect(long id){
+        if (Helper.isNotEmpty(SelectPersonActivity.mSelectList)){
+            for (UserBean userBean:SelectPersonActivity.mSelectList) {
+                if (id == userBean.getId()){
+                    SelectPersonActivity.mSelectList.remove(userBean);
+                    break;
+                }
+            }
+        }
     }
 
     public void setDataList(List<UserBean> list){

@@ -55,11 +55,21 @@ public class ScheduleTimePop extends PopupWindow implements View.OnClickListener
         setBackgroundDrawable(new BitmapDrawable());
         setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         initView();
+        initData();
         initListener();
     }
 
     private void initView() {
-        mCalendar = Calendar.getInstance();
+        mDpDate = mContentView.findViewById(R.id.dp_date);
+        mTpTime = mContentView.findViewById(R.id.tp_time);
+        mBtnConfirm = mContentView.findViewById(R.id.tv_confirm);
+        mBtnCancel = mContentView.findViewById(R.id.tv_cancel);
+    }
+
+    private void initData(){
+        if (mCalendar==null){
+            mCalendar = Calendar.getInstance();
+        }
         int year = mCalendar.get(Calendar.YEAR);
         int month = mCalendar.get(Calendar.MONTH) + 1;
         int day = mCalendar.get(Calendar.DAY_OF_MONTH);
@@ -74,12 +84,6 @@ public class ScheduleTimePop extends PopupWindow implements View.OnClickListener
 
         mSelectTime = hourStr + ":" + minuteStr;
         mSelectDate =  year+ "年" + monthStr + "月" +  dayStr + "日";
-        mDpDate = mContentView.findViewById(R.id.dp_date);
-        mTpTime = mContentView.findViewById(R.id.tp_time);
-        mBtnConfirm = mContentView.findViewById(R.id.tv_confirm);
-        mBtnCancel = mContentView.findViewById(R.id.tv_cancel);
-
-
     }
 
     private void initListener() {
@@ -110,6 +114,7 @@ public class ScheduleTimePop extends PopupWindow implements View.OnClickListener
             mSelectListener.onSelected(mSelectDate,mSelectTime);
             dismiss();
         }else if (id == R.id.tv_cancel){
+            setTime(mCalendar);
             dismiss();
         }
     }
@@ -134,6 +139,8 @@ public class ScheduleTimePop extends PopupWindow implements View.OnClickListener
 
     public void setTime(Calendar calendar){
         if(mDpDate!=null && mTpTime!=null && calendar!=null){
+            mCalendar = calendar;
+            initData();
             mDpDate.setCurrentTime(calendar);
             mTpTime.setCurrentTime(calendar);
         }
