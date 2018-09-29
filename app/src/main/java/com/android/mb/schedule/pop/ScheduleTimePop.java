@@ -114,7 +114,6 @@ public class ScheduleTimePop extends PopupWindow implements View.OnClickListener
             mSelectListener.onSelected(mSelectDate,mSelectTime);
             dismiss();
         }else if (id == R.id.tv_cancel){
-            setTime(mCalendar);
             dismiss();
         }
     }

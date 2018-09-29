@@ -297,10 +297,22 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
             mIvImport.setImageResource(mIsImport==1?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
         }else  if (id == R.id.lly_start_date){
             if(mScheduleStartTimePop != null){
+                if (Helper.isNotEmpty(mBeginTime)){
+                    Calendar calendar = Calendar.getInstance();
+                    Date date = Helper.string2Date(mBeginTime,mDateFormat+mTimeFormat);
+                    calendar.setTime(date);
+                    mScheduleStartTimePop.setTime(calendar);
+                }
                 mScheduleStartTimePop.showPopupWindow(view);
             }
         }else  if (id == R.id.lly_end_date){
             if(mScheduleEndTimePop != null){
+                if (Helper.isNotEmpty(mEndTime)){
+                    Calendar calendar = Calendar.getInstance();
+                    Date date = Helper.string2Date(mEndTime,mDateFormat+mTimeFormat);
+                    calendar.setTime(date);
+                    mScheduleEndTimePop.setTime(calendar);
+                }
                 mScheduleEndTimePop.showPopupWindow(view);
             }
         }
@@ -327,6 +339,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         mScheduleStartTimePop = new ScheduleTimePop(this, new ScheduleTimePop.SelectListener() {
             @Override
             public void onSelected(String selectDate, String selectTime) {
+                mBeginTime = selectDate+selectTime;
                 mTvStartDate.setText(selectDate);
                 mTvStartTime.setText(selectTime);
             }
@@ -335,6 +348,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         mScheduleEndTimePop = new ScheduleTimePop(this, new ScheduleTimePop.SelectListener() {
             @Override
             public void onSelected(String selectDate, String selectTime) {
+                mEndTime = selectDate+selectTime;
                 mTvEndDate.setText(selectDate);
                 mTvEndTime.setText(selectTime);
             }
@@ -349,15 +363,16 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         }
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         String hourStr = hour<10?("0"+hour):""+hour;
+        mBeginTime = Helper.date2String(calendar.getTime(),mDateFormat+mTimeFormat);
         mTvStartDate.setText(Helper.date2String(calendar.getTime(),mDateFormat));
         mTvStartTime.setText(String.format("%s:%s", hourStr, "00"));
         mScheduleStartTimePop.setTime(calendar);
 
 
-
         calendar.add(Calendar.HOUR_OF_DAY,1);
         int endHour = calendar.get(Calendar.HOUR_OF_DAY);
         String endHourStr = endHour<10?("0"+endHour):""+endHour;
+        mEndTime = Helper.date2String(calendar.getTime(),mDateFormat+mTimeFormat);
         mTvEndDate.setText(Helper.date2String(calendar.getTime(),mDateFormat));
         mTvEndTime.setText(String.format("%s:%s", endHourStr, "00"));
         mScheduleEndTimePop.setTime(calendar);
