@@ -471,12 +471,14 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
                         @Override
                         public void onClick(View v) {
                             mCheckDialog.dismiss();
+                            mScheduleRequest.setType(0);
                             doRequest();
                         }
                     }).addMenu("更改此活动和所有将来的活动", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             mCheckDialog.dismiss();
+                            mScheduleRequest.setType(1);
                             doRequest();
                         }
                     }).create();

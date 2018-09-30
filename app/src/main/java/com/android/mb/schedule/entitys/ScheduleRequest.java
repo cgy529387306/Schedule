@@ -43,6 +43,8 @@ public class ScheduleRequest implements Serializable{
 
     private long fid;
 
+    private int type;
+
 
     public long getId() {
         return id;
@@ -154,5 +156,13 @@ public class ScheduleRequest implements Serializable{
 
     public void setFid(long fid) {
         this.fid = fid;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }
