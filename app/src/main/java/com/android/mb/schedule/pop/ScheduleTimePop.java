@@ -32,6 +32,7 @@ public class ScheduleTimePop extends PopupWindow implements View.OnClickListener
     private TimePicker mTpTime;
     private TextView mBtnConfirm;
     private TextView mBtnCancel;
+    private boolean mIsAllDay;
 
     public void setSelectListener(SelectListener selectListener) {
         this.mSelectListener = selectListener;
@@ -55,6 +56,7 @@ public class ScheduleTimePop extends PopupWindow implements View.OnClickListener
         setBackgroundDrawable(new BitmapDrawable());
         setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         initView();
+        initViewStatus();
         initData();
         initListener();
     }
@@ -64,6 +66,10 @@ public class ScheduleTimePop extends PopupWindow implements View.OnClickListener
         mTpTime = mContentView.findViewById(R.id.tp_time);
         mBtnConfirm = mContentView.findViewById(R.id.tv_confirm);
         mBtnCancel = mContentView.findViewById(R.id.tv_cancel);
+    }
+
+    private void initViewStatus(){
+        mTpTime.setVisibility(mIsAllDay?View.GONE:View.VISIBLE);
     }
 
     private void initData(){
@@ -139,9 +145,15 @@ public class ScheduleTimePop extends PopupWindow implements View.OnClickListener
     public void setTime(Calendar calendar){
         if(mDpDate!=null && mTpTime!=null && calendar!=null){
             mCalendar = calendar;
+            initViewStatus();
             initData();
             mDpDate.setCurrentTime(calendar);
             mTpTime.setCurrentTime(calendar);
         }
+    }
+
+    public void setIsAllDay(boolean isAllDay){
+        mIsAllDay = isAllDay;
+        initViewStatus();
     }
 }

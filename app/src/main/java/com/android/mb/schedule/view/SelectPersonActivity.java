@@ -56,14 +56,10 @@ public class SelectPersonActivity extends BaseMvpActivity<PersonPresenter,IPerso
     @Override
     protected void onRightAction() {
         super.onRightAction();
-        if (Helper.isEmpty(mSelectList)){
-            showToastMessage("请选择人员");
-        }else{
-            Intent intent = new Intent();
-            intent.putExtra("selectPerson", (Serializable) mSelectList);
-            setResult(RESULT_OK,intent);
-            finish();
-        }
+        Intent intent = new Intent();
+        intent.putExtra("selectPerson", (Serializable) (mSelectList==null?new ArrayList<UserBean>():mSelectList));
+        setResult(RESULT_OK,intent);
+        finish();
     }
 
     @Override

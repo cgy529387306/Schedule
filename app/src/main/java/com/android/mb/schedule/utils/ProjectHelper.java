@@ -397,10 +397,10 @@ public class ProjectHelper {
     public static String getSharePersonStr(List<UserBean> userList){
         StringBuilder shareStr = new StringBuilder();
         if (Helper.isNotEmpty(userList)){
-            if (userList.size()>3){
-                for (int i=0;i<4;i++) {
+            if (userList.size()>2){
+                for (int i=0;i<3;i++) {
                     UserBean userBean = userList.get(i);
-                    if (i==3){
+                    if (i==2){
                         shareStr.append(userBean.getNickname());
                     }else{
                         shareStr.append(userBean.getNickname()).append(",");

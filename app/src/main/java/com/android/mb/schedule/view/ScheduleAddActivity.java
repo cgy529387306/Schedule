@@ -358,7 +358,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
     private void initDate(){
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.HOUR_OF_DAY,1);
-        if (Helper.isNotEmpty(mDateStr)){
+        if (Helper.isNotEmpty(mDateStr) && Helper.string2Date(mDateStr)!=null){
             calendar.setTime(Helper.string2Date(mDateStr));
         }
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -446,12 +446,21 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
             mTvAddress.setText(ProjectHelper.getCommonText(address));
         }else if (ProjectConstants.REQUEST_SELECT_PERSON == requestCode){
             mRelatePersons = (List<UserBean>) data.getSerializableExtra("selectPerson");
-            String relateStr = String.format(mContext.getString(R.string.relate_person), ProjectHelper.getSharePersonStr(mRelatePersons),mRelatePersons.size());
-            mTvPersons.setText(relateStr);
+            if (Helper.isEmpty(mRelatePersons)){
+                mTvPersons.setText("");
+            }else{
+                String relateStr = String.format(mContext.getString(R.string.relate_person), ProjectHelper.getSharePersonStr(mRelatePersons),mRelatePersons.size());
+                mTvPersons.setText(relateStr);
+            }
+
         }else if (ProjectConstants.REQUEST_SELECT_SHARE == requestCode){
             mSharePersons = (List<UserBean>) data.getSerializableExtra("selectPerson");
-            String shareStr = String.format(mContext.getString(R.string.relate_person), ProjectHelper.getSharePersonStr(mSharePersons),mSharePersons.size());
-            mTvShare.setText(shareStr);
+            if (Helper.isEmpty(mSharePersons)){
+                mTvShare.setText("");
+            }else{
+                String shareStr = String.format(mContext.getString(R.string.relate_person), ProjectHelper.getSharePersonStr(mSharePersons),mSharePersons.size());
+                mTvShare.setText(shareStr);
+            }
         }
     }
 

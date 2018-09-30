@@ -158,12 +158,13 @@ public abstract class BaseActivity extends AppCompatActivity{
         @Override
         public void onClick(View v) {
             int id = v.getId();
-            ProjectHelper.disableViewDoubleClick(v);
             if (id == R.id.iv_back){
                 onLeftBack();
             }else if (id == R.id.iv_action){
+                ProjectHelper.disableViewDoubleClick(v);
                 onRightAction();
             }else if (id == R.id.tv_action){
+                ProjectHelper.disableViewDoubleClick(v);
                 onRightAction();
             }
         }

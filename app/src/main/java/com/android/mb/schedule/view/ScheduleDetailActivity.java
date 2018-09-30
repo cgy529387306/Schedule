@@ -32,6 +32,7 @@ import com.android.mb.schedule.view.interfaces.IDetailView;
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,6 +58,7 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
     private TextView mTvFileName;//文件名称
     private TextView mTvDownDocument; // 点击下载文件
     private TextView mTvPersons; // 相关人员
+    private TextView mTvShares;//分享人员
     private TextView mTvWhenRemind; // 日程什么时候开始提醒
     private TextView mTvEdit;
     private TextView mTvShare;
@@ -99,6 +101,7 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
         mTvFileName = findViewById(R.id.tv_file_name);
         mTvDownDocument = findViewById(R.id.tv_download_document);
         mTvPersons = findViewById(R.id.tv_persons);
+        mTvShares = findViewById(R.id.tv_shares);
         mTvWhenRemind = findViewById(R.id.tv_when_remind);
         mTvUpdateTime = findViewById(R.id.tv_update_time);
         mTvEdit = findViewById(R.id.tv_edit);
@@ -183,7 +186,13 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
                 String shareStr = String.format(mContext.getString(R.string.relate_person), ProjectHelper.getSharePersonStr(detailData.getRelated()),detailData.getRelated().size());
                 mTvPersons.setText(shareStr);
             }
-            mLinEdit.setVisibility(detailBean.getCreate_by() == CurrentUser.getInstance().getId()?View.VISIBLE:View.GONE);
+            if (Helper.isNotEmpty(detailData.getRelated())){
+                String shareStr = String.format(mContext.getString(R.string.relate_person), ProjectHelper.getSharePersonStr(detailData.getShare()),detailData.getShare().size());
+                mTvShares.setText(shareStr);
+            }
+            long dif =(System.currentTimeMillis()/1000) - detailBean.getTime_s();
+            boolean isMore72 = dif>72*60*60;
+            mLinEdit.setVisibility(detailBean.getCreate_by() == CurrentUser.getInstance().getId() && !isMore72?View.VISIBLE:View.GONE);
         }
     }
 
@@ -242,6 +251,7 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
     @Override
     public void shareSuccess(Object result) {
         showToastMessage("分享成功");
+        getDetail();
     }
 
     @Override
