@@ -46,6 +46,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.1.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+    implementation 'com.contrarywind:Android-PickerView:4.1.6'
 
     // MD dialog
     implementation 'com.avast:android-styled-dialogs:2.3.3'
@@ -57,4 +58,5 @@ dependencies {
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.42'
 
     implementation project(':calendarview')
+
 }

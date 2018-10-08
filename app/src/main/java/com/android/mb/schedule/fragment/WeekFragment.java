@@ -1,11 +1,13 @@
 package com.android.mb.schedule.fragment;
 
+import android.graphics.Color;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.view.View;
 
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.base.BaseMvpFragment;
+import com.android.mb.schedule.entitys.ScheduleBean;
 import com.android.mb.schedule.entitys.ScheduleData;
 import com.android.mb.schedule.presenter.WeekPresenter;
 import com.android.mb.schedule.utils.Helper;
@@ -114,6 +116,9 @@ public class WeekFragment  extends BaseMvpFragment<WeekPresenter,IWeekView> impl
 
     @Override
     public void getSuccess(List<ScheduleData> result) {
+        if (Helper.isNotEmpty(result)){
+            setData(result);
+        }
     }
 
     private void getWeekData(Date firstDate){
@@ -121,6 +126,63 @@ public class WeekFragment  extends BaseMvpFragment<WeekPresenter,IWeekView> impl
         Map<String,Object> requestMap = new HashMap<>();
         requestMap.put("date",mWeekDate);
         mPresenter.getWeekSchedule(requestMap);
+        mScheduleView.setEvents(new ArrayList<ScheduleViewEvent>());
+    }
+
+    private void setData(List<ScheduleData> result){
+        List<ScheduleBean> scheduleEvents = new ArrayList<>();
+        List<ScheduleBean> allDayEvents = new ArrayList<>();
+        for (ScheduleData scheduleData:result){
+            for (ScheduleBean scheduleBean : scheduleData.getList()){
+                if (scheduleBean.getAllDay()==1){
+                    allDayEvents.add(scheduleBean);
+                }else{
+                    scheduleEvents.add(scheduleBean);
+                }
+            }
+        }
+        setEvent(scheduleEvents);
+        setAllDayEvents(allDayEvents);
+    }
+
+    private void setEvent(List<ScheduleBean> dataList){
+        List<ScheduleViewEvent> scheduleViewEvents = new ArrayList<>();
+        for (ScheduleBean scheduleBean:dataList) {
+            Calendar startCal = (Calendar) Calendar.getInstance().clone();
+            Calendar endCal = (Calendar) Calendar.getInstance().clone();
+            Date startDate = Helper.long2Date(scheduleBean.getTime_s()/1000);
+            Date endDate = Helper.long2Date(scheduleBean.getTime_e()/1000);
+            startCal.setTime(startDate);
+            endCal.setTime(endDate);
+            ScheduleViewEvent scheduleViewEvent = new ScheduleViewEvent();
+            scheduleViewEvent.setAllDayEvent(false);
+            scheduleViewEvent.setColor(Color.BLUE);
+            scheduleViewEvent.setContent(scheduleBean.getTitle());
+            scheduleViewEvent.setTextColor(Color.BLACK);
+            scheduleViewEvent.setStartTime(startCal);
+            scheduleViewEvent.setEndTime(endCal);
+        }
+        mScheduleView.setEvents(scheduleViewEvents);
+    }
+
+    private void setAllDayEvents(List<ScheduleBean> dataList){
+        List<ScheduleViewEvent> scheduleViewEvents = new ArrayList<>();
+        for (ScheduleBean scheduleBean:dataList) {
+            Calendar startCal = (Calendar) Calendar.getInstance().clone();
+            Calendar endCal = (Calendar) Calendar.getInstance().clone();
+            Date startDate = Helper.long2Date(scheduleBean.getTime_s()/1000);
+            Date endDate = Helper.long2Date(scheduleBean.getTime_e()/1000);
+            startCal.setTime(startDate);
+            endCal.setTime(endDate);
+            ScheduleViewEvent scheduleViewEvent = new ScheduleViewEvent();
+            scheduleViewEvent.setAllDayEvent(true);
+            scheduleViewEvent.setColor(Color.YELLOW);
+            scheduleViewEvent.setContent(scheduleBean.getTitle());
+            scheduleViewEvent.setTextColor(Color.RED);
+            scheduleViewEvent.setStartTime(startCal);
+            scheduleViewEvent.setEndTime(endCal);
+        }
+        mScheduleView.setAllDayEvents(scheduleViewEvents);
     }
     
 
