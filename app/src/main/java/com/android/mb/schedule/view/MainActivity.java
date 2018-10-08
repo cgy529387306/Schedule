@@ -273,7 +273,7 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
             if (mFragmentViewPager.getCurrentItem()==0 && mMonthFragment!=null){
                 Calendar calendar = Calendar.getInstance();
                 calendar.add(Calendar.HOUR_OF_DAY,1);
-                String time = Helper.date2String(calendar.getTime(),"HH:mm:ss");
+                String time = Helper.date2String(calendar.getTime(),"HH:00:00");
                 String date = mMonthFragment.mSelectDate+" "+time;
                 bundle.putString("date",date);
             }

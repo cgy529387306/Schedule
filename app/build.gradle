@@ -57,4 +57,5 @@ dependencies {
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.42'
 
     implementation project(':calendarview')
+    implementation project(':pickerview')
 }
