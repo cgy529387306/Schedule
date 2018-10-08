@@ -9,10 +9,6 @@ import java.util.Calendar;
  */
 
 public class ScheduleViewEvent {
-    /**
-     * 日程的类型
-     */
-    private int scheduleType;
     private long id;
     /**
      * 开始时间
@@ -49,14 +45,6 @@ public class ScheduleViewEvent {
      * 文字的颜色
      */
     private int textColor;
-
-    public int getScheduleType() {
-        return scheduleType;
-    }
-
-    public void setScheduleType(int scheduleType) {
-        this.scheduleType = scheduleType;
-    }
 
     public long getId() {
         return id;

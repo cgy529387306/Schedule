@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Handler;
 
 /**
  * @创建人 weishukai
@@ -859,19 +860,6 @@ public class ScheduleView extends View {
          * step 2:画最上边一条线
          */
         canvas.drawLine(0, 0, getWidth(), lineSize, linePaint);
-//        /**
-//         * step 2:画过去的时间
-//         * 注释，因为过去的时间和下面过去的时间容易造成视图上的不清晰
-//         */
-//            Calendar today = Calendar.getInstance();
-//            int year = today.get(Calendar.YEAR) - firstDay.get(Calendar.YEAR);
-//            if (year == 0) {
-//                int dayNumber = today.get(Calendar.DAY_OF_YEAR) - firstDay.get(Calendar.DAY_OF_YEAR) + 1;
-//                float right = hourTextWidth + dayNumber * (columnWidth + lineSize);
-//                canvas.drawRect(hourTextWidth, 0, right, allDayEventShowHeight, pastTimePaint);
-//            } else if (year < 0) {
-//                canvas.drawRect(hourTextWidth, 0, getWidth() - hourTextWidth, allDayEventShowHeight, pastTimePaint);
-//            }
 
         /**
          * step 3:画竖线
@@ -967,8 +955,8 @@ public class ScheduleView extends View {
         if (scheduleViewEventList != null && scheduleViewEventList.size() > 0) {
             sortEvents(scheduleViewEventList);
             groupEvents(scheduleViewEventList);
-            invalidate();
         }
+        invalidate();
     }
 
 
@@ -1080,9 +1068,8 @@ public class ScheduleView extends View {
             List<EventRect> eventRectList = getAllDayEventCountList(allDayEventList);
             List<EventRect>[] eventListArr = sortAndGroupAllDayEventList(eventRectList);
             combinAllDayEventList(eventListArr);
-            invalidate();
         }
-
+        invalidate();
     }
 
 
