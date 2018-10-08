@@ -1,12 +1,17 @@
 package com.android.mb.schedule.view;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,7 +26,6 @@ import com.android.mb.schedule.entitys.ScheduleRequest;
 import com.android.mb.schedule.entitys.UserBean;
 import com.android.mb.schedule.pop.ScheduleRemindPop;
 import com.android.mb.schedule.pop.ScheduleRepeatPop;
-import com.android.mb.schedule.pop.ScheduleTimePop;
 import com.android.mb.schedule.presenter.SchedulePresenter;
 import com.android.mb.schedule.utils.AppHelper;
 import com.android.mb.schedule.utils.FileUtils;
@@ -33,6 +37,10 @@ import com.android.mb.schedule.utils.PreferencesHelper;
 import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.view.interfaces.IScheduleView;
 import com.android.mb.schedule.widget.BottomMenuDialog;
+import com.bigkoo.pickerview.builder.TimePickerBuilder;
+import com.bigkoo.pickerview.listener.OnTimeSelectChangeListener;
+import com.bigkoo.pickerview.listener.OnTimeSelectListener;
+import com.bigkoo.pickerview.view.TimePickerView;
 
 import java.io.File;
 import java.io.Serializable;
@@ -71,8 +79,10 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
     private int mIsImport = 0;
     private ScheduleRepeatPop mScheduleRepeatPop;
     private ScheduleRemindPop mScheduleRemindPop;
-    private ScheduleTimePop mScheduleStartTimePop;
-    private ScheduleTimePop mScheduleEndTimePop;
+    private TimePickerView mScheduleStartTimePop;
+    private TimePickerView mScheduleEndTimePop;
+    private TimePickerView mScheduleStartDatePop;
+    private TimePickerView mScheduleEndDatePop;
     private ScheduleRequest mScheduleRequest;
     private long mFileId = -1;
     private int mType;//0:新建 1:编辑
@@ -85,7 +95,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
     private ScheduleDetailData mDetailData;
     private BottomMenuDialog mCheckDialog;
     private boolean mIsRepeatChange;
-    private String mBeginTime,mEndTime;
+    private Calendar mStartTime,mEndTime;
     @Override
     protected void loadIntent() {
         mLocalKey = "ScheduleRequest"+ CurrentUser.getInstance().getId();
@@ -205,12 +215,13 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
             mTvStartTime.setText(Helper.long2DateString(mScheduleRequest.getStart()*1000,mTimeFormat));
             mTvEndDate.setText(Helper.long2DateString(mScheduleRequest.getEnd()*1000,mDateFormat));
             mTvEndTime.setText(Helper.long2DateString(mScheduleRequest.getEnd()*1000,mTimeFormat));
-            Calendar startCalendar = (Calendar) Calendar.getInstance().clone();
-            startCalendar.setTime(Helper.long2Date(mScheduleRequest.getStart()*1000));
-            mScheduleStartTimePop.setTime(startCalendar);
-            Calendar endCalendar = (Calendar) Calendar.getInstance().clone();
-            endCalendar.setTime(Helper.long2Date(mScheduleRequest.getEnd()*1000));
-            mScheduleEndTimePop.setTime(endCalendar);
+            mStartTime = (Calendar) Calendar.getInstance().clone();
+            mStartTime.setTime(Helper.long2Date(mScheduleRequest.getStart()*1000));
+            mScheduleStartTimePop.setDate(mStartTime);
+
+            mEndTime = (Calendar) Calendar.getInstance().clone();
+            mEndTime.setTime(Helper.long2Date(mScheduleRequest.getEnd()*1000));
+            mScheduleEndTimePop.setDate(mEndTime);
 
             mIsAllDay = mScheduleRequest.getAllDay();
             mIvAllDay.setImageResource(mIsAllDay==1?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
@@ -268,11 +279,18 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         }else  if (id == R.id.iv_all_day){
             mIsAllDay = mIsAllDay==0?1:0;
             mIvAllDay.setImageResource(mIsAllDay==1?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
-            Date date = Helper.isNotEmpty(mDateStr)?Helper.string2Date(mDateStr):new Date();
-            mTvStartDate.setText(Helper.date2String(date,mDateFormat));
+            mStartTime = mStartTime==null?Calendar.getInstance():mStartTime;
+            String startDate = Helper.date2String(mStartTime.getTime(),mDateFormat);
+            mTvStartDate.setText(startDate);
             mTvStartTime.setText("00:00");
-            mTvEndDate.setText(Helper.date2String(date,mDateFormat));
-            mTvEndTime.setText("23:59");
+            mStartTime.setTime(Helper.string2Date(startDate+"00:00",mDateFormat+mTimeFormat));
+
+            mEndTime = (Calendar) mStartTime.clone();
+            mEndTime.add(Calendar.DAY_OF_MONTH, 1);
+            String endDate = Helper.date2String(mEndTime.getTime(),mDateFormat);
+            mTvEndDate.setText(endDate);
+            mTvEndTime.setText("00:00");
+            mEndTime.setTime(Helper.string2Date(endDate+"00:00",mDateFormat+mTimeFormat));
         }else  if (id == R.id.iv_add_person){
             Bundle bundle = new Bundle();
             bundle.putSerializable("selectPerson", (Serializable) mRelatePersons);
@@ -296,24 +314,22 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
             mIsImport = mIsImport==0?1:0;
             mIvImport.setImageResource(mIsImport==1?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
         }else  if (id == R.id.lly_start_date){
-            if(mScheduleStartTimePop != null){
-                if (Helper.isNotEmpty(mBeginTime)){
-                    Calendar calendar = Calendar.getInstance();
-                    Date date = Helper.string2Date(mBeginTime,mDateFormat+mTimeFormat);
-                    calendar.setTime(date);
-                    mScheduleStartTimePop.setTime(calendar);
-                }
-                mScheduleStartTimePop.showPopupWindow(view);
+            AppHelper.hideSoftInputFromWindow(view);
+            if (mIsAllDay==1){
+                mScheduleStartDatePop.setDate(mStartTime);
+                mScheduleStartDatePop.show(view);
+            }else{
+                mScheduleStartTimePop.setDate(mStartTime);
+                mScheduleStartTimePop.show(view);
             }
         }else  if (id == R.id.lly_end_date){
-            if(mScheduleEndTimePop != null){
-                if (Helper.isNotEmpty(mEndTime)){
-                    Calendar calendar = Calendar.getInstance();
-                    Date date = Helper.string2Date(mEndTime,mDateFormat+mTimeFormat);
-                    calendar.setTime(date);
-                    mScheduleEndTimePop.setTime(calendar);
-                }
-                mScheduleEndTimePop.showPopupWindow(view);
+            AppHelper.hideSoftInputFromWindow(view);
+            if (mIsAllDay==1){
+                mScheduleEndDatePop.setDate(mEndTime);
+                mScheduleEndDatePop.show(view);
+            }else{
+                mScheduleEndTimePop.setDate(mEndTime);
+                mScheduleEndTimePop.show(view);
             }
         }
     }
@@ -336,46 +352,200 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
              mTvWhenRemind.setText(ProjectHelper.getRemindStr(type));
             }
         });
-        mScheduleStartTimePop = new ScheduleTimePop(this, new ScheduleTimePop.SelectListener() {
-            @Override
-            public void onSelected(String selectDate, String selectTime) {
-                mBeginTime = selectDate+selectTime;
-                mTvStartDate.setText(selectDate);
-                mTvStartTime.setText(selectTime);
-            }
-        });
+        initStartTimePop();
+        initEndTimePop();
+        initStartDatePop();
+        initEndDatePop();
+    }
 
-        mScheduleEndTimePop = new ScheduleTimePop(this, new ScheduleTimePop.SelectListener() {
+    private void initEndTimePop() {
+        mScheduleEndTimePop = new TimePickerBuilder(this, new OnTimeSelectListener() {
             @Override
-            public void onSelected(String selectDate, String selectTime) {
-                mEndTime = selectDate+selectTime;
-                mTvEndDate.setText(selectDate);
-                mTvEndTime.setText(selectTime);
+            public void onTimeSelect(Date date, View v) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                mEndTime = (Calendar) calendar.clone();
+                mTvEndDate.setText(Helper.date2String(date,mDateFormat));
+                mTvEndTime.setText(Helper.date2String(date,mTimeFormat));
             }
-        });
+        })
+                .setTimeSelectChangeListener(new OnTimeSelectChangeListener() {
+                    @Override
+                    public void onTimeSelectChanged(Date date) {
+//                        mScheduleEndTimePop.setTitleText(Helper.date2String(date,"EE"));
+                    }
+                })
+                .setType(new boolean[]{true, true, true, true, true, false})
+                .setTitleBgColor(0xff2aaeff)
+                .setSubmitColor(0xffffffff)
+                .setCancelColor(0xffffffff)
+                .setTitleColor(0xffffffff)
+                .isDialog(true) //默认设置false ，内部实现将DecorView 作为它的父控件。
+                .build();
+        Dialog mDialog = mScheduleEndTimePop.getDialog();
+        if (mDialog != null) {
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    Gravity.BOTTOM);
+            params.leftMargin = 0;
+            params.rightMargin = 0;
+            mScheduleEndTimePop.getDialogContainerLayout().setLayoutParams(params);
+
+            Window dialogWindow = mDialog.getWindow();
+            if (dialogWindow != null) {
+                dialogWindow.setWindowAnimations(com.bigkoo.pickerview.R.style.picker_view_slide_anim);//修改动画样式
+                dialogWindow.setGravity(Gravity.BOTTOM);//改成Bottom,底部显示
+            }
+        }
+    }
+
+    private void initStartTimePop(){
+        mScheduleStartTimePop = new TimePickerBuilder(this, new OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View v) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                mStartTime = (Calendar) calendar.clone();
+                mTvStartDate.setText(Helper.date2String(date,mDateFormat));
+                mTvStartTime.setText(Helper.date2String(date,mTimeFormat));
+            }
+        })
+                .setTimeSelectChangeListener(new OnTimeSelectChangeListener() {
+                    @Override
+                    public void onTimeSelectChanged(Date date) {
+//                        mScheduleStartTimePop.setTitleText(Helper.date2String(date,"EE"));
+                    }
+                })
+                .setType(new boolean[]{true, true, true, true, true, false})
+                .setTitleBgColor(0xff2aaeff)
+                .setSubmitColor(0xffffffff)
+                .setCancelColor(0xffffffff)
+                .setTitleColor(0xffffffff)
+                .isDialog(true) //默认设置false ，内部实现将DecorView 作为它的父控件。
+                .build();
+        Dialog mDialog = mScheduleStartTimePop.getDialog();
+        if (mDialog != null) {
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    Gravity.BOTTOM);
+            params.leftMargin = 0;
+            params.rightMargin = 0;
+            mScheduleStartTimePop.getDialogContainerLayout().setLayoutParams(params);
+
+            Window dialogWindow = mDialog.getWindow();
+            if (dialogWindow != null) {
+                dialogWindow.setWindowAnimations(com.bigkoo.pickerview.R.style.picker_view_slide_anim);//修改动画样式
+                dialogWindow.setGravity(Gravity.BOTTOM);//改成Bottom,底部显示
+            }
+        }
+    }
+
+    private void initStartDatePop(){
+        mScheduleStartDatePop = new TimePickerBuilder(this, new OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View v) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                mStartTime = (Calendar) calendar.clone();
+                mTvStartDate.setText(Helper.date2String(date,mDateFormat));
+                mTvStartTime.setText(Helper.date2String(date,mTimeFormat));
+            }
+        })
+                .setTimeSelectChangeListener(new OnTimeSelectChangeListener() {
+                    @Override
+                    public void onTimeSelectChanged(Date date) {
+//                        mScheduleStartDatePop.setTitleText(Helper.date2String(date,"EE"));
+                    }
+                })
+                .setType(new boolean[]{true, true, true, false, false, false})
+                .setTitleBgColor(0xff2aaeff)
+                .setSubmitColor(0xffffffff)
+                .setCancelColor(0xffffffff)
+                .setTitleColor(0xffffffff)
+                .isDialog(true) //默认设置false ，内部实现将DecorView 作为它的父控件。
+                .build();
+        Dialog mDialog = mScheduleStartDatePop.getDialog();
+        if (mDialog != null) {
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    Gravity.BOTTOM);
+            params.leftMargin = 0;
+            params.rightMargin = 0;
+            mScheduleStartDatePop.getDialogContainerLayout().setLayoutParams(params);
+
+            Window dialogWindow = mDialog.getWindow();
+            if (dialogWindow != null) {
+                dialogWindow.setWindowAnimations(com.bigkoo.pickerview.R.style.picker_view_slide_anim);//修改动画样式
+                dialogWindow.setGravity(Gravity.BOTTOM);//改成Bottom,底部显示
+            }
+        }
+    }
+
+    private void initEndDatePop(){
+        mScheduleEndDatePop = new TimePickerBuilder(this, new OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View v) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                mEndTime = (Calendar) calendar.clone();
+                mTvEndDate.setText(Helper.date2String(date,mDateFormat));
+                mTvEndTime.setText(Helper.date2String(date,mTimeFormat));
+            }
+        })
+                .setTimeSelectChangeListener(new OnTimeSelectChangeListener() {
+                    @Override
+                    public void onTimeSelectChanged(Date date) {
+//                        mScheduleEndDatePop.setTitleText(Helper.date2String(date,"EE"));
+                    }
+                })
+                .setType(new boolean[]{true, true, true, false, false, false})
+                .setTitleBgColor(0xff2aaeff)
+                .setSubmitColor(0xffffffff)
+                .setCancelColor(0xffffffff)
+                .setTitleColor(0xffffffff)
+                .isDialog(true) //默认设置false ，内部实现将DecorView 作为它的父控件。
+                .build();
+        Dialog mDialog = mScheduleEndDatePop.getDialog();
+        if (mDialog != null) {
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    Gravity.BOTTOM);
+            params.leftMargin = 0;
+            params.rightMargin = 0;
+            mScheduleEndDatePop.getDialogContainerLayout().setLayoutParams(params);
+
+            Window dialogWindow = mDialog.getWindow();
+            if (dialogWindow != null) {
+                dialogWindow.setWindowAnimations(com.bigkoo.pickerview.R.style.picker_view_slide_anim);//修改动画样式
+                dialogWindow.setGravity(Gravity.BOTTOM);//改成Bottom,底部显示
+            }
+        }
     }
 
     private void initDate(){
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.HOUR_OF_DAY,1);
+        mStartTime = (Calendar) Calendar.getInstance().clone();
+        mStartTime.add(Calendar.HOUR_OF_DAY,1);
         if (Helper.isNotEmpty(mDateStr) && Helper.string2Date(mDateStr)!=null){
-            calendar.setTime(Helper.string2Date(mDateStr));
+            mStartTime.setTime(Helper.string2Date(mDateStr));
         }
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int hour = mStartTime.get(Calendar.HOUR_OF_DAY);
         String hourStr = hour<10?("0"+hour):""+hour;
-        mBeginTime = Helper.date2String(calendar.getTime(),mDateFormat+mTimeFormat);
-        mTvStartDate.setText(Helper.date2String(calendar.getTime(),mDateFormat));
+        mTvStartDate.setText(Helper.date2String(mStartTime.getTime(),mDateFormat));
         mTvStartTime.setText(String.format("%s:%s", hourStr, "00"));
-        mScheduleStartTimePop.setTime(calendar);
+        mScheduleStartTimePop.setDate(mStartTime);
 
 
-        calendar.add(Calendar.HOUR_OF_DAY,1);
-        int endHour = calendar.get(Calendar.HOUR_OF_DAY);
+        mEndTime = (Calendar) mStartTime.clone();
+        mEndTime.add(Calendar.HOUR_OF_DAY,1);
+        int endHour = mEndTime.get(Calendar.HOUR_OF_DAY);
         String endHourStr = endHour<10?("0"+endHour):""+endHour;
-        mEndTime = Helper.date2String(calendar.getTime(),mDateFormat+mTimeFormat);
-        mTvEndDate.setText(Helper.date2String(calendar.getTime(),mDateFormat));
+        mTvEndDate.setText(Helper.date2String(mEndTime.getTime(),mDateFormat));
         mTvEndTime.setText(String.format("%s:%s", endHourStr, "00"));
-        mScheduleEndTimePop.setTime(calendar);
+        mScheduleEndTimePop.setDate(mEndTime);
     }
 
     @Override
