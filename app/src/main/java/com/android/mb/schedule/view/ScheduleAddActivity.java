@@ -225,6 +225,9 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
 
             mIsAllDay = mScheduleRequest.getAllDay();
             mIvAllDay.setImageResource(mIsAllDay==1?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
+            mTvStartTime.setVisibility(mIsAllDay==1?View.GONE:View.VISIBLE);
+            mTvEndTime.setVisibility(mIsAllDay==1?View.GONE:View.VISIBLE);
+
             mIsImport = mScheduleRequest.getImportant();
             mIvImport.setImageResource(mIsImport==1?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
             mTvRepeat.setText(ProjectHelper.getRepeatStr(mScheduleRequest.getRepeattype()));
@@ -279,18 +282,14 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         }else  if (id == R.id.iv_all_day){
             mIsAllDay = mIsAllDay==0?1:0;
             mIvAllDay.setImageResource(mIsAllDay==1?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
+            mTvStartTime.setVisibility(mIsAllDay==1?View.GONE:View.VISIBLE);
+            mTvEndTime.setVisibility(mIsAllDay==1?View.GONE:View.VISIBLE);
             mStartTime = mStartTime==null?Calendar.getInstance():mStartTime;
             String startDate = Helper.date2String(mStartTime.getTime(),mDateFormat);
             mTvStartDate.setText(startDate);
-            mTvStartTime.setText("00:00");
+            mTvEndDate.setText(startDate);
             mStartTime.setTime(Helper.string2Date(startDate+"00:00",mDateFormat+mTimeFormat));
-
-            mEndTime = (Calendar) mStartTime.clone();
-            mEndTime.add(Calendar.DAY_OF_MONTH, 1);
-            String endDate = Helper.date2String(mEndTime.getTime(),mDateFormat);
-            mTvEndDate.setText(endDate);
-            mTvEndTime.setText("00:00");
-            mEndTime.setTime(Helper.string2Date(endDate+"00:00",mDateFormat+mTimeFormat));
+            mEndTime.setTime(Helper.string2Date(startDate+"23:59",mDateFormat+mTimeFormat));
         }else  if (id == R.id.iv_add_person){
             Bundle bundle = new Bundle();
             bundle.putSerializable("selectPerson", (Serializable) mRelatePersons);
