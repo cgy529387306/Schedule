@@ -277,7 +277,8 @@ public class ScheduleView extends View {
                         }
                         invalidate();
                         return true;
-                    } else if (isAllDayOpen && e.getX() < getWidth() - hourTextWidth) {
+                    } else if (e.getX() < getWidth() - hourTextWidth) {
+                        //isAllDayOpen &&
                         if (allDayEventRectList != null && allDayEventRectList.size() > 0) {
                             for (EventRect eventRect : allDayEventRectList) {
                                 RectF rectF = new RectF(eventRect.rectF.left, eventRect.rectF.top + originOffsetAllDay.y, eventRect.rectF.right, eventRect.rectF.bottom + originOffsetAllDay.y);
@@ -613,7 +614,7 @@ public class ScheduleView extends View {
     /**
      * 滑动到当前时间
      */
-    private void goToCurrentHour() {
+    public void goToCurrentHour() {
         Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY) - 1;
         Log.d(TAG, "+++++++++++++++       hour    " + hour);

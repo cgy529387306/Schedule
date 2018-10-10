@@ -58,9 +58,12 @@ public class WeekFragment  extends BaseMvpFragment<WeekPresenter,IWeekView> impl
 
     @Override
     protected void processLogic() {
-        mScheduleView.setAllDayEvents(new ArrayList<ScheduleViewEvent>());
-        mScheduleView.setEvents(new ArrayList<ScheduleViewEvent>());
-       getScheduleList();
+    }
+
+    @Override
+    protected void lazyLoad() {
+        super.lazyLoad();
+        getScheduleList();
     }
 
     private void getScheduleList(){

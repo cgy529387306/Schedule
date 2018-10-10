@@ -192,8 +192,7 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
             }
             long dif =(System.currentTimeMillis()/1000) - detailBean.getTime_s();
             boolean isMore72 = dif>72*60*60;
-            mLinEdit.setVisibility(View.VISIBLE);
-//            mLinEdit.setVisibility(detailBean.getCreate_by() == CurrentUser.getInstance().getId() && !isMore72?View.VISIBLE:View.GONE);
+            mLinEdit.setVisibility(detailBean.getCreate_by() == CurrentUser.getInstance().getId() && !isMore72?View.VISIBLE:View.GONE);
         }
     }
 
