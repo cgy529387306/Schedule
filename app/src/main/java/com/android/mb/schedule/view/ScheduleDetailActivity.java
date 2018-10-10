@@ -28,6 +28,7 @@ import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.view.interfaces.IDetailView;
+import com.android.mb.schedule.widget.BottomMenuDialog;
 
 import java.io.File;
 import java.io.Serializable;
@@ -70,6 +71,7 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
     private ProgressDialog mProgressDialog;//创建ProgressDialog
     private long mId;
     private ScheduleDetailData mDetailData;
+    private BottomMenuDialog mCheckDialog;
     @Override
     protected void loadIntent() {
         mId = getIntent().getLongExtra("id",0);
@@ -148,14 +150,17 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
         }else if (id == R.id.tv_share){
             NavigationHelper.startActivityForResult(ScheduleDetailActivity.this,SelectPersonActivity.class,null,ProjectConstants.REQUEST_SELECT_PERSON);
         }else if (id == R.id.tv_delete){
-            DialogHelper.showConfirmDialog(ScheduleDetailActivity.this, "提示", "确定删除改日程吗？", true, "确定", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Map<String,Object> requestMap = new HashMap<>();
-                    requestMap.put("id",mId);
-                    mPresenter.deleteSchedule(requestMap);
-                }
-            },"取消",null);
+            if (mDetailData!=null && mDetailData.getInfo()!=null && mDetailData.getInfo().getRepeattype()!=1){
+                //重复事件
+                checkRepeatChange();
+            }else{
+                DialogHelper.showConfirmDialog(ScheduleDetailActivity.this, "提示", "确定删除该日程吗？", true, "确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        doDelete();
+                    }
+                },"取消",null);
+            }
         }
     }
 
@@ -272,5 +277,31 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
             requestMap.put("share", ProjectHelper.getIdStr(list));
             mPresenter.shareTo(requestMap);
         }
+    }
+
+    private void checkRepeatChange() {
+        if (mCheckDialog == null) {
+            mCheckDialog = new BottomMenuDialog.Builder(mContext)
+                    .addMenu("删除所有重复的活动", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mCheckDialog.dismiss();
+                            doDelete();
+                        }
+                    }).addMenu("删除此活动和所有将来的活动", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mCheckDialog.dismiss();
+                            doDelete();
+                        }
+                    }).create();
+        }
+        mCheckDialog.show();
+    }
+
+    private void doDelete(){
+        Map<String,Object> requestMap = new HashMap<>();
+        requestMap.put("id",mId);
+        mPresenter.deleteSchedule(requestMap);
     }
 }

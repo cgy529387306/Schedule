@@ -54,7 +54,7 @@ public class MonthFragment extends BaseMvpFragment<MonthPresenter,IMonthView> im
     private SectionMyAdapter mAdapter;
     private TextView mTvDate;
     private String mMonthDate;
-    public String mSelectDate;
+    public static String mSelectDate;
     private List<ScheduleBean> mDataList = new ArrayList<>();
     private List<ScheduleData> mScheduleDataList = new ArrayList<>();
     private List<String> mSchemeList = new ArrayList<>();
@@ -213,5 +213,11 @@ public class MonthFragment extends BaseMvpFragment<MonthPresenter,IMonthView> im
     }
 
 
-
+    public void scrollToSelectDate(){
+        if (mCalendarView!=null && Helper.isNotEmpty(mSelectDate) && Helper.string2Date(mSelectDate,"yyyy-MM-dd")!=null){
+            java.util.Calendar calendar = java.util.Calendar.getInstance();
+            calendar.setTime(Helper.string2Date(mSelectDate,"yyyy-MM-dd"));
+            mCalendarView.scrollToCalendar(calendar.get(java.util.Calendar.YEAR),calendar.get(java.util.Calendar.MONTH)+1,calendar.get(java.util.Calendar.DAY_OF_MONTH));
+        }
+    }
 }

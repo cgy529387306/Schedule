@@ -30,9 +30,9 @@ public class ScheduleShareAdapter extends BaseQuickAdapter<ShareBean, BaseViewHo
         helper.setText(R.id.tv_address,item.getAddress());
         helper.setText(R.id.tv_time,item.getTime());
         if (Helper.isEmpty(item.getShare())){
-            helper.setVisible(R.id.tv_share,false);
+            helper.setGone(R.id.tv_share,true);
         }else{
-            helper.setVisible(R.id.tv_share,true);
+            helper.setGone(R.id.tv_share,false);
             helper.setText(R.id.tv_share,String.format(mContext.getString(R.string.share_person), ProjectHelper.getSharePersonStr(item.getShare()),item.getShare().size()));
         }
 

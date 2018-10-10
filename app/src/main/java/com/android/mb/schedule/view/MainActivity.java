@@ -104,16 +104,25 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
         mNavigationView.setNavigationItemSelectedListener(this);
         mIvOpenDrawerLayout.setOnClickListener(this);
         mCoordinatorLayout.setOnTouchListener(mOnTouchListener);
-        mDrawerLayout.setDrawerListener(mDrawerListener);
+        mDrawerLayout.addDrawerListener(mDrawerListener);
         findViewById(R.id.tv_add).setOnClickListener(this);
         mIvRefresh.setOnClickListener(this);
         mIvToday.setOnClickListener(this);
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                if (tab.getPosition()<2){
-                    //月和周
+                if (tab.getPosition()==0){
+                    //月视图
                     mFragmentViewPager.setCurrentItem(tab.getPosition(),true);
+                    if (mMonthFragment!=null){
+                        mMonthFragment.scrollToSelectDate();
+                    }
+                }else if (tab.getPosition()==1){
+                    //周视图
+                    mFragmentViewPager.setCurrentItem(tab.getPosition(),true);
+                    if (mWeekFragment!=null){
+                        mWeekFragment.scrollToSelectDate();
+                    }
                 }else if (tab.getPosition()==3){
                     //我的日程
                     NavigationHelper.startActivity(MainActivity.this,ScheduleUserActivity.class,null,false);
@@ -152,10 +161,6 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
         mNavigationView = findViewById(R.id.nav_view);
         mCoordinatorLayout = findViewById(R.id.right);
         mIvOpenDrawerLayout = findViewById(R.id.iv_open_drawerlayout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawerLayout,R.mipmap.icon_search , R.string.open, R.string.close);
-        mDrawerLayout.setDrawerListener(toggle);
-        toggle.syncState();
         mFragmentViewPager = findViewById(R.id.fragmentViewPager);
         View headerView = mNavigationView.getHeaderView(0);
         mIvHead = headerView.findViewById(R.id.iv_head);
@@ -195,7 +200,7 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
     }
 
 
-    View.OnTouchListener mOnTouchListener = new View.OnTouchListener() {
+    private View.OnTouchListener mOnTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
             if (isDrawer) {
@@ -205,7 +210,8 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
             }
         }
     };
-    DrawerLayout.DrawerListener mDrawerListener = new DrawerLayout.DrawerListener() {
+
+    private DrawerLayout.DrawerListener mDrawerListener = new DrawerLayout.DrawerListener() {
         @Override
         public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
             isDrawer=true;
@@ -270,7 +276,7 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
         }else if (id == R.id.tv_add){
             Bundle bundle = new Bundle();
             bundle.putInt("type",0);
-            if (mFragmentViewPager.getCurrentItem()==0 && mMonthFragment!=null){
+            if (mMonthFragment!=null && Helper.isNotEmpty(mMonthFragment.mSelectDate)){
                 Calendar calendar = Calendar.getInstance();
                 calendar.add(Calendar.HOUR_OF_DAY,1);
                 String time = Helper.date2String(calendar.getTime(),"HH:00:00");
@@ -328,4 +334,6 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
             initUserInfo(result.getUserinfo());
         }
     }
+
+
 }

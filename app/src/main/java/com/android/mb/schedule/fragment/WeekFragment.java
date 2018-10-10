@@ -13,7 +13,9 @@ import com.android.mb.schedule.entitys.ScheduleData;
 import com.android.mb.schedule.presenter.WeekPresenter;
 import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.utils.Helper;
+import com.android.mb.schedule.utils.LunarUtil;
 import com.android.mb.schedule.utils.NavigationHelper;
+import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.view.MainActivity;
 import com.android.mb.schedule.view.ScheduleAddActivity;
 import com.android.mb.schedule.view.ScheduleDetailActivity;
@@ -21,6 +23,7 @@ import com.android.mb.schedule.view.interfaces.IWeekView;
 import com.android.mb.schedule.widget.ScheduleView;
 import com.android.mb.schedule.widget.ScheduleViewEvent;
 import com.haibin.calendarview.CalendarLayout;
+import com.haibin.calendarview.CalendarUtil;
 import com.haibin.calendarview.CalendarView;
 
 import java.util.ArrayList;
@@ -43,7 +46,6 @@ public class WeekFragment  extends BaseMvpFragment<WeekPresenter,IWeekView> impl
     private ScheduleView mScheduleView;
     private String mWeekDate;
     private List<String> mSchemeList = new ArrayList<>();
-    private boolean mIsRefresh;
     @Override
     protected int getLayoutId() {
         return R.layout.frg_week;
@@ -123,6 +125,19 @@ public class WeekFragment  extends BaseMvpFragment<WeekPresenter,IWeekView> impl
                     mScheduleView.setFirstDay(calendar);
                     getWeekData(firstDate);
                 }
+            }
+        });
+        mCalendarView.setOnCalendarSelectListener(new CalendarView.OnCalendarSelectListener() {
+            @Override
+            public void onCalendarOutOfRange(com.haibin.calendarview.Calendar calendar) {
+
+            }
+
+            @Override
+            public void onCalendarSelect(com.haibin.calendarview.Calendar calendar, boolean isClick) {
+                CalendarUtil.mLastCalendar = calendar;
+                String dateStr = calendar.toString();
+                MonthFragment.mSelectDate = Helper.date2String(Helper.string2Date(dateStr,"yyyyMMdd"),"yyyy-MM-dd");
             }
         });
     }
@@ -237,6 +252,18 @@ public class WeekFragment  extends BaseMvpFragment<WeekPresenter,IWeekView> impl
         calendar.setScheme(text);
         calendar.addScheme(new com.haibin.calendarview.Calendar.Scheme());
         return calendar;
+    }
+
+    public void scrollToSelectDate(){
+        if (mCalendarView!=null && Helper.isNotEmpty(MonthFragment.mSelectDate) && Helper.string2Date(MonthFragment.mSelectDate,"yyyy-MM-dd")!=null){
+            java.util.Calendar calendar = java.util.Calendar.getInstance();
+            calendar.setTime(Helper.string2Date(MonthFragment.mSelectDate,"yyyy-MM-dd"));
+            mCalendarView.scrollToCalendar(calendar.get(java.util.Calendar.YEAR),calendar.get(java.util.Calendar.MONTH)+1,calendar.get(java.util.Calendar.DAY_OF_MONTH));
+            mScheduleView.setFirstDay(calendar);
+            Map<String,Object> requestMap = new HashMap<>();
+            requestMap.put("date",ProjectHelper.getMonday(calendar));
+            mPresenter.getWeekSchedule(requestMap);
+        }
     }
 
 }

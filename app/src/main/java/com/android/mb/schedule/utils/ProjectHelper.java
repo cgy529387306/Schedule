@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.provider.MediaStore.MediaColumns;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewParent;
 
@@ -489,5 +490,13 @@ public class ProjectHelper {
             }
         }
         return sectionList;
+    }
+
+    public static String getMonday(Calendar calendar) {
+        if (calendar == null){
+            return Helper.date2String(Calendar.getInstance().getTime(),"yyyy-MM-dd");
+        }
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY); // 获取本周日的日期
+        return Helper.date2String(calendar.getTime(),"yyyy-MM-dd");
     }
 }

@@ -635,7 +635,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
 
     private void checkRepeatChange() {
         if (mCheckDialog == null) {
-            mCheckDialog = new BottomMenuDialog.Builder(ScheduleAddActivity.this)
+            mCheckDialog = new BottomMenuDialog.Builder(mContext)
                     .addMenu("更改所有重复的活动", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
