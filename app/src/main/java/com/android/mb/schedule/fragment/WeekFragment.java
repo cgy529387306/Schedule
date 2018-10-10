@@ -104,6 +104,7 @@ public class WeekFragment  extends BaseMvpFragment<WeekPresenter,IWeekView> impl
             public void onEventClick(ScheduleViewEvent event, RectF eventRectF) {
                 Bundle bundle = new Bundle();
                 bundle.putLong("id",event.getId());
+                bundle.putString("date",Helper.date2String(Helper.string2Date(mCalendarView.getSelectedCalendar().toString(),"yyyyMMdd"),"yyyy-MM-dd"));
                 NavigationHelper.startActivity(mContext,ScheduleDetailActivity.class,bundle,false);
             }
         });

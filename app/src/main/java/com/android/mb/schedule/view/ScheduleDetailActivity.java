@@ -70,11 +70,13 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
     public static final String mDateFormat = "yyyy年MM月dd日";
     private ProgressDialog mProgressDialog;//创建ProgressDialog
     private long mId;
+    private String mDate;
     private ScheduleDetailData mDetailData;
     private BottomMenuDialog mCheckDialog;
     @Override
     protected void loadIntent() {
         mId = getIntent().getLongExtra("id",0);
+        mDate = getIntent().getStringExtra("date");
     }
 
     @Override
@@ -120,6 +122,9 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
     private void getDetail(){
         Map<String,Object> requestMap = new HashMap<>();
         requestMap.put("id",mId);
+        if (Helper.isNotEmpty(mDate)){
+            requestMap.put("date",mDate);
+        }
         mPresenter.getSchedule(requestMap);
     }
 
@@ -157,7 +162,7 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
                 DialogHelper.showConfirmDialog(ScheduleDetailActivity.this, "提示", "确定删除该日程吗？", true, "确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        doDelete();
+                        doDelete(false);
                     }
                 },"取消",null);
             }
@@ -286,22 +291,25 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
                         @Override
                         public void onClick(View v) {
                             mCheckDialog.dismiss();
-                            doDelete();
+                            doDelete(false);
                         }
                     }).addMenu("删除此活动和所有将来的活动", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             mCheckDialog.dismiss();
-                            doDelete();
+                            doDelete(true);
                         }
                     }).create();
         }
         mCheckDialog.show();
     }
 
-    private void doDelete(){
+    private void doDelete(boolean hasDate){
         Map<String,Object> requestMap = new HashMap<>();
         requestMap.put("id",mId);
+        if (hasDate){
+            requestMap.put("date",Helper.date2String(new Date(),"yyyy-MM-dd"));
+        }
         mPresenter.deleteSchedule(requestMap);
     }
 }
