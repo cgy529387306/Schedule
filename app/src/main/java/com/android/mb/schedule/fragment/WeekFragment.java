@@ -2,7 +2,6 @@ package com.android.mb.schedule.fragment;
 
 import android.graphics.RectF;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 
 import com.android.mb.schedule.R;
@@ -13,7 +12,6 @@ import com.android.mb.schedule.entitys.ScheduleData;
 import com.android.mb.schedule.presenter.WeekPresenter;
 import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.utils.Helper;
-import com.android.mb.schedule.utils.LunarUtil;
 import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.view.MainActivity;

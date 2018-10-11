@@ -295,7 +295,9 @@ public class ProjectHelper {
                 Field[] declaredFields = obj.getClass().getDeclaredFields();
                 for (Field field : declaredFields) {
                     field.setAccessible(true);
-                    map.put(field.getName(), field.get(obj));
+                    if (field.getName()!=null && field.get(obj)!=null){
+                        map.put(field.getName(), field.get(obj));
+                    }
                 }
             }catch (Exception e){
                 e.printStackTrace();

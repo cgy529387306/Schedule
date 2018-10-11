@@ -153,7 +153,9 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
             bundle.putSerializable("schedule",mDetailData);
             NavigationHelper.startActivity(ScheduleDetailActivity.this,ScheduleAddActivity.class,bundle,false);
         }else if (id == R.id.tv_share){
-            NavigationHelper.startActivityForResult(ScheduleDetailActivity.this,SelectPersonActivity.class,null,ProjectConstants.REQUEST_SELECT_PERSON);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("selectPerson", (Serializable) mDetailData.getShare());
+            NavigationHelper.startActivityForResult(ScheduleDetailActivity.this,SelectPersonActivity.class,bundle,ProjectConstants.REQUEST_SELECT_PERSON);
         }else if (id == R.id.tv_delete){
             if (mDetailData!=null && mDetailData.getInfo()!=null && mDetailData.getInfo().getRepeattype()!=1){
                 //重复事件
@@ -196,7 +198,7 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
                 String shareStr = String.format(mContext.getString(R.string.relate_person), ProjectHelper.getSharePersonStr(detailData.getRelated()),detailData.getRelated().size());
                 mTvPersons.setText(shareStr);
             }
-            if (Helper.isNotEmpty(detailData.getRelated())){
+            if (Helper.isNotEmpty(detailData.getShare())){
                 String shareStr = String.format(mContext.getString(R.string.relate_person), ProjectHelper.getSharePersonStr(detailData.getShare()),detailData.getShare().size());
                 mTvShares.setText(shareStr);
             }
