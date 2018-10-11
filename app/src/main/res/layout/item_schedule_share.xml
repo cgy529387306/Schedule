@@ -67,7 +67,6 @@
         android:drawableLeft="@mipmap/ic_share"
         android:drawablePadding="6dp"
         android:textSize="14sp"
-        android:text="分享给张三丰，李四，万五，陈六等12人"
         android:textColor="@color/gray_a5" />
     <View
         android:layout_width="match_parent"

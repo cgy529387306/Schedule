@@ -1110,28 +1110,33 @@ public class ScheduleView extends View {
             eventRect.startIndex = 0;
             eventRect.endIndex = 1;
         } else {
-            if (event.getStartTime().before(firstDay)) {
-                eventRect.startIndex = 0;
-            } else {
-                int dayOfWeek = event.getStartTime().get(Calendar.DAY_OF_WEEK);
-                if (dayOfWeek == 1) {
-                    dayOfWeek = 6;
-                } else {
-                    dayOfWeek -= 2;
-                }
-                eventRect.startIndex = dayOfWeek;
-            }
-            if (event.getEndTime().after(endDay)) {
-                eventRect.endIndex = 7;
-            } else {
-                int dayOfWeek = event.getEndTime().get(Calendar.DAY_OF_WEEK);
-                if (dayOfWeek == 1) {
-                    dayOfWeek = 7;
-                } else {
-                    dayOfWeek -= 1;
-                }
-                eventRect.endIndex = dayOfWeek;
-            }
+            int startWeek = event.getStartTime().get(Calendar.DAY_OF_WEEK);
+            int endWeek = event.getEndTime().get(Calendar.DAY_OF_WEEK);
+            eventRect.startIndex = startWeek-1;
+            eventRect.endIndex = endWeek;
+//
+//            if (event.getStartTime().before(firstDay)) {
+//                eventRect.startIndex = 0;
+//            } else {
+//                int dayOfWeek = event.getStartTime().get(Calendar.DAY_OF_WEEK);
+//                if (dayOfWeek == 1) {
+//                    dayOfWeek = 6;
+//                } else {
+//                    dayOfWeek -= 2;
+//                }
+//                eventRect.startIndex = dayOfWeek;
+//            }
+//            if (event.getEndTime().after(endDay)) {
+//                eventRect.endIndex = 7;
+//            } else {
+//                int dayOfWeek = event.getEndTime().get(Calendar.DAY_OF_WEEK);
+//                if (dayOfWeek == 1) {
+//                    dayOfWeek = 7;
+//                } else {
+//                    dayOfWeek -= 1;
+//                }
+//                eventRect.endIndex = dayOfWeek;
+//            }
         }
         return eventRect;
     }
@@ -1236,7 +1241,7 @@ public class ScheduleView extends View {
      * @return
      */
     private int getAllDayEventRow() {
-        if (!isAllDayOpen) {
+            if (!isAllDayOpen) {
             return allDayEventMinRow;
         } else {
             if (allDayEventCurrRow > allDayEventMaxRow) {
