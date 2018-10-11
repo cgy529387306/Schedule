@@ -29,6 +29,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.OverScroller;
 
 import com.android.mb.schedule.R;
+import com.android.mb.schedule.utils.ToastHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -147,7 +148,7 @@ public class ScheduleView extends View {
 
     private OnEventClickListener onEventClickListener;
     private OnEventAddClickListener onEventAddClickListener;
-
+    private OnScrollListener onScrollListener;
     /**
      * 手势和滑动相关
      */
@@ -192,6 +193,7 @@ public class ScheduleView extends View {
             if (currentScrollDirection == Direction.NONE) {
                 if (Math.abs(distanceX) > Math.abs(distanceY)) {
                     //横线暂不做处理
+                    currentScrollDirection = Direction.HORIZONTAL;
                 } else {
                     currentScrollDirection = Direction.VERTICAL;
                 }
@@ -226,6 +228,15 @@ public class ScheduleView extends View {
 //            Log.d(TAG, "onFling  " + e1.getY() + "    " + e2.getY());
 //            Log.d(TAG, "velocityX：  " + velocityX + "    velocityY:" + velocityY);
             if (currentScrollDirection == Direction.HORIZONTAL) {
+                if (velocityX>0){
+                    if (onScrollListener!=null){
+                        onScrollListener.onLeft();
+                    }
+                }else {
+                    if (onScrollListener!=null){
+                        onScrollListener.onRight();
+                    }
+                }
 
             } else if (currentScrollDirection == Direction.VERTICAL) {
                 lastCurrY = 0;
@@ -1065,6 +1076,8 @@ public class ScheduleView extends View {
      */
     public void setAllDayEvents(List<ScheduleViewEvent> allDayEventList) {
         allDayEventRectList.clear();
+        isAllDayOpen = false;
+        allDayEventCurrRow = 0;
         if (allDayEventList != null && allDayEventList.size() > 0) {
             List<EventRect> eventRectList = getAllDayEventCountList(allDayEventList);
             List<EventRect>[] eventListArr = sortAndGroupAllDayEventList(eventRectList);
@@ -1397,6 +1410,10 @@ public class ScheduleView extends View {
         this.onEventAddClickListener = onEventAddClickListener;
     }
 
+    public void setOnScrollListener(OnScrollListener onScrollListener) {
+        this.onScrollListener = onScrollListener;
+    }
+
     /**
      * 点击了event的回调
      */
@@ -1412,6 +1429,13 @@ public class ScheduleView extends View {
 
     public void setFirstDay(Calendar firstDay) {
         this.firstDay = firstDay;
+    }
+
+    public interface OnScrollListener {
+
+        void onLeft();
+
+        void onRight();
     }
 
 }

@@ -106,6 +106,17 @@ public class WeekFragment  extends BaseMvpFragment<WeekPresenter,IWeekView> impl
                 NavigationHelper.startActivity(mContext,ScheduleDetailActivity.class,bundle,false);
             }
         });
+        mScheduleView.setOnScrollListener(new ScheduleView.OnScrollListener() {
+            @Override
+            public void onLeft() {
+                mCalendarView.scrollToPre();
+            }
+
+            @Override
+            public void onRight() {
+                mCalendarView.scrollToNext();
+            }
+        });
         mCalendarView.setOnMonthChangeListener(new CalendarView.OnMonthChangeListener() {
             @Override
             public void onMonthChange(int year, int month) {
