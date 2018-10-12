@@ -89,10 +89,11 @@ public class MonthFragment extends BaseMvpFragment<MonthPresenter,IMonthView> im
         for (String date:dataList) {
             Date date1 = Helper.string2Date(date,"yyyy-MM-dd");
             java.util.Calendar calendar = java.util.Calendar.getInstance();
-            calendar.setTime(date1);
-            map.put(getSchemeCalendar(calendar.get(java.util.Calendar.YEAR), calendar.get(java.util.Calendar.MONTH)+1, calendar.get(java.util.Calendar.DAY_OF_MONTH), 0x2aaeff, "议").toString(),
-                    getSchemeCalendar(calendar.get(java.util.Calendar.YEAR), calendar.get(java.util.Calendar.MONTH)+1, calendar.get(java.util.Calendar.DAY_OF_MONTH), 0x2aaeff, "议"));
-
+            if (date1!=null){
+                calendar.setTime(date1);
+                map.put(getSchemeCalendar(calendar.get(java.util.Calendar.YEAR), calendar.get(java.util.Calendar.MONTH)+1, calendar.get(java.util.Calendar.DAY_OF_MONTH), 0x2aaeff, "议").toString(),
+                        getSchemeCalendar(calendar.get(java.util.Calendar.YEAR), calendar.get(java.util.Calendar.MONTH)+1, calendar.get(java.util.Calendar.DAY_OF_MONTH), 0x2aaeff, "议"));
+            }
         }
         mCalendarView.setSchemeDate(map);
     }

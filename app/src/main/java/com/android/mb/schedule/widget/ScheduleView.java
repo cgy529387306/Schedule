@@ -1429,6 +1429,11 @@ public class ScheduleView extends View {
 
     public void setFirstDay(Calendar firstDay) {
         this.firstDay = firstDay;
+        endDay = (Calendar) firstDay.clone();
+        endDay.add(Calendar.DAY_OF_WEEK, columnNumber - 1);
+        endDay.set(Calendar.HOUR_OF_DAY, 23);
+        endDay.set(Calendar.MINUTE, 59);
+        endDay.set(Calendar.SECOND, 59);
     }
 
     public interface OnScrollListener {
