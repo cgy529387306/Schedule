@@ -57,7 +57,7 @@
                 app:allDayEventBgColor="#ffffff"
                 app:allDayEventDefaultColor="#85cdca"
                 app:allDayEventMaxRow="10"
-                app:allDayEventMinRow="1"
+                app:allDayEventMinRow="2"
                 app:allDayEventRowHeight="24dp"
                 app:allDayEventSize="12sp"
                 app:allDayEventTitleColor="#525252"

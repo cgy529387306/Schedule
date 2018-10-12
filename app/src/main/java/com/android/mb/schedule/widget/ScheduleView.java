@@ -284,7 +284,9 @@ public class ScheduleView extends View {
                         if (isAllDayOpen) {
                             isAllDayOpen = false;
                         } else {
-                            isAllDayOpen = true;
+                            if (allDayEventCurrRow > allDayEventMinRow){
+                                isAllDayOpen = true;
+                            }
                         }
                         invalidate();
                         return true;
@@ -909,13 +911,13 @@ public class ScheduleView extends View {
             if (allDayEventCountList != null && allDayEventCountList.length > 0) {
                 for (int i = 0; i < allDayEventCountList.length; i++) {
                     if (allDayEventCountList[i] > 0) {
-                        float left = (float) (hourTextWidth + i * (columnWidth + lineSize) + columnWidth / 2 - bell.getWidth() * 0.85);
+                        float left = (float) (hourTextWidth + i * (columnWidth + lineSize) + columnWidth / 2);
                         float top = allDayEventShowHeight() / 2 - bell.getHeight() / 2;
-                        float right = left + bell.getWidth();
-                        float bottom = top + bell.getHeight();
-                        RectF allDayEventBellRect = new RectF(left, top, right, bottom);
-                        canvas.drawBitmap(bell, null, allDayEventBellRect, allDayEventCountPaint);
-                        canvas.drawText("" + allDayEventCountList[i], right + allDayEventCountTextSize / 2, allDayEventShowHeight() / 2 + allDayEventCountTextSize / 2 - 3, allDayEventCountPaint);
+                        float right = left;
+                        float bottom = top;
+//                        RectF allDayEventBellRect = new RectF(left, top, right, bottom);
+//                        canvas.drawBitmap(bell, null, allDayEventBellRect, allDayEventCountPaint);
+                        canvas.drawText("+" + allDayEventCountList[i], right + allDayEventCountTextSize / 2, allDayEventShowHeight() / 2 + allDayEventCountTextSize / 2 - 3, allDayEventCountPaint);
                     }
                 }
             }

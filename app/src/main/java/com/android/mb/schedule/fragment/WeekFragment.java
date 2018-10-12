@@ -155,6 +155,7 @@ public class WeekFragment  extends BaseMvpFragment<WeekPresenter,IWeekView> impl
     public void toToday(){
         if (mCalendarView!=null){
             mCalendarView.scrollToCurrent();
+            getScheduleList();
         }
     }
 
@@ -271,9 +272,7 @@ public class WeekFragment  extends BaseMvpFragment<WeekPresenter,IWeekView> impl
             calendar.setTime(Helper.string2Date(MonthFragment.mSelectDate,"yyyy-MM-dd"));
             mCalendarView.scrollToCalendar(calendar.get(java.util.Calendar.YEAR),calendar.get(java.util.Calendar.MONTH)+1,calendar.get(java.util.Calendar.DAY_OF_MONTH));
             mScheduleView.setFirstDay(calendar);
-            Map<String,Object> requestMap = new HashMap<>();
-            requestMap.put("date",ProjectHelper.getMonday(calendar));
-            mPresenter.getWeekSchedule(requestMap);
+            getScheduleList();
         }
     }
 
