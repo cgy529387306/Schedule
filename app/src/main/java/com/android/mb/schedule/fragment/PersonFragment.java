@@ -50,7 +50,7 @@ public class PersonFragment extends BaseFragment {
 
     @Override
     protected void processLogic() {
-
+        refreshData();
     }
 
     @Override
@@ -89,12 +89,12 @@ public class PersonFragment extends BaseFragment {
         }
     }
 
-    public void setDataList(List<UserBean> list){
+    public void setDataList(List<UserBean> list,boolean isRefresh){
         mDataList = list;
-        mAdapter.setEmptyView(R.layout.empty_data, (ViewGroup) mRecyclerView.getParent());
-        refreshData();
+        if (isRefresh){
+            refreshData();
+        }
     }
-
 
     private void refreshData() {
         if (mAdapter!=null && mDataList!=null){
@@ -102,6 +102,7 @@ public class PersonFragment extends BaseFragment {
                 userBean.setSelect(ProjectHelper.getSelectIdList().contains(userBean.getId()));
             }
             mAdapter.setNewData(mDataList);
+            mAdapter.setEmptyView(R.layout.empty_data, (ViewGroup) mRecyclerView.getParent());
         }
     }
 }

@@ -118,4 +118,8 @@ public interface IScheduleService {
     @FormUrlEncoded
     Observable<HttpResult<TreeData>> getOfficeList(@FieldMap Map<String,Object> requestMap);
 
+    @POST("/app/common/office2")
+    @FormUrlEncoded
+    Observable<HttpResult<TreeData>> getUnder(@FieldMap Map<String,Object> requestMap);
+
 }

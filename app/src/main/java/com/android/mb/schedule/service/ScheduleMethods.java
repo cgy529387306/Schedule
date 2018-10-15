@@ -279,4 +279,15 @@ public class ScheduleMethods extends BaseHttp {
                 .compose(CacheTransformer.emptyTransformer())
                 .map(new HttpCacheResultFunc<TreeData>());
     }
+
+    public Observable getUnderList(){
+        Map<String,Object> requestMap = new HashMap<>();
+        if (CurrentUser.getInstance().isLogin()){
+            requestMap.put("token_id",CurrentUser.getInstance().getToken_id());
+            requestMap.put("token",CurrentUser.getInstance().getToken());
+        }
+        return getService().getUnder(requestMap)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<TreeData>());
+    }
 }

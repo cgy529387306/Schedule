@@ -4,6 +4,7 @@ buildscript {
     
     repositories {
         maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+        maven { url "https://raw.githubusercontent.com/Pgyer/mvn_repo_pgyer/master" }
         maven { url "https://jitpack.io" }
     }
     dependencies {
@@ -18,6 +19,7 @@ buildscript {
 allprojects {
     repositories {
         maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+        maven { url "https://raw.githubusercontent.com/Pgyer/mvn_repo_pgyer/master" }
         maven { url "https://jitpack.io" }
     }
 }

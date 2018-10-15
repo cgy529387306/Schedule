@@ -11,8 +11,10 @@ import com.android.mb.schedule.R;
 import com.android.mb.schedule.adapter.MyTabPagerAdapter;
 import com.android.mb.schedule.base.BaseMvpActivity;
 import com.android.mb.schedule.constants.ProjectConstants;
+import com.android.mb.schedule.entitys.CurrentUser;
 import com.android.mb.schedule.entitys.TreeData;
 import com.android.mb.schedule.entitys.UserBean;
+import com.android.mb.schedule.entitys.UserData;
 import com.android.mb.schedule.fragment.OrgFragment;
 import com.android.mb.schedule.fragment.PersonFragment;
 import com.android.mb.schedule.fragment.SelectedFragment;
@@ -93,9 +95,18 @@ public class SelectPersonActivity extends BaseMvpActivity<PersonPresenter,IPerso
     }
 
     private void getDataFromLocal(){
-        String orgListStr = PreferencesHelper.getInstance().getString(ProjectConstants.KEY_ORG_LIST);
-        String personListStr = PreferencesHelper.getInstance().getString(ProjectConstants.KEY_PERSON_LIST);
+        String orgListStr = PreferencesHelper.getInstance().getString(ProjectConstants.KEY_ORG_LIST+CurrentUser.getInstance().getId());
+        String personListStr = PreferencesHelper.getInstance().getString(ProjectConstants.KEY_PERSON_LIST+CurrentUser.getInstance().getId());
         TreeData orgList = JsonHelper.fromJson(orgListStr,TreeData.class);
+        UserData userData = JsonHelper.fromJson(personListStr,UserData.class);
+        if (Helper.isNotEmpty(orgList)){
+            OrgFragment orgFragment = (OrgFragment) mFragmentList.get(1);
+            orgFragment.setDataList(orgList.getTree());
+        }
+        if (userData!=null && Helper.isNotEmpty(userData.getUserList())){
+            PersonFragment personFragment = (PersonFragment) mFragmentList.get(0);
+            personFragment.setDataList(userData.getUserList(),false);
+        }
 
     }
 
@@ -136,7 +147,7 @@ public class SelectPersonActivity extends BaseMvpActivity<PersonPresenter,IPerso
     @Override
     public void getOrgSuccess(TreeData result) {
         if (result!=null){
-            PreferencesHelper.getInstance().putString(ProjectConstants.KEY_ORG_LIST, JsonHelper.toJson(result));
+            PreferencesHelper.getInstance().putString(ProjectConstants.KEY_ORG_LIST+CurrentUser.getInstance().getId(), JsonHelper.toJson(result));
             OrgFragment orgFragment = (OrgFragment) mFragmentList.get(1);
             orgFragment.setDataList(result.getTree());
         }
@@ -145,9 +156,11 @@ public class SelectPersonActivity extends BaseMvpActivity<PersonPresenter,IPerso
     @Override
     public void getPersonSuccess(List<UserBean> result) {
         if (result!=null){
-            PreferencesHelper.getInstance().putString(ProjectConstants.KEY_PERSON_LIST, JsonHelper.toJson(result));
+            UserData userData = new UserData();
+            userData.setUserList(result);
+            PreferencesHelper.getInstance().putString(ProjectConstants.KEY_PERSON_LIST+CurrentUser.getInstance().getId(), JsonHelper.toJson(userData));
             PersonFragment personFragment = (PersonFragment) mFragmentList.get(0);
-            personFragment.setDataList(result);
+            personFragment.setDataList(result,true);
         }
     }
 }
