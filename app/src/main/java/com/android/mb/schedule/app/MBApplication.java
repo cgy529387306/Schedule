@@ -6,6 +6,8 @@ import android.content.Context;
 import com.android.mb.schedule.retrofit.download.HttpMethods;
 import com.pgyersdk.crash.PgyCrashManager;
 
+import cn.jpush.android.api.JPushInterface;
+
 /**
  * 主要用来获取全局的Context
  * @author cgy
@@ -42,8 +44,13 @@ public class MBApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 		sInstance = this;
+		initJPush();
 		HttpMethods.getInstance().init();
 		PgyCrashManager.register(this);
 	}
-	
+
+	private void initJPush(){
+		JPushInterface.setDebugMode(true); 	// 设置开启日志,发布时请关闭日志
+		JPushInterface.init(this);
+	}
 }

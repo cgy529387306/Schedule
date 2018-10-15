@@ -14,6 +14,7 @@ public class ProjectConstants {
     public static final int EVENT_UPDATE_DATE = 10005;
 
 
+
     //REQUEST
     public static final int REQUEST_SELECT_ADDRESS = 0x01;
 
@@ -22,4 +23,8 @@ public class ProjectConstants {
     public static final int REQUEST_SELECT_PERSON = 0x03;
 
     public static final int REQUEST_SELECT_SHARE = 0x04;
+
+
+    //SharedPreferences
+    public static final String KEY_REGISTRATION_ID = "KEY_REGISTRATION_ID";
 }

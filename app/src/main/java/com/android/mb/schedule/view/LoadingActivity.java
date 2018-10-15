@@ -4,11 +4,17 @@ package com.android.mb.schedule.view;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.WindowManager;
 
 import com.android.mb.schedule.R;
+import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.entitys.CurrentUser;
+import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.NavigationHelper;
+import com.android.mb.schedule.utils.PreferencesHelper;
+
+import cn.jpush.android.api.JPushInterface;
 
 
 /**
@@ -25,6 +31,7 @@ public class LoadingActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
+        getRegisterId();
         new Handler().postDelayed(new Runnable() {
 
             public void run() {
@@ -38,5 +45,12 @@ public class LoadingActivity extends AppCompatActivity {
         }, LOADING_TIME_OUT);
     }
 
+    private void getRegisterId(){
+        String rid = JPushInterface.getRegistrationID(getApplicationContext());
+        if (Helper.isNotEmpty(rid)) {
+            PreferencesHelper.getInstance().putString(ProjectConstants.KEY_REGISTRATION_ID,rid);
+            Log.d("jpush rid:",rid);
+        }
+    }
 
 }

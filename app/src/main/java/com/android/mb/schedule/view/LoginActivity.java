@@ -22,6 +22,8 @@ import com.android.mb.schedule.view.interfaces.ILoginView;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.jpush.android.api.JPushInterface;
+
 /**
  * 登录
  * Created by cgy on 2018\8\20 0020.
@@ -77,6 +79,10 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter,ILoginView> im
     private void doLogin(){
         String account = mEtAccount.getText().toString().trim();
         String pwd = mEtPwd.getText().toString().trim();
+        String rid = PreferencesHelper.getInstance().getString(ProjectConstants.KEY_REGISTRATION_ID);
+        if (Helper.isEmpty(rid)){
+            rid = JPushInterface.getRegistrationID(getApplicationContext());
+        }
         if (Helper.isEmpty(account)){
             showToastMessage("请输入用户名");
             return;
@@ -92,6 +98,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter,ILoginView> im
         Map<String,Object> requestMap = new HashMap<>();
         requestMap.put("username",account);
         requestMap.put("password",pwd);
+        requestMap.put("registerId",rid);
         mPresenter.userLogin(requestMap);
     }
 
@@ -121,5 +128,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter,ILoginView> im
         }
         finish();
     }
+
+
 
 }
