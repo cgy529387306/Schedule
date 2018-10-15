@@ -197,10 +197,14 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
             if (Helper.isNotEmpty(detailData.getRelated())){
                 String shareStr = String.format(mContext.getString(R.string.relate_person), ProjectHelper.getSharePersonStr(detailData.getRelated()),detailData.getRelated().size());
                 mTvPersons.setText(shareStr);
+            }else{
+                mTvPersons.setText("");
             }
             if (Helper.isNotEmpty(detailData.getShare())){
                 String shareStr = String.format(mContext.getString(R.string.relate_person), ProjectHelper.getSharePersonStr(detailData.getShare()),detailData.getShare().size());
                 mTvShares.setText(shareStr);
+            }else{
+                mTvShares.setText("");
             }
             long dif =(System.currentTimeMillis()/1000) - detailBean.getTime_s();
             boolean isMore72 = dif>72*60*60;

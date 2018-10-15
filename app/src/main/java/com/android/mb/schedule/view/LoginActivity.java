@@ -12,6 +12,7 @@ import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.entitys.CurrentUser;
 import com.android.mb.schedule.entitys.LoginData;
 import com.android.mb.schedule.presenter.LoginPresenter;
+import com.android.mb.schedule.utils.AppHelper;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.utils.PreferencesHelper;
@@ -111,6 +112,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter,ILoginView> im
     public void loginSuccess(LoginData result) {
         if (result!=null && result.getUserinfo()!=null){
             showToastMessage("登录成功");
+            AppHelper.hideSoftInputFromWindow(mEtAccount);
             CurrentUser.getInstance().login(result.getUserinfo(),true);
             NavigationHelper.startActivity(LoginActivity.this,MainActivity.class,null,true);
         }
