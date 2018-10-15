@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.android.mb.schedule.retrofit.download.HttpMethods;
+import com.pgyersdk.crash.PgyCrashManager;
 
 /**
  * 主要用来获取全局的Context
@@ -42,6 +43,7 @@ public class MBApplication extends Application {
 		super.onCreate();
 		sInstance = this;
 		HttpMethods.getInstance().init();
+		PgyCrashManager.register(this);
 	}
 	
 }

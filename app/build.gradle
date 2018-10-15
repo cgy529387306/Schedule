@@ -9,8 +9,8 @@ android {
         applicationId "com.android.mb.myapplication"
         minSdkVersion 16
         targetSdkVersion 21
-        versionCode 1
-        versionName "1.0"
+        versionCode 102
+        versionName "1.0.2"
     }
     buildTypes {
         release {
@@ -55,6 +55,8 @@ dependencies {
 
     // 简化版 Adapter
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.42'
+
+    implementation 'com.pgyersdk:sdk:2.8.1'
 
     implementation project(':calendarview')
     implementation project(':pickerview')

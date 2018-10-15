@@ -39,6 +39,8 @@ import com.android.mb.schedule.utils.ToastHelper;
 import com.android.mb.schedule.view.interfaces.IHomeView;
 import com.android.mb.schedule.widget.CircleImageView;
 import com.android.mb.schedule.widget.FragmentViewPager;
+import com.pgyersdk.crash.PgyCrashManager;
+import com.pgyersdk.update.PgyUpdateManager;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -90,6 +92,8 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
+        PgyUpdateManager.setIsForced(false); //设置是否强制更新。true为强制更新；false为不强制更新（默认值）。
+        PgyUpdateManager.register(this);
         mPresenter.getUserInfo();
         regiestEvent(ProjectConstants.EVENT_UPDATE_USER_INFO, new Action1<Events<?>>() {
             @Override
@@ -97,6 +101,12 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
                initUserInfo(CurrentUser.getInstance());
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        PgyUpdateManager.unregister();
     }
 
     @Override
@@ -151,6 +161,7 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
             }
         });
     }
+
 
     private void initView() {
         mTvTitle = findViewById(R.id.tv_main_title);
