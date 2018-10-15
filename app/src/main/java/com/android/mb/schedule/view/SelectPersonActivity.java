@@ -18,6 +18,8 @@ import com.android.mb.schedule.fragment.PersonFragment;
 import com.android.mb.schedule.fragment.SelectedFragment;
 import com.android.mb.schedule.presenter.PersonPresenter;
 import com.android.mb.schedule.utils.Helper;
+import com.android.mb.schedule.utils.JsonHelper;
+import com.android.mb.schedule.utils.PreferencesHelper;
 import com.android.mb.schedule.view.interfaces.IPersonView;
 
 import java.io.Serializable;
@@ -90,9 +92,17 @@ public class SelectPersonActivity extends BaseMvpActivity<PersonPresenter,IPerso
         mTb.setupWithViewPager(mVp);
     }
 
+    private void getDataFromLocal(){
+        String orgListStr = PreferencesHelper.getInstance().getString(ProjectConstants.KEY_ORG_LIST);
+        String personListStr = PreferencesHelper.getInstance().getString(ProjectConstants.KEY_PERSON_LIST);
+        TreeData orgList = JsonHelper.fromJson(orgListStr,TreeData.class);
+
+    }
+
     @Override
     protected void processLogic(Bundle savedInstanceState) {
         initTabPager();
+        getDataFromLocal();
         mPresenter.getOfficeList();
         mPresenter.getPersons();
     }
@@ -126,6 +136,7 @@ public class SelectPersonActivity extends BaseMvpActivity<PersonPresenter,IPerso
     @Override
     public void getOrgSuccess(TreeData result) {
         if (result!=null){
+            PreferencesHelper.getInstance().putString(ProjectConstants.KEY_ORG_LIST, JsonHelper.toJson(result));
             OrgFragment orgFragment = (OrgFragment) mFragmentList.get(1);
             orgFragment.setDataList(result.getTree());
         }
@@ -134,6 +145,7 @@ public class SelectPersonActivity extends BaseMvpActivity<PersonPresenter,IPerso
     @Override
     public void getPersonSuccess(List<UserBean> result) {
         if (result!=null){
+            PreferencesHelper.getInstance().putString(ProjectConstants.KEY_PERSON_LIST, JsonHelper.toJson(result));
             PersonFragment personFragment = (PersonFragment) mFragmentList.get(0);
             personFragment.setDataList(result);
         }

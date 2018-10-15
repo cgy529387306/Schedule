@@ -27,4 +27,8 @@ public class ProjectConstants {
 
     //SharedPreferences
     public static final String KEY_REGISTRATION_ID = "KEY_REGISTRATION_ID";
+
+    public static final String KEY_PERSON_LIST = "KEY_PERSON_LIST";
+
+    public static final String KEY_ORG_LIST = "KEY_ORG_LIST";
 }
