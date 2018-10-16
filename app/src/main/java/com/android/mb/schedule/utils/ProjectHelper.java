@@ -32,6 +32,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -500,5 +501,21 @@ public class ProjectHelper {
         }
         calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY); // 获取本周日的日期
         return Helper.date2String(calendar.getTime(),"yyyy-MM-dd");
+    }
+
+    public static boolean isSameDay(Date date, Date sameDate) {
+        if (null == date || null == sameDate) {
+            return false;
+        }
+        Calendar nowCalendar = Calendar.getInstance();
+        nowCalendar.setTime(sameDate);
+        nowCalendar.setTimeZone(TimeZone.getTimeZone("GMT+08:00"));
+        Calendar dateCalendar = Calendar.getInstance();
+        dateCalendar.setTime(date);
+        dateCalendar.setTimeZone(TimeZone.getTimeZone("GMT+08:00"));
+        return nowCalendar.get(Calendar.YEAR) == dateCalendar.get(Calendar.YEAR)
+                && nowCalendar.get(Calendar.MONTH) == dateCalendar.get(Calendar.MONTH)
+                && nowCalendar.get(Calendar.DATE) == dateCalendar.get(Calendar.DATE);
+
     }
 }

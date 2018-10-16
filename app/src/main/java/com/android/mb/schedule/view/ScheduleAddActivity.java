@@ -237,7 +237,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
             mStartTime = mStartTime==null?Calendar.getInstance():mStartTime;
             String startDate = Helper.date2String(mStartTime.getTime(),mDateFormat);
             mStartTime.setTime(Helper.string2Date(startDate+"08:00",mDateFormat+mTimeFormat));
-            mEndTime.setTime(Helper.string2Date(startDate+"08:00",mDateFormat+mTimeFormat));
+            mEndTime.setTime(Helper.string2Date(startDate+"09:00",mDateFormat+mTimeFormat));
             mTvStartDate.setText(startDate);
             mTvEndDate.setText(startDate);
             mTvStartTime.setText(Helper.date2String(mStartTime.getTime(),mTimeFormat));

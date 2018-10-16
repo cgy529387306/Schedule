@@ -187,8 +187,12 @@ public class WeekFragment  extends BaseMvpFragment<WeekPresenter,IWeekView> impl
         List<ScheduleBean> allDayEvents = new ArrayList<>();
         for (ScheduleData scheduleData:result){
             for (ScheduleBean scheduleBean : scheduleData.getList()){
-                if (scheduleBean.getAllDay()==1){
-                    allDayEvents.add(scheduleBean);
+                Date startDate = Helper.long2Date(scheduleBean.getTime_s()*1000);
+                Date endDate = Helper.long2Date(scheduleBean.getTime_e()*1000);
+                if (scheduleBean.getAllDay()==1||!ProjectHelper.isSameDay(startDate,endDate)){
+                    if (!isContainSchedule(scheduleBean,allDayEvents)){
+                        allDayEvents.add(scheduleBean);
+                    }
                 }else{
                     scheduleEvents.add(scheduleBean);
                 }
@@ -197,6 +201,18 @@ public class WeekFragment  extends BaseMvpFragment<WeekPresenter,IWeekView> impl
         setEvent(scheduleEvents,false);
         setEvent(allDayEvents,true);
     }
+
+    private boolean isContainSchedule(ScheduleBean item,List<ScheduleBean> scheduleBeanList){
+        boolean isContain = false;
+        for (ScheduleBean scheduleBean:scheduleBeanList){
+            if (scheduleBean.getId()==item.getId()){
+                isContain = true;
+                break;
+            }
+        }
+        return isContain;
+    }
+
 
     //D4EFFF、BFE7FF、AADFFF、94D6FF
     private void setEvent(List<ScheduleBean> dataList,boolean isAllDay){
