@@ -11,10 +11,16 @@ import android.widget.EditText;
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.adapter.AddressAdapter;
 import com.android.mb.schedule.base.BaseMvpActivity;
+import com.android.mb.schedule.constants.ProjectConstants;
+import com.android.mb.schedule.entitys.CurrentUser;
+import com.android.mb.schedule.entitys.TreeData;
 import com.android.mb.schedule.presenter.AddressPresenter;
 import com.android.mb.schedule.utils.Helper;
+import com.android.mb.schedule.utils.JsonHelper;
+import com.android.mb.schedule.utils.PreferencesHelper;
 import com.android.mb.schedule.view.interfaces.IAddressView;
 import com.android.mb.schedule.widget.MyDividerItemDecoration;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +78,7 @@ public class SelectAddressActivity extends BaseMvpActivity<AddressPresenter,IAdd
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
+        getDataFromLocal();
         mPresenter.getAddress();
     }
 
@@ -96,7 +103,17 @@ public class SelectAddressActivity extends BaseMvpActivity<AddressPresenter,IAdd
     @Override
     public void getSuccess(List<String> result) {
         if (result!=null){
+            PreferencesHelper.getInstance().putString(ProjectConstants.KEY_ADDRESS_LIST+ CurrentUser.getInstance().getId(), JsonHelper.toJson(result));
             mAdapter.setNewData(result);
+            mAdapter.setEmptyView(R.layout.empty_data, (ViewGroup) mRecyclerView.getParent());
+        }
+    }
+
+    private void getDataFromLocal(){
+        String addressListStr = PreferencesHelper.getInstance().getString(ProjectConstants.KEY_ADDRESS_LIST+CurrentUser.getInstance().getId());
+        List<String> addressList = JsonHelper.fromJson(addressListStr,new TypeToken<List<String>>(){}.getType());
+        if (addressList!=null){
+            mAdapter.setNewData(addressList);
             mAdapter.setEmptyView(R.layout.empty_data, (ViewGroup) mRecyclerView.getParent());
         }
     }

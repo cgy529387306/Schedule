@@ -23,6 +23,7 @@ import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.JsonHelper;
 import com.android.mb.schedule.utils.PreferencesHelper;
 import com.android.mb.schedule.view.interfaces.IPersonView;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -98,14 +99,14 @@ public class SelectPersonActivity extends BaseMvpActivity<PersonPresenter,IPerso
         String orgListStr = PreferencesHelper.getInstance().getString(ProjectConstants.KEY_ORG_LIST+CurrentUser.getInstance().getId());
         String personListStr = PreferencesHelper.getInstance().getString(ProjectConstants.KEY_PERSON_LIST+CurrentUser.getInstance().getId());
         TreeData orgList = JsonHelper.fromJson(orgListStr,TreeData.class);
-        UserData userData = JsonHelper.fromJson(personListStr,UserData.class);
+        List<UserBean> personList = JsonHelper.fromJson(personListStr,new TypeToken<List<UserBean>>(){}.getType());
         if (Helper.isNotEmpty(orgList)){
             OrgFragment orgFragment = (OrgFragment) mFragmentList.get(1);
             orgFragment.setDataList(orgList.getTree());
         }
-        if (userData!=null && Helper.isNotEmpty(userData.getUserList())){
+        if (personList!=null){
             PersonFragment personFragment = (PersonFragment) mFragmentList.get(0);
-            personFragment.setDataList(userData.getUserList(),false);
+            personFragment.setDataList(personList,false);
         }
 
     }
@@ -156,9 +157,7 @@ public class SelectPersonActivity extends BaseMvpActivity<PersonPresenter,IPerso
     @Override
     public void getPersonSuccess(List<UserBean> result) {
         if (result!=null){
-            UserData userData = new UserData();
-            userData.setUserList(result);
-            PreferencesHelper.getInstance().putString(ProjectConstants.KEY_PERSON_LIST+CurrentUser.getInstance().getId(), JsonHelper.toJson(userData));
+            PreferencesHelper.getInstance().putString(ProjectConstants.KEY_PERSON_LIST+CurrentUser.getInstance().getId(), JsonHelper.toJson(result));
             PersonFragment personFragment = (PersonFragment) mFragmentList.get(0);
             personFragment.setDataList(result,true);
         }

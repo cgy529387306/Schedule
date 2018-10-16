@@ -31,4 +31,8 @@ public class ProjectConstants {
     public static final String KEY_PERSON_LIST = "KEY_PERSON_LIST";
 
     public static final String KEY_ORG_LIST = "KEY_ORG_LIST";
+
+    public static final String KEY_UNDER_LIST = "KEY_UNDER_LIST";
+
+    public static final String KEY_ADDRESS_LIST = "KEY_ADDRESS_LIST";
 }

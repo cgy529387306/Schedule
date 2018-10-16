@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.entitys.TreeBean;
+import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.widget.treeview.TreeNode;
 import com.android.mb.schedule.widget.treeview.TreeViewBinder;
 
@@ -15,6 +16,7 @@ import com.android.mb.schedule.widget.treeview.TreeViewBinder;
  */
 
 public class OrgNodeBinder extends TreeViewBinder<OrgNodeBinder.ViewHolder> {
+
     @Override
     public ViewHolder provideViewHolder(View itemView) {
         return new ViewHolder(itemView);
@@ -27,7 +29,8 @@ public class OrgNodeBinder extends TreeViewBinder<OrgNodeBinder.ViewHolder> {
         int rotateDegree = node.isExpand() ? 90 : 0;
         holder.ivArrow.setRotation(rotateDegree);
         TreeBean orgNode = (TreeBean) node.getContent();
-        holder.tvName.setText(orgNode.getName());
+        String number = Helper.isEmpty(node.getChildList())?"":"("+node.getChildList().size()+")";
+        holder.tvName.setText(orgNode.getName()+number);
         if (node.isLeaf())
             holder.ivArrow.setVisibility(View.INVISIBLE);
         else holder.ivArrow.setVisibility(View.VISIBLE);

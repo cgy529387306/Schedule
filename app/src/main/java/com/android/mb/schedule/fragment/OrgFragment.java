@@ -76,7 +76,7 @@ public class OrgFragment extends BaseFragment {
             addChild(treeBean,root);
             root.expand();
         }
-        mTreeAdapter = new TreeViewAdapter(mTreeNodes, Arrays.asList(new UserNodeBinder(), new OrgNodeBinder()));
+        mTreeAdapter = new TreeViewAdapter(mTreeNodes, Arrays.asList(new UserNodeBinder(getActivity(),0), new OrgNodeBinder()));
         mRecyclerView.setAdapter(mTreeAdapter);
         mTreeAdapter.setOnTreeNodeListener(new TreeViewAdapter.OnTreeNodeListener() {
             @Override

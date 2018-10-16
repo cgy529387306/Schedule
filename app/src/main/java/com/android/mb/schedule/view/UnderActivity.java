@@ -5,15 +5,21 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.base.BaseMvpActivity;
-import com.android.mb.schedule.binder.OrgNode1Binder;
-import com.android.mb.schedule.binder.UserNode1Binder;
+import com.android.mb.schedule.binder.OrgNodeBinder;
+import com.android.mb.schedule.binder.UserNodeBinder;
+import com.android.mb.schedule.constants.ProjectConstants;
+import com.android.mb.schedule.entitys.CurrentUser;
 import com.android.mb.schedule.entitys.TreeBean;
 import com.android.mb.schedule.entitys.TreeData;
 import com.android.mb.schedule.entitys.UserBean;
 import com.android.mb.schedule.presenter.UnderPresenter;
+import com.android.mb.schedule.utils.Helper;
+import com.android.mb.schedule.utils.JsonHelper;
+import com.android.mb.schedule.utils.PreferencesHelper;
 import com.android.mb.schedule.view.interfaces.IUnderView;
 import com.android.mb.schedule.widget.MyDividerItemDecoration;
 import com.android.mb.schedule.widget.treeview.TreeNode;
@@ -29,6 +35,8 @@ import java.util.List;
  */
 
 public class UnderActivity extends BaseMvpActivity<UnderPresenter,IUnderView> implements IUnderView, View.OnClickListener {
+
+    private TextView mTvEmpty;
     private RecyclerView mRecyclerView;
     private TreeViewAdapter mTreeAdapter;
     private List<TreeNode> mTreeNodes = new ArrayList<>();
@@ -40,7 +48,7 @@ public class UnderActivity extends BaseMvpActivity<UnderPresenter,IUnderView> im
 
     @Override
     protected int getLayoutId() {
-        return R.layout.frg_org;
+        return R.layout.activity_under;
     }
 
     @Override
@@ -50,6 +58,7 @@ public class UnderActivity extends BaseMvpActivity<UnderPresenter,IUnderView> im
 
     @Override
     protected void bindViews() {
+        mTvEmpty = findViewById(R.id.tv_empty);
         mRecyclerView = findViewById(R.id.recyclerView);
         mRecyclerView.addItemDecoration(new MyDividerItemDecoration(mContext, LinearLayoutManager.VERTICAL));
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -57,6 +66,7 @@ public class UnderActivity extends BaseMvpActivity<UnderPresenter,IUnderView> im
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
+        getDataFromLocal();
         mPresenter.getOfficeList();
     }
 
@@ -79,18 +89,33 @@ public class UnderActivity extends BaseMvpActivity<UnderPresenter,IUnderView> im
     @Override
     public void getOrgSuccess(TreeData result) {
         mDataList = result.getTree();
+        PreferencesHelper.getInstance().putString(ProjectConstants.KEY_UNDER_LIST+ CurrentUser.getInstance().getId(), JsonHelper.toJson(result));
         refreshData();
+    }
+
+    private void getDataFromLocal(){
+        String orgListStr = PreferencesHelper.getInstance().getString(ProjectConstants.KEY_UNDER_LIST+CurrentUser.getInstance().getId());
+        TreeData orgList = JsonHelper.fromJson(orgListStr,TreeData.class);
+        if (orgList!=null){
+            mDataList = orgList.getTree();
+            refreshData();
+        }
     }
 
     private void refreshData(){
         mTreeNodes.clear();
+        if (Helper.isEmpty(mDataList)){
+            mTvEmpty.setVisibility(View.VISIBLE);
+            return;
+        }
+        mTvEmpty.setVisibility(View.GONE);
         for (TreeBean treeBean:mDataList) {
             TreeNode<TreeBean> root = new TreeNode<>(treeBean);
             mTreeNodes.add(root);
             addChild(treeBean,root);
             root.expand();
         }
-        mTreeAdapter = new TreeViewAdapter(mTreeNodes, Arrays.asList(new UserNode1Binder(), new OrgNode1Binder()));
+        mTreeAdapter = new TreeViewAdapter(mTreeNodes, Arrays.asList(new UserNodeBinder(this,1), new OrgNodeBinder()));
         mRecyclerView.setAdapter(mTreeAdapter);
         mTreeAdapter.setOnTreeNodeListener(new TreeViewAdapter.OnTreeNodeListener() {
             @Override
@@ -103,7 +128,7 @@ public class UnderActivity extends BaseMvpActivity<UnderPresenter,IUnderView> im
 
             @Override
             public void onToggle(boolean isExpand, RecyclerView.ViewHolder holder) {
-                OrgNode1Binder.ViewHolder dirViewHolder = (OrgNode1Binder.ViewHolder) holder;
+                OrgNodeBinder.ViewHolder dirViewHolder = (OrgNodeBinder.ViewHolder) holder;
                 final ImageView ivArrow = dirViewHolder.getIvArrow();
                 int rotateDegree = isExpand ? 90 : -90;
                 ivArrow.animate().rotationBy(rotateDegree)

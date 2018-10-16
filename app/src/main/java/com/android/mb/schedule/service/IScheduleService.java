@@ -110,6 +110,10 @@ public interface IScheduleService {
     @FormUrlEncoded
     Observable<HttpResult<List<MyScheduleBean>>> getMine(@FieldMap Map<String,Object> requestMap);
 
+    @POST("/app/schedule/other")
+    @FormUrlEncoded
+    Observable<HttpResult<List<RelatedBean>>> getOther(@FieldMap Map<String,Object> requestMap);
+
     @POST("/app/common/area")
     @FormUrlEncoded
     Observable<HttpResult<Object>> getAreaList(@FieldMap Map<String,Object> requestMap);

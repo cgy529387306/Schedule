@@ -85,6 +85,9 @@
         <activity
             android:name=".view.UnderActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".view.ScheduleUnderActivity"
+            android:screenOrientation="portrait"/>
 
         <!-- Required SDK核心功能-->
         <activity

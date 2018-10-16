@@ -1,14 +1,20 @@
 package com.android.mb.schedule.binder;
 
+import android.app.Activity;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.mb.schedule.R;
+import com.android.mb.schedule.app.MBApplication;
 import com.android.mb.schedule.entitys.UserBean;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.ImageUtils;
+import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.utils.ProjectHelper;
+import com.android.mb.schedule.utils.ToastHelper;
+import com.android.mb.schedule.view.ScheduleUnderActivity;
 import com.android.mb.schedule.view.SelectPersonActivity;
 import com.android.mb.schedule.widget.treeview.TreeNode;
 import com.android.mb.schedule.widget.treeview.TreeViewBinder;
@@ -19,6 +25,16 @@ import com.android.mb.schedule.widget.treeview.TreeViewBinder;
  */
 
 public class UserNodeBinder extends TreeViewBinder<UserNodeBinder.ViewHolder> {
+
+    private int mType;
+
+    private Activity mActivity;
+
+    public UserNodeBinder(Activity activity,int type) {
+        mType = type;
+        mActivity = activity;
+    }
+
     @Override
     public ViewHolder provideViewHolder(View itemView) {
         return new ViewHolder(itemView);
@@ -29,21 +45,39 @@ public class UserNodeBinder extends TreeViewBinder<UserNodeBinder.ViewHolder> {
         final UserBean userNode = (UserBean) node.getContent();
         ImageUtils.displayAvatar(holder.ivAvatar.getContext(),userNode.getAvatar(),holder.ivAvatar);
         holder.tvName.setText(userNode.getNickname());
-        holder.ivCheck.setImageResource(userNode.isSelect()?R.mipmap.ic_item_checked:R.mipmap.ic_item_check);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                userNode.setSelect(!userNode.isSelect());
-                holder.ivCheck.setImageResource(userNode.isSelect()?R.mipmap.ic_item_checked:R.mipmap.ic_item_check);
-                if (userNode.isSelect()){
-                    if (!ProjectHelper.getSelectIdList().contains(userNode.getId())){
-                        SelectPersonActivity.mSelectList.add(userNode);
-                    }
-                }else{
-                    removeSelect(userNode.getId());
+        if (mType==1){
+            holder.ivCheck.setVisibility(View.GONE);
+        }else{
+            holder.ivCheck.setVisibility(View.VISIBLE);
+            holder.ivCheck.setImageResource(userNode.isSelect()?R.mipmap.ic_item_checked:R.mipmap.ic_item_check);
+        }
+        if (mType==1){
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putLong("id",userNode.getId());
+                    bundle.putString("name",userNode.getNickname());
+                    NavigationHelper.startActivity(mActivity, ScheduleUnderActivity.class,bundle,false);
                 }
-            }
-        });
+            });
+        }else{
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    userNode.setSelect(!userNode.isSelect());
+                    holder.ivCheck.setImageResource(userNode.isSelect()?R.mipmap.ic_item_checked:R.mipmap.ic_item_check);
+                    if (userNode.isSelect()){
+                        if (!ProjectHelper.getSelectIdList().contains(userNode.getId())){
+                            SelectPersonActivity.mSelectList.add(userNode);
+                        }
+                    }else{
+                        removeSelect(userNode.getId());
+                    }
+                }
+            });
+        }
+
     }
 
     private void removeSelect(long id){
