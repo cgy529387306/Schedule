@@ -94,7 +94,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
     private String mLocalKey;
     private ScheduleDetailData mDetailData;
     private BottomMenuDialog mCheckDialog;
-    private boolean mIsRepeatChange;
+    private boolean mIsShowRemind;
     private Calendar mStartTime,mEndTime;
     @Override
     protected void loadIntent() {
@@ -127,57 +127,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
     @Override
     protected void onRightAction() {
         super.onRightAction();
-        AppHelper.hideSoftInputFromWindow(mEdtScheduleName);
-        String name = mEdtScheduleName.getText().toString().trim();
-        String content = mEdtScheduleContent.getText().toString().trim();
-        String address = mTvAddress.getText().toString().trim();
-        String startDate = mTvStartDate.getText().toString().trim();
-        String startTime = mTvStartTime.getText().toString().trim();
-        String endDate = mTvEndDate.getText().toString().trim();
-        String endTime = mTvEndTime.getText().toString().trim();
-        Date start = Helper.string2Date(startDate+startTime,mDateFormat+mTimeFormat);
-        Date end = Helper.string2Date(endDate+endTime,mDateFormat+mTimeFormat);
-        if (Helper.isEmpty(name)){
-            showToastMessage("请输入日程名称");
-            return;
-        }
-        if (Helper.isEmpty(address)){
-            showToastMessage("请输入地点");
-            return;
-        }
-        if (start.getTime()>=end.getTime()){
-            showToastMessage("开始时间必须大于结束时间");
-            return;
-        }
-        if (mScheduleRequest==null){
-            mScheduleRequest=new ScheduleRequest();
-        }
-        if (mFileId!=-1){
-            mScheduleRequest.setFid(mFileId);
-        }
-        mScheduleRequest.setTitle(name);
-        mScheduleRequest.setDescription(content);
-        mScheduleRequest.setAddress(address);
-        mScheduleRequest.setImportant(mIsImport);
-        mScheduleRequest.setAllDay(mIsAllDay);
-        mScheduleRequest.setRelated(Helper.isEmpty(mRelatePersons)?"":ProjectHelper.getIdStr(mRelatePersons));
-        mScheduleRequest.setShare(Helper.isEmpty(mSharePersons)?"":ProjectHelper.getIdStr(mSharePersons));
-        mScheduleRequest.setSummary("");
-        mScheduleRequest.setStart(start.getTime()/1000);
-        mScheduleRequest.setEnd(end.getTime()/1000);
-        mScheduleRequest.setRemind(mScheduleRemindPop.getType());
-        mScheduleRequest.setRepeattype(mScheduleRepeatPop.getType());
-        if (NetworkHelper.isNetworkAvailable(mContext)){
-            if (mIsRepeatChange){
-                checkRepeatChange();
-            }else{
-                doRequest();
-            }
-
-        }else{
-            showToastMessage("当前网络不可用，待网络连接后再保存日程");
-            PreferencesHelper.getInstance().putString(mLocalKey, JsonHelper.toJson(mScheduleRequest));
-        }
+        doSave();
     }
 
     @Override
@@ -232,7 +182,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
             mIvImport.setImageResource(mIsImport==1?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
             mTvRepeat.setText(ProjectHelper.getRepeatStr(mScheduleRequest.getRepeattype()));
             mTvWhenRemind.setText(ProjectHelper.getRemindStr(mScheduleRequest.getRemind()));
-
+            mIsShowRemind = mScheduleRequest.getRepeattype()!=1;
             if (Helper.isNotEmpty(mDetailData.getRelated())){
                 mRelatePersons = mDetailData.getRelated();
                 String relateStr = String.format(mContext.getString(R.string.relate_person), ProjectHelper.getSharePersonStr(mRelatePersons),mRelatePersons.size());
@@ -286,10 +236,12 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
             mTvEndTime.setVisibility(mIsAllDay==1?View.GONE:View.VISIBLE);
             mStartTime = mStartTime==null?Calendar.getInstance():mStartTime;
             String startDate = Helper.date2String(mStartTime.getTime(),mDateFormat);
+            mStartTime.setTime(Helper.string2Date(startDate+"08:00",mDateFormat+mTimeFormat));
+            mEndTime.setTime(Helper.string2Date(startDate+"08:00",mDateFormat+mTimeFormat));
             mTvStartDate.setText(startDate);
             mTvEndDate.setText(startDate);
-            mStartTime.setTime(Helper.string2Date(startDate+"00:00",mDateFormat+mTimeFormat));
-            mEndTime.setTime(Helper.string2Date(startDate+"23:59",mDateFormat+mTimeFormat));
+            mTvStartTime.setText(Helper.date2String(mStartTime.getTime(),mTimeFormat));
+            mTvEndTime.setText(Helper.date2String(mEndTime.getTime(),mTimeFormat));
         }else  if (id == R.id.iv_add_person){
             Bundle bundle = new Bundle();
             bundle.putSerializable("selectPerson", (Serializable) mRelatePersons);
@@ -339,9 +291,6 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         mScheduleRepeatPop = new ScheduleRepeatPop(this, repeatType,new ScheduleRepeatPop.SelectListener() {
             @Override
             public void onSelected(int type) {
-                if (mType==1){
-                    mIsRepeatChange = type!=mScheduleRequest.getRemind();
-                }
                 mTvRepeat.setText(ProjectHelper.getRepeatStr(type));
             }
         });
@@ -449,7 +398,6 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
                 calendar.setTime(date);
                 mStartTime = (Calendar) calendar.clone();
                 mTvStartDate.setText(Helper.date2String(date,mDateFormat));
-                mTvStartTime.setText(Helper.date2String(date,mTimeFormat));
             }
         })
                 .setTimeSelectChangeListener(new OnTimeSelectChangeListener() {
@@ -491,7 +439,6 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
                 calendar.setTime(date);
                 mEndTime = (Calendar) calendar.clone();
                 mTvEndDate.setText(Helper.date2String(date,mDateFormat));
-                mTvEndTime.setText(Helper.date2String(date,mTimeFormat));
             }
         })
                 .setTimeSelectChangeListener(new OnTimeSelectChangeListener() {
@@ -641,25 +588,83 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
                         public void onClick(View v) {
                             mCheckDialog.dismiss();
                             mScheduleRequest.setType(0);
-                            doRequest();
+                            if (mType==1){
+                                mPresenter.editSchedule(mScheduleRequest);
+                            }else{
+                                mPresenter.addSchedule(mScheduleRequest);
+                            }
                         }
                     }).addMenu("更改此活动和所有将来的活动", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             mCheckDialog.dismiss();
                             mScheduleRequest.setType(1);
-                            doRequest();
+                            if (mType==1){
+                                mPresenter.editSchedule(mScheduleRequest);
+                            }else{
+                                mPresenter.addSchedule(mScheduleRequest);
+                            }
                         }
                     }).create();
         }
         mCheckDialog.show();
     }
 
-    private void doRequest(){
-        if (mType==1){
-            mPresenter.editSchedule(mScheduleRequest);
+    private void doSave(){
+        AppHelper.hideSoftInputFromWindow(mEdtScheduleName);
+        String name = mEdtScheduleName.getText().toString().trim();
+        String content = mEdtScheduleContent.getText().toString().trim();
+        String address = mTvAddress.getText().toString().trim();
+        String startDate = mTvStartDate.getText().toString().trim();
+        String startTime = mTvStartTime.getText().toString().trim();
+        String endDate = mTvEndDate.getText().toString().trim();
+        String endTime = mTvEndTime.getText().toString().trim();
+        Date start = Helper.string2Date(startDate+startTime,mDateFormat+mTimeFormat);
+        Date end = Helper.string2Date(endDate+endTime,mDateFormat+mTimeFormat);
+        if (Helper.isEmpty(name)){
+            showToastMessage("请输入日程名称");
+            return;
+        }
+        if (Helper.isEmpty(address)){
+            showToastMessage("请输入地点");
+            return;
+        }
+        if (start.getTime()>=end.getTime()){
+            showToastMessage("开始时间必须大于结束时间");
+            return;
+        }
+        if (mScheduleRequest==null){
+            mScheduleRequest=new ScheduleRequest();
+        }
+        if (mFileId!=-1){
+            mScheduleRequest.setFid(mFileId);
+        }
+        mScheduleRequest.setTitle(name);
+        mScheduleRequest.setDescription(content);
+        mScheduleRequest.setAddress(address);
+        mScheduleRequest.setImportant(mIsImport);
+        mScheduleRequest.setAllDay(mIsAllDay);
+        mScheduleRequest.setRelated(Helper.isEmpty(mRelatePersons)?"":ProjectHelper.getIdStr(mRelatePersons));
+        mScheduleRequest.setShare(Helper.isEmpty(mSharePersons)?"":ProjectHelper.getIdStr(mSharePersons));
+        mScheduleRequest.setSummary("");
+        mScheduleRequest.setStart(start.getTime()/1000);
+        mScheduleRequest.setEnd(end.getTime()/1000);
+        mScheduleRequest.setRemind(mScheduleRemindPop.getType());
+        mScheduleRequest.setRepeattype(mScheduleRepeatPop.getType());
+        if (NetworkHelper.isNetworkAvailable(mContext)){
+            if (mIsShowRemind){
+                checkRepeatChange();
+            }else{
+                if (mType==1){
+                    mPresenter.editSchedule(mScheduleRequest);
+                }else{
+                    mPresenter.addSchedule(mScheduleRequest);
+                }
+            }
+
         }else{
-            mPresenter.addSchedule(mScheduleRequest);
+            showToastMessage("当前网络不可用，待网络连接后再保存日程");
+            PreferencesHelper.getInstance().putString(mLocalKey, JsonHelper.toJson(mScheduleRequest));
         }
     }
 
