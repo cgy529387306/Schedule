@@ -1,5 +1,6 @@
 package com.android.mb.schedule.adapter;
 
+import android.view.View;
 import android.widget.ImageView;
 
 import com.android.mb.schedule.R;
@@ -20,7 +21,13 @@ public class SelectAdapter extends BaseQuickAdapter<UserBean, BaseViewHolder> {
     protected void convert(BaseViewHolder helper, UserBean item) {
         helper.setText(R.id.tv_name,item.getNickname());
         ImageUtils.displayAvatar(mContext,item.getAvatar(), (ImageView) helper.getView(R.id.iv_avatar));
-        helper.setVisible(R.id.iv_check,false);
+        helper.setImageResource(R.id.iv_check,R.mipmap.ic_detail_delete);
+        helper.getView(R.id.iv_check).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
 }

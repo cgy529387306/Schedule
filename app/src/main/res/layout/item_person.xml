@@ -11,14 +11,13 @@
         android:src="@mipmap/ic_avatar_default" />
     <TextView
         android:id="@+id/tv_name"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxWidth="160dp"
         android:layout_marginLeft="10dp"
         android:singleLine="true"
         android:text="刘浩然"
-        android:textStyle="bold"
         android:textColor="@color/text_color"
        />
     <View
@@ -27,8 +26,8 @@
         android:layout_weight="1"/>
     <ImageView
         android:id="@+id/iv_check"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:padding="10dp"
         android:src="@mipmap/ic_item_check"/>
 </LinearLayout>
