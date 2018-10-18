@@ -46,6 +46,7 @@ public class SectionMyAdapter extends BaseSectionQuickAdapter<ScheduleSection, B
         tvTitle.setCompoundDrawablesWithIntrinsicBounds(drawableLeft,
                 null, null, null);
         tvTitle.setText(scheduleBean.getTitle());
+
         helper.setText(R.id.tv_address, scheduleBean.getAddress());
         if (scheduleBean.getTimeType()==0){
             helper.setTextColor(R.id.tv_time,mContext.getResources().getColor(R.color.base_orange));

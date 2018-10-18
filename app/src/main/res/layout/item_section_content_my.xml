@@ -13,6 +13,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:singleLine="true"
+            android:layout_marginRight="15dp"
             android:layout_height="wrap_content"
             android:drawableLeft="@mipmap/ic_warn"
             android:drawablePadding="6dp"
@@ -33,6 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:layout_marginLeft="12dp"
         android:text="马尾造船厂集团18号楼 刘元"
         android:textSize="14sp"
         android:textColor="@color/gray_a5" />

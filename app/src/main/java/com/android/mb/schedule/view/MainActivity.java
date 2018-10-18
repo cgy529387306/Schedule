@@ -1,24 +1,18 @@
 package com.android.mb.schedule.view;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.mb.schedule.R;
@@ -31,6 +25,7 @@ import com.android.mb.schedule.fragment.MonthFragment;
 import com.android.mb.schedule.fragment.WeekFragment;
 import com.android.mb.schedule.presenter.HomePresenter;
 import com.android.mb.schedule.rxbus.Events;
+import com.android.mb.schedule.utils.AppHelper;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.ImageUtils;
 import com.android.mb.schedule.utils.NavigationHelper;
@@ -39,25 +34,20 @@ import com.android.mb.schedule.utils.ToastHelper;
 import com.android.mb.schedule.view.interfaces.IHomeView;
 import com.android.mb.schedule.widget.CircleImageView;
 import com.android.mb.schedule.widget.FragmentViewPager;
-import com.pgyersdk.crash.PgyCrashManager;
 import com.pgyersdk.update.PgyUpdateManager;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 import rx.functions.Action1;
 
 /**
  * 首页
  */
-public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> implements IHomeView, NavigationView.OnNavigationItemSelectedListener ,View.OnClickListener{
+public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> implements IHomeView, View.OnClickListener{
 
     private DrawerLayout mDrawerLayout;
-    private NavigationView mNavigationView;
     private TabLayout mTabLayout;
-    private boolean isDrawer=false;
-    private CoordinatorLayout mCoordinatorLayout;
     private ImageView mIvOpenDrawerLayout;
     private FragmentViewPager mFragmentViewPager;
     private ArrayList<Fragment> mFragmentArrayList;
@@ -69,6 +59,8 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
     private TextView mTvTitle; // 标题
     private ImageView mIvRefresh; // 右边图标
     private ImageView mIvToday; // 右边图标
+    private LinearLayout mLlyMenu;
+    private CoordinatorLayout mCoordinatorLayout;
     @Override
     protected void loadIntent() {
 
@@ -111,11 +103,16 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
 
     @Override
     protected void setListener() {
-        mNavigationView.setNavigationItemSelectedListener(this);
-        mIvOpenDrawerLayout.setOnClickListener(this);
-        mCoordinatorLayout.setOnTouchListener(mOnTouchListener);
-        mDrawerLayout.addDrawerListener(mDrawerListener);
+        findViewById(R.id.nav_my_share).setOnClickListener(this);
+        findViewById(R.id.nav_other_share).setOnClickListener(this);
+        findViewById(R.id.nav_subordinate_log).setOnClickListener(this);
+        findViewById(R.id.nav_relatedme_log).setOnClickListener(this);
+        findViewById(R.id.nav_setting).setOnClickListener(this);
+        findViewById(R.id.nav_exit).setOnClickListener(this);
+
         findViewById(R.id.tv_add).setOnClickListener(this);
+        mIvOpenDrawerLayout.setOnClickListener(this);
+        mDrawerLayout.addDrawerListener(mDrawerListener);
         mIvRefresh.setOnClickListener(this);
         mIvToday.setOnClickListener(this);
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -164,19 +161,18 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
 
 
     private void initView() {
+        mCoordinatorLayout = findViewById(R.id.coordinator);
+        mLlyMenu = findViewById(R.id.lly_menu);
         mTvTitle = findViewById(R.id.tv_main_title);
         mIvRefresh = findViewById(R.id.iv_refresh);
         mIvToday = findViewById(R.id.iv_today);
         mTabLayout = findViewById(R.id.tab_layout);
         mDrawerLayout = findViewById(R.id.drawer_layout);
-        mNavigationView = findViewById(R.id.nav_view);
-        mCoordinatorLayout = findViewById(R.id.right);
         mIvOpenDrawerLayout = findViewById(R.id.iv_open_drawerlayout);
         mFragmentViewPager = findViewById(R.id.fragmentViewPager);
-        View headerView = mNavigationView.getHeaderView(0);
-        mIvHead = headerView.findViewById(R.id.iv_head);
-        mTvName =  headerView.findViewById(R.id.tv_name);
-        mTvJob =  headerView.findViewById(R.id.tv_job);
+        mIvHead = findViewById(R.id.iv_head);
+        mTvName =  findViewById(R.id.tv_name);
+        mTvJob =  findViewById(R.id.tv_job);
     }
 
     private void initTabViewPager(){
@@ -210,69 +206,15 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
         }
     }
 
-
-    private View.OnTouchListener mOnTouchListener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            if (isDrawer) {
-                return mNavigationView.dispatchTouchEvent(motionEvent);
-            } else {
-                return false;
-            }
-        }
-    };
-
-    private DrawerLayout.DrawerListener mDrawerListener = new DrawerLayout.DrawerListener() {
-        @Override
-        public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
-            isDrawer=true;
-            //获取屏幕的宽高
-            WindowManager manager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-            Display display = manager.getDefaultDisplay();
-            //设置右面的布局位置  根据左面菜单的right作为右面布局的left   左面的right+屏幕的宽度（或者right的宽度这里是相等的）为右面布局的right
-            mCoordinatorLayout.layout(mNavigationView.getRight(), 0, mNavigationView.getRight() + display.getWidth(), display.getHeight());
-        }
-        @Override
-        public void onDrawerOpened(View drawerView) {}
-        @Override
-        public void onDrawerClosed(View drawerView) {
-            isDrawer=false;
-        }
-        @Override
-        public void onDrawerStateChanged(int newState) {}
-    };
-
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(Gravity.LEFT);
         } else {
             backPressed();
         }
     }
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.nav_my_share){ //我的分享
-            NavigationHelper.startActivity(MainActivity.this,ScheduleShareActivity.class,null,false);
-        }else if (id == R.id.nav_other_share){  //他人分享
-            NavigationHelper.startActivity(MainActivity.this,ScheduleShareOtherActivity.class,null,false);
-        } else if (id == R.id.nav_subordinate_log){  // 下属日志
-            NavigationHelper.startActivity(MainActivity.this,UnderActivity.class,null,false);
-        }
-        else if (id == R.id.nav_relatedme_log){  // 与我相关的日志
-            NavigationHelper.startActivity(MainActivity.this,ScheduleRelateActivity.class,null,false);
-        }else if (id == R.id.nav_setting){  //设置
-            NavigationHelper.startActivity(MainActivity.this,SettingActivity.class,null,false);
-        }else if (id == R.id.nav_exit) {  //退出
-            CurrentUser.getInstance().loginOut();
-            NavigationHelper.startActivity(MainActivity.this, LoginActivity.class, null, true);
-        }
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
+
 
     @Override
     public void onClick(View view) {
@@ -303,6 +245,26 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
             if (mFragmentViewPager.getCurrentItem()==1 && mWeekFragment!=null){
                 mWeekFragment.toToday();
             }
+        }else if (id == R.id.nav_my_share){ //我的分享
+            NavigationHelper.startActivity(MainActivity.this,ScheduleShareActivity.class,null,false);
+            mDrawerLayout.closeDrawer(Gravity.LEFT);
+        }else if (id == R.id.nav_other_share){  //他人分享
+            NavigationHelper.startActivity(MainActivity.this,ScheduleShareOtherActivity.class,null,false);
+            mDrawerLayout.closeDrawer(Gravity.LEFT);
+        } else if (id == R.id.nav_subordinate_log){  // 下属日志
+            NavigationHelper.startActivity(MainActivity.this,UnderActivity.class,null,false);
+            mDrawerLayout.closeDrawer(Gravity.LEFT);
+        }
+        else if (id == R.id.nav_relatedme_log){  // 与我相关的日志
+            NavigationHelper.startActivity(MainActivity.this,ScheduleRelateActivity.class,null,false);
+            mDrawerLayout.closeDrawer(Gravity.LEFT);
+        }else if (id == R.id.nav_setting){  //设置
+            NavigationHelper.startActivity(MainActivity.this,SettingActivity.class,null,false);
+            mDrawerLayout.closeDrawer(Gravity.LEFT);
+        }else if (id == R.id.nav_exit) {  //退出
+            CurrentUser.getInstance().loginOut();
+            NavigationHelper.startActivity(MainActivity.this, LoginActivity.class, null, true);
+            mDrawerLayout.closeDrawer(Gravity.LEFT);
         }
     }
 
@@ -345,5 +307,19 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
         }
     }
 
+
+    private DrawerLayout.DrawerListener mDrawerListener = new DrawerLayout.DrawerListener() {
+        @Override
+        public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+            mCoordinatorLayout.layout(mLlyMenu.getRight(), 0, mLlyMenu.getRight() + AppHelper.getScreenWidth(), AppHelper.getScreenHeight());
+        }
+        @Override
+        public void onDrawerOpened(View drawerView) {}
+        @Override
+        public void onDrawerClosed(View drawerView) {
+        }
+        @Override
+        public void onDrawerStateChanged(int newState) {}
+    };
 
 }
