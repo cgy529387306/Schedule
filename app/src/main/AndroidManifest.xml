@@ -181,7 +181,7 @@
         </receiver>
         <!-- Required  . Enable it you can get statistics data with channel -->
         <meta-data android:name="JPUSH_CHANNEL" android:value="developer-default"/>
-        <meta-data android:name="JPUSH_APPKEY" android:value="2ea5473294b25f3f717252aa" />
+        <meta-data android:name="JPUSH_APPKEY" android:value="9a1350668ad255286f5c94d4" />
 
         <meta-data
             android:name="PGYER_APPID"

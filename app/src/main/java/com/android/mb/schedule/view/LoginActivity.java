@@ -99,7 +99,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter,ILoginView> im
         Map<String,Object> requestMap = new HashMap<>();
         requestMap.put("username",account);
         requestMap.put("password",pwd);
-        requestMap.put("registerId",rid);
+        requestMap.put("registerid",rid);
         mPresenter.userLogin(requestMap);
     }
 
