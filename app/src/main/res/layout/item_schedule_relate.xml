@@ -23,8 +23,8 @@
         android:orientation="horizontal">
         <com.android.mb.schedule.widget.CircleImageView
             android:id="@+id/iv_head"
-            android:layout_width="58dp"
-            android:layout_height="58dp"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
             android:src="@mipmap/ic_avatar_default" />
         <LinearLayout
             android:layout_width="0dp"
@@ -36,11 +36,9 @@
                 android:id="@+id/tv_name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="6dp"
                 android:layout_marginLeft="10dp"
                 android:singleLine="true"
-                android:textStyle="bold"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:text="刘浩然"
                 android:textColor="@color/gray_45" />
             <TextView
@@ -57,10 +55,9 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
             android:src="@mipmap/bg_share_me"/>
     </LinearLayout>
-    <include layout="@layout/common_divider" />
+    <include layout="@layout/common_divider_10" />
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
@@ -68,10 +65,11 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:drawableLeft="@drawable/shape_circle_dot_blue"
         android:singleLine="true"
         android:drawablePadding="6dp"
         android:text="到集团信息公司沟通问题"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textColor="@color/base_blue" />
     <LinearLayout
         android:layout_width="match_parent"
@@ -88,7 +86,7 @@
             android:singleLine="true"
             android:layout_height="wrap_content"
             android:drawableLeft="@mipmap/ic_address"
-            android:drawablePadding="6dp"
+            android:drawablePadding="4dp"
             android:textSize="14sp"
             android:text="马尾造船厂"
             android:textColor="@color/gray_a5" />
@@ -98,7 +96,7 @@
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:drawableLeft="@mipmap/ic_time"
-            android:drawablePadding="6dp"
+            android:drawablePadding="4dp"
             android:textSize="14sp"
             android:text="08-25  18:56"
             android:textColor="@color/gray_a5" />

@@ -27,7 +27,7 @@
         android:drawableLeft="@mipmap/ic_warn"
         android:drawablePadding="6dp"
         android:text="到集团信息公司沟通问题"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textColor="@color/base_blue" />
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,7 +41,7 @@
             android:singleLine="true"
             android:layout_height="wrap_content"
             android:drawableLeft="@mipmap/ic_address"
-            android:drawablePadding="6dp"
+            android:drawablePadding="4dp"
             android:textSize="14sp"
             android:text="马尾造船厂"
             android:textColor="@color/gray_a5" />
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:drawableLeft="@mipmap/ic_time"
-            android:drawablePadding="6dp"
+            android:drawablePadding="4dp"
             android:textSize="14sp"
             android:text="08-25  18:56"
             android:textColor="@color/gray_a5" />

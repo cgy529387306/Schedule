@@ -68,13 +68,14 @@ public class MonthFragment extends BaseMvpFragment<MonthPresenter,IMonthView> im
         mCalendarLayout = view.findViewById(R.id.calendarLayout);
         mCalendarView = view.findViewById(R.id.calendarView);
         mRecyclerView = view.findViewById(R.id.recyclerView);
+        mTvDate = view.findViewById(R.id.tv_date);
     }
 
     @Override
     protected void processLogic() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new SectionMyAdapter(R.layout.item_section_content_my,R.layout.item_section_header_my,new ArrayList());
-        mAdapter.addHeaderView(getHeaderView());
+//        mAdapter.addHeaderView(getHeaderView());
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -165,7 +166,12 @@ public class MonthFragment extends BaseMvpFragment<MonthPresenter,IMonthView> im
                 if (calendar.isCurrentDay()){
                     mTvDate.setText("今天  农历  "+ lunar.toString());
                 }else{
-                    mTvDate.setText("农历  "+lunar.toString());
+                    String intervalStr = "";
+                    long day = ProjectHelper.getInterval(date);
+                    if (day!=0){
+                        intervalStr = day>0?Math.abs(day)+"天前，":Math.abs(day)+"天后，";
+                    }
+                    mTvDate.setText(intervalStr+"农历  "+lunar.toString());
                 }
                 if (Helper.isNotEmpty(mScheduleDataList)){
                     mDataList = ProjectHelper.getScheduleList(mSelectDate,mScheduleDataList);
@@ -206,7 +212,7 @@ public class MonthFragment extends BaseMvpFragment<MonthPresenter,IMonthView> im
         }
         addSchemeList(mSchemeList);
         mAdapter.setNewData(ProjectHelper.getSectionData(mDataList));
-        mAdapter.setEmptyView(R.layout.empty_schedule, (ViewGroup) mRecyclerView.getParent());
+        mAdapter.setEmptyView(R.layout.empty_home_month, (ViewGroup) mRecyclerView.getParent());
     }
 
     @Override

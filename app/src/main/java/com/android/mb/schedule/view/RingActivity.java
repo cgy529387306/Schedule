@@ -42,6 +42,14 @@ public class RingActivity extends BaseActivity {
     @Override
     protected void initTitle() {
         setTitleText("铃声设置");
+        setRightText("保存");
+    }
+
+    @Override
+    protected void onRightAction() {
+        super.onRightAction();
+        //TODO
+        finish();
     }
 
     @Override

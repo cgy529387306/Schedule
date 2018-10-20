@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:background="#fff"
         android:orientation="vertical"
-        app:calendar_content_view_id="@+id/recyclerView">
+        app:calendar_content_view_id="@+id/lly_schedule">
 
         <com.haibin.calendarview.CalendarView
             android:id="@+id/calendarView"
@@ -37,12 +37,28 @@
             app:week_start_with="sun"
             app:week_text_color="#454545"
             app:week_view="com.android.mb.schedule.custom.CustomWeekView" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerView"
+        <LinearLayout
+            android:id="@+id/lly_schedule"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/white"/>
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_date"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="今天"
+                android:textColor="@color/text_color"
+                android:textSize="16sp"
+                android:background="@color/gray_f4"
+                android:gravity="center_vertical"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"/>
 
+        </LinearLayout>
     </com.haibin.calendarview.CalendarLayout>
 </LinearLayout>

@@ -518,4 +518,29 @@ public class ProjectHelper {
                 && nowCalendar.get(Calendar.DATE) == dateCalendar.get(Calendar.DATE);
 
     }
+
+    public static boolean isToday(String date){
+        if (Helper.isEmpty(date)){
+            return false;
+        }
+        Date date1 = Helper.string2Date(date,"yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date1);
+        if (calendar.get(Calendar.YEAR) == Calendar.getInstance().get(Calendar.YEAR)
+                &&calendar.get(Calendar.DAY_OF_YEAR) == Calendar.getInstance().get(Calendar.DAY_OF_YEAR)) {
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public static long getInterval(Date date){
+        if (date==null){
+            return 0;
+        }
+        long startTime = date.getTime();
+        long endTime = new Date().getTime();
+        int newL = (int) ((endTime - startTime) / (1000 * 3600 * 24));
+        return newL;
+    }
 }

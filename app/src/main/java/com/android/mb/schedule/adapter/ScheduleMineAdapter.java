@@ -10,6 +10,7 @@ import com.android.mb.schedule.entitys.MyScheduleBean;
 import com.android.mb.schedule.entitys.RelatedBean;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.ImageUtils;
+import com.android.mb.schedule.utils.ProjectHelper;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
@@ -25,7 +26,8 @@ public class ScheduleMineAdapter extends BaseQuickAdapter<MyScheduleBean, BaseVi
     @Override
     protected void convert(BaseViewHolder helper, MyScheduleBean item) {
         TextView tvDate = helper.getView(R.id.tv_date);
-        tvDate.setVisibility(isSameWithLastDate(item,helper.getLayoutPosition())? View.GONE:View.VISIBLE);
+        helper.getView(R.id.lly_date).setVisibility(isSameWithLastDate(item,helper.getLayoutPosition())? View.GONE:View.VISIBLE);
+        helper.getView(R.id.iv_today).setVisibility(ProjectHelper.isToday(item.getDate())?View.VISIBLE:View.GONE);
         tvDate.setText(getDateFormat(item.getDate()));
         TextView tvTitle = helper.getView(R.id.tv_title);
         Drawable drawableLeft = item.getImportant()==1?mContext.getResources().getDrawable(
