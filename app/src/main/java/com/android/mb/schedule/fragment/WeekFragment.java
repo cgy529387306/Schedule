@@ -30,6 +30,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import rx.functions.Action1;
 
@@ -231,8 +232,9 @@ public class WeekFragment  extends BaseMvpFragment<WeekPresenter,IWeekView> impl
             scheduleViewEvent.setEndTime(endCal);
             scheduleViewEvent.setContent(scheduleBean.getTitle());
 
-            scheduleViewEvent.setColor(0xFFD4EFFF);
-            scheduleViewEvent.setHeadLineColor(0xFF2aaeff);
+            scheduleViewEvent.setColor(randColor());
+            scheduleViewEvent.setHeadLineColor(0xFFdfdfdf);
+            scheduleViewEvent.setSideLineColor(0xFFdfdfdf);
             scheduleViewEvent.setTextColor(getResources().getColor(R.color.text_color));
             scheduleViewEvents.add(scheduleViewEvent);
         }
@@ -241,6 +243,15 @@ public class WeekFragment  extends BaseMvpFragment<WeekPresenter,IWeekView> impl
         }else{
             mScheduleView.setEvents(scheduleViewEvents);
         }
+    }
+
+    private int randColor(){
+        List<Integer> colorList = new ArrayList<>();
+        colorList.add(0xFFD4EFFF);
+        colorList.add(0xFFBFE7FF);
+        colorList.add(0xFFAADFFF);
+        colorList.add(0xFF94D6FF);
+        return colorList.get(new Random().nextInt(4));
     }
 
     private void setSchemeList(List<ScheduleData> result){

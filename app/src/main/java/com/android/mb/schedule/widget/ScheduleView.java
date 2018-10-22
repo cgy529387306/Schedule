@@ -765,15 +765,12 @@ public class ScheduleView extends View {
                 EventRect eventRect = eventRectList.get(i);
                 RectF eventRectF = null;
                 RectF eventRectFLineKuang = null;
-                RectF eventRectFHeadLine = null;
                 if (columnNumber == 1) {
                     eventRectFLineKuang = new RectF(eventRect.rectF.left, eventRect.rectF.top + originOffset.y, eventRect.rectF.right, eventRect.rectF.bottom + originOffset.y);
-                    eventRectFHeadLine = new RectF(eventRect.rectF.left, eventRect.rectF.top + originOffset.y + 1, eventRect.rectF.left + 2 * lineSize, eventRect.rectF.bottom + originOffset.y - 1);
-                    eventRectF = new RectF(eventRect.rectF.left + 2 * lineSize, eventRect.rectF.top + originOffset.y + 1, eventRect.rectF.right - 1, eventRect.rectF.bottom + originOffset.y - 1);
+                    eventRectF = new RectF(eventRect.rectF.left + 2 * lineSize, eventRect.rectF.top + originOffset.y+lineSize, eventRect.rectF.right - 1, eventRect.rectF.bottom + originOffset.y - 1);
                 } else {
-                    eventRectFLineKuang = new RectF(eventRect.rectF.left, eventRect.rectF.top + originOffset.y, eventRect.rectF.right, eventRect.rectF.bottom + originOffset.y);
-                    eventRectFHeadLine = new RectF(eventRect.rectF.left + 1, eventRect.rectF.top + originOffset.y, eventRect.rectF.right - 1, eventRect.rectF.top + originOffset.y + 2 * lineSize);
-                    eventRectF = new RectF(eventRect.rectF.left + 1, eventRect.rectF.top + originOffset.y + 2 * lineSize, eventRect.rectF.right - 1, eventRect.rectF.bottom + originOffset.y - 1);
+                    eventRectFLineKuang = new RectF(eventRect.rectF.left, eventRect.rectF.top + originOffset.y+1, eventRect.rectF.right, eventRect.rectF.bottom + originOffset.y);
+                    eventRectF = new RectF(eventRect.rectF.left + 1, eventRect.rectF.top + originOffset.y + lineSize, eventRect.rectF.right - 1, eventRect.rectF.bottom + originOffset.y - 1);
                 }
                 if (eventRectFLineKuang.top > getHeight() && eventRectFLineKuang.bottom < minAllDayEventShowHeight()) {
                     //没有显示进来就不画了
@@ -782,8 +779,6 @@ public class ScheduleView extends View {
                     canvas.drawRect(eventRectFLineKuang, eventBgPaint);
                     eventBgPaint.setColor(eventRect.event.getColor() == 0 ? allDayEventDefaultColor : eventRect.event.getColor());
                     canvas.drawRect(eventRectF, eventBgPaint);
-                    eventBgPaint.setColor(eventRect.event.getHeadLineColor() == 0 ? allDayEventDefaultColor : eventRect.event.getHeadLineColor());
-                    canvas.drawRect(eventRectFHeadLine, eventBgPaint);
                     if (eventRectFLineKuang.right - eventRectFLineKuang.left > eventTextSize && eventRectFLineKuang.bottom - eventRectFLineKuang.top > eventTextSize) {
                         eventTextPaint.setColor(eventRect.event.getTextColor());
                         drawText(eventRect.event.getContent(), canvas, eventTextPaint, eventRectF, (int) (eventRectF.right - eventRectF.left), eventTextSize);
@@ -924,13 +919,10 @@ public class ScheduleView extends View {
                 for (EventRect allDayEventRect : allDayEventRectList) {
                     RectF eventRectF = null;
                     RectF eventRectFLineKuang = null;
-                    RectF eventRectFHeadLine = null;
                     eventRectFLineKuang = new RectF(allDayEventRect.rectF.left, allDayEventRect.rectF.top + originOffsetAllDay.y, allDayEventRect.rectF.right, allDayEventRect.rectF.bottom + originOffsetAllDay.y);
-                    eventRectFHeadLine = new RectF(allDayEventRect.rectF.left, allDayEventRect.rectF.top + originOffsetAllDay.y + 1, allDayEventRect.rectF.left + 2 * lineSize, allDayEventRect.rectF.bottom + originOffsetAllDay.y - 1);
-                    eventRectF = new RectF(allDayEventRect.rectF.left + 2 * lineSize, allDayEventRect.rectF.top + originOffsetAllDay.y + 1, allDayEventRect.rectF.right - 1, allDayEventRect.rectF.bottom + originOffsetAllDay.y - 1);
+                    eventRectF = new RectF(allDayEventRect.rectF.left +lineSize, allDayEventRect.rectF.top + originOffsetAllDay.y + 1, allDayEventRect.rectF.right - 1, allDayEventRect.rectF.bottom + originOffsetAllDay.y - 1);
                     if (eventRectFLineKuang.top < (allDayEventShowHeight() - lineSize) && eventRectFLineKuang.bottom > (allDayEventShowHeight() - lineSize)) {
                         eventRectFLineKuang.bottom = (allDayEventShowHeight() - lineSize);
-                        eventRectFHeadLine.bottom = (allDayEventShowHeight() - lineSize);
                         eventRectF.bottom = (allDayEventShowHeight() - lineSize);
                     }
                     if (eventRectFLineKuang.top >= (allDayEventShowHeight() - lineSize) || eventRectFLineKuang.bottom <= 0) {
@@ -940,8 +932,6 @@ public class ScheduleView extends View {
                         canvas.drawRect(eventRectFLineKuang, allDayEventPaint);
                         allDayEventPaint.setColor(allDayEventRect.event.getColor() == 0 ? eventBgColor : allDayEventRect.event.getColor());
                         canvas.drawRect(eventRectF, allDayEventPaint);
-                        allDayEventPaint.setColor(allDayEventRect.event.getHeadLineColor() == 0 ? eventBgLineColor : allDayEventRect.event.getHeadLineColor());
-                        canvas.drawRect(eventRectFHeadLine, allDayEventPaint);
                         if (eventRectF.bottom - eventRectF.top > allDayEventSize && eventRectF.right - eventRectF.left > allDayEventSize) {
                             allDayEventPaint.setColor(allDayEventRect.event.getTextColor());
                             drawText(allDayEventRect.event.getContent(), canvas, allDayEventPaint, eventRectF, (int) (eventRectF.right - eventRectF.left), allDayEventSize);
