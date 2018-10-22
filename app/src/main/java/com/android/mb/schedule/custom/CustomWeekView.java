@@ -123,7 +123,7 @@ public class CustomWeekView extends WeekView {
         } else {
             mPointPaint.setColor(0xff2aaeff);
         }
-        canvas.drawCircle(x + mItemWidth / 2, mItemHeight - 3 * mPadding, mPointRadius, mPointPaint);
+        canvas.drawCircle(x + mItemWidth / 2, mItemHeight - 2 * mPadding, mPointRadius, mPointPaint);
     }
 
     @Override

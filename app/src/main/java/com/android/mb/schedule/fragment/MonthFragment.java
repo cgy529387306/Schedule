@@ -75,14 +75,7 @@ public class MonthFragment extends BaseMvpFragment<MonthPresenter,IMonthView> im
     protected void processLogic() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new SectionMyAdapter(R.layout.item_section_content_my,R.layout.item_section_header_my,new ArrayList());
-//        mAdapter.addHeaderView(getHeaderView());
         mRecyclerView.setAdapter(mAdapter);
-    }
-
-    private View getHeaderView(){
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.header_home, null);
-        mTvDate = view.findViewById(R.id.tv_date);
-        return view;
     }
 
     private void addSchemeList(List<String> dataList){

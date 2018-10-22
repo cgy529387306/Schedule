@@ -10,10 +10,12 @@ import com.android.mb.schedule.entitys.MyScheduleBean;
 import com.android.mb.schedule.entitys.RelatedBean;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.ImageUtils;
+import com.android.mb.schedule.utils.LunarUtil;
 import com.android.mb.schedule.utils.ProjectHelper;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -25,10 +27,19 @@ public class ScheduleMineAdapter extends BaseQuickAdapter<MyScheduleBean, BaseVi
 
     @Override
     protected void convert(BaseViewHolder helper, MyScheduleBean item) {
+        String dateStr = "";
+        Date date = Helper.string2Date(item.getDate(),"yyyy-MM-dd");
+        if (date!=null){
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            LunarUtil lunar = new LunarUtil(calendar);
+            dateStr = " 农历 "+lunar.toString();
+        }
+
         TextView tvDate = helper.getView(R.id.tv_date);
         helper.getView(R.id.lly_date).setVisibility(isSameWithLastDate(item,helper.getLayoutPosition())? View.GONE:View.VISIBLE);
         helper.getView(R.id.iv_today).setVisibility(ProjectHelper.isToday(item.getDate())?View.VISIBLE:View.GONE);
-        tvDate.setText(getDateFormat(item.getDate()));
+        tvDate.setText(getDateFormat(item.getDate())+dateStr);
         TextView tvTitle = helper.getView(R.id.tv_title);
         Drawable drawableLeft = item.getImportant()==1?mContext.getResources().getDrawable(
                 R.mipmap.ic_warn):mContext.getResources().getDrawable(R.drawable.shape_circle_dot_blue);

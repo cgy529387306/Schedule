@@ -125,7 +125,7 @@ public class CustomMonthView extends MonthView {
             mPointPaint.setColor(0xff2aaeff);
         }
 
-        canvas.drawCircle(x + mItemWidth / 2, y + mItemHeight - 3 * mPadding, mPointRadius, mPointPaint);
+        canvas.drawCircle(x + mItemWidth / 2, y + mItemHeight - 2 * mPadding, mPointRadius, mPointPaint);
     }
 
     @Override

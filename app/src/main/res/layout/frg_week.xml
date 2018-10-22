@@ -60,7 +60,7 @@
                 app:allDayEventMinRow="2"
                 app:allDayEventRowHeight="24dp"
                 app:allDayEventSize="12sp"
-                app:allDayEventTitleColor="#525252"
+                app:allDayEventTitleColor="#2aaeff"
                 app:allDayEventTitleSize="12sp"
                 app:bgColor="#ffffff"
                 app:columnNumber="7"

@@ -28,6 +28,16 @@ public class MyDividerItemDecoration extends RecyclerView.ItemDecoration {
 
     private int mOrientation;
 
+    private int mLeftPadding;
+
+    public MyDividerItemDecoration(Context context, int orientation,int paddingLeft) {
+       mLeftPadding = paddingLeft;
+        final TypedArray a = context.obtainStyledAttributes(ATTRS );
+        mDivider = a.getDrawable(0);
+        a.recycle();
+        setOrientation(orientation);
+    }
+
     public MyDividerItemDecoration(Context context, int orientation) {
         final TypedArray a = context.obtainStyledAttributes(ATTRS );
         mDivider = a.getDrawable(0);
@@ -52,7 +62,7 @@ public class MyDividerItemDecoration extends RecyclerView.ItemDecoration {
     }
 
     public void drawVertical(Canvas c, RecyclerView parent) {
-        final int left = parent.getPaddingLeft();
+        final int left = parent.getPaddingLeft()+AppHelper.calDpi2px(mLeftPadding);
         final int right = parent.getWidth() - parent.getPaddingRight();
 
         final int childCount = parent.getChildCount();

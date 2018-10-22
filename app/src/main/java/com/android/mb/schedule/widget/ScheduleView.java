@@ -225,8 +225,6 @@ public class ScheduleView extends View {
          */
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-//            Log.d(TAG, "onFling  " + e1.getY() + "    " + e2.getY());
-//            Log.d(TAG, "velocityX：  " + velocityX + "    velocityY:" + velocityY);
             if (currentScrollDirection == Direction.HORIZONTAL) {
                 if (velocityX>0){
                     if (onScrollListener!=null){
