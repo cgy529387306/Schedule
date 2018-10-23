@@ -88,6 +88,9 @@
         <activity
             android:name=".view.ScheduleUnderActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".view.SearchPeopleActivity"
+            android:screenOrientation="portrait"/>
 
         <!-- Required SDK核心功能-->
         <activity

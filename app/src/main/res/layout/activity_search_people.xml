@@ -1,0 +1,23 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_color"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/et_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@mipmap/icon_search"
+        android:drawablePadding="6dp"
+        android:layout_margin="10dp"
+        android:padding="6dp"
+        android:paddingLeft="15dp"
+        android:background="@drawable/shape_circle_white"
+        android:hint="搜索"
+        android:gravity="center_vertical"
+        android:textColor="@color/text_color"
+        android:textSize="16sp" />
+
+</LinearLayout>

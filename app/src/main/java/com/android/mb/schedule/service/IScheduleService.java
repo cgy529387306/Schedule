@@ -6,6 +6,7 @@ import com.android.mb.schedule.entitys.MyScheduleBean;
 import com.android.mb.schedule.entitys.RelatedBean;
 import com.android.mb.schedule.entitys.ScheduleData;
 import com.android.mb.schedule.entitys.ScheduleDetailData;
+import com.android.mb.schedule.entitys.SearchBean;
 import com.android.mb.schedule.entitys.ShareBean;
 import com.android.mb.schedule.entitys.ShareData;
 import com.android.mb.schedule.entitys.TreeData;
@@ -125,5 +126,9 @@ public interface IScheduleService {
     @POST("/app/common/office2")
     @FormUrlEncoded
     Observable<HttpResult<TreeData>> getUnder(@FieldMap Map<String,Object> requestMap);
+
+    @POST("/app/common/sch")
+    @FormUrlEncoded
+    Observable<HttpResult<List<SearchBean>>> searchPeople(@FieldMap Map<String,Object> requestMap);
 
 }

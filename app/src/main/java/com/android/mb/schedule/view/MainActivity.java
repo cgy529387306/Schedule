@@ -237,7 +237,7 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
             }
             NavigationHelper.startActivity(MainActivity.this,ScheduleAddActivity.class,bundle,false);
         }else if (id == R.id.iv_refresh){
-
+            NavigationHelper.startActivity(MainActivity.this,SearchPeopleActivity.class,null,false);
         }else if (id == R.id.iv_today){
             if (mFragmentViewPager.getCurrentItem()==0 && mMonthFragment!=null){
                 mMonthFragment.toToday();
