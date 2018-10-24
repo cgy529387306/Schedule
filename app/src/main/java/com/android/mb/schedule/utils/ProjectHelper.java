@@ -12,12 +12,14 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewParent;
 
+import com.android.mb.schedule.entitys.PeopleSection;
 import com.android.mb.schedule.entitys.ScheduleBean;
 import com.android.mb.schedule.entitys.ScheduleData;
 import com.android.mb.schedule.entitys.ScheduleDetailBean;
 import com.android.mb.schedule.entitys.ScheduleDetailData;
 import com.android.mb.schedule.entitys.ScheduleRequest;
 import com.android.mb.schedule.entitys.ScheduleSection;
+import com.android.mb.schedule.entitys.SearchBean;
 import com.android.mb.schedule.entitys.UserBean;
 import com.android.mb.schedule.view.SelectPersonActivity;
 import com.google.gson.Gson;
@@ -494,6 +496,7 @@ public class ProjectHelper {
         }
         return sectionList;
     }
+
 
     public static String getMonday(Calendar calendar) {
         if (calendar == null){

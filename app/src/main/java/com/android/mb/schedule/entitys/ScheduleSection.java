@@ -21,7 +21,7 @@ public class ScheduleSection extends SectionEntity<ScheduleBean> {
         return isMore;
     }
 
-    public void setMore(boolean mroe) {
-        isMore = mroe;
+    public void setMore(boolean more) {
+        isMore = more;
     }
 }

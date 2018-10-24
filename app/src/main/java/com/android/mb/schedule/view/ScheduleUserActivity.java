@@ -11,26 +11,18 @@ import android.widget.Toast;
 
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.adapter.ScheduleMineAdapter;
-import com.android.mb.schedule.adapter.SectionAdapter;
 import com.android.mb.schedule.base.BaseMvpActivity;
 import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.entitys.MyScheduleBean;
-import com.android.mb.schedule.entitys.RelatedBean;
-import com.android.mb.schedule.entitys.ScheduleSection;
-import com.android.mb.schedule.entitys.ScheduleBean;
-import com.android.mb.schedule.entitys.ScheduleData;
 import com.android.mb.schedule.presenter.MinePresenter;
-import com.android.mb.schedule.presenter.WeekPresenter;
 import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.view.interfaces.IMineView;
-import com.android.mb.schedule.view.interfaces.IWeekView;
 import com.android.mb.schedule.widget.MyDividerItemDecoration;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

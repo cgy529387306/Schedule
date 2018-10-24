@@ -24,6 +24,8 @@ public class ProjectConstants {
 
     public static final int REQUEST_SELECT_SHARE = 0x04;
 
+    public static final int REQUEST_SEARCH_PEOPLE = 0x05;
+
 
     //SharedPreferences
     public static final String KEY_REGISTRATION_ID = "KEY_REGISTRATION_ID";

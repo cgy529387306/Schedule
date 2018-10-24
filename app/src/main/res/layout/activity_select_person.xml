@@ -9,7 +9,6 @@
         android:id="@+id/et_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:drawableLeft="@mipmap/icon_search"
         android:drawablePadding="6dp"
         android:layout_margin="10dp"
@@ -17,6 +16,7 @@
         android:paddingLeft="15dp"
         android:background="@drawable/shape_circle_white"
         android:hint="搜索"
+        android:editable="false"
         android:gravity="center_vertical"
         android:textColor="@color/text_color"
         android:textSize="16sp" />

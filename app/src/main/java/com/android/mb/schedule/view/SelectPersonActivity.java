@@ -1,10 +1,13 @@
 package com.android.mb.schedule.view;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 import android.widget.EditText;
 
 import com.android.mb.schedule.R;
@@ -19,12 +22,15 @@ import com.android.mb.schedule.fragment.OrgFragment;
 import com.android.mb.schedule.fragment.PersonFragment;
 import com.android.mb.schedule.fragment.SelectedFragment;
 import com.android.mb.schedule.presenter.PersonPresenter;
+import com.android.mb.schedule.utils.FileUtils;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.JsonHelper;
+import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.utils.PreferencesHelper;
 import com.android.mb.schedule.view.interfaces.IPersonView;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -121,6 +127,12 @@ public class SelectPersonActivity extends BaseMvpActivity<PersonPresenter,IPerso
 
     @Override
     protected void setListener() {
+        mEtSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavigationHelper.startActivityForResult(SelectPersonActivity.this,SearchPeopleActivity.class,null,ProjectConstants.REQUEST_SEARCH_PEOPLE);
+            }
+        });
         mVp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -160,6 +172,19 @@ public class SelectPersonActivity extends BaseMvpActivity<PersonPresenter,IPerso
             PreferencesHelper.getInstance().putString(ProjectConstants.KEY_PERSON_LIST+CurrentUser.getInstance().getId(), JsonHelper.toJson(result));
             PersonFragment personFragment = (PersonFragment) mFragmentList.get(0);
             personFragment.setDataList(result,true);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        if (ProjectConstants.REQUEST_SEARCH_PEOPLE == requestCode) {
+            if (mVp!=null && mVp.getAdapter()!=null && mVp.getAdapter().getCount()>=3){
+                mVp.setCurrentItem(2);
+            }
         }
     }
 }
