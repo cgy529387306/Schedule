@@ -92,6 +92,9 @@
             android:name=".view.SearchPeopleActivity"
             android:screenOrientation="portrait"/>
 
+        <service android:name=".service.LongRunningService"
+            android:priority="1000"/>
+
         <!-- Required SDK核心功能-->
         <activity
             android:name="cn.jpush.android.ui.PushActivity"

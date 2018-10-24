@@ -1,5 +1,6 @@
 package com.android.mb.schedule.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
@@ -25,6 +26,7 @@ import com.android.mb.schedule.fragment.MonthFragment;
 import com.android.mb.schedule.fragment.WeekFragment;
 import com.android.mb.schedule.presenter.HomePresenter;
 import com.android.mb.schedule.rxbus.Events;
+import com.android.mb.schedule.service.LongRunningService;
 import com.android.mb.schedule.utils.AppHelper;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.ImageUtils;
@@ -84,6 +86,7 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
+//        startService(new Intent(this, LongRunningService.class));
         PgyUpdateManager.setIsForced(false); //设置是否强制更新。true为强制更新；false为不强制更新（默认值）。
         PgyUpdateManager.register(this);
         mPresenter.getUserInfo();

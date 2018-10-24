@@ -1,4 +1,4 @@
-package com.android.mb.schedule.service;
+package com.android.mb.schedule.api;
 
 import com.android.mb.schedule.utils.Helper;
 

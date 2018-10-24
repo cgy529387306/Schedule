@@ -1,4 +1,4 @@
-package com.android.mb.schedule.service;
+package com.android.mb.schedule.api;
 
 import com.android.mb.schedule.entitys.FileData;
 import com.android.mb.schedule.entitys.LoginData;
@@ -8,7 +8,6 @@ import com.android.mb.schedule.entitys.ScheduleData;
 import com.android.mb.schedule.entitys.ScheduleDetailData;
 import com.android.mb.schedule.entitys.SearchBean;
 import com.android.mb.schedule.entitys.ShareBean;
-import com.android.mb.schedule.entitys.ShareData;
 import com.android.mb.schedule.entitys.TreeData;
 import com.android.mb.schedule.entitys.UserBean;
 import com.android.mb.schedule.retrofit.http.entity.HttpResult;
@@ -17,17 +16,11 @@ import java.util.List;
 import java.util.Map;
 
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-import retrofit2.http.Body;
-import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
-import retrofit2.http.PartMap;
-import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import rx.Observable;
 

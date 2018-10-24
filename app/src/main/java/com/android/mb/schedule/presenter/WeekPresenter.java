@@ -4,12 +4,10 @@ import android.text.TextUtils;
 
 import com.android.mb.schedule.base.BaseMvpPresenter;
 import com.android.mb.schedule.entitys.ScheduleData;
-import com.android.mb.schedule.presenter.interfaces.IMonthPresenter;
 import com.android.mb.schedule.presenter.interfaces.IWeekPresenter;
 import com.android.mb.schedule.retrofit.http.exception.ApiException;
 import com.android.mb.schedule.retrofit.http.exception.NoNetWorkException;
-import com.android.mb.schedule.service.ScheduleMethods;
-import com.android.mb.schedule.view.interfaces.IMonthView;
+import com.android.mb.schedule.api.ScheduleMethods;
 import com.android.mb.schedule.view.interfaces.IWeekView;
 
 import java.util.List;

@@ -6,11 +6,10 @@ import com.android.mb.schedule.base.BaseMvpPresenter;
 import com.android.mb.schedule.presenter.interfaces.IAddressPresenter;
 import com.android.mb.schedule.retrofit.http.exception.ApiException;
 import com.android.mb.schedule.retrofit.http.exception.NoNetWorkException;
-import com.android.mb.schedule.service.ScheduleMethods;
+import com.android.mb.schedule.api.ScheduleMethods;
 import com.android.mb.schedule.view.interfaces.IAddressView;
 
 import java.util.List;
-import java.util.Map;
 
 import rx.Observable;
 import rx.Subscriber;

@@ -6,7 +6,7 @@ import com.android.mb.schedule.base.BaseMvpPresenter;
 import com.android.mb.schedule.presenter.interfaces.ISetPwdPresenter;
 import com.android.mb.schedule.retrofit.http.exception.ApiException;
 import com.android.mb.schedule.retrofit.http.exception.NoNetWorkException;
-import com.android.mb.schedule.service.ScheduleMethods;
+import com.android.mb.schedule.api.ScheduleMethods;
 import com.android.mb.schedule.view.interfaces.ISetPwdView;
 
 import java.util.Map;

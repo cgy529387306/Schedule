@@ -7,7 +7,7 @@ import com.android.mb.schedule.entitys.ShareBean;
 import com.android.mb.schedule.presenter.interfaces.IMySharePresenter;
 import com.android.mb.schedule.retrofit.http.exception.ApiException;
 import com.android.mb.schedule.retrofit.http.exception.NoNetWorkException;
-import com.android.mb.schedule.service.ScheduleMethods;
+import com.android.mb.schedule.api.ScheduleMethods;
 import com.android.mb.schedule.view.interfaces.IMyShareView;
 
 import java.util.List;

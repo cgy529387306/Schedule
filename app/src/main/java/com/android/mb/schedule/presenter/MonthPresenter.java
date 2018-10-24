@@ -7,7 +7,7 @@ import com.android.mb.schedule.entitys.ScheduleData;
 import com.android.mb.schedule.presenter.interfaces.IMonthPresenter;
 import com.android.mb.schedule.retrofit.http.exception.ApiException;
 import com.android.mb.schedule.retrofit.http.exception.NoNetWorkException;
-import com.android.mb.schedule.service.ScheduleMethods;
+import com.android.mb.schedule.api.ScheduleMethods;
 import com.android.mb.schedule.view.interfaces.IMonthView;
 
 import java.util.List;

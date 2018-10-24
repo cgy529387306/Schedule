@@ -8,7 +8,7 @@ import com.android.mb.schedule.entitys.ScheduleRequest;
 import com.android.mb.schedule.presenter.interfaces.ISchedulePresenter;
 import com.android.mb.schedule.retrofit.http.exception.ApiException;
 import com.android.mb.schedule.retrofit.http.exception.NoNetWorkException;
-import com.android.mb.schedule.service.ScheduleMethods;
+import com.android.mb.schedule.api.ScheduleMethods;
 import com.android.mb.schedule.view.interfaces.IScheduleView;
 
 import java.io.File;

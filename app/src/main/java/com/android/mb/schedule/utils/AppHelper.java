@@ -192,7 +192,7 @@ public class AppHelper {
      * 判断指定的服务是否已启动
      *
      * @param serviceFullName 服务全名(包括包名)
-     * @return true if service is running
+     * @return true if api is running
      */
     public static boolean isServiceRunning(String serviceFullName) {
         return isServiceRunning(MBApplication.getInstance(), serviceFullName);
@@ -203,7 +203,7 @@ public class AppHelper {
      *
      * @param context context
      * @param serviceFullName 服务全名(包括包名)
-     * @return true if service is running
+     * @return true if api is running
      */
     public static boolean isServiceRunning(Context context, String serviceFullName) {
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);

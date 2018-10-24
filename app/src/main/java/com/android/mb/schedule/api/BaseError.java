@@ -1,4 +1,4 @@
-package com.android.mb.schedule.service;
+package com.android.mb.schedule.api;
 
 /**
  * Created by cgy on 2018/3/1 0001.
