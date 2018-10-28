@@ -64,8 +64,9 @@ public class RelatedPresenter extends BaseMvpPresenter<IRelatedView> implements 
         long uid = CurrentUser.getInstance().getId();
         int page = (int) requestMap.get("page");
         int offset = (page-1)*20;
+        String like = "%"+uid+"%";
         Observable  observable = scheduleDao.queryBuilder()
-                .where(ScheduleDao.Properties.Related.like(String.valueOf(uid))).orderDesc(ScheduleDao.Properties.Time_s).orderDesc(ScheduleDao.Properties.Id).limit(20).offset(offset).rx().list();
+                .where(ScheduleDao.Properties.Related.like(like)).orderDesc(ScheduleDao.Properties.Time_s).orderDesc(ScheduleDao.Properties.Id).limit(20).offset(offset).rx().list();
         toSubscribe(observable,  new Subscriber<List<Schedule>>() {
             @Override
             public void onCompleted() {
