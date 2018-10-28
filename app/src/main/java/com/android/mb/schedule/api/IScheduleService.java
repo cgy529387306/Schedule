@@ -3,13 +3,16 @@ package com.android.mb.schedule.api;
 import com.android.mb.schedule.entitys.FileData;
 import com.android.mb.schedule.entitys.LoginData;
 import com.android.mb.schedule.entitys.MyScheduleBean;
+import com.android.mb.schedule.entitys.OfficeSyncData;
 import com.android.mb.schedule.entitys.RelatedBean;
 import com.android.mb.schedule.entitys.ScheduleData;
 import com.android.mb.schedule.entitys.ScheduleDetailData;
+import com.android.mb.schedule.entitys.ScheduleSyncData;
 import com.android.mb.schedule.entitys.SearchBean;
 import com.android.mb.schedule.entitys.ShareBean;
 import com.android.mb.schedule.entitys.TreeData;
 import com.android.mb.schedule.entitys.UserBean;
+import com.android.mb.schedule.entitys.UserSyncData;
 import com.android.mb.schedule.retrofit.http.entity.HttpResult;
 
 import java.util.List;
@@ -123,5 +126,22 @@ public interface IScheduleService {
     @POST("/app/common/sch")
     @FormUrlEncoded
     Observable<HttpResult<List<SearchBean>>> searchPeople(@FieldMap Map<String,Object> requestMap);
+
+    /**
+     * stamp 时间戳
+     * @param requestMap
+     * @return
+     */
+    @POST("/app/schedule/sync")
+    @FormUrlEncoded
+    Observable<HttpResult<ScheduleSyncData>> syncSchedule(@FieldMap Map<String,Object> requestMap);
+
+    @POST("app/common/sync_office")
+    @FormUrlEncoded
+    Observable<HttpResult<OfficeSyncData>> syncOffice(@FieldMap Map<String,Object> requestMap);
+
+    @POST("app/common/sync_admin")
+    @FormUrlEncoded
+    Observable<HttpResult<UserSyncData>> syncPeople(@FieldMap Map<String,Object> requestMap);
 
 }

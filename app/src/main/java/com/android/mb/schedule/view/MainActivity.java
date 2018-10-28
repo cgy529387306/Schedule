@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,16 +21,25 @@ import com.android.mb.schedule.R;
 import com.android.mb.schedule.adapter.MyFragmentPagerAdapter;
 import com.android.mb.schedule.base.BaseMvpActivity;
 import com.android.mb.schedule.constants.ProjectConstants;
+import com.android.mb.schedule.db.GreenDaoManager;
+import com.android.mb.schedule.db.Office;
+import com.android.mb.schedule.db.Schedule;
+import com.android.mb.schedule.db.User;
 import com.android.mb.schedule.entitys.CurrentUser;
 import com.android.mb.schedule.entitys.LoginData;
 import com.android.mb.schedule.fragment.MonthFragment;
 import com.android.mb.schedule.fragment.WeekFragment;
+import com.android.mb.schedule.greendao.OfficeDao;
+import com.android.mb.schedule.greendao.ScheduleDao;
+import com.android.mb.schedule.greendao.UserDao;
 import com.android.mb.schedule.presenter.HomePresenter;
 import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.service.LongRunningService;
+import com.android.mb.schedule.service.SyncService;
 import com.android.mb.schedule.utils.AppHelper;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.ImageUtils;
+import com.android.mb.schedule.utils.JsonHelper;
 import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.utils.ToastHelper;
@@ -40,6 +50,7 @@ import com.pgyersdk.update.PgyUpdateManager;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import rx.functions.Action1;
 
@@ -87,6 +98,7 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
     @Override
     protected void processLogic(Bundle savedInstanceState) {
 //        startService(new Intent(this, LongRunningService.class));
+        startService(new Intent(this, SyncService.class));
         PgyUpdateManager.setIsForced(false); //设置是否强制更新。true为强制更新；false为不强制更新（默认值）。
         PgyUpdateManager.register(this);
         mPresenter.getUserInfo();
@@ -240,7 +252,7 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
             }
             NavigationHelper.startActivity(MainActivity.this,ScheduleAddActivity.class,bundle,false);
         }else if (id == R.id.iv_refresh){
-            NavigationHelper.startActivity(MainActivity.this,SearchPeopleActivity.class,null,false);
+            doGetDbData();
         }else if (id == R.id.iv_today){
             if (mFragmentViewPager.getCurrentItem()==0 && mMonthFragment!=null){
                 mMonthFragment.toToday();
@@ -308,6 +320,21 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
             CurrentUser.getInstance().login(result.getUserinfo(),false);
             initUserInfo(result.getUserinfo());
         }
+    }
+
+    private void doGetDbData(){
+        ScheduleDao scheduleDao = GreenDaoManager.getInstance().getNewSession().getScheduleDao();
+        Long userId = CurrentUser.getInstance().getId();
+        List<Schedule> dataList = scheduleDao.queryBuilder().where(ScheduleDao.Properties.Create_by.eq(userId)).list();
+        Log.e("scheduleList:", JsonHelper.toJson(dataList));
+
+        UserDao userDao = GreenDaoManager.getInstance().getNewSession().getUserDao();
+        List<User> userList = userDao.queryBuilder().list();
+        Log.e("userList:", JsonHelper.toJson(userList));
+
+        OfficeDao officeDao = GreenDaoManager.getInstance().getNewSession().getOfficeDao();
+        List<Office> officeList = officeDao.queryBuilder().list();
+        Log.e("officeList:", JsonHelper.toJson(officeList));
     }
 
 

@@ -50,7 +50,8 @@ public class RelatedBean implements Serializable{
         this.time = time;
     }
 
-    public String getCreate_date() {
+    public String
+    getCreate_date() {
         return create_date == null ? "" : create_date;
     }
 

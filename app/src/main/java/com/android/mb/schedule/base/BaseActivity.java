@@ -1,8 +1,10 @@
 package com.android.mb.schedule.base;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,8 +20,10 @@ import android.widget.TextView;
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.rxbus.RxBus;
+import com.android.mb.schedule.service.SyncService;
 import com.android.mb.schedule.utils.AppHelper;
 import com.android.mb.schedule.utils.KeyBoardUtils;
+import com.android.mb.schedule.utils.NetworkHelper;
 import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.utils.StatusBarUtil;
 import com.android.mb.schedule.utils.ToastUtils;
@@ -42,7 +46,7 @@ import rx.subscriptions.CompositeSubscription;
 public abstract class BaseActivity extends AppCompatActivity{
 
     protected Context mContext;
-
+    public static final String BROADCAST_KEY_CONNECTIVITY_CHANGE = "android.net.conn.CONNECTIVITY_CHANGE";
     /**
      * 管理Rxjava。
      */
@@ -59,10 +63,16 @@ public abstract class BaseActivity extends AppCompatActivity{
     private ImageView mIvAction;
 
     private FrameLayout mActionBarLayout;
+
+    // 网络状态
+    private boolean mIsNetworkAvailable = false;
+    private BroadcastReceiver mNetWorkStateChangeReceiver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
+        mIsNetworkAvailable = NetworkHelper.isNetworkAvailable(this);
+        registerNetWorkConnectivityChangeReceiver();
         initView(savedInstanceState);
         initStatusBar();
     }
@@ -80,6 +90,7 @@ public abstract class BaseActivity extends AppCompatActivity{
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        unregisterReceiver(mNetWorkStateChangeReceiver);
         RxBus.getInstance().unSubscribe(this);
         onUnsubscribe();
     }
@@ -180,6 +191,43 @@ public abstract class BaseActivity extends AppCompatActivity{
 
     protected void onRightAction(){
     }
+
+    /**
+     *
+     * function: 网络变化接收
+     *
+     *
+     * @ author:cgy 2014-12-26 上午10:12:37
+     */
+    private void registerNetWorkConnectivityChangeReceiver() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BROADCAST_KEY_CONNECTIVITY_CHANGE);
+        filter.setPriority(1000);
+
+        mNetWorkStateChangeReceiver = new BroadcastReceiver() {
+
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                if(null != action && BROADCAST_KEY_CONNECTIVITY_CHANGE.equals(action)){
+                    boolean temp = NetworkHelper.isNetworkAvailable(BaseActivity.this);
+                    if(temp != mIsNetworkAvailable) {
+                        mIsNetworkAvailable = temp;
+                        if (mIsNetworkAvailable){
+                            startService(new Intent(mContext, SyncService.class));
+                        }else{
+                            showToastMessage("网络已断开");
+                        }
+                    }
+                    return;
+                }
+            }
+        };
+
+        registerReceiver(mNetWorkStateChangeReceiver, filter);
+    }
+
 
     /**
      * 界面跳转

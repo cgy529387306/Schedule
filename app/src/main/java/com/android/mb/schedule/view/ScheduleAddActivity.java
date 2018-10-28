@@ -20,6 +20,7 @@ import com.android.mb.schedule.R;
 import com.android.mb.schedule.base.BaseMvpActivity;
 import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.entitys.CurrentUser;
+import com.android.mb.schedule.entitys.FileBean;
 import com.android.mb.schedule.entitys.FileData;
 import com.android.mb.schedule.entitys.ScheduleDetailData;
 import com.android.mb.schedule.entitys.ScheduleRequest;
@@ -84,7 +85,6 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
     private TimePickerView mScheduleStartDatePop;
     private TimePickerView mScheduleEndDatePop;
     private ScheduleRequest mScheduleRequest;
-    private long mFileId = -1;
     private int mType;//0:新建 1:编辑
     public static final String mDateFormat = "yyyy年MM月dd日";
     public static final String mTimeFormat = "HH:mm";
@@ -96,6 +96,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
     private BottomMenuDialog mCheckDialog;
     private boolean mIsShowRemind;
     private Calendar mStartTime,mEndTime;
+    private FileBean mFileBean;
     @Override
     protected void loadIntent() {
         mLocalKey = "ScheduleRequest"+ CurrentUser.getInstance().getId();
@@ -192,6 +193,14 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
                 mSharePersons = mDetailData.getShare();
                 String shareStr = String.format(mContext.getString(R.string.relate_person), ProjectHelper.getSharePersonStr(mSharePersons),mSharePersons.size());
                 mTvShare.setText(shareStr);
+            }
+            if (Helper.isNotEmpty(mDetailData.getFile())){
+                mFileBean = mDetailData.getFile().get(0);
+                if (mFileBean!=null){
+                    mTvFileName.setVisibility(View.VISIBLE);
+                    mTvFileName.setText(mFileBean.getFilename());
+                    mTvUploadDocument.setText("点击替换附件");
+                }
             }
         }
     }
@@ -524,9 +533,13 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
             if (Helper.isNotEmpty(fileUrl)){
                 String fileName = fileUrl.substring(fileUrl.lastIndexOf("/")+1);
                 if (Helper.isNotEmpty(fileName)){
-                    mFileId = result.getId();
+                    mFileBean = new FileBean();
+                    mFileBean.setFilename(fileName);
+                    mFileBean.setId(result.getId());
+                    mFileBean.setUrl(fileUrl);
+
                     mTvFileName.setVisibility(View.VISIBLE);
-                    mTvFileName.setText(fileName);
+                    mTvFileName.setText(mFileBean.getFilename());
                     mTvUploadDocument.setText("点击替换附件");
                 }
             }
@@ -636,8 +649,11 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         if (mScheduleRequest==null){
             mScheduleRequest=new ScheduleRequest();
         }
-        if (mFileId!=-1){
-            mScheduleRequest.setFid(mFileId);
+        if (mFileBean!=null && mFileBean.getId()!=-1){
+            mScheduleRequest.setFid(mFileBean.getId());
+            List<FileBean> fileList = new ArrayList<>();
+            fileList.add(mFileBean);
+            mScheduleRequest.setFileList(JsonHelper.toJson(fileList));
         }
         mScheduleRequest.setTitle(name);
         mScheduleRequest.setDescription(content);
@@ -646,25 +662,22 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         mScheduleRequest.setAllDay(mIsAllDay);
         mScheduleRequest.setRelated(Helper.isEmpty(mRelatePersons)?"":ProjectHelper.getIdStr(mRelatePersons));
         mScheduleRequest.setShare(Helper.isEmpty(mSharePersons)?"":ProjectHelper.getIdStr(mSharePersons));
+        mScheduleRequest.setRelated(JsonHelper.toJson(mRelatePersons));
+        mScheduleRequest.setShare(JsonHelper.toJson(mSharePersons));
+
         mScheduleRequest.setSummary("");
         mScheduleRequest.setStart(start.getTime()/1000);
         mScheduleRequest.setEnd(end.getTime()/1000);
         mScheduleRequest.setRemind(mScheduleRemindPop.getType());
         mScheduleRequest.setRepeattype(mScheduleRepeatPop.getType());
-        if (NetworkHelper.isNetworkAvailable(mContext)){
-            if (mIsShowRemind){
-                checkRepeatChange();
-            }else{
-                if (mType==1){
-                    mPresenter.editSchedule(mScheduleRequest);
-                }else{
-                    mPresenter.addSchedule(mScheduleRequest);
-                }
-            }
-
+        if (mIsShowRemind){
+            checkRepeatChange();
         }else{
-            showToastMessage("当前网络不可用，待网络连接后再保存日程");
-            PreferencesHelper.getInstance().putString(mLocalKey, JsonHelper.toJson(mScheduleRequest));
+            if (mType==1){
+                mPresenter.editSchedule(mScheduleRequest);
+            }else{
+                mPresenter.addSchedule(mScheduleRequest);
+            }
         }
     }
 

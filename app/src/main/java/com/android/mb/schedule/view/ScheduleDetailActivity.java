@@ -15,6 +15,7 @@ import com.android.mb.schedule.R;
 import com.android.mb.schedule.base.BaseMvpActivity;
 import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.entitys.CurrentUser;
+import com.android.mb.schedule.entitys.FileBean;
 import com.android.mb.schedule.entitys.ScheduleDetailBean;
 import com.android.mb.schedule.entitys.ScheduleDetailData;
 import com.android.mb.schedule.entitys.UserBean;
@@ -189,7 +190,7 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
             mTvUpdateTime.setText(String.format(mContext.getString(R.string.update_time),updateTime));
             if (Helper.isNotEmpty(detailData.getFile())){
                 mLinFile.setVisibility(View.VISIBLE);
-                ScheduleDetailData.FileBean fileBean = detailData.getFile().get(0);
+                FileBean fileBean = detailData.getFile().get(0);
                 mTvFileName.setText(fileBean.getFilename());
             }else{
                 mLinFile.setVisibility(View.GONE);
@@ -214,7 +215,7 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
 
     private void downloadFile(){
         if (Helper.isNotEmpty(mDetailData.getFile())){
-            ScheduleDetailData.FileBean fileBean = mDetailData.getFile().get(0);
+            FileBean fileBean = mDetailData.getFile().get(0);
             mTvFileName.setText(fileBean.getFilename());
             mProgressDialog =  new ProgressDialog(ScheduleDetailActivity.this);//实例化ProgressDialog
             mProgressDialog.setTitle("文件下载");//设置标题
@@ -225,7 +226,7 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
             mProgressDialog.setIndeterminate(false);//是否精确显示对话框，flase为是，反之为否
             mProgressDialog.show();
             DownloadHelper.getInstance()
-                    .downloadFile(fileBean.getUrl(), Environment.getExternalStorageDirectory() + File.separator + "/Schedule", fileBean.getFilename(),
+                    .downloadFile(fileBean.getUrl(), Environment.getExternalStorageDirectory() + File.separator + "/ScheduleSync", fileBean.getFilename(),
                             new FileDownloadCallback<File>() {
                                 @Override
                                 public void onDownLoadSuccess(File file) {
@@ -283,10 +284,7 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
         }
         if (ProjectConstants.REQUEST_SELECT_PERSON == requestCode){
             List<UserBean> list = (List<UserBean>) data.getSerializableExtra("selectPerson");
-            Map<String,Object> requestMap = new HashMap<>();
-            requestMap.put("sid",mId);
-            requestMap.put("share", ProjectHelper.getIdStr(list));
-            mPresenter.shareTo(requestMap);
+            mPresenter.shareTo(mId,list);
         }
     }
 

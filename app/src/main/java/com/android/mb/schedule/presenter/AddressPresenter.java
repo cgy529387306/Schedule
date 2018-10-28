@@ -36,8 +36,6 @@ public class AddressPresenter extends BaseMvpPresenter<IAddressView> implements 
                 if(mMvpView!=null){
                     if (e instanceof ApiException && !TextUtils.isEmpty(e.getMessage())){
                         mMvpView.showToastMessage(e.getMessage());
-                    }else if (e instanceof NoNetWorkException && !TextUtils.isEmpty(e.getMessage())){
-                        mMvpView.showToastMessage(e.getMessage());
                     }
                 }
             }

@@ -53,24 +53,5 @@ public class ScheduleDetailData implements Serializable{
         this.file = file;
     }
 
-    public static class FileBean implements Serializable{
-        private String url;
-        private String filename;
 
-        public String getUrl() {
-            return url == null ? "" : url;
-        }
-
-        public void setUrl(String url) {
-            this.url = url;
-        }
-
-        public String getFilename() {
-            return filename == null ? "" : filename;
-        }
-
-        public void setFilename(String filename) {
-            this.filename = filename;
-        }
-    }
 }

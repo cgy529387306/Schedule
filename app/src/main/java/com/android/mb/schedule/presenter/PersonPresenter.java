@@ -37,8 +37,6 @@ public class PersonPresenter extends BaseMvpPresenter<IPersonView> implements IP
                 if(mMvpView!=null){
                     if (e instanceof ApiException && !TextUtils.isEmpty(e.getMessage())){
                         mMvpView.showToastMessage(e.getMessage());
-                    }else if (e instanceof NoNetWorkException && !TextUtils.isEmpty(e.getMessage())){
-                        mMvpView.showToastMessage(e.getMessage());
                     }
                 }
             }
@@ -65,8 +63,6 @@ public class PersonPresenter extends BaseMvpPresenter<IPersonView> implements IP
             public void onError(Throwable e) {
                 if(mMvpView!=null){
                     if (e instanceof ApiException && !TextUtils.isEmpty(e.getMessage())){
-                        mMvpView.showToastMessage(e.getMessage());
-                    }else if (e instanceof NoNetWorkException && !TextUtils.isEmpty(e.getMessage())){
                         mMvpView.showToastMessage(e.getMessage());
                     }
                 }

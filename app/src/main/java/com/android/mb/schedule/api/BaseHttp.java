@@ -19,10 +19,10 @@ import rx.functions.Func1;
 
 public class BaseHttp {
 
-
+    public static final String BASE_URL = "https://shop.5979wenhua.com";
 
     public String getServerHost() {
-        return "https://shop.5979wenhua.com";
+        return BASE_URL;
     }
 
     @SuppressWarnings("unchecked")

@@ -1,5 +1,7 @@
 package com.android.mb.schedule.constants;
 
+import com.android.mb.schedule.entitys.CurrentUser;
+
 public class ProjectConstants {
 
     //EVENT
@@ -37,4 +39,6 @@ public class ProjectConstants {
     public static final String KEY_UNDER_LIST = "KEY_UNDER_LIST";
 
     public static final String KEY_ADDRESS_LIST = "KEY_ADDRESS_LIST";
+
+    public static final String KEY_LAST_SYNC = "KEY_LAST_SYNC_";
 }

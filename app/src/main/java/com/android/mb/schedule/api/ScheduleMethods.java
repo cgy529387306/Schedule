@@ -4,14 +4,17 @@ import com.android.mb.schedule.entitys.CurrentUser;
 import com.android.mb.schedule.entitys.FileData;
 import com.android.mb.schedule.entitys.LoginData;
 import com.android.mb.schedule.entitys.MyScheduleBean;
+import com.android.mb.schedule.entitys.OfficeSyncData;
 import com.android.mb.schedule.entitys.RelatedBean;
 import com.android.mb.schedule.entitys.ScheduleData;
 import com.android.mb.schedule.entitys.ScheduleDetailData;
 import com.android.mb.schedule.entitys.ScheduleRequest;
+import com.android.mb.schedule.entitys.ScheduleSyncData;
 import com.android.mb.schedule.entitys.SearchBean;
 import com.android.mb.schedule.entitys.ShareBean;
 import com.android.mb.schedule.entitys.TreeData;
 import com.android.mb.schedule.entitys.UserBean;
+import com.android.mb.schedule.entitys.UserSyncData;
 import com.android.mb.schedule.retrofit.cache.transformer.CacheTransformer;
 import com.android.mb.schedule.retrofit.http.RetrofitHttpClient;
 import com.android.mb.schedule.utils.ProjectHelper;
@@ -311,4 +314,36 @@ public class ScheduleMethods extends BaseHttp {
                 .compose(CacheTransformer.emptyTransformer())
                 .map(new HttpCacheResultFunc<TreeData>());
     }
+
+    public Observable syncSchedule(Map<String,Object> requestMap){
+        if (CurrentUser.getInstance().isLogin()){
+            requestMap.put("token_id",CurrentUser.getInstance().getToken_id());
+            requestMap.put("token",CurrentUser.getInstance().getToken());
+        }
+        return getService().syncSchedule(requestMap)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<ScheduleSyncData>());
+    }
+
+    public Observable syncOffice(Map<String,Object> requestMap){
+        if (CurrentUser.getInstance().isLogin()){
+            requestMap.put("token_id",CurrentUser.getInstance().getToken_id());
+            requestMap.put("token",CurrentUser.getInstance().getToken());
+        }
+        return getService().syncOffice(requestMap)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<OfficeSyncData>());
+    }
+
+    public Observable syncPeople(Map<String,Object> requestMap){
+        if (CurrentUser.getInstance().isLogin()){
+            requestMap.put("token_id",CurrentUser.getInstance().getToken_id());
+            requestMap.put("token",CurrentUser.getInstance().getToken());
+        }
+        return getService().syncPeople(requestMap)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<UserSyncData>());
+    }
+
+
 }

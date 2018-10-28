@@ -14,27 +14,20 @@ public class ScheduleDetailBean implements Serializable {
     private String address;
     private long time_s;
     private long time_e;
-    private Object date;
+    private String date;
     private String startTime;
     private String endTime;
     private int allDay;
     private int repeattype;//;//'重复类型 1 - 一次性活动，2 - 每天重复，3 - 周重复，4 月重复'
     private int remind;////提醒 0 不提醒,1 10分钟前，2 15分钟前，3 30分钟前，4 1小时前，5 2小时前，6 24小时前，7 2天前
     private int important;
-    private int isFinish;
-    private String finished_date;
-    private String filename;
-    private String files;
     private long create_by;
     private long update_by;
     private String create_date;
     private String update_date;
     private long createtime;
     private long updatetime;
-    private Object reverse_type;
-    private Object reverse_from_id;
     private String not_remind_related;
-    private Object attach_name;
 
     public long getId() {
         return id;
@@ -92,11 +85,11 @@ public class ScheduleDetailBean implements Serializable {
         this.time_e = time_e;
     }
 
-    public Object getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Object date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
@@ -148,38 +141,6 @@ public class ScheduleDetailBean implements Serializable {
         this.important = important;
     }
 
-    public int getIsFinish() {
-        return isFinish;
-    }
-
-    public void setIsFinish(int isFinish) {
-        this.isFinish = isFinish;
-    }
-
-    public String getFinished_date() {
-        return finished_date == null ? "" : finished_date;
-    }
-
-    public void setFinished_date(String finished_date) {
-        this.finished_date = finished_date;
-    }
-
-    public String getFilename() {
-        return filename == null ? "" : filename;
-    }
-
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
-
-    public String getFiles() {
-        return files == null ? "" : files;
-    }
-
-    public void setFiles(String files) {
-        this.files = files;
-    }
-
     public long getCreate_by() {
         return create_by;
     }
@@ -228,21 +189,6 @@ public class ScheduleDetailBean implements Serializable {
         this.updatetime = updatetime;
     }
 
-    public Object getReverse_type() {
-        return reverse_type;
-    }
-
-    public void setReverse_type(Object reverse_type) {
-        this.reverse_type = reverse_type;
-    }
-
-    public Object getReverse_from_id() {
-        return reverse_from_id;
-    }
-
-    public void setReverse_from_id(Object reverse_from_id) {
-        this.reverse_from_id = reverse_from_id;
-    }
 
     public String getNot_remind_related() {
         return not_remind_related == null ? "" : not_remind_related;
@@ -252,11 +198,4 @@ public class ScheduleDetailBean implements Serializable {
         this.not_remind_related = not_remind_related;
     }
 
-    public Object getAttach_name() {
-        return attach_name;
-    }
-
-    public void setAttach_name(Object attach_name) {
-        this.attach_name = attach_name;
-    }
 }

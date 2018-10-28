@@ -45,6 +45,12 @@ public class ScheduleRequest implements Serializable{
 
     private int type;
 
+    private String shareList;
+
+    private String relateList;
+
+    private String fileList;
+
 
     public long getId() {
         return id;
@@ -164,5 +170,29 @@ public class ScheduleRequest implements Serializable{
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public String getShareList() {
+        return shareList;
+    }
+
+    public void setShareList(String shareList) {
+        this.shareList = shareList;
+    }
+
+    public String getRelateList() {
+        return relateList;
+    }
+
+    public void setRelateList(String relateList) {
+        this.relateList = relateList;
+    }
+
+    public String getFileList() {
+        return fileList;
+    }
+
+    public void setFileList(String fileList) {
+        this.fileList = fileList;
     }
 }

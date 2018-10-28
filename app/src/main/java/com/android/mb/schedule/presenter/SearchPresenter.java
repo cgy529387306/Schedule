@@ -37,8 +37,6 @@ public class SearchPresenter extends BaseMvpPresenter<ISearchView> implements IS
                 if(mMvpView!=null){
                     if (e instanceof ApiException && !TextUtils.isEmpty(e.getMessage())){
                         mMvpView.showToastMessage(e.getMessage());
-                    }else if (e instanceof NoNetWorkException && !TextUtils.isEmpty(e.getMessage())){
-                        mMvpView.showToastMessage(e.getMessage());
                     }
                 }
             }

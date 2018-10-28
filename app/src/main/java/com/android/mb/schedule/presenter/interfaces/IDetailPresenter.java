@@ -1,5 +1,8 @@
 package com.android.mb.schedule.presenter.interfaces;
 
+import com.android.mb.schedule.entitys.UserBean;
+
+import java.util.List;
 import java.util.Map;
 
 public interface IDetailPresenter {
@@ -7,5 +10,5 @@ public interface IDetailPresenter {
 
     void deleteSchedule(Map<String, Object> requestMap);
 
-    void shareTo(Map<String, Object> requestMap);
+    void shareTo(long id, List<UserBean> shareList);
 }

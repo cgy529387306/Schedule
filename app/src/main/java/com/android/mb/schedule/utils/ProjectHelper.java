@@ -12,7 +12,16 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewParent;
 
+import com.android.mb.schedule.api.BaseHttp;
+import com.android.mb.schedule.db.GreenDaoManager;
+import com.android.mb.schedule.db.Office;
+import com.android.mb.schedule.db.Schedule;
+import com.android.mb.schedule.db.User;
+import com.android.mb.schedule.entitys.CurrentUser;
+import com.android.mb.schedule.entitys.FileBean;
+import com.android.mb.schedule.entitys.MyScheduleBean;
 import com.android.mb.schedule.entitys.PeopleSection;
+import com.android.mb.schedule.entitys.RelatedBean;
 import com.android.mb.schedule.entitys.ScheduleBean;
 import com.android.mb.schedule.entitys.ScheduleData;
 import com.android.mb.schedule.entitys.ScheduleDetailBean;
@@ -20,9 +29,13 @@ import com.android.mb.schedule.entitys.ScheduleDetailData;
 import com.android.mb.schedule.entitys.ScheduleRequest;
 import com.android.mb.schedule.entitys.ScheduleSection;
 import com.android.mb.schedule.entitys.SearchBean;
+import com.android.mb.schedule.entitys.ShareBean;
 import com.android.mb.schedule.entitys.UserBean;
+import com.android.mb.schedule.greendao.OfficeDao;
+import com.android.mb.schedule.greendao.UserDao;
 import com.android.mb.schedule.view.SelectPersonActivity;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -393,9 +406,6 @@ public class ProjectHelper {
             scheduleRequest.setRepeattype(detailBean.getRepeattype());
             scheduleRequest.setRemind(detailBean.getRemind());
             scheduleRequest.setImportant(detailBean.getImportant());
-//            scheduleRequest.setFid(0);
-//            scheduleRequest.setShare("");
-//            scheduleRequest.setRelated("");
         }
         return scheduleRequest;
     }
@@ -545,5 +555,152 @@ public class ProjectHelper {
         long endTime = new Date().getTime();
         int newL = (int) ((endTime - startTime) / (1000 * 3600 * 24));
         return newL;
+    }
+
+    public static List<MyScheduleBean> transToMyScheduleList(List<Schedule> dataList){
+        List<MyScheduleBean> result = new ArrayList<>();
+        if (Helper.isNotEmpty(dataList)){
+            for (Schedule schedule:dataList){
+                MyScheduleBean myScheduleBean = new MyScheduleBean();
+                myScheduleBean.setId(schedule.getId());
+                myScheduleBean.setTitle(schedule.getTitle());
+                myScheduleBean.setDescription(schedule.getDescription());
+                myScheduleBean.setDate(schedule.getDate());
+                myScheduleBean.setTime_s(schedule.getTime_s());
+                myScheduleBean.setTime_e(schedule.getTime_e());
+                myScheduleBean.setAddress(schedule.getAddress());
+                myScheduleBean.setStartTime(schedule.getStartTime());
+                myScheduleBean.setEndTime(schedule.getEndTime());
+                myScheduleBean.setAllDay(schedule.getAllDay());
+                myScheduleBean.setRepeattype(schedule.getRepeattype());
+                myScheduleBean.setRemind(schedule.getRemind());
+                myScheduleBean.setImportant(schedule.getImportant());
+                myScheduleBean.setSummary(schedule.getSummary());
+                myScheduleBean.setNot_remind_related(schedule.getNot_remind_related()+"");
+                result.add(myScheduleBean);
+            }
+        }
+        return result;
+    }
+
+    public static List<RelatedBean> transToRelateScheduleList(List<Schedule> dataList){
+        List<RelatedBean> result = new ArrayList<>();
+        UserDao userDao = GreenDaoManager.getInstance().getNewSession().getUserDao();
+        OfficeDao officeDao = GreenDaoManager.getInstance().getNewSession().getOfficeDao();
+        if (Helper.isNotEmpty(dataList)){
+            for (Schedule schedule:dataList){
+                RelatedBean relatedBean = new RelatedBean();
+                relatedBean.setId(schedule.getId());
+                relatedBean.setTitle(schedule.getTitle());
+                relatedBean.setAddress(schedule.getAddress());
+                relatedBean.setImportant(schedule.getImportant());
+                String startTime = Helper.long2DateString(schedule.getTime_s()*1000,"MM-dd HH:mm");
+                String endTime = Helper.long2DateString(schedule.getTime_e()*1000,"MM-dd HH:mm");
+                relatedBean.setTime(startTime+"-"+endTime);
+                relatedBean.setCreate_date(Helper.long2DateString(schedule.getCreatetime()*1000));
+                User user = userDao.loadByRowId(schedule.getCreate_by());
+                Office office = officeDao.load(user.getOffice_id());
+                if (user!=null){
+                    String userName = user.getNickname()==null?user.getUsername():user.getNickname();
+                    String officeName = office.getName();
+                    relatedBean.setUser_avatar(BaseHttp.BASE_URL+user.getAvatar());
+                    relatedBean.setUser_name(userName);
+                    relatedBean.setUser_office(officeName);
+                }
+                result.add(relatedBean);
+            }
+        }
+        return result;
+    }
+
+    public static List<ShareBean> transToShareScheduleList(List<Schedule> dataList){
+        List<ShareBean> result = new ArrayList<>();
+        if (Helper.isNotEmpty(dataList)){
+            for (Schedule schedule:dataList){
+                ShareBean shareBean = new ShareBean();
+                shareBean.setId(schedule.getId());
+                shareBean.setTitle(schedule.getTitle());
+                shareBean.setAddress(schedule.getAddress());
+                String startTime = Helper.long2DateString(schedule.getTime_s()*1000,"MM-dd HH:mm");
+                String endTime = Helper.long2DateString(schedule.getTime_e()*1000,"MM-dd HH:mm");
+                shareBean.setTime(startTime+"-"+endTime);
+                shareBean.setCreate_date(Helper.long2DateString(schedule.getCreatetime()*1000));
+                List<UserBean> share = JsonHelper.fromJson(schedule.getShare(),new TypeToken<List<UserBean>>(){}.getType());
+                shareBean.setShare(share);
+                shareBean.setImportant(schedule.getImportant());
+
+                result.add(shareBean);
+            }
+        }
+        return result;
+    }
+
+
+    public static ScheduleDetailData transToScheduleDetailData(Schedule data){
+        ScheduleDetailData scheduleDetailData = new ScheduleDetailData();
+        if (data!=null){
+            ScheduleDetailBean scheduleDetailBean = new ScheduleDetailBean();
+            scheduleDetailBean.setId(data.getId());
+            scheduleDetailBean.setTitle(data.getTitle());
+            scheduleDetailBean.setDescription(data.getDescription());
+            scheduleDetailBean.setSummary(data.getSummary());
+            scheduleDetailBean.setAddress(data.getAddress());
+            scheduleDetailBean.setTime_s(data.getTime_s());
+            scheduleDetailBean.setTime_e(data.getTime_e());
+            scheduleDetailBean.setDate(data.getDate());
+            scheduleDetailBean.setStartTime(data.getStartTime());
+            scheduleDetailBean.setEndTime(data.getEndTime());
+            scheduleDetailBean.setAllDay(data.getAllDay());
+            scheduleDetailBean.setRepeattype(data.getRepeattype());
+            scheduleDetailBean.setRemind(data.getRemind());
+            scheduleDetailBean.setImportant(data.getImportant());
+            scheduleDetailBean.setCreate_by(CurrentUser.getInstance().getId());
+            scheduleDetailBean.setUpdate_by(CurrentUser.getInstance().getId());
+            scheduleDetailBean.setCreatetime(data.getCreatetime());
+            scheduleDetailBean.setUpdatetime(data.getUpdatetime());
+            scheduleDetailData.setInfo(scheduleDetailBean);
+            scheduleDetailBean.setNot_remind_related(data.getNot_remind_related()+"");
+            scheduleDetailData.setInfo(scheduleDetailBean);
+
+            List<UserBean> related = JsonHelper.fromJson(data.getRelated(),new TypeToken<List<UserBean>>(){}.getType());
+            List<UserBean> share = JsonHelper.fromJson(data.getShare(),new TypeToken<List<UserBean>>(){}.getType());
+            List<FileBean> file = JsonHelper.fromJson(data.getShare(),new TypeToken<List<FileBean>>(){}.getType());
+            scheduleDetailData.setRelated(related);
+            scheduleDetailData.setShare(share);
+            scheduleDetailData.setFile(file);
+        }
+        return scheduleDetailData;
+    }
+
+    public static Schedule transToSchedule(ScheduleRequest scheduleRequest,boolean isEdit){
+        Schedule schedule = new Schedule();
+        if (scheduleRequest!=null){
+            if (isEdit){
+                schedule.setId(scheduleRequest.getId());
+            }
+            schedule.setCreate_by(CurrentUser.getInstance().getId());
+            schedule.setTitle(scheduleRequest.getTitle());
+            schedule.setDescription(scheduleRequest.getDescription());
+            schedule.setDate(Helper.date2String(new Date(),"yyyy-MM-dd"));
+            schedule.setTime_s(scheduleRequest.getStart());
+            schedule.setTime_e(scheduleRequest.getEnd());
+            schedule.setStartTime(Helper.long2DateString(scheduleRequest.getStart()*1000,"HH:mm"));
+            schedule.setEndTime(Helper.long2DateString(scheduleRequest.getEnd()*1000,"HH:mm"));
+            schedule.setAddress(scheduleRequest.getAddress());
+            schedule.setAllDay(scheduleRequest.getAllDay());
+            schedule.setRepeattype(scheduleRequest.getRepeattype());
+            schedule.setRemind(scheduleRequest.getRemind());
+            schedule.setImportant(scheduleRequest.getImportant());
+            schedule.setSummary(scheduleRequest.getSummary());
+//            schedule.setNot_remind_related(scheduleRequest.getno);
+            if (!isEdit){
+                schedule.setCreatetime(System.currentTimeMillis()/1000);
+            }
+            schedule.setUpdatetime(System.currentTimeMillis()/1000);
+            schedule.setRelated(scheduleRequest.getRelated());
+            schedule.setShare(scheduleRequest.getShare());
+            schedule.setFile(scheduleRequest.getFileList());
+        }
+        return schedule;
     }
 }

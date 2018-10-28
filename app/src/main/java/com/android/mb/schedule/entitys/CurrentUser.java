@@ -146,6 +146,7 @@ public class CurrentUser {
         boolean born = false;
         String json = "";
         if (entity != null) {
+            me.setId(entity.getId());
             me.setUsername(entity.getUsername());
             me.setNickname(entity.getNickname());
             me.setMobile(entity.getMobile());
@@ -154,7 +155,6 @@ public class CurrentUser {
             me.setOffice_name(entity.getOffice_name());
             me.setAvatar(entity.getAvatar());
             if (isLogin){
-                me.setId(entity.getId());
                 me.setToken(entity.getToken());
                 me.setToken_id(entity.getToken_id());
                 me.setExpiretime(entity.getExpiretime());

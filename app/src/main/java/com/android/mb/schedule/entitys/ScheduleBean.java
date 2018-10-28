@@ -9,7 +9,7 @@ public class ScheduleBean implements MultiItemEntity,Serializable{
     private long id;
     private String title;
     private String description;
-    private Object date;
+    private String date;
     private long time_s;
     private long time_e;
     private String address;
@@ -57,11 +57,11 @@ public class ScheduleBean implements MultiItemEntity,Serializable{
         this.description = description;
     }
 
-    public Object getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Object date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
