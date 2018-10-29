@@ -7,6 +7,7 @@ import com.android.mb.schedule.base.BaseMvpPresenter;
 import com.android.mb.schedule.db.GreenDaoManager;
 import com.android.mb.schedule.db.Schedule;
 import com.android.mb.schedule.entitys.CurrentUser;
+import com.android.mb.schedule.entitys.ScheduleBean;
 import com.android.mb.schedule.entitys.ScheduleData;
 import com.android.mb.schedule.greendao.ScheduleDao;
 import com.android.mb.schedule.presenter.interfaces.IMonthPresenter;
@@ -18,6 +19,9 @@ import com.android.mb.schedule.utils.NetworkHelper;
 import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.view.interfaces.IMonthView;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -66,8 +70,8 @@ public class MonthPresenter extends BaseMvpPresenter<IMonthView> implements IMon
     private void getDataFromLocal(Map<String, Object> requestMap) {
         ScheduleDao scheduleDao = GreenDaoManager.getInstance().getNewSession().getScheduleDao();
         long userId = CurrentUser.getInstance().getId();
-        String date = (String) requestMap.get("date");
-        Observable observable = scheduleDao.queryBuilder().where(ScheduleDao.Properties.Create_by.eq(userId))
+        final String dateStr = (String) requestMap.get("date");
+        Observable observable = scheduleDao.queryBuilder().where(ScheduleDao.Properties.Create_by.eq(userId)).where(ScheduleDao.Properties.Time_s.le(getMonthEndTime(dateStr)))
                 .orderDesc(ScheduleDao.Properties.Time_s).orderDesc(ScheduleDao.Properties.Id).rx().list();
         toSubscribe(observable,  new Subscriber<List<Schedule>>() {
             @Override
@@ -87,9 +91,175 @@ public class MonthPresenter extends BaseMvpPresenter<IMonthView> implements IMon
             @Override
             public void onNext(List<Schedule> result) {
                 if (mMvpView!=null){
-
+                    if (Helper.isNotEmpty(result)){
+                       setData(dateStr,result);
+                    }
                 }
             }
         });
     }
+
+    private void setData(String dateStr,List<Schedule> result){
+        List<ScheduleData> dataList = getScheduleDateList(dateStr);
+        for (Schedule schedule:result) {
+            if (schedule.getRepeattype() == 2){
+                //每天重复
+                for (ScheduleData scheduleData:dataList){
+                    Date date = Helper.string2Date(scheduleData.getDate(),"yyyy-MM-dd");
+                    if (date.getTime()>schedule.getTime_s()){
+                        List<ScheduleBean> scheduleBeanList = scheduleData.getList();
+                        scheduleBeanList.add(ProjectHelper.transToScheduleBean(schedule));
+                        scheduleData.setList(scheduleBeanList);
+                    }
+                }
+
+            }else if (schedule.getRepeattype() == 3){
+                //周重复
+                for (ScheduleData scheduleData:dataList){
+                    Date date = Helper.string2Date(scheduleData.getDate(),"yyyy-MM-dd");
+                    if (date.getTime()>schedule.getTime_s() && isSameWeekNum(date,Helper.long2Date(schedule.getTime_s()*1000))){
+                        List<ScheduleBean> scheduleBeanList = scheduleData.getList();
+                        scheduleBeanList.add(ProjectHelper.transToScheduleBean(schedule));
+                        scheduleData.setList(scheduleBeanList);
+                    }
+                }
+
+            }else if (schedule.getRepeattype() == 4){
+                //月重复
+                for (ScheduleData scheduleData:dataList){
+                    Date date = Helper.string2Date(scheduleData.getDate(),"yyyy-MM-dd");
+                    if (date.getTime()>schedule.getTime_s() && isSameMonthNum(date,Helper.long2Date(schedule.getTime_s()*1000))){
+                        List<ScheduleBean> scheduleBeanList = scheduleData.getList();
+                        scheduleBeanList.add(ProjectHelper.transToScheduleBean(schedule));
+                        scheduleData.setList(scheduleBeanList);
+                    }
+                }
+
+            }else if (schedule.getRepeattype() == 1){
+                //一次性
+                for (ScheduleData scheduleData:dataList){
+                    Date date = Helper.string2Date(scheduleData.getDate(),"yyyy-MM-dd");
+                    if (isSameDay(date,Helper.long2Date(schedule.getTime_s()*1000))){
+                        List<ScheduleBean> scheduleBeanList = scheduleData.getList();
+                        scheduleBeanList.add(ProjectHelper.transToScheduleBean(schedule));
+                        scheduleData.setList(scheduleBeanList);
+                    }
+                }
+            }
+        }
+        mMvpView.getSuccess(dataList);
+    }
+
+    private long getMonthStartTime(String dateStr){
+        try {
+            Date date = Helper.string2Date(dateStr,"yyyy-MM-dd");
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.set(Calendar.DAY_OF_MONTH, 1);
+            String endTimeStr = Helper.date2String(calendar.getTime(),"yyyy-MM-dd")+" 00:00:00";
+            return Helper.dateString2Long(endTimeStr)/1000;
+        }catch (Exception e){
+            e.getStackTrace();
+            return 0;
+        }
+    }
+
+
+    private long getMonthEndTime(String dateStr){
+        try {
+            Date date = Helper.string2Date(dateStr,"yyyy-MM-dd");
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+            String endTimeStr = Helper.date2String(calendar.getTime(),"yyyy-MM-dd")+" 23:59:59";
+            return Helper.dateString2Long(endTimeStr)/1000;
+        }catch (Exception e){
+            e.getStackTrace();
+            return 0;
+        }
+    }
+
+    private boolean isSameWeekNum(Date date1,Date date2){
+        try {
+            Calendar calendar1 = (Calendar) Calendar.getInstance().clone();
+            calendar1.setTime(date1);
+
+            Calendar calendar2 = (Calendar) Calendar.getInstance().clone();
+            calendar2.setTime(date2);
+
+            return calendar1.get(Calendar.DAY_OF_WEEK) == calendar2.get(Calendar.DAY_OF_WEEK);
+        }catch (Exception e){
+            e.getStackTrace();
+            return false;
+        }
+    }
+
+    private boolean isSameDay(Date date1,Date date2){
+        try {
+            Calendar calendar1 = (Calendar) Calendar.getInstance().clone();
+            calendar1.setTime(date1);
+
+            Calendar calendar2 = (Calendar) Calendar.getInstance().clone();
+            calendar2.setTime(date2);
+
+            return calendar1.get(Calendar.YEAR)==calendar2.get(Calendar.YEAR) && calendar1.get(Calendar.MONTH)==calendar2.get(Calendar.MONTH) && calendar1.get(Calendar.DAY_OF_MONTH)==calendar2.get(Calendar.DAY_OF_MONTH);
+        }catch (Exception e){
+            e.getStackTrace();
+            return false;
+        }
+    }
+
+    private boolean isSameMonthNum(Date date1,Date date2){
+        try {
+            Calendar calendar1 = (Calendar) Calendar.getInstance().clone();
+            calendar1.setTime(date1);
+
+            Calendar calendar2 = (Calendar) Calendar.getInstance().clone();
+            calendar2.setTime(date2);
+
+            return calendar1.get(Calendar.DAY_OF_WEEK) == calendar2.get(Calendar.DAY_OF_WEEK);
+        }catch (Exception e){
+            e.getStackTrace();
+            return false;
+        }
+    }
+
+    private List<String> getMonthDateList(String dateStr){
+        try {
+            List<String> dateList = new ArrayList<>();
+            Date date = Helper.string2Date(dateStr,"yyyy-MM-dd");
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);//month 为指定月份任意日期
+            int dayNumOfMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+            cal.set(Calendar.DAY_OF_MONTH, 1);// 从一号开始
+            for (int i = 0; i < dayNumOfMonth; i++, cal.add(Calendar.DATE, 1)) {
+                Date d = cal.getTime();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                String df = simpleDateFormat.format(d);
+                dateList.add(df);
+            }
+            return dateList;
+        }catch (Exception e){
+            e.getStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    private List<ScheduleData> getScheduleDateList(String dateStr){
+        try {
+            List<ScheduleData> dataList = new ArrayList<>();
+            List<String> dateList = getMonthDateList(dateStr);
+            for (String date:dateList){
+                ScheduleData scheduleData = new ScheduleData();
+                scheduleData.setDate(date);
+                scheduleData.setList(new ArrayList<ScheduleBean>());
+                dataList.add(scheduleData);
+            }
+            return dataList;
+        }catch (Exception e){
+            e.getStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
 }

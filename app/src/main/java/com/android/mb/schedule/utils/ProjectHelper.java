@@ -583,6 +583,26 @@ public class ProjectHelper {
         return result;
     }
 
+    public static ScheduleBean transToScheduleBean(Schedule schedule){
+        ScheduleBean scheduleBean = new ScheduleBean();
+        scheduleBean.setId(schedule.getId());
+        scheduleBean.setTitle(schedule.getTitle());
+        scheduleBean.setDescription(schedule.getDescription());
+        scheduleBean.setDate(schedule.getDate());
+        scheduleBean.setTime_s(schedule.getTime_s());
+        scheduleBean.setTime_e(schedule.getTime_e());
+        scheduleBean.setAddress(schedule.getAddress());
+        scheduleBean.setStartTime(schedule.getStartTime());
+        scheduleBean.setEndTime(schedule.getEndTime());
+        scheduleBean.setAllDay(schedule.getAllDay());
+        scheduleBean.setRemind(schedule.getRemind());
+        scheduleBean.setImportant(schedule.getImportant());
+        scheduleBean.setSummary(schedule.getSummary());
+        scheduleBean.setNot_remind_related(schedule.getNot_remind_related()+"");
+        return scheduleBean;
+    }
+
+
     public static List<RelatedBean> transToRelateScheduleList(List<Schedule> dataList){
         List<RelatedBean> result = new ArrayList<>();
         UserDao userDao = GreenDaoManager.getInstance().getNewSession().getUserDao();
