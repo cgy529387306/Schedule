@@ -2,6 +2,7 @@ package com.android.mb.schedule.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
@@ -32,6 +33,7 @@ import com.android.mb.schedule.fragment.WeekFragment;
 import com.android.mb.schedule.greendao.OfficeDao;
 import com.android.mb.schedule.greendao.ScheduleDao;
 import com.android.mb.schedule.greendao.UserDao;
+import com.android.mb.schedule.keeplive.KeepLiveManager;
 import com.android.mb.schedule.presenter.HomePresenter;
 import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.service.LongRunningService;
@@ -97,8 +99,9 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
-//        startService(new Intent(this, LongRunningService.class));
+        startService(new Intent(this, LongRunningService.class));
         startService(new Intent(this, SyncService.class));
+        KeepLiveManager.getInstance().registerKeepLifeReceiver(this);
         PgyUpdateManager.setIsForced(false); //设置是否强制更新。true为强制更新；false为不强制更新（默认值）。
         PgyUpdateManager.register(this);
         mPresenter.getUserInfo();
@@ -113,6 +116,7 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        KeepLiveManager.getInstance().unregisterKeepLiveReceiver(this);
         PgyUpdateManager.unregister();
     }
 
@@ -252,7 +256,13 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
             }
             NavigationHelper.startActivity(MainActivity.this,ScheduleAddActivity.class,bundle,false);
         }else if (id == R.id.iv_refresh){
-            doGetDbData();
+            startService(new Intent(this, SyncService.class));
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    ToastHelper.showLongToast("同步成功！");
+                }
+            },1000);
         }else if (id == R.id.iv_today){
             if (mFragmentViewPager.getCurrentItem()==0 && mMonthFragment!=null){
                 mMonthFragment.toToday();

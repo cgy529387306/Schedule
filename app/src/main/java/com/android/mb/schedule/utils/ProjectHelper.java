@@ -703,4 +703,27 @@ public class ProjectHelper {
         }
         return schedule;
     }
+
+    public static UserBean transToUserBean(User user){
+        UserBean userBean = new UserBean();
+        if (user!=null){
+            userBean.setId(user.getId());
+            userBean.setSelect(false);
+            userBean.setNickname(user.getNickname());
+            userBean.setOffice_id(user.getOffice_id());
+            userBean.setAvatar(BaseHttp.BASE_URL+user.getAvatar());
+        }
+        return userBean;
+    }
+
+    public static List<UserBean> transToUserBeanList(List<User> userList){
+        List<UserBean> userBeanList = new ArrayList<>();
+        if (Helper.isNotEmpty(userList)){
+            for (User user:userList){
+                userBeanList.add(transToUserBean(user));
+            }
+        }
+        return userBeanList;
+    }
+
 }

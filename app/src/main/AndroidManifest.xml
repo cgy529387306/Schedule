@@ -37,6 +37,18 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".keeplive.KeepLiveActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:finishOnTaskLaunch="false"
+            android:launchMode="singleInstance"
+            android:process=":live"
+            android:theme="@style/KeepLiveTheme" />
+        <service
+            android:name=".keeplive.KeepLiveService"
+            android:enabled="true"
+            android:exported="true" />
+        <activity
             android:name=".view.LoginActivity"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:screenOrientation="portrait"/>

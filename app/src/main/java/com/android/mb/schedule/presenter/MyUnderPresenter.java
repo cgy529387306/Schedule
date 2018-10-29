@@ -62,7 +62,7 @@ public class MyUnderPresenter extends BaseMvpPresenter<IMyUnderView> implements 
         }
     }
 
-    public void getDataFromLocal(Map<String, Object> requestMap) {
+    private void getDataFromLocal(Map<String, Object> requestMap) {
         ScheduleDao scheduleDao = GreenDaoManager.getInstance().getNewSession().getScheduleDao();
         long uid = (long) requestMap.get("uid");
         int page = (int) requestMap.get("page");

@@ -59,7 +59,7 @@ public class RelatedPresenter extends BaseMvpPresenter<IRelatedView> implements 
         }
     }
 
-    public void getDataFromLocal(Map<String, Object> requestMap) {
+    private void getDataFromLocal(Map<String, Object> requestMap) {
         ScheduleDao scheduleDao = GreenDaoManager.getInstance().getNewSession().getScheduleDao();
         long uid = CurrentUser.getInstance().getId();
         int page = (int) requestMap.get("page");

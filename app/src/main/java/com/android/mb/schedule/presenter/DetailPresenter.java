@@ -66,7 +66,7 @@ public class DetailPresenter extends BaseMvpPresenter<IDetailView> implements ID
         }
     }
 
-    public void getDataFromLocal(Map<String, Object> requestMap) {
+    private void getDataFromLocal(Map<String, Object> requestMap) {
         ScheduleDao scheduleDao = GreenDaoManager.getInstance().getNewSession().getScheduleDao();
         long id = (long) requestMap.get("id");
         Schedule schedule = scheduleDao.loadByRowId(id);
@@ -112,7 +112,7 @@ public class DetailPresenter extends BaseMvpPresenter<IDetailView> implements ID
 
     }
 
-    public void deleteFromLocal(Map<String, Object> requestMap) {
+    private void deleteFromLocal(Map<String, Object> requestMap) {
         ScheduleDao scheduleDao = GreenDaoManager.getInstance().getNewSession().getScheduleDao();
         long id = (long) requestMap.get("id");
         scheduleDao.deleteByKey(id);
@@ -155,7 +155,7 @@ public class DetailPresenter extends BaseMvpPresenter<IDetailView> implements ID
         }
     }
 
-    public void shareToLocal(long id, List<UserBean> shareList) {
+    private void shareToLocal(long id, List<UserBean> shareList) {
         ScheduleDao scheduleDao = GreenDaoManager.getInstance().getNewSession().getScheduleDao();
         Schedule schedule = scheduleDao.loadByRowId(id);
         schedule.setShare(JsonHelper.toJson(shareList));

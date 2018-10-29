@@ -65,7 +65,7 @@ public class MinePresenter extends BaseMvpPresenter<IMineView> implements IMineP
 
     }
 
-    public void getDataFromLocal(Map<String, Object> requestMap) {
+    private void getDataFromLocal(Map<String, Object> requestMap) {
         ScheduleDao scheduleDao = GreenDaoManager.getInstance().getNewSession().getScheduleDao();
         long userId = CurrentUser.getInstance().getId();
         int type = (int) requestMap.get("type");
@@ -102,4 +102,6 @@ public class MinePresenter extends BaseMvpPresenter<IMineView> implements IMineP
             }
         });
     }
+
+
 }
