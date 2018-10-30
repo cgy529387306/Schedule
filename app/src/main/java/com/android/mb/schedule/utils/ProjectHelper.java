@@ -775,18 +775,20 @@ public class ProjectHelper {
     }
 
     public static boolean isSameDay(Date date, Date sameDate) {
-        if (null == date || null == sameDate) {
+        try {
+            if (null == date || null == sameDate) {
+                return false;
+            }
+            Calendar calendar1 = (Calendar) Calendar.getInstance().clone();
+            calendar1.setTime(date);
+
+            Calendar calendar2 = (Calendar) Calendar.getInstance().clone();
+            calendar2.setTime(sameDate);
+            return calendar1.get(Calendar.YEAR)==calendar2.get(Calendar.YEAR) && calendar1.get(Calendar.MONTH)==calendar2.get(Calendar.MONTH) && calendar1.get(Calendar.DAY_OF_MONTH)==calendar2.get(Calendar.DAY_OF_MONTH);
+        }catch (Exception e){
+            e.getStackTrace();
             return false;
         }
-        Calendar nowCalendar = Calendar.getInstance();
-        nowCalendar.setTime(sameDate);
-        nowCalendar.setTimeZone(TimeZone.getTimeZone("GMT+08:00"));
-        Calendar dateCalendar = Calendar.getInstance();
-        dateCalendar.setTime(date);
-        dateCalendar.setTimeZone(TimeZone.getTimeZone("GMT+08:00"));
-        return nowCalendar.get(Calendar.YEAR) == dateCalendar.get(Calendar.YEAR)
-                && nowCalendar.get(Calendar.MONTH) == dateCalendar.get(Calendar.MONTH)
-                && nowCalendar.get(Calendar.DATE) == dateCalendar.get(Calendar.DATE);
 
     }
 
@@ -817,6 +819,16 @@ public class ProjectHelper {
         }catch (Exception e){
             e.getStackTrace();
             return false;
+        }
+    }
+
+    public static long getDayEndTime(String dateStr){
+        try {
+            String date = dateStr + " 23:59:59";
+            return Helper.dateString2Long(date)/1000;
+        }catch (Exception e){
+            e.getStackTrace();
+            return System.currentTimeMillis()/1000;
         }
     }
 

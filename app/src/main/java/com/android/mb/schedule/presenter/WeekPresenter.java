@@ -108,11 +108,10 @@ public class WeekPresenter extends BaseMvpPresenter<IWeekView> implements IWeekP
                         //每天重复
                         for (ScheduleData scheduleData:dataList){
                             Date date = Helper.string2Date(scheduleData.getDate(),"yyyy-MM-dd");
-                            long time = date.getTime()/1000;
-                            if (time>schedule.getTime_s()){
-                                if (schedule.getClose_time()==0 || schedule.getClose_time()>time){
+                            if (ProjectHelper.getDayEndTime(scheduleData.getDate())>=schedule.getTime_s()){
+                                if (schedule.getClose_time()==0 || schedule.getClose_time()>date.getTime()/1000){
                                     List<ScheduleBean> scheduleBeanList = scheduleData.getList();
-                                    scheduleBeanList.add(ProjectHelper.transToScheduleBean(schedule,dateStr));
+                                    scheduleBeanList.add(ProjectHelper.transToScheduleBean(schedule,scheduleData.getDate()));
                                     scheduleData.setList(scheduleBeanList);
                                 }
                             }
@@ -122,11 +121,10 @@ public class WeekPresenter extends BaseMvpPresenter<IWeekView> implements IWeekP
                         //周重复
                         for (ScheduleData scheduleData:dataList){
                             Date date = Helper.string2Date(scheduleData.getDate(),"yyyy-MM-dd");
-                            long time = date.getTime()/1000;
-                            if (time>schedule.getTime_s() && ProjectHelper.isSameWeekNum(date,Helper.long2Date(schedule.getTime_s()*1000))){
-                                if (schedule.getClose_time()==0 || schedule.getClose_time()>time){
+                            if (ProjectHelper.getDayEndTime(scheduleData.getDate())>=schedule.getTime_s() && ProjectHelper.isSameWeekNum(date,Helper.long2Date(schedule.getTime_s()*1000))){
+                                if (schedule.getClose_time()==0 || schedule.getClose_time()>date.getTime()/1000){
                                     List<ScheduleBean> scheduleBeanList = scheduleData.getList();
-                                    scheduleBeanList.add(ProjectHelper.transToScheduleBean(schedule,dateStr));
+                                    scheduleBeanList.add(ProjectHelper.transToScheduleBean(schedule,scheduleData.getDate()));
                                     scheduleData.setList(scheduleBeanList);
                                 }
                             }
@@ -136,11 +134,10 @@ public class WeekPresenter extends BaseMvpPresenter<IWeekView> implements IWeekP
                         //月重复
                         for (ScheduleData scheduleData:dataList){
                             Date date = Helper.string2Date(scheduleData.getDate(),"yyyy-MM-dd");
-                            long time = date.getTime()/1000;
-                            if (time>schedule.getTime_s() && ProjectHelper.isSameMonthNum(date,Helper.long2Date(schedule.getTime_s()*1000))){
-                                if (schedule.getClose_time()==0 || schedule.getClose_time()>time){
+                            if (ProjectHelper.getDayEndTime(scheduleData.getDate())>=schedule.getTime_s() && ProjectHelper.isSameMonthNum(date,Helper.long2Date(schedule.getTime_s()*1000))){
+                                if (schedule.getClose_time()==0 || schedule.getClose_time()>date.getTime()/1000){
                                     List<ScheduleBean> scheduleBeanList = scheduleData.getList();
-                                    scheduleBeanList.add(ProjectHelper.transToScheduleBean(schedule,dateStr));
+                                    scheduleBeanList.add(ProjectHelper.transToScheduleBean(schedule,scheduleData.getDate()));
                                     scheduleData.setList(scheduleBeanList);
                                 }
                             }
@@ -152,7 +149,7 @@ public class WeekPresenter extends BaseMvpPresenter<IWeekView> implements IWeekP
                             Date date = Helper.string2Date(scheduleData.getDate(),"yyyy-MM-dd");
                             if (ProjectHelper.isSameDay(date,Helper.long2Date(schedule.getTime_s()*1000))){
                                 List<ScheduleBean> scheduleBeanList = scheduleData.getList();
-                                scheduleBeanList.add(ProjectHelper.transToScheduleBean(schedule,dateStr));
+                                scheduleBeanList.add(ProjectHelper.transToScheduleBean(schedule,scheduleData.getDate()));
                                 scheduleData.setList(scheduleBeanList);
                             }
                         }
@@ -223,8 +220,8 @@ public class WeekPresenter extends BaseMvpPresenter<IWeekView> implements IWeekP
             List<String> dateList = new ArrayList<>();
             Date date = Helper.string2Date(dateStr,"yyyy-MM-dd");
             Calendar cal = Calendar.getInstance();
-            cal.setTime(date);//month 为指定月份任意日期
-            for (int i = 0; i < 6; i++, cal.add(Calendar.DATE, 1)) {
+            cal.setTime(date);
+            for (int i = 0; i < 7; i++, cal.add(Calendar.DATE, 1)) {
                 Date d = cal.getTime();
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 String df = simpleDateFormat.format(d);
