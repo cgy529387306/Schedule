@@ -69,12 +69,16 @@ public class DetailPresenter extends BaseMvpPresenter<IDetailView> implements ID
     private void getDataFromLocal(Map<String, Object> requestMap) {
         ScheduleDao scheduleDao = GreenDaoManager.getInstance().getNewSession().getScheduleDao();
         long id = (long) requestMap.get("id");
+        String date = "";
+        if (requestMap.containsKey("date")){
+           date = (String) requestMap.get("date");
+        }
         Schedule schedule = scheduleDao.loadByRowId(id);
         if (schedule==null){
             mMvpView.showToastMessage("该日程不存在");
         }else{
             if (mMvpView!=null){
-                mMvpView.getSuccess(ProjectHelper.transToScheduleDetailData(schedule));
+                mMvpView.getSuccess(ProjectHelper.transToScheduleDetailData(schedule,date));
             }
         }
     }

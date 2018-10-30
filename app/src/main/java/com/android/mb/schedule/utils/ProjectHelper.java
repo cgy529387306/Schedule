@@ -43,6 +43,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -516,21 +518,6 @@ public class ProjectHelper {
         return Helper.date2String(calendar.getTime(),"yyyy-MM-dd");
     }
 
-    public static boolean isSameDay(Date date, Date sameDate) {
-        if (null == date || null == sameDate) {
-            return false;
-        }
-        Calendar nowCalendar = Calendar.getInstance();
-        nowCalendar.setTime(sameDate);
-        nowCalendar.setTimeZone(TimeZone.getTimeZone("GMT+08:00"));
-        Calendar dateCalendar = Calendar.getInstance();
-        dateCalendar.setTime(date);
-        dateCalendar.setTimeZone(TimeZone.getTimeZone("GMT+08:00"));
-        return nowCalendar.get(Calendar.YEAR) == dateCalendar.get(Calendar.YEAR)
-                && nowCalendar.get(Calendar.MONTH) == dateCalendar.get(Calendar.MONTH)
-                && nowCalendar.get(Calendar.DATE) == dateCalendar.get(Calendar.DATE);
-
-    }
 
     public static boolean isToday(String date){
         if (Helper.isEmpty(date)){
@@ -583,14 +570,19 @@ public class ProjectHelper {
         return result;
     }
 
-    public static ScheduleBean transToScheduleBean(Schedule schedule){
+    public static ScheduleBean transToScheduleBean(Schedule schedule,String dateStr){
+        String timeStart = Helper.long2DateString(schedule.getTime_s()*1000,"HH:mm:ss");
+        long start = Helper.dateString2Long(dateStr+" "+timeStart)/1000;
+        String timeEnd = Helper.long2DateString(schedule.getTime_e()*1000,"HH:mm:ss");
+        long end = Helper.dateString2Long(dateStr+" "+timeEnd)/1000;
+
         ScheduleBean scheduleBean = new ScheduleBean();
         scheduleBean.setId(schedule.getId());
         scheduleBean.setTitle(schedule.getTitle());
         scheduleBean.setDescription(schedule.getDescription());
-        scheduleBean.setDate(schedule.getDate());
-        scheduleBean.setTime_s(schedule.getTime_s());
-        scheduleBean.setTime_e(schedule.getTime_e());
+        scheduleBean.setDate(dateStr);
+        scheduleBean.setTime_s(start);
+        scheduleBean.setTime_e(end);
         scheduleBean.setAddress(schedule.getAddress());
         scheduleBean.setStartTime(schedule.getStartTime());
         scheduleBean.setEndTime(schedule.getEndTime());
@@ -620,13 +612,11 @@ public class ProjectHelper {
                 relatedBean.setCreate_date(Helper.long2DateString(schedule.getCreatetime()*1000));
                 User user = userDao.loadByRowId(schedule.getCreate_by());
                 Office office = officeDao.load(user.getOffice_id());
-                if (user!=null){
-                    String userName = user.getNickname()==null?user.getUsername():user.getNickname();
-                    String officeName = office.getName();
-                    relatedBean.setUser_avatar(BaseHttp.BASE_URL+user.getAvatar());
-                    relatedBean.setUser_name(userName);
-                    relatedBean.setUser_office(officeName);
-                }
+                String userName = user.getNickname()==null?user.getUsername():user.getNickname();
+                String officeName = office.getName();
+                relatedBean.setUser_avatar(BaseHttp.BASE_URL+user.getAvatar());
+                relatedBean.setUser_name(userName);
+                relatedBean.setUser_office(officeName);
                 result.add(relatedBean);
             }
         }
@@ -656,7 +646,7 @@ public class ProjectHelper {
     }
 
 
-    public static ScheduleDetailData transToScheduleDetailData(Schedule data){
+    public static ScheduleDetailData transToScheduleDetailData(Schedule data,String dateStr){
         ScheduleDetailData scheduleDetailData = new ScheduleDetailData();
         if (data!=null){
             ScheduleDetailBean scheduleDetailBean = new ScheduleDetailBean();
@@ -665,11 +655,25 @@ public class ProjectHelper {
             scheduleDetailBean.setDescription(data.getDescription());
             scheduleDetailBean.setSummary(data.getSummary());
             scheduleDetailBean.setAddress(data.getAddress());
-            scheduleDetailBean.setTime_s(data.getTime_s());
-            scheduleDetailBean.setTime_e(data.getTime_e());
-            scheduleDetailBean.setDate(data.getDate());
-            scheduleDetailBean.setStartTime(data.getStartTime());
-            scheduleDetailBean.setEndTime(data.getEndTime());
+            if (Helper.isEmpty(dateStr)){
+                scheduleDetailBean.setTime_s(data.getTime_s());
+                scheduleDetailBean.setTime_e(data.getTime_e());
+                scheduleDetailBean.setDate(data.getDate());
+                scheduleDetailBean.setStartTime(data.getStartTime());
+                scheduleDetailBean.setEndTime(data.getEndTime());
+            }else{
+                String timeStart = Helper.long2DateString(data.getTime_s()*1000,"HH:mm:ss");
+                long start = Helper.dateString2Long(dateStr+" "+timeStart)/1000;
+                String timeEnd = Helper.long2DateString(data.getTime_e()*1000,"HH:mm:ss");
+                long end = Helper.dateString2Long(dateStr+" "+timeEnd)/1000;
+
+                scheduleDetailBean.setTime_s(start);
+                scheduleDetailBean.setTime_e(end);
+                scheduleDetailBean.setDate(dateStr);
+                scheduleDetailBean.setStartTime(data.getStartTime());
+                scheduleDetailBean.setEndTime(data.getEndTime());
+            }
+
             scheduleDetailBean.setAllDay(data.getAllDay());
             scheduleDetailBean.setRepeattype(data.getRepeattype());
             scheduleDetailBean.setRemind(data.getRemind());
@@ -744,6 +748,76 @@ public class ProjectHelper {
             }
         }
         return userBeanList;
+    }
+
+    public static List<ScheduleData> sortScheduleData(List<ScheduleData> dataList){
+        List<ScheduleData> result = new ArrayList<>();
+        for (ScheduleData scheduleData:dataList){
+            if (Helper.isNotEmpty(scheduleData.getList())){
+                Collections.sort(scheduleData.getList(), new Comparator<ScheduleBean>() {
+
+                    @Override
+                    public int compare(ScheduleBean o1, ScheduleBean o2) {
+                        long i = o1.getTime_s() - o2.getTime_s();
+                        if (i>0){
+                            return 1;
+                        }else if (i<0){
+                            return -1;
+                        }else{
+                            return 0;
+                        }
+                    }
+                });
+            }
+            result.add(scheduleData);
+        }
+        return result;
+    }
+
+    public static boolean isSameDay(Date date, Date sameDate) {
+        if (null == date || null == sameDate) {
+            return false;
+        }
+        Calendar nowCalendar = Calendar.getInstance();
+        nowCalendar.setTime(sameDate);
+        nowCalendar.setTimeZone(TimeZone.getTimeZone("GMT+08:00"));
+        Calendar dateCalendar = Calendar.getInstance();
+        dateCalendar.setTime(date);
+        dateCalendar.setTimeZone(TimeZone.getTimeZone("GMT+08:00"));
+        return nowCalendar.get(Calendar.YEAR) == dateCalendar.get(Calendar.YEAR)
+                && nowCalendar.get(Calendar.MONTH) == dateCalendar.get(Calendar.MONTH)
+                && nowCalendar.get(Calendar.DATE) == dateCalendar.get(Calendar.DATE);
+
+    }
+
+    public static boolean isSameWeekNum(Date date1,Date date2){
+        try {
+            Calendar calendar1 = (Calendar) Calendar.getInstance().clone();
+            calendar1.setTime(date1);
+
+            Calendar calendar2 = (Calendar) Calendar.getInstance().clone();
+            calendar2.setTime(date2);
+
+            return calendar1.get(Calendar.DAY_OF_WEEK) == calendar2.get(Calendar.DAY_OF_WEEK);
+        }catch (Exception e){
+            e.getStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean isSameMonthNum(Date date1,Date date2){
+        try {
+            Calendar calendar1 = (Calendar) Calendar.getInstance().clone();
+            calendar1.setTime(date1);
+
+            Calendar calendar2 = (Calendar) Calendar.getInstance().clone();
+            calendar2.setTime(date2);
+
+            return calendar1.get(Calendar.DAY_OF_WEEK) == calendar2.get(Calendar.DAY_OF_WEEK);
+        }catch (Exception e){
+            e.getStackTrace();
+            return false;
+        }
     }
 
 }
