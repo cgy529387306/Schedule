@@ -108,7 +108,7 @@ public class MonthPresenter extends BaseMvpPresenter<IMonthView> implements IMon
                         //每天重复
                         for (ScheduleData scheduleData:dataList){
                             Date date = Helper.string2Date(scheduleData.getDate(),"yyyy-MM-dd");
-                            if (ProjectHelper.getDayEndTime(scheduleData.getDate())>=schedule.getTime_s()){
+                            if (ProjectHelper.getDayEndTime(scheduleData.getDate())>=schedule.getTime_s() && schedule.getSt_del()==0){
                                 if (schedule.getClose_time()==0 || schedule.getClose_time()>date.getTime()/1000){
                                     List<ScheduleBean> scheduleBeanList = scheduleData.getList();
                                     scheduleBeanList.add(ProjectHelper.transToScheduleBean(schedule,scheduleData.getDate()));
@@ -121,7 +121,7 @@ public class MonthPresenter extends BaseMvpPresenter<IMonthView> implements IMon
                         //周重复
                         for (ScheduleData scheduleData:dataList){
                             Date date = Helper.string2Date(scheduleData.getDate(),"yyyy-MM-dd");
-                            if (ProjectHelper.getDayEndTime(scheduleData.getDate())>=schedule.getTime_s() && ProjectHelper.isSameWeekNum(date,Helper.long2Date(schedule.getTime_s()*1000))){
+                            if (ProjectHelper.getDayEndTime(scheduleData.getDate())>=schedule.getTime_s() && schedule.getSt_del()==0 && ProjectHelper.isSameWeekNum(date,Helper.long2Date(schedule.getTime_s()*1000))){
                                 if (schedule.getClose_time()==0 || schedule.getClose_time()>date.getTime()/1000){
                                     List<ScheduleBean> scheduleBeanList = scheduleData.getList();
                                     scheduleBeanList.add(ProjectHelper.transToScheduleBean(schedule,scheduleData.getDate()));
@@ -134,7 +134,7 @@ public class MonthPresenter extends BaseMvpPresenter<IMonthView> implements IMon
                         //月重复
                         for (ScheduleData scheduleData:dataList){
                             Date date = Helper.string2Date(scheduleData.getDate(),"yyyy-MM-dd");
-                            if (ProjectHelper.getDayEndTime(scheduleData.getDate())>=schedule.getTime_s() && ProjectHelper.isSameMonthNum(date,Helper.long2Date(schedule.getTime_s()*1000))){
+                            if (ProjectHelper.getDayEndTime(scheduleData.getDate())>=schedule.getTime_s() && schedule.getSt_del()==0 && ProjectHelper.isSameMonthNum(date,Helper.long2Date(schedule.getTime_s()*1000))){
                                 if (schedule.getClose_time()==0 || schedule.getClose_time()>date.getTime()/1000){
                                     List<ScheduleBean> scheduleBeanList = scheduleData.getList();
                                     scheduleBeanList.add(ProjectHelper.transToScheduleBean(schedule,scheduleData.getDate()));
@@ -147,7 +147,7 @@ public class MonthPresenter extends BaseMvpPresenter<IMonthView> implements IMon
                         //一次性
                         for (ScheduleData scheduleData:dataList){
                             Date date = Helper.string2Date(scheduleData.getDate(),"yyyy-MM-dd");
-                            if (ProjectHelper.isSameDay(date,Helper.long2Date(schedule.getTime_s()*1000))){
+                            if (schedule.getSt_del()==0 && ProjectHelper.isSameDay(date,Helper.long2Date(schedule.getTime_s()*1000))){
                                 List<ScheduleBean> scheduleBeanList = scheduleData.getList();
                                 scheduleBeanList.add(ProjectHelper.transToScheduleBean(schedule,scheduleData.getDate()));
                                 scheduleData.setList(scheduleBeanList);
