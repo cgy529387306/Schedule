@@ -89,10 +89,8 @@ public class WeekPresenter extends BaseMvpPresenter<IWeekView> implements IWeekP
 
             @Override
             public void onNext(List<Schedule> result) {
-                if (mMvpView!=null){
-                    if (Helper.isNotEmpty(result)){
-                        setData(dateStr,result);
-                    }
+                if (mMvpView!=null && result!=null){
+                    setData(dateStr,result);
                 }
             }
         });
@@ -175,10 +173,8 @@ public class WeekPresenter extends BaseMvpPresenter<IWeekView> implements IWeekP
 
             @Override
             public void onNext(List<ScheduleData> result) {
-                if (mMvpView!=null){
-                    if (Helper.isNotEmpty(result)){
-                        mMvpView.getSuccess(result);
-                    }
+                if (mMvpView!=null && result!=null){
+                    mMvpView.getSuccess(result);
                 }
             }
         });

@@ -104,7 +104,18 @@ public class SchedulePresenter extends BaseMvpPresenter<IScheduleView> implement
 
     private void editDataLocal(ScheduleRequest request) {
         ScheduleDao scheduleDao = GreenDaoManager.getInstance().getNewSession().getScheduleDao();
-        scheduleDao.update(ProjectHelper.transToSchedule(request,true));
+        Schedule schedule = ProjectHelper.transToSchedule(request,true);
+        if (request.getType()==1){
+            schedule.setClose_time(System.currentTimeMillis()/1000);
+            scheduleDao.update(schedule);
+
+            schedule.setClose_time(0);
+            schedule.setCreatetime(System.currentTimeMillis()/1000);
+            schedule.setId(null);
+            scheduleDao.insertOrReplace(schedule);
+        }else{
+            scheduleDao.update(schedule);
+        }
         if (mMvpView!=null){
             mMvpView.editSuccess("1");
         }

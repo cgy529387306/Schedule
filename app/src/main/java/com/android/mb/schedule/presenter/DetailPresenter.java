@@ -119,7 +119,17 @@ public class DetailPresenter extends BaseMvpPresenter<IDetailView> implements ID
     private void deleteFromLocal(Map<String, Object> requestMap) {
         ScheduleDao scheduleDao = GreenDaoManager.getInstance().getNewSession().getScheduleDao();
         long id = (long) requestMap.get("id");
-        scheduleDao.deleteByKey(id);
+        boolean hasDate = requestMap.containsKey("date");
+        String date = (String) requestMap.get("date");
+        long close = Helper.dateString2Long(date,"yyyy-MM-dd");
+        if (hasDate){
+            Schedule schedule = scheduleDao.loadByRowId(id);
+            schedule.setClose_time(close/1000);
+            schedule.setUpdatetime(System.currentTimeMillis()/1000);
+            scheduleDao.update(schedule);
+        }else{
+            scheduleDao.deleteByKey(id);
+        }
         if (mMvpView!=null){
             mMvpView.deleteSuccess("");
         }

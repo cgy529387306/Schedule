@@ -32,6 +32,7 @@ import com.android.mb.schedule.entitys.SearchBean;
 import com.android.mb.schedule.entitys.ShareBean;
 import com.android.mb.schedule.entitys.UserBean;
 import com.android.mb.schedule.greendao.OfficeDao;
+import com.android.mb.schedule.greendao.ScheduleDao;
 import com.android.mb.schedule.greendao.UserDao;
 import com.android.mb.schedule.view.SelectPersonActivity;
 import com.google.gson.Gson;
@@ -700,16 +701,22 @@ public class ProjectHelper {
         Schedule schedule = new Schedule();
         if (scheduleRequest!=null){
             if (isEdit){
-                schedule.setId(scheduleRequest.getId());
+                ScheduleDao scheduleDao = GreenDaoManager.getInstance().getNewSession().getScheduleDao();
+                schedule = scheduleDao.loadByRowId(scheduleRequest.getId());
+            }else{
+                schedule = new Schedule();
+                schedule.setCreatetime(System.currentTimeMillis()/1000);
             }
             schedule.setCreate_by(CurrentUser.getInstance().getId());
             schedule.setTitle(scheduleRequest.getTitle());
             schedule.setDescription(scheduleRequest.getDescription());
             schedule.setDate(Helper.date2String(new Date(),"yyyy-MM-dd"));
-            schedule.setTime_s(scheduleRequest.getStart());
-            schedule.setTime_e(scheduleRequest.getEnd());
-            schedule.setStartTime(Helper.long2DateString(scheduleRequest.getStart()*1000,"HH:mm"));
-            schedule.setEndTime(Helper.long2DateString(scheduleRequest.getEnd()*1000,"HH:mm"));
+            if (scheduleRequest.getType()==0){
+                schedule.setTime_s(scheduleRequest.getStart());
+                schedule.setTime_e(scheduleRequest.getEnd());
+                schedule.setStartTime(Helper.long2DateString(scheduleRequest.getStart()*1000,"HH:mm"));
+                schedule.setEndTime(Helper.long2DateString(scheduleRequest.getEnd()*1000,"HH:mm"));
+            }
             schedule.setAddress(scheduleRequest.getAddress());
             schedule.setAllDay(scheduleRequest.getAllDay());
             schedule.setRepeattype(scheduleRequest.getRepeattype());
@@ -717,9 +724,6 @@ public class ProjectHelper {
             schedule.setImportant(scheduleRequest.getImportant());
             schedule.setSummary(scheduleRequest.getSummary());
 //            schedule.setNot_remind_related(scheduleRequest.getno);
-            if (!isEdit){
-                schedule.setCreatetime(System.currentTimeMillis()/1000);
-            }
             schedule.setUpdatetime(System.currentTimeMillis()/1000);
             schedule.setRelated(scheduleRequest.getRelated());
             schedule.setShare(scheduleRequest.getShare());

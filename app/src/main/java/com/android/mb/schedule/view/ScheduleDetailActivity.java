@@ -311,8 +311,8 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
     private void doDelete(boolean hasDate){
         Map<String,Object> requestMap = new HashMap<>();
         requestMap.put("id",mId);
-        if (hasDate){
-            requestMap.put("date",Helper.date2String(new Date(),"yyyy-MM-dd"));
+        if (hasDate && Helper.isNotEmpty(mDate)){
+            requestMap.put("date",mDate);
         }
         mPresenter.deleteSchedule(requestMap);
     }
