@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.rxbus.RxBus;
+import com.android.mb.schedule.service.PostService;
 import com.android.mb.schedule.service.SyncService;
 import com.android.mb.schedule.utils.AppHelper;
 import com.android.mb.schedule.utils.KeyBoardUtils;
@@ -216,6 +217,7 @@ public abstract class BaseActivity extends AppCompatActivity{
                         mIsNetworkAvailable = temp;
                         if (mIsNetworkAvailable){
                             startService(new Intent(mContext, SyncService.class));
+                            startService(new Intent(mContext, PostService.class));
                         }else{
                             showToastMessage("网络已断开");
                         }
@@ -227,7 +229,6 @@ public abstract class BaseActivity extends AppCompatActivity{
 
         registerReceiver(mNetWorkStateChangeReceiver, filter);
     }
-
 
     /**
      * 界面跳转

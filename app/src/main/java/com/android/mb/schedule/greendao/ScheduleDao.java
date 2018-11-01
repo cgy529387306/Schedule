@@ -47,6 +47,7 @@ public class ScheduleDao extends AbstractDao<Schedule, Long> {
         public final static Property Related = new Property(20, String.class, "related", false, "RELATED");
         public final static Property Share = new Property(21, String.class, "share", false, "SHARE");
         public final static Property File = new Property(22, String.class, "file", false, "FILE");
+        public final static Property Local = new Property(23, int.class, "local", false, "LOCAL");
     }
 
 
@@ -84,7 +85,8 @@ public class ScheduleDao extends AbstractDao<Schedule, Long> {
                 "\"ST_DEL\" INTEGER NOT NULL ," + // 19: st_del
                 "\"RELATED\" TEXT," + // 20: related
                 "\"SHARE\" TEXT," + // 21: share
-                "\"FILE\" TEXT);"); // 22: file
+                "\"FILE\" TEXT," + // 22: file
+                "\"LOCAL\" INTEGER NOT NULL );"); // 23: local
     }
 
     /** Drops the underlying database table. */
@@ -163,6 +165,7 @@ public class ScheduleDao extends AbstractDao<Schedule, Long> {
         if (file != null) {
             stmt.bindString(23, file);
         }
+        stmt.bindLong(24, entity.getLocal());
     }
 
     @Override
@@ -235,6 +238,7 @@ public class ScheduleDao extends AbstractDao<Schedule, Long> {
         if (file != null) {
             stmt.bindString(23, file);
         }
+        stmt.bindLong(24, entity.getLocal());
     }
 
     @Override
@@ -267,7 +271,8 @@ public class ScheduleDao extends AbstractDao<Schedule, Long> {
             cursor.getInt(offset + 19), // st_del
             cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20), // related
             cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21), // share
-            cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22) // file
+            cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22), // file
+            cursor.getInt(offset + 23) // local
         );
         return entity;
     }
@@ -297,6 +302,7 @@ public class ScheduleDao extends AbstractDao<Schedule, Long> {
         entity.setRelated(cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20));
         entity.setShare(cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21));
         entity.setFile(cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22));
+        entity.setLocal(cursor.getInt(offset + 23));
      }
     
     @Override

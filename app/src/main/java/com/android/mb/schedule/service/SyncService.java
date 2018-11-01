@@ -121,7 +121,7 @@ public class SyncService extends Service {
                     scheduleSync.getDate(),scheduleSync.getTime_s(),scheduleSync.getTime_e(),scheduleSync.getAddress(),scheduleSync.getStartTime(),
                     scheduleSync.getEndTime(),scheduleSync.getAllDay(),scheduleSync.getRepeattype(),scheduleSync.getRemind(),scheduleSync.getImportant(),
                     scheduleSync.getSummary(),scheduleSync.getNot_remind_related(),scheduleSync.getClose_time(),scheduleSync.getCreatetime(),scheduleSync.getUpdatetime(),
-                    scheduleSync.getSt_del(), JsonHelper.toJson(scheduleSync.getRelated()),JsonHelper.toJson(scheduleSync.getShare()),JsonHelper.toJson(scheduleSync.getFile()));
+                    scheduleSync.getSt_del(), JsonHelper.toJson(scheduleSync.getRelated()),JsonHelper.toJson(scheduleSync.getShare()),JsonHelper.toJson(scheduleSync.getFile()),0);
             insertList.add(schedule);
         }
         ScheduleDao scheduleDao = GreenDaoManager.getInstance().getNewSession().getScheduleDao();

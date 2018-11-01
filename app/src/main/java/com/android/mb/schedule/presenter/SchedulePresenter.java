@@ -63,7 +63,7 @@ public class SchedulePresenter extends BaseMvpPresenter<IScheduleView> implement
 
     private void addDataLocal(ScheduleRequest request) {
         ScheduleDao scheduleDao = GreenDaoManager.getInstance().getNewSession().getScheduleDao();
-        scheduleDao.insertOrReplace(ProjectHelper.transToSchedule(request,false));
+        scheduleDao.insertOrReplace(ProjectHelper.transToSchedule(request));
         if (mMvpView!=null){
             mMvpView.addSuccess("1");
         }
@@ -104,22 +104,25 @@ public class SchedulePresenter extends BaseMvpPresenter<IScheduleView> implement
 
     private void editDataLocal(ScheduleRequest request) {
         ScheduleDao scheduleDao = GreenDaoManager.getInstance().getNewSession().getScheduleDao();
-        Schedule schedule = ProjectHelper.transToSchedule(request,true);
         if (request.getType()==1){
-            schedule.setClose_time(System.currentTimeMillis()/1000);
-            scheduleDao.update(schedule);
+            Schedule lastSchedule = scheduleDao.loadByRowId(request.getId());
+            lastSchedule.setClose_time(System.currentTimeMillis()/1000);
+            scheduleDao.update(lastSchedule);
 
+            Schedule schedule = ProjectHelper.transToEditSchedule(request);
             schedule.setClose_time(0);
             schedule.setCreatetime(System.currentTimeMillis()/1000);
             schedule.setId(null);
             scheduleDao.insertOrReplace(schedule);
         }else{
+            Schedule schedule = ProjectHelper.transToEditSchedule(request);
             scheduleDao.update(schedule);
         }
         if (mMvpView!=null){
             mMvpView.editSuccess("1");
         }
     }
+
 
     @Override
     public void uploadFile(File file) {

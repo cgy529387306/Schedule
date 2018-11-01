@@ -1,6 +1,5 @@
 package com.android.mb.schedule.service;
 
-import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -8,7 +7,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 
@@ -18,13 +16,14 @@ import com.android.mb.schedule.db.GreenDaoManager;
 import com.android.mb.schedule.db.Schedule;
 import com.android.mb.schedule.entitys.CurrentUser;
 import com.android.mb.schedule.greendao.ScheduleDao;
-import com.android.mb.schedule.receiver.MyNewTaskReceiver;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.NetworkHelper;
 import com.android.mb.schedule.utils.ToastHelper;
 import com.android.mb.schedule.view.MainActivity;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -35,10 +34,7 @@ import rx.subscriptions.CompositeSubscription;
 public class LongRunningService extends Service {
     protected CompositeSubscription mCompositeSubscription;
     public int mInterval = 60*1000;//1分钟
-    private AlarmManager mAlarmManager;
-    private PendingIntent mPendingIntent;
-
-
+    private Timer mTimer;
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -58,20 +54,21 @@ public class LongRunningService extends Service {
 
     @Override
     public void onDestroy() {
-        mAlarmManager.cancel(mPendingIntent);
+        mTimer.cancel();
         onUnsubscribe();
         super.onDestroy();
     }
 
     private void doJobTask(){
+        mTimer = new Timer();
         if (!NetworkHelper.isNetworkAvailable(MBApplication.getInstance())){
-            getRemind();
+            mTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    getRemind();
+                }
+            },0,mInterval);
         }
-        mAlarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        long triggerAtTime = SystemClock.elapsedRealtime()+(mInterval);
-        Intent i = new Intent(this,MyNewTaskReceiver.class);
-        mPendingIntent = PendingIntent.getBroadcast(this,0,i,0);
-        mAlarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,triggerAtTime,mPendingIntent);
     }
 
     private void doRemind(Schedule schedule){

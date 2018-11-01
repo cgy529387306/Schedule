@@ -1,19 +1,14 @@
 package com.android.mb.schedule.db;
 
-import com.android.mb.schedule.entitys.FileBean;
-import com.android.mb.schedule.entitys.UserBean;
-
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
-
-import java.util.List;
 import org.greenrobot.greendao.annotation.Generated;
 
 /**
- * Created by cgy on 18/10/26.
+ * Created by cgy on 18/11/1.
  */
 @Entity
-public class Schedule {
+public class Add {
     @Id(autoincrement = true)
     private Long id;
     private long create_by;
@@ -38,14 +33,13 @@ public class Schedule {
     private String related;
     private String share;
     private String file;
-    private int local;
-    @Generated(hash = 1812624133)
-    public Schedule(Long id, long create_by, String title, String description,
+    @Generated(hash = 1549220595)
+    public Add(Long id, long create_by, String title, String description,
             String date, long time_s, long time_e, String address, String startTime,
             String endTime, int allDay, int repeattype, int remind, int important,
             String summary, int not_remind_related, long close_time,
             long createtime, long updatetime, int st_del, String related,
-            String share, String file, int local) {
+            String share, String file) {
         this.id = id;
         this.create_by = create_by;
         this.title = title;
@@ -69,10 +63,9 @@ public class Schedule {
         this.related = related;
         this.share = share;
         this.file = file;
-        this.local = local;
     }
-    @Generated(hash = 729319394)
-    public Schedule() {
+    @Generated(hash = 798142234)
+    public Add() {
     }
     public Long getId() {
         return this.id;
@@ -211,11 +204,5 @@ public class Schedule {
     }
     public void setFile(String file) {
         this.file = file;
-    }
-    public int getLocal() {
-        return this.local;
-    }
-    public void setLocal(int local) {
-        this.local = local;
     }
 }

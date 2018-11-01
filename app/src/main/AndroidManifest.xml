@@ -108,6 +108,8 @@
             android:priority="1000"/>
         <service android:name=".service.SyncService"
             android:priority="1000"/>
+        <service android:name=".service.PostService"
+            android:priority="1000"/>
         <!-- Required SDK核心功能-->
         <activity
             android:name="cn.jpush.android.ui.PushActivity"

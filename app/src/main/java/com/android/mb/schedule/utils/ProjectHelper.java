@@ -441,12 +441,14 @@ public class ProjectHelper {
 
     public static String getIdStr(List<UserBean> userList){
         StringBuilder shareIds = new StringBuilder();
-        for (int i=0;i<userList.size();i++) {
-            UserBean userBean = userList.get(i);
-            if (i==userList.size()-1){
-                shareIds.append(userBean.getId());
-            }else{
-                shareIds.append(userBean.getId()).append(",");
+        if (Helper.isNotEmpty(userList)){
+            for (int i=0;i<userList.size();i++) {
+                UserBean userBean = userList.get(i);
+                if (i==userList.size()-1){
+                    shareIds.append(userBean.getId());
+                }else{
+                    shareIds.append(userBean.getId()).append(",");
+                }
             }
         }
         return shareIds.toString();
@@ -697,26 +699,19 @@ public class ProjectHelper {
         return scheduleDetailData;
     }
 
-    public static Schedule transToSchedule(ScheduleRequest scheduleRequest,boolean isEdit){
+    public static Schedule transToSchedule(ScheduleRequest scheduleRequest){
         Schedule schedule = new Schedule();
         if (scheduleRequest!=null){
-            if (isEdit){
-                ScheduleDao scheduleDao = GreenDaoManager.getInstance().getNewSession().getScheduleDao();
-                schedule = scheduleDao.loadByRowId(scheduleRequest.getId());
-            }else{
-                schedule = new Schedule();
-                schedule.setCreatetime(System.currentTimeMillis()/1000);
-            }
+            schedule.setLocal(1);
+            schedule.setCreatetime(System.currentTimeMillis()/1000);
             schedule.setCreate_by(CurrentUser.getInstance().getId());
             schedule.setTitle(scheduleRequest.getTitle());
             schedule.setDescription(scheduleRequest.getDescription());
             schedule.setDate(Helper.date2String(new Date(),"yyyy-MM-dd"));
-            if (scheduleRequest.getType()==0){
-                schedule.setTime_s(scheduleRequest.getStart());
-                schedule.setTime_e(scheduleRequest.getEnd());
-                schedule.setStartTime(Helper.long2DateString(scheduleRequest.getStart()*1000,"HH:mm"));
-                schedule.setEndTime(Helper.long2DateString(scheduleRequest.getEnd()*1000,"HH:mm"));
-            }
+            schedule.setTime_s(scheduleRequest.getStart());
+            schedule.setTime_e(scheduleRequest.getEnd());
+            schedule.setStartTime(Helper.long2DateString(scheduleRequest.getStart()*1000,"HH:mm"));
+            schedule.setEndTime(Helper.long2DateString(scheduleRequest.getEnd()*1000,"HH:mm"));
             schedule.setAddress(scheduleRequest.getAddress());
             schedule.setAllDay(scheduleRequest.getAllDay());
             schedule.setRepeattype(scheduleRequest.getRepeattype());
@@ -729,6 +724,61 @@ public class ProjectHelper {
             schedule.setShare(scheduleRequest.getShare());
             schedule.setFile(scheduleRequest.getFileList());
         }
+        return schedule;
+    }
+
+    public static ScheduleRequest transToRequest(Schedule schedule){
+        ScheduleRequest scheduleRequest = new ScheduleRequest();
+        if (schedule!=null){
+            scheduleRequest.setId(schedule.getId());
+            scheduleRequest.setTitle(schedule.getTitle());
+            scheduleRequest.setDescription(schedule.getDescription());
+            scheduleRequest.setSummary(schedule.getSummary());
+            scheduleRequest.setAddress(schedule.getAddress());
+            scheduleRequest.setStart(schedule.getTime_s());
+            scheduleRequest.setEnd(schedule.getTime_e());
+            scheduleRequest.setAllDay(schedule.getAllDay());
+            scheduleRequest.setRepeattype(schedule.getRepeattype());
+            scheduleRequest.setRemind(schedule.getRemind());
+            scheduleRequest.setImportant(schedule.getImportant());
+            List<UserBean> shareList = JsonHelper.fromJson(schedule.getShare(),new TypeToken<List<UserBean>>(){}.getType());
+            List<UserBean> relateList = JsonHelper.fromJson(schedule.getShare(),new TypeToken<List<UserBean>>(){}.getType());
+            List<FileBean> fileList = JsonHelper.fromJson(schedule.getShare(),new TypeToken<List<FileBean>>(){}.getType());
+            scheduleRequest.setRelated(ProjectHelper.getIdStr(relateList));
+            scheduleRequest.setShare(ProjectHelper.getIdStr(shareList));
+            if (Helper.isNotEmpty(fileList)){
+                FileBean fileBean = fileList.get(0);
+                scheduleRequest.setFid(fileBean.getId());
+            }
+        }
+        return scheduleRequest;
+    }
+
+    public static Schedule transToEditSchedule(ScheduleRequest scheduleRequest){
+        ScheduleDao scheduleDao = GreenDaoManager.getInstance().getNewSession().getScheduleDao();
+        Schedule schedule = scheduleDao.loadByRowId(scheduleRequest.getId());
+        if (schedule==null){
+            schedule=new Schedule();
+        }
+        schedule.setCreate_by(CurrentUser.getInstance().getId());
+        schedule.setTitle(scheduleRequest.getTitle());
+        schedule.setDescription(scheduleRequest.getDescription());
+        schedule.setDate(Helper.date2String(new Date(),"yyyy-MM-dd"));
+        schedule.setTime_s(scheduleRequest.getStart());
+        schedule.setTime_e(scheduleRequest.getEnd());
+        schedule.setStartTime(Helper.long2DateString(scheduleRequest.getStart()*1000,"HH:mm"));
+        schedule.setEndTime(Helper.long2DateString(scheduleRequest.getEnd()*1000,"HH:mm"));
+        schedule.setAddress(scheduleRequest.getAddress());
+        schedule.setAllDay(scheduleRequest.getAllDay());
+        schedule.setRepeattype(scheduleRequest.getRepeattype());
+        schedule.setRemind(scheduleRequest.getRemind());
+        schedule.setImportant(scheduleRequest.getImportant());
+        schedule.setSummary(scheduleRequest.getSummary());
+//            schedule.setNot_remind_related(scheduleRequest.getno);
+        schedule.setUpdatetime(System.currentTimeMillis()/1000);
+        schedule.setRelated(scheduleRequest.getRelated());
+        schedule.setShare(scheduleRequest.getShare());
+        schedule.setFile(scheduleRequest.getFileList());
         return schedule;
     }
 
@@ -819,7 +869,7 @@ public class ProjectHelper {
             Calendar calendar2 = (Calendar) Calendar.getInstance().clone();
             calendar2.setTime(date2);
 
-            return calendar1.get(Calendar.DAY_OF_WEEK) == calendar2.get(Calendar.DAY_OF_WEEK);
+            return calendar1.get(Calendar.DAY_OF_MONTH) == calendar2.get(Calendar.DAY_OF_MONTH);
         }catch (Exception e){
             e.getStackTrace();
             return false;

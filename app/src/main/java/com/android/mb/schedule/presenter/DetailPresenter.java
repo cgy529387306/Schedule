@@ -4,11 +4,13 @@ import android.text.TextUtils;
 
 import com.android.mb.schedule.app.MBApplication;
 import com.android.mb.schedule.base.BaseMvpPresenter;
+import com.android.mb.schedule.db.Delete;
 import com.android.mb.schedule.db.GreenDaoManager;
 import com.android.mb.schedule.db.Schedule;
 import com.android.mb.schedule.entitys.CurrentUser;
 import com.android.mb.schedule.entitys.ScheduleDetailData;
 import com.android.mb.schedule.entitys.UserBean;
+import com.android.mb.schedule.greendao.DeleteDao;
 import com.android.mb.schedule.greendao.ScheduleDao;
 import com.android.mb.schedule.presenter.interfaces.IDetailPresenter;
 import com.android.mb.schedule.retrofit.http.exception.ApiException;
@@ -118,6 +120,7 @@ public class DetailPresenter extends BaseMvpPresenter<IDetailView> implements ID
 
     private void deleteFromLocal(Map<String, Object> requestMap) {
         ScheduleDao scheduleDao = GreenDaoManager.getInstance().getNewSession().getScheduleDao();
+        DeleteDao deleteDao = GreenDaoManager.getInstance().getNewSession().getDeleteDao();
         long id = (long) requestMap.get("id");
         boolean hasDate = requestMap.containsKey("date");
         String date = (String) requestMap.get("date");
@@ -129,11 +132,14 @@ public class DetailPresenter extends BaseMvpPresenter<IDetailView> implements ID
             scheduleDao.update(schedule);
         }else{
             scheduleDao.deleteByKey(id);
+            deleteDao.insert(new Delete(null,id));
         }
         if (mMvpView!=null){
             mMvpView.deleteSuccess("");
         }
     }
+
+
 
     @Override
     public void shareTo(long id, List<UserBean> shareList) {
