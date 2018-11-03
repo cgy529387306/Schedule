@@ -109,6 +109,7 @@ public class PostService extends Service {
 
             @Override
             public void onError(Throwable e) {
+
             }
 
             @Override
@@ -134,6 +135,8 @@ public class PostService extends Service {
             @Override
             public void onNext(Object result) {
                 schedule.setLocal(0);
+                ScheduleDao scheduleDao = GreenDaoManager.getInstance().getNewSession().getScheduleDao();
+                scheduleDao.update(schedule);
             }
         });
     }

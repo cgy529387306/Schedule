@@ -125,7 +125,7 @@ public class SchedulePresenter extends BaseMvpPresenter<IScheduleView> implement
 
 
     @Override
-    public void uploadFile(File file) {
+    public void uploadFile(final File file) {
         mMvpView.showProgressDialog("上传中...");
         Observable observable = ScheduleMethods.getInstance().upload(file);
         toSubscribe(observable,  new Subscriber<FileData>() {
@@ -150,6 +150,9 @@ public class SchedulePresenter extends BaseMvpPresenter<IScheduleView> implement
             public void onNext(FileData result) {
                 if (mMvpView!=null){
                     mMvpView.dismissProgressDialog();
+                    if (result!=null){
+                        result.setFileName(file.getName());
+                    }
                     mMvpView.uploadSuccess(result);
                 }
             }

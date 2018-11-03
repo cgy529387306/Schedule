@@ -216,7 +216,9 @@ public abstract class BaseActivity extends AppCompatActivity{
                     if(temp != mIsNetworkAvailable) {
                         mIsNetworkAvailable = temp;
                         if (mIsNetworkAvailable){
-                            startService(new Intent(mContext, SyncService.class));
+                            Intent sysIntent = new Intent(mContext, SyncService.class);
+                            sysIntent.putExtra("isManual",false);
+                            startService(sysIntent);
                             startService(new Intent(mContext, PostService.class));
                         }else{
                             showToastMessage("网络已断开");

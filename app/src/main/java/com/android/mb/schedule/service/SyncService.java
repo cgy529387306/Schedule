@@ -23,6 +23,8 @@ import com.android.mb.schedule.greendao.OfficeDao;
 import com.android.mb.schedule.greendao.ScheduleDao;
 import com.android.mb.schedule.greendao.UserDao;
 import com.android.mb.schedule.retrofit.http.exception.ApiException;
+import com.android.mb.schedule.rxbus.Events;
+import com.android.mb.schedule.rxbus.RxBus;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.JsonHelper;
 import com.android.mb.schedule.utils.PreferencesHelper;
@@ -35,6 +37,7 @@ import java.util.List;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
@@ -46,6 +49,8 @@ public class SyncService extends Service {
     protected CompositeSubscription mCompositeSubscription;
 
     private long mLastUpdateTime;
+
+    private boolean mIsManual;
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -59,6 +64,7 @@ public class SyncService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        mIsManual = intent.getBooleanExtra("isManual",false);
         doJobTask();
         return super.onStartCommand(intent, flags, startId);
     }
@@ -66,6 +72,7 @@ public class SyncService extends Service {
     @Override
     public void onDestroy() {
         onUnsubscribe();
+        RxBus.getInstance().unSubscribe(this);
         super.onDestroy();
     }
 
@@ -101,7 +108,11 @@ public class SyncService extends Service {
 
             @Override
             public void onNext(ScheduleSyncData result) {
+                if (mIsManual){
+                    ToastHelper.showLongToast("同步成功");
+                }
                 PreferencesHelper.getInstance().putLong(ProjectConstants.KEY_LAST_SYNC+ CurrentUser.getInstance().getId(),System.currentTimeMillis()/1000);
+                sendMsg(ProjectConstants.EVENT_UPDATE_SCHEDULE_LIST,null);
                 if (result!=null){
                     if (Helper.isNotEmpty(result.getUpd())){
                         insertSchedule(result.getUpd());
@@ -141,7 +152,6 @@ public class SyncService extends Service {
 
             @Override
             public void onNext(List<Schedule> result) {
-
             }
         });
     }
@@ -381,6 +391,28 @@ public class SyncService extends Service {
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(s));
+    }
+
+
+    /**
+     * 注册事件.
+     * @param event
+     * @param onNext
+     */
+    public void regiestEvent(int event,Action1<Events<?>> onNext){
+        RxBus.init()
+                .setEvent(event)
+                .onNext(onNext)
+                .create(this);
+    }
+
+    /**
+     * 发送事件.
+     * @param event
+     * @param o
+     */
+    public void sendMsg(int event,Object o){
+        RxBus.getInstance().send(event,o);
     }
 
 }

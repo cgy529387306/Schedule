@@ -43,6 +43,7 @@ import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.ImageUtils;
 import com.android.mb.schedule.utils.JsonHelper;
 import com.android.mb.schedule.utils.NavigationHelper;
+import com.android.mb.schedule.utils.NetworkHelper;
 import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.utils.ToastHelper;
 import com.android.mb.schedule.view.interfaces.IHomeView;
@@ -99,8 +100,10 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
+        Intent sysIntent = new Intent(mContext, SyncService.class);
+        sysIntent.putExtra("isManual",false);
+        startService(sysIntent);
         startService(new Intent(this, LongRunningService.class));
-        startService(new Intent(this, SyncService.class));
         KeepLiveManager.getInstance().registerKeepLifeReceiver(this);
         PgyUpdateManager.setIsForced(false); //设置是否强制更新。true为强制更新；false为不强制更新（默认值）。
         PgyUpdateManager.register(this);
@@ -256,13 +259,14 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
             }
             NavigationHelper.startActivity(MainActivity.this,ScheduleAddActivity.class,bundle,false);
         }else if (id == R.id.iv_refresh){
-            startService(new Intent(this, SyncService.class));
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    ToastHelper.showLongToast("同步成功！");
-                }
-            },1000);
+            if (NetworkHelper.isNetworkAvailable(mContext)){
+                Intent intent = new Intent(this, SyncService.class);
+                intent.putExtra("isManual",true);
+                startService(intent);
+            }else{
+                showToastMessage("当前网络已断开，无法同步");
+            }
+
         }else if (id == R.id.iv_today){
             if (mFragmentViewPager.getCurrentItem()==0 && mMonthFragment!=null){
                 mMonthFragment.toToday();

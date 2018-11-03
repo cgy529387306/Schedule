@@ -37,8 +37,8 @@ public class DownloadHelper {
                 .getDownloadService()
                 .download(url)
                 .subscribeOn(Schedulers.io())//请求网络 在调度者的io线程
-                .observeOn(Schedulers.io()) //指定线程保存文件
-                .observeOn(Schedulers.computation())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<ResponseBody, File>() {
 
                     @Override

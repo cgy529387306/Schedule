@@ -11,6 +11,8 @@ public class FileData implements Serializable {
 
     private long id;
 
+    private String fileName;
+
     public String getFile() {
         return file == null ? "" : file;
     }
@@ -25,5 +27,13 @@ public class FileData implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 }

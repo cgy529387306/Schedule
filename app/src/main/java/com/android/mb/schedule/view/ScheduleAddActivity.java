@@ -530,18 +530,16 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         if (result!=null){
             showToastMessage("上传成功");
             String fileUrl = result.getFile();
-            if (Helper.isNotEmpty(fileUrl)){
-                String fileName = fileUrl.substring(fileUrl.lastIndexOf("/")+1);
-                if (Helper.isNotEmpty(fileName)){
-                    mFileBean = new FileBean();
-                    mFileBean.setFilename(fileName);
-                    mFileBean.setId(result.getId());
-                    mFileBean.setUrl(fileUrl);
+            String fileName = result.getFileName();
+            if (Helper.isNotEmpty(fileUrl) && Helper.isNotEmpty(fileName)){
+                mFileBean = new FileBean();
+                mFileBean.setFilename(fileName);
+                mFileBean.setId(result.getId());
+                mFileBean.setUrl(fileUrl);
 
-                    mTvFileName.setVisibility(View.VISIBLE);
-                    mTvFileName.setText(mFileBean.getFilename());
-                    mTvUploadDocument.setText("点击替换附件");
-                }
+                mTvFileName.setVisibility(View.VISIBLE);
+                mTvFileName.setText(mFileBean.getFilename());
+                mTvUploadDocument.setText("点击替换附件");
             }
         }
     }
