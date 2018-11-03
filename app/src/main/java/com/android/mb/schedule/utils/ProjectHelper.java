@@ -34,6 +34,7 @@ import com.android.mb.schedule.entitys.UserBean;
 import com.android.mb.schedule.greendao.OfficeDao;
 import com.android.mb.schedule.greendao.ScheduleDao;
 import com.android.mb.schedule.greendao.UserDao;
+import com.android.mb.schedule.service.SyncService;
 import com.android.mb.schedule.view.SelectPersonActivity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -884,6 +885,12 @@ public class ProjectHelper {
             e.getStackTrace();
             return System.currentTimeMillis()/1000;
         }
+    }
+
+    public static void syncSchedule(Context context,boolean isManual){
+        Intent sysIntent = new Intent(context, SyncService.class);
+        sysIntent.putExtra("isManual",isManual);
+        context.startService(sysIntent);
     }
 
 }

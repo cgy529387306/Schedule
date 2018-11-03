@@ -82,7 +82,7 @@ public class PostService extends Service {
                 List<Delete> deleteList = deleteDao.loadAll();
                 if (Helper.isNotEmpty(deleteList)){
                     for (Delete delete:deleteList){
-                        doDelete(delete.getSid());
+                        doDelete(deleteList,delete);
                     }
                 }
                 long userId = CurrentUser.getInstance().getId();
@@ -90,16 +90,16 @@ public class PostService extends Service {
                 List<Schedule> scheduleList = scheduleDao.queryBuilder().where(ScheduleDao.Properties.Create_by.eq(userId)).where(ScheduleDao.Properties.Local.eq(1)).list();
                 if (Helper.isNotEmpty(scheduleList)){
                     for (Schedule schedule:scheduleList){
-                        doAdd(schedule);
+                        doAdd(scheduleList,schedule);
                     }
                 }
             }
         }).start();
     }
 
-    private void doDelete(final long id){
+    private void doDelete(final List<Delete> dataList, final Delete delete){
         Map<String,Object> requestMap = new HashMap<>();
-        requestMap.put("id",id);
+        requestMap.put("id",delete.getSid());
         Observable observable = ScheduleMethods.getInstance().deleteSchedule(requestMap);
         toSubscribe(observable,  new Subscriber<Object>() {
             @Override
@@ -115,12 +115,12 @@ public class PostService extends Service {
             @Override
             public void onNext(Object result) {
                 DeleteDao deleteDao = GreenDaoManager.getInstance().getNewSession().getDeleteDao();
-                deleteDao.deleteByKey(id);
+                deleteDao.deleteByKey(delete.getId());
             }
         });
     }
 
-    private void doAdd(final Schedule schedule){
+    private void doAdd(final List<Schedule> dataList, final Schedule schedule){
         Observable observable = ScheduleMethods.getInstance().addSchedule(ProjectHelper.transToRequest(schedule));
         toSubscribe(observable,  new Subscriber<Object>() {
             @Override
@@ -137,6 +137,9 @@ public class PostService extends Service {
                 schedule.setLocal(0);
                 ScheduleDao scheduleDao = GreenDaoManager.getInstance().getNewSession().getScheduleDao();
                 scheduleDao.update(schedule);
+                if (dataList.contains(schedule) && dataList.indexOf(schedule)==dataList.size()-1){
+                    ProjectHelper.syncSchedule(getApplicationContext(),false);
+                }
             }
         });
     }

@@ -41,4 +41,6 @@ public class ProjectConstants {
     public static final String KEY_ADDRESS_LIST = "KEY_ADDRESS_LIST";
 
     public static final String KEY_LAST_SYNC = "KEY_LAST_SYNC_";
+
+    public static final String KEY_LAST_SYNC_OTHER = "KEY_LAST_SYNC_OTHER_";
 }

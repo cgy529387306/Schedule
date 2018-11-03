@@ -52,6 +52,7 @@ public class SchedulePresenter extends BaseMvpPresenter<IScheduleView> implement
                 @Override
                 public void onNext(Object result) {
                     if (mMvpView!=null){
+                        ProjectHelper.syncSchedule(MBApplication.getInstance(),false);
                         mMvpView.addSuccess(result);
                     }
                 }
@@ -93,6 +94,7 @@ public class SchedulePresenter extends BaseMvpPresenter<IScheduleView> implement
                 @Override
                 public void onNext(Object result) {
                     if (mMvpView!=null){
+                        ProjectHelper.syncSchedule(MBApplication.getInstance(),false);
                         mMvpView.editSuccess(result);
                     }
                 }

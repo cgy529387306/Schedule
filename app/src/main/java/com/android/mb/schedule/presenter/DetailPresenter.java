@@ -112,6 +112,7 @@ public class DetailPresenter extends BaseMvpPresenter<IDetailView> implements ID
                 @Override
                 public void onNext(Object result) {
                     if (mMvpView!=null){
+                        ProjectHelper.syncSchedule(MBApplication.getInstance(),false);
                         mMvpView.deleteSuccess(result);
                     }
                 }
@@ -172,6 +173,7 @@ public class DetailPresenter extends BaseMvpPresenter<IDetailView> implements ID
                 @Override
                 public void onNext(Object result) {
                     if (mMvpView!=null){
+                        ProjectHelper.syncSchedule(MBApplication.getInstance(),false);
                         mMvpView.shareSuccess(result);
                     }
                 }

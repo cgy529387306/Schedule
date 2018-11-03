@@ -37,6 +37,7 @@ import com.android.mb.schedule.keeplive.KeepLiveManager;
 import com.android.mb.schedule.presenter.HomePresenter;
 import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.service.LongRunningService;
+import com.android.mb.schedule.service.SyncOtherService;
 import com.android.mb.schedule.service.SyncService;
 import com.android.mb.schedule.utils.AppHelper;
 import com.android.mb.schedule.utils.Helper;
@@ -100,9 +101,8 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
-        Intent sysIntent = new Intent(mContext, SyncService.class);
-        sysIntent.putExtra("isManual",false);
-        startService(sysIntent);
+        ProjectHelper.syncSchedule(mContext,false);
+        startService(new Intent(this, SyncOtherService.class));
         startService(new Intent(this, LongRunningService.class));
         KeepLiveManager.getInstance().registerKeepLifeReceiver(this);
         PgyUpdateManager.setIsForced(false); //设置是否强制更新。true为强制更新；false为不强制更新（默认值）。
@@ -260,9 +260,7 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
             NavigationHelper.startActivity(MainActivity.this,ScheduleAddActivity.class,bundle,false);
         }else if (id == R.id.iv_refresh){
             if (NetworkHelper.isNetworkAvailable(mContext)){
-                Intent intent = new Intent(this, SyncService.class);
-                intent.putExtra("isManual",true);
-                startService(intent);
+                ProjectHelper.syncSchedule(mContext,true);
             }else{
                 showToastMessage("当前网络已断开，无法同步");
             }
