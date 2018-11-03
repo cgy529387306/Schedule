@@ -116,6 +116,9 @@ public class PostService extends Service {
             public void onNext(Object result) {
                 DeleteDao deleteDao = GreenDaoManager.getInstance().getNewSession().getDeleteDao();
                 deleteDao.deleteByKey(delete.getId());
+                if (dataList.contains(delete) && dataList.indexOf(delete)==dataList.size()-1){
+                    ProjectHelper.syncSchedule(getApplicationContext(),false);
+                }
             }
         });
     }
