@@ -110,10 +110,10 @@
             android:name=".view.WeekReportActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".view.AllTagActivity"
+            android:name=".view.TagAllActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".view.TagActivity"
+            android:name=".view.TagPersonActivity"
             android:screenOrientation="portrait"/>
 
         <service android:name=".service.LongRunningService"

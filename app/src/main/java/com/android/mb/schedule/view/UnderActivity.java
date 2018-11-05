@@ -61,7 +61,7 @@ public class UnderActivity extends BaseMvpActivity<UnderPresenter,IUnderView> im
     @Override
     protected void onRightAction() {
         super.onRightAction();
-        NavigationHelper.startActivity(UnderActivity.this, AllTagActivity.class, null, false);
+        NavigationHelper.startActivity(UnderActivity.this, TagAllActivity.class, null, false);
     }
 
     @Override

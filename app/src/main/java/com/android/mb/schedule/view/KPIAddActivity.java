@@ -14,11 +14,14 @@ import com.android.mb.schedule.R;
 import com.android.mb.schedule.base.BaseMvpActivity;
 import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.entitys.FileData;
+import com.android.mb.schedule.entitys.KpiRequest;
 import com.android.mb.schedule.entitys.ScheduleDetailBean;
+import com.android.mb.schedule.presenter.KpiPresenter;
 import com.android.mb.schedule.presenter.SchedulePresenter;
 import com.android.mb.schedule.utils.AppHelper;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.ProjectHelper;
+import com.android.mb.schedule.view.interfaces.IKpiView;
 import com.android.mb.schedule.view.interfaces.IScheduleView;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectChangeListener;
@@ -33,7 +36,7 @@ import java.util.Date;
  * 新增实绩
  * Created by cgy on 16/7/18.
  */
-public class KPIAddActivity extends BaseMvpActivity<SchedulePresenter,IScheduleView> implements IScheduleView, View.OnClickListener{
+public class KPIAddActivity extends BaseMvpActivity<KpiPresenter,IKpiView> implements IKpiView, View.OnClickListener{
     private EditText mEdtScheduleName; //日程名称
     private EditText mEdtScheduleContent; // 日程内容
     private EditText mEdtKpiContent; // 实绩内容
@@ -224,8 +227,8 @@ public class KPIAddActivity extends BaseMvpActivity<SchedulePresenter,IScheduleV
 
 
     @Override
-    protected SchedulePresenter createPresenter() {
-        return new SchedulePresenter();
+    protected KpiPresenter createPresenter() {
+        return new KpiPresenter();
     }
 
     @Override
@@ -244,7 +247,8 @@ public class KPIAddActivity extends BaseMvpActivity<SchedulePresenter,IScheduleV
     }
 
     @Override
-    public void uploadSuccess(FileData result) {
+    public void getSuccess(KpiRequest result) {
+
     }
 
 

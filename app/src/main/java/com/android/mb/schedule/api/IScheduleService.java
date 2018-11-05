@@ -1,6 +1,7 @@
 package com.android.mb.schedule.api;
 
 import com.android.mb.schedule.entitys.FileData;
+import com.android.mb.schedule.entitys.KpiRequest;
 import com.android.mb.schedule.entitys.LoginData;
 import com.android.mb.schedule.entitys.MyScheduleBean;
 import com.android.mb.schedule.entitys.OfficeSyncData;
@@ -10,6 +11,7 @@ import com.android.mb.schedule.entitys.ScheduleDetailData;
 import com.android.mb.schedule.entitys.ScheduleSyncData;
 import com.android.mb.schedule.entitys.SearchBean;
 import com.android.mb.schedule.entitys.ShareBean;
+import com.android.mb.schedule.entitys.TagBean;
 import com.android.mb.schedule.entitys.TreeData;
 import com.android.mb.schedule.entitys.UserBean;
 import com.android.mb.schedule.entitys.UserSyncData;
@@ -143,5 +145,25 @@ public interface IScheduleService {
     @POST("app/common/sync_admin")
     @FormUrlEncoded
     Observable<HttpResult<UserSyncData>> syncPeople(@FieldMap Map<String,Object> requestMap);
+
+    @POST("app/schedule/add")
+    @FormUrlEncoded
+    Observable<HttpResult<Object>> addKpi(@FieldMap Map<String,Object> requestMap);
+
+    @POST("app/schedule/edit")
+    @FormUrlEncoded
+    Observable<HttpResult<Object>> editKpi(@FieldMap Map<String,Object> requestMap);
+
+    @POST("/app/schedule/get")
+    @FormUrlEncoded
+    Observable<HttpResult<KpiRequest>> getKpi(@FieldMap Map<String,Object> requestMap);
+
+    @POST("/app/schedule/other")
+    @FormUrlEncoded
+    Observable<HttpResult<List<TagBean>>> getTagList(@FieldMap Map<String,Object> requestMap);
+
+    @POST("/app/schedule/other")
+    @FormUrlEncoded
+    Observable<HttpResult<List<UserBean>>> getTagPerson(@FieldMap Map<String,Object> requestMap);
 
 }

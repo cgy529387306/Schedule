@@ -11,14 +11,17 @@ import android.view.ViewGroup;
 
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.adapter.AllTagAdapter;
-import com.android.mb.schedule.adapter.TagAdapter;
 import com.android.mb.schedule.base.BaseMvpActivity;
 import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.entitys.RelatedBean;
+import com.android.mb.schedule.entitys.TagBean;
 import com.android.mb.schedule.presenter.RelatedPresenter;
+import com.android.mb.schedule.presenter.TagPresenter;
 import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.utils.Helper;
+import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.view.interfaces.IRelatedView;
+import com.android.mb.schedule.view.interfaces.ITagView;
 import com.android.mb.schedule.widget.MyDividerItemDecoration;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
@@ -29,15 +32,15 @@ import java.util.List;
 import rx.functions.Action1;
 
 /**
- * 标签
+ * 所有标签
  * Created by cgy on 2018\8\20 0020.
  */
 
-public class TagActivity extends BaseMvpActivity<RelatedPresenter,IRelatedView> implements IRelatedView,
+public class TagAllActivity extends BaseMvpActivity<TagPresenter,ITagView> implements ITagView,
         View.OnClickListener,SwipeRefreshLayout.OnRefreshListener,BaseQuickAdapter.RequestLoadMoreListener,BaseQuickAdapter.OnItemClickListener{
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
-    private TagAdapter mAdapter;
+    private AllTagAdapter mAdapter;
     private int mCurrentPage = 1;
     @Override
     protected void loadIntent() {
@@ -51,7 +54,7 @@ public class TagActivity extends BaseMvpActivity<RelatedPresenter,IRelatedView> 
 
     @Override
     protected void initTitle() {
-        setTitleText("标签");
+        setTitleText("所有标签");
     }
 
     @Override
@@ -62,7 +65,7 @@ public class TagActivity extends BaseMvpActivity<RelatedPresenter,IRelatedView> 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.addItemDecoration(new MyDividerItemDecoration(mContext, LinearLayoutManager.VERTICAL,10));
-        mAdapter = new TagAdapter(R.layout.item_tag_person,new ArrayList());
+        mAdapter = new AllTagAdapter(R.layout.item_tag_all,new ArrayList());
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -121,13 +124,10 @@ public class TagActivity extends BaseMvpActivity<RelatedPresenter,IRelatedView> 
         int id = v.getId();
     }
 
-    @Override
-    public void getSuccess(List<RelatedBean> result) {
-    }
 
     @Override
-    protected RelatedPresenter createPresenter() {
-        return new RelatedPresenter();
+    protected TagPresenter createPresenter() {
+        return new TagPresenter();
     }
 
     @Override
@@ -144,5 +144,11 @@ public class TagActivity extends BaseMvpActivity<RelatedPresenter,IRelatedView> 
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+        NavigationHelper.startActivity(TagAllActivity.this, TagPersonActivity.class, null, false);
+    }
+
+    @Override
+    public void getSuccess(List<TagBean> result) {
+
     }
 }

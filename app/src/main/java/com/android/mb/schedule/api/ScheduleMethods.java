@@ -2,6 +2,7 @@ package com.android.mb.schedule.api;
 
 import com.android.mb.schedule.entitys.CurrentUser;
 import com.android.mb.schedule.entitys.FileData;
+import com.android.mb.schedule.entitys.KpiRequest;
 import com.android.mb.schedule.entitys.LoginData;
 import com.android.mb.schedule.entitys.MyScheduleBean;
 import com.android.mb.schedule.entitys.OfficeSyncData;
@@ -12,6 +13,7 @@ import com.android.mb.schedule.entitys.ScheduleRequest;
 import com.android.mb.schedule.entitys.ScheduleSyncData;
 import com.android.mb.schedule.entitys.SearchBean;
 import com.android.mb.schedule.entitys.ShareBean;
+import com.android.mb.schedule.entitys.TagBean;
 import com.android.mb.schedule.entitys.TreeData;
 import com.android.mb.schedule.entitys.UserBean;
 import com.android.mb.schedule.entitys.UserSyncData;
@@ -345,5 +347,56 @@ public class ScheduleMethods extends BaseHttp {
                 .map(new HttpCacheResultFunc<UserSyncData>());
     }
 
+    public Observable addKpi(KpiRequest kpiRequest){
+        Map<String,Object> requestMap = ProjectHelper.objectToMap(kpiRequest);
+        if (CurrentUser.getInstance().isLogin()){
+            requestMap.put("token_id",CurrentUser.getInstance().getToken_id());
+            requestMap.put("token",CurrentUser.getInstance().getToken());
+        }
+        return getService().addKpi(requestMap)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<Object>());
+    }
+
+    public Observable editKpi(KpiRequest kpiRequest){
+        Map<String,Object> requestMap = ProjectHelper.objectToMap(kpiRequest);
+        if (CurrentUser.getInstance().isLogin()){
+            requestMap.put("token_id",CurrentUser.getInstance().getToken_id());
+            requestMap.put("token",CurrentUser.getInstance().getToken());
+        }
+        return getService().editKpi(requestMap)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<Object>());
+    }
+
+    public Observable getKpi(Map<String,Object> requestMap){
+        if (CurrentUser.getInstance().isLogin()){
+            requestMap.put("token_id",CurrentUser.getInstance().getToken_id());
+            requestMap.put("token",CurrentUser.getInstance().getToken());
+        }
+        return getService().getKpi(requestMap)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<KpiRequest>());
+    }
+
+    public Observable getTagList(Map<String, Object> requestMap){
+        if (CurrentUser.getInstance().isLogin()){
+            requestMap.put("token_id",CurrentUser.getInstance().getToken_id());
+            requestMap.put("token",CurrentUser.getInstance().getToken());
+        }
+        return getService().getTagList(requestMap)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<List<TagBean>>());
+    }
+
+    public Observable getTagPerson(Map<String, Object> requestMap){
+        if (CurrentUser.getInstance().isLogin()){
+            requestMap.put("token_id",CurrentUser.getInstance().getToken_id());
+            requestMap.put("token",CurrentUser.getInstance().getToken());
+        }
+        return getService().getTagPerson(requestMap)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<List<UserBean>>());
+    }
 
 }
