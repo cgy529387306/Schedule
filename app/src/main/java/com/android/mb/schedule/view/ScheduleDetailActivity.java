@@ -88,8 +88,19 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
     @Override
     protected void initTitle() {
         setTitleText("查看日程");
+//        setRightText("填写实绩");
     }
 
+    @Override
+    protected void onRightAction() {
+        super.onRightAction();
+        if (mDetailData!=null && mDetailData.getInfo()!=null){
+            ScheduleDetailBean detailBean = mDetailData.getInfo();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("detailBean",detailBean);
+            NavigationHelper.startActivity(ScheduleDetailActivity.this,KPIAddActivity.class,bundle,false);
+        }
+    }
 
     @Override
     protected void bindViews() {

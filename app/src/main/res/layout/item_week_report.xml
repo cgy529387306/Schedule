@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_width="wrap_content"
+        android:minWidth="70dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="10dp"
+        android:singleLine="true"
+        android:textSize="14sp"
+        android:text="07-29"
+        android:textColor="@color/gray_a5"
+        android:background="@drawable/shape_circle_gray"
+        android:gravity="center"/>
+    <TextView
+        android:id="@+id/tv_time_range"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:singleLine="true"
+        android:textSize="14sp"
+        android:text="企业使用小结 10.15-10.21"
+        android:textColor="@color/gray_a5" />
+    <TextView
+        android:id="@+id/tv_use_people"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="6dp"
+        android:singleLine="true"
+        android:textSize="16sp"
+        android:text="使用人数1111人"
+        android:textColor="@color/text_color" />
+    <TextView
+        android:id="@+id/tv_unUse_people"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="6dp"
+        android:singleLine="true"
+        android:textSize="14sp"
+        android:text="未使用人数1234"
+        android:textColor="@color/gray_a5" />
+    <TextView
+        android:id="@+id/tv_use_ratio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="20dp"
+        android:singleLine="true"
+        android:textSize="14sp"
+        android:text="使用率24% 环比上一周有下降"
+        android:textColor="@color/gray_a5" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/bg_color"/>
+</LinearLayout>

@@ -2,7 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/lly_root"
@@ -13,7 +13,7 @@
             android:background="@color/white"
             android:padding="10dp">
             <TextView
-                android:layout_width="100dp"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
                 android:text="日程名称"
@@ -38,7 +38,7 @@
             android:paddingRight="10dp"
             android:paddingBottom="10dp">
             <TextView
-                android:layout_width="100dp"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@mipmap/icon_location"
                 android:drawablePadding="5dp"
@@ -153,7 +153,7 @@
             android:background="@color/white"
             android:padding="10dp">
             <TextView
-                android:layout_width="100dp"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|top"
                 android:text="日程内容"

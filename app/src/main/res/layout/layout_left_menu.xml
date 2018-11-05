@@ -111,6 +111,25 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"/>
     <TextView
+        android:id="@+id/nav_notify"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:text="通知"
+        android:textColor="@color/text_color"
+        android:drawableLeft="@mipmap/ic_notify"
+        android:visibility="gone"
+        android:gravity="center_vertical"
+        android:drawablePadding="12dp"
+        android:layout_marginLeft="20dp"
+        android:textSize="18sp"/>
+    <include
+        layout="@layout/common_divider"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:visibility="gone"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"/>
+    <TextView
         android:id="@+id/nav_setting"
         android:layout_width="match_parent"
         android:layout_height="44dp"

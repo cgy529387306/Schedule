@@ -19,6 +19,7 @@ import com.android.mb.schedule.entitys.UserBean;
 import com.android.mb.schedule.presenter.UnderPresenter;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.JsonHelper;
+import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.utils.PreferencesHelper;
 import com.android.mb.schedule.view.interfaces.IUnderView;
 import com.android.mb.schedule.widget.MyDividerItemDecoration;
@@ -54,6 +55,13 @@ public class UnderActivity extends BaseMvpActivity<UnderPresenter,IUnderView> im
     @Override
     protected void initTitle() {
         setTitleText("下属日程");
+//        setRightText("标签");
+    }
+
+    @Override
+    protected void onRightAction() {
+        super.onRightAction();
+        NavigationHelper.startActivity(UnderActivity.this, AllTagActivity.class, null, false);
     }
 
     @Override

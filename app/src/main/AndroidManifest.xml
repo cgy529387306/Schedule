@@ -103,6 +103,18 @@
         <activity
             android:name=".view.SearchPeopleActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".view.KPIAddActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".view.WeekReportActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".view.AllTagActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".view.TagActivity"
+            android:screenOrientation="portrait"/>
 
         <service android:name=".service.LongRunningService"
             android:priority="1000"/>

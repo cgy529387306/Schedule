@@ -1,0 +1,164 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lly_root"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:padding="10dp">
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:text="日程名称"
+                android:textColor="@color/text_color"
+                android:textSize="15sp" />
+            <EditText
+                android:id="@+id/et_schedule_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:minLines="2"
+                android:background="@null"
+                android:hint="点击输入日程名称"
+                android:textColorHint="@color/gray_a5"
+                android:textColor="@color/edit_color"
+                android:textSize="15sp" />
+        </LinearLayout>
+        <include layout="@layout/common_divider" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:padding="10dp">
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|top"
+                android:text="日程内容"
+                android:textColor="@color/text_color"
+                android:textSize="15sp" />
+            <EditText
+                android:id="@+id/et_schedule_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:maxLength="400"
+                android:minLines="2"
+                android:background="@null"
+                android:hint="点击输入日程(字数不超过400字)"
+                android:textColorHint="@color/gray_a5"
+                android:textColor="@color/edit_color"
+                android:textSize="15sp" />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@color/bg_color" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="10dp">
+            <LinearLayout
+                android:id="@+id/lly_start_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:padding="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="开始"
+                    android:textColor="@color/gray_a5"
+                    android:textSize="15sp" />
+                <TextView
+                    android:id="@+id/tv_start_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="2018年8月22日"
+                    android:textColor="@color/gray_a5"
+                    android:textSize="15sp" />
+                <TextView
+                    android:id="@+id/tv_start_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="10:00"
+                    android:textColor="@color/text_color"
+                    android:textSize="15sp" />
+            </LinearLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@mipmap/ic_arrow_right_big" />
+            <LinearLayout
+                android:id="@+id/lly_end_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:padding="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="结束"
+                    android:textColor="@color/gray_a5"
+                    android:textSize="15sp" />
+                <TextView
+                    android:id="@+id/tv_end_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="2018年8月22日"
+                    android:textColor="@color/gray_a5"
+                    android:textSize="15sp" />
+                <TextView
+                    android:id="@+id/tv_end_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="10:00"
+                    android:textColor="@color/text_color"
+                    android:textSize="15sp" />
+            </LinearLayout>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@color/bg_color" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@color/white">
+            <EditText
+                android:id="@+id/et_kpi_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/border_shape_bg_color"
+                android:layout_margin="10dp"
+                android:padding="10dp"
+                android:gravity="top|left"
+                android:hint="填写实绩内容(非必填)"
+                android:textColorHint="@color/gray_a5"
+                android:textColor="@color/edit_color"
+                android:textSize="15sp" />
+        </LinearLayout>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="60dp" />
+    </LinearLayout>
+</ScrollView>

@@ -129,6 +129,7 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
         findViewById(R.id.nav_other_share).setOnClickListener(this);
         findViewById(R.id.nav_subordinate_log).setOnClickListener(this);
         findViewById(R.id.nav_relatedme_log).setOnClickListener(this);
+        findViewById(R.id.nav_notify).setOnClickListener(this);
         findViewById(R.id.nav_setting).setOnClickListener(this);
         findViewById(R.id.nav_exit).setOnClickListener(this);
 
@@ -291,6 +292,9 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
         }else if (id == R.id.nav_exit) {  //退出
             CurrentUser.getInstance().loginOut();
             NavigationHelper.startActivity(MainActivity.this, LoginActivity.class, null, true);
+            mDrawerLayout.closeDrawer(Gravity.LEFT);
+        } else if (id == R.id.nav_notify) {  //通知
+            NavigationHelper.startActivity(MainActivity.this, WeekReportActivity.class, null, false);
             mDrawerLayout.closeDrawer(Gravity.LEFT);
         }
     }
