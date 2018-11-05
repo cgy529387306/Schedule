@@ -97,6 +97,8 @@ public class SyncService extends Service {
             public void onError(Throwable e) {
                 if (e instanceof ApiException && !TextUtils.isEmpty(e.getMessage())){
                     ToastHelper.showLongToast(e.getMessage());
+                }else{
+                    ToastHelper.showLongToast("同步失败");
                 }
             }
 
