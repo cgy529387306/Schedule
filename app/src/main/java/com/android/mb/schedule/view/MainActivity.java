@@ -45,6 +45,7 @@ import com.android.mb.schedule.utils.ImageUtils;
 import com.android.mb.schedule.utils.JsonHelper;
 import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.utils.NetworkHelper;
+import com.android.mb.schedule.utils.ProgressDialogHelper;
 import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.utils.ToastHelper;
 import com.android.mb.schedule.view.interfaces.IHomeView;
@@ -125,6 +126,12 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
 
     @Override
     protected void setListener() {
+        regiestEvent(ProjectConstants.EVENT_SYNC_SUCCESS, new Action1<Events<?>>() {
+            @Override
+            public void call(Events<?> events) {
+               ProgressDialogHelper.dismissProgressDialog();
+            }
+        });
         findViewById(R.id.nav_my_share).setOnClickListener(this);
         findViewById(R.id.nav_other_share).setOnClickListener(this);
         findViewById(R.id.nav_subordinate_log).setOnClickListener(this);
@@ -261,6 +268,7 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
             NavigationHelper.startActivity(MainActivity.this,ScheduleAddActivity.class,bundle,false);
         }else if (id == R.id.iv_refresh){
             if (NetworkHelper.isNetworkAvailable(mContext)){
+                ProgressDialogHelper.showProgressDialog(MainActivity.this,"数据同步中，请稍等...");
                 ProjectHelper.syncSchedule(mContext,true);
             }else{
                 showToastMessage("当前网络已断开，无法同步");

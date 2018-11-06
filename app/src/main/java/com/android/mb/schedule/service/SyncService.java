@@ -104,11 +104,12 @@ public class SyncService extends Service {
         toSubscribe(observable,  new Subscriber<ScheduleSyncData>() {
             @Override
             public void onCompleted() {
-
+                sendMsg(ProjectConstants.EVENT_SYNC_SUCCESS,null);
             }
 
             @Override
             public void onError(Throwable e) {
+                sendMsg(ProjectConstants.EVENT_SYNC_SUCCESS,null);
                 if (e instanceof ApiException && !TextUtils.isEmpty(e.getMessage())){
                     ToastHelper.showLongToast(e.getMessage());
                 }else{
@@ -148,6 +149,7 @@ public class SyncService extends Service {
         }
         PreferencesHelper.getInstance().putLong(ProjectConstants.KEY_LAST_SYNC+ CurrentUser.getInstance().getId(),System.currentTimeMillis()/1000);
         sendMsg(ProjectConstants.EVENT_UPDATE_SCHEDULE_LIST,null);
+        sendMsg(ProjectConstants.EVENT_SYNC_SUCCESS,null);
     }
 
     private void insertSchedule(final List<ScheduleSync> dataList){

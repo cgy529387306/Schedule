@@ -15,6 +15,8 @@ public class ProjectConstants {
 
     public static final int EVENT_UPDATE_DATE = 10005;
 
+    public static final int EVENT_SYNC_SUCCESS = 10006;
+
 
 
     //REQUEST
