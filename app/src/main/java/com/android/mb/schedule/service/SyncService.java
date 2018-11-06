@@ -122,8 +122,12 @@ public class SyncService extends Service {
                 if (result!=null){
                     if (count==1){
                         total = result.getTotal();
-                        mCurrentPage = 1;
-                        syncSchedule(0);
+                        if (total==0){
+                            syncSuccess();
+                        }else{
+                            mCurrentPage = 1;
+                            syncSchedule(0);
+                        }
                     }else{
                         if (Helper.isNotEmpty(result.getUpd()) && mCurrentPage*mPageSize<total){
                             if (Helper.isNotEmpty(result.getUpd())){
