@@ -7,7 +7,7 @@ import java.util.List;
  */
 
 public class ScheduleSyncData {
-
+    private int total;
     private List<ScheduleSync> upd;
     private List<Long> del;
 
@@ -25,5 +25,13 @@ public class ScheduleSyncData {
 
     public void setDel(List<Long> del) {
         this.del = del;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
     }
 }

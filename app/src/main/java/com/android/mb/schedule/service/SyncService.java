@@ -52,6 +52,12 @@ public class SyncService extends Service {
     private long mLastUpdateTime;
 
     private boolean mIsManual;
+
+    private int mCurrentPage;
+
+    private int mPageSize = 1000;
+
+    private int total;
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -78,12 +84,19 @@ public class SyncService extends Service {
     }
 
     private void doJobTask(){
+        mCurrentPage = 1;
         mLastUpdateTime = PreferencesHelper.getInstance().getLong(ProjectConstants.KEY_LAST_SYNC+ CurrentUser.getInstance().getId(),0);
-        syncSchedule();
+        syncSchedule(1);
     }
 
-    private void syncSchedule(){
-        HashMap<String, Object> requestMap = new HashMap<>();
+    private void syncSchedule(final int count){
+        final HashMap<String, Object> requestMap = new HashMap<>();
+        if (count==1){
+            requestMap.put("count",count);
+        }else{
+            requestMap.put("page",mCurrentPage);
+            requestMap.put("limit",mPageSize);
+        }
         if (mLastUpdateTime!=0){
             requestMap.put("stamp",mLastUpdateTime);
         }
@@ -105,21 +118,36 @@ public class SyncService extends Service {
 
             @Override
             public void onNext(ScheduleSyncData result) {
-                if (mIsManual){
-                    ToastHelper.showLongToast("同步成功");
-                }
-                PreferencesHelper.getInstance().putLong(ProjectConstants.KEY_LAST_SYNC+ CurrentUser.getInstance().getId(),System.currentTimeMillis()/1000);
-                sendMsg(ProjectConstants.EVENT_UPDATE_SCHEDULE_LIST,null);
                 if (result!=null){
-                    if (Helper.isNotEmpty(result.getUpd())){
-                        insertSchedule(result.getUpd());
-                    }
-                    if (Helper.isNotEmpty(result.getDel())){
-                        deleteSchedule(result.getDel());
+                    if (count==1){
+                        total = result.getTotal();
+                        mCurrentPage = 1;
+                        syncSchedule(0);
+                    }else{
+                        if (Helper.isNotEmpty(result.getUpd()) && mCurrentPage*mPageSize<total){
+                            if (Helper.isNotEmpty(result.getUpd())){
+                                insertSchedule(result.getUpd());
+                                mCurrentPage++;
+                                syncSchedule(0);
+                            }
+                        }else{
+                            syncSuccess();
+                        }
+                        if (Helper.isNotEmpty(result.getDel()) && mCurrentPage==1){
+                            deleteSchedule(result.getDel());
+                        }
                     }
                 }
             }
         });
+    }
+
+    private void syncSuccess(){
+        if (mIsManual){
+            ToastHelper.showLongToast("同步成功");
+        }
+        PreferencesHelper.getInstance().putLong(ProjectConstants.KEY_LAST_SYNC+ CurrentUser.getInstance().getId(),System.currentTimeMillis()/1000);
+        sendMsg(ProjectConstants.EVENT_UPDATE_SCHEDULE_LIST,null);
     }
 
     private void insertSchedule(final List<ScheduleSync> dataList){

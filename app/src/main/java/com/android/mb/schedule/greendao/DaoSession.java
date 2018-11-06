@@ -8,15 +8,15 @@ import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.identityscope.IdentityScopeType;
 import org.greenrobot.greendao.internal.DaoConfig;
 
-import com.android.mb.schedule.db.Office;
 import com.android.mb.schedule.db.Schedule;
 import com.android.mb.schedule.db.User;
+import com.android.mb.schedule.db.Office;
 import com.android.mb.schedule.db.Add;
 import com.android.mb.schedule.db.Delete;
 
-import com.android.mb.schedule.greendao.OfficeDao;
 import com.android.mb.schedule.greendao.ScheduleDao;
 import com.android.mb.schedule.greendao.UserDao;
+import com.android.mb.schedule.greendao.OfficeDao;
 import com.android.mb.schedule.greendao.AddDao;
 import com.android.mb.schedule.greendao.DeleteDao;
 
@@ -29,15 +29,15 @@ import com.android.mb.schedule.greendao.DeleteDao;
  */
 public class DaoSession extends AbstractDaoSession {
 
-    private final DaoConfig officeDaoConfig;
     private final DaoConfig scheduleDaoConfig;
     private final DaoConfig userDaoConfig;
+    private final DaoConfig officeDaoConfig;
     private final DaoConfig addDaoConfig;
     private final DaoConfig deleteDaoConfig;
 
-    private final OfficeDao officeDao;
     private final ScheduleDao scheduleDao;
     private final UserDao userDao;
+    private final OfficeDao officeDao;
     private final AddDao addDao;
     private final DeleteDao deleteDao;
 
@@ -45,14 +45,14 @@ public class DaoSession extends AbstractDaoSession {
             daoConfigMap) {
         super(db);
 
-        officeDaoConfig = daoConfigMap.get(OfficeDao.class).clone();
-        officeDaoConfig.initIdentityScope(type);
-
         scheduleDaoConfig = daoConfigMap.get(ScheduleDao.class).clone();
         scheduleDaoConfig.initIdentityScope(type);
 
         userDaoConfig = daoConfigMap.get(UserDao.class).clone();
         userDaoConfig.initIdentityScope(type);
+
+        officeDaoConfig = daoConfigMap.get(OfficeDao.class).clone();
+        officeDaoConfig.initIdentityScope(type);
 
         addDaoConfig = daoConfigMap.get(AddDao.class).clone();
         addDaoConfig.initIdentityScope(type);
@@ -60,29 +60,25 @@ public class DaoSession extends AbstractDaoSession {
         deleteDaoConfig = daoConfigMap.get(DeleteDao.class).clone();
         deleteDaoConfig.initIdentityScope(type);
 
-        officeDao = new OfficeDao(officeDaoConfig, this);
         scheduleDao = new ScheduleDao(scheduleDaoConfig, this);
         userDao = new UserDao(userDaoConfig, this);
+        officeDao = new OfficeDao(officeDaoConfig, this);
         addDao = new AddDao(addDaoConfig, this);
         deleteDao = new DeleteDao(deleteDaoConfig, this);
 
-        registerDao(Office.class, officeDao);
         registerDao(Schedule.class, scheduleDao);
         registerDao(User.class, userDao);
+        registerDao(Office.class, officeDao);
         registerDao(Add.class, addDao);
         registerDao(Delete.class, deleteDao);
     }
     
     public void clear() {
-        officeDaoConfig.clearIdentityScope();
         scheduleDaoConfig.clearIdentityScope();
         userDaoConfig.clearIdentityScope();
+        officeDaoConfig.clearIdentityScope();
         addDaoConfig.clearIdentityScope();
         deleteDaoConfig.clearIdentityScope();
-    }
-
-    public OfficeDao getOfficeDao() {
-        return officeDao;
     }
 
     public ScheduleDao getScheduleDao() {
@@ -91,6 +87,10 @@ public class DaoSession extends AbstractDaoSession {
 
     public UserDao getUserDao() {
         return userDao;
+    }
+
+    public OfficeDao getOfficeDao() {
+        return officeDao;
     }
 
     public AddDao getAddDao() {
