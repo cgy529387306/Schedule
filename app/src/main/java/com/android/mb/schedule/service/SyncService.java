@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.android.mb.schedule.api.ScheduleMethods;
 import com.android.mb.schedule.constants.ProjectConstants;
@@ -98,7 +99,7 @@ public class SyncService extends Service {
                 if (e instanceof ApiException && !TextUtils.isEmpty(e.getMessage())){
                     ToastHelper.showLongToast(e.getMessage());
                 }else{
-                    ToastHelper.showLongToast("同步失败");
+                    Log.d("SyncService","同步失败");
                 }
             }
 

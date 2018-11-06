@@ -7,14 +7,14 @@ import retrofit2.http.Url;
 import rx.Observable;
 
 /**
- * Created by Chenwy on 2018/1/5 10:26
+ * Description:
+ * Created by jia on 2017/11/30.
+ * 人之所以能，是相信能
  */
-
 public interface DownloadService {
-    /**
-     * 下载文件
-     */
+
     @Streaming
     @GET
-    Observable<ResponseBody> download(@Url String url);//直接使用网址下载
+    Observable<ResponseBody> download(@Url String url);
+
 }

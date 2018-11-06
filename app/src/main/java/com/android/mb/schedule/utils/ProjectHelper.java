@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.provider.MediaStore.MediaColumns;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewParent;
@@ -39,6 +40,7 @@ import com.android.mb.schedule.view.SelectPersonActivity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.ParseException;
@@ -893,4 +895,13 @@ public class ProjectHelper {
         context.startService(sysIntent);
     }
 
+    public static boolean isFileExit(String dir,String fileName){
+       try{
+           File file = new File(dir, fileName);
+           return file.exists() && file.canRead();
+       }catch (Exception e){
+           e.printStackTrace();
+           return false;
+       }
+    }
 }

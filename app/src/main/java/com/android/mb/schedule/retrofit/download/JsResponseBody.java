@@ -1,6 +1,7 @@
 package com.android.mb.schedule.retrofit.download;
 
-import com.android.mb.schedule.rxbus.RxBus;
+
+import android.util.Log;
 
 import java.io.IOException;
 
@@ -13,17 +14,22 @@ import okio.Okio;
 import okio.Source;
 
 /**
- * Created by Chenwy on 2018/1/5 14:13
+ * Description: 带进度 下载请求体
+ * Created by jia on 2017/11/30.
+ * 人之所以能，是相信能
  */
+public class JsResponseBody extends ResponseBody {
 
-public class DownloadResponseBody extends ResponseBody {
     private ResponseBody responseBody;
+
+    private JsDownloadListener downloadListener;
 
     // BufferedSource 是okio库中的输入流，这里就当作inputStream来使用。
     private BufferedSource bufferedSource;
 
-    public DownloadResponseBody(ResponseBody responseBody) {
+    public JsResponseBody(ResponseBody responseBody, JsDownloadListener downloadListener) {
         this.responseBody = responseBody;
+        this.downloadListener = downloadListener;
     }
 
     @Override
@@ -51,12 +57,14 @@ public class DownloadResponseBody extends ResponseBody {
             @Override
             public long read(Buffer sink, long byteCount) throws IOException {
                 long bytesRead = super.read(sink, byteCount);
+                // read() returns the number of bytes read, or -1 if this source is exhausted.
                 totalBytesRead += bytesRead != -1 ? bytesRead : 0;
-                if (bytesRead != -1) {
-                    DownloadProgressEvent downloadProgressEvent = new DownloadProgressEvent();
-                    downloadProgressEvent.progress = (int) (totalBytesRead * 100f / responseBody.contentLength());
-                    downloadProgressEvent.total = (int) contentLength();
-                    RxBus.getInstance().send(10003,downloadProgressEvent);
+                Log.e("download", "read: "+ (int) (totalBytesRead * 100 / responseBody.contentLength()));
+                if (null != downloadListener) {
+                    if (bytesRead != -1) {
+                        downloadListener.onProgress((int) (totalBytesRead * 100 / responseBody.contentLength()));
+                    }
+
                 }
                 return bytesRead;
             }

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -20,11 +19,11 @@ import com.android.mb.schedule.entitys.ScheduleDetailBean;
 import com.android.mb.schedule.entitys.ScheduleDetailData;
 import com.android.mb.schedule.entitys.UserBean;
 import com.android.mb.schedule.presenter.DetailPresenter;
-import com.android.mb.schedule.retrofit.download.DownloadHelper;
-import com.android.mb.schedule.retrofit.download.FileDownloadCallback;
+import com.android.mb.schedule.retrofit.download.DownloadUtils;
+import com.android.mb.schedule.retrofit.download.JsDownloadListener;
 import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.utils.DialogHelper;
-import com.android.mb.schedule.utils.FileUtils;
+import com.android.mb.schedule.utils.FileOpenUtils;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.utils.ProjectHelper;
@@ -33,8 +32,6 @@ import com.android.mb.schedule.widget.BottomMenuDialog;
 
 import java.io.File;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,8 +71,11 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
     private String mDate;
     private ScheduleDetailData mDetailData;
     private BottomMenuDialog mCheckDialog;
+    private String mFileDir;
+
     @Override
     protected void loadIntent() {
+        mFileDir = Environment.getExternalStorageDirectory() + File.separator + "/Schedule";
         mId = getIntent().getLongExtra("id",0);
         mDate = getIntent().getStringExtra("date");
     }
@@ -158,7 +158,12 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.tv_download_document){
-            downloadFile();
+            if (isFileExit()){
+                File file = new File(mFileDir,mDetailData.getFile().get(0).getFilename());
+                FileOpenUtils.openFile(ScheduleDetailActivity.this,file);
+            }else{
+                downloadFile();
+            }
         }else if (id == R.id.tv_edit){
             Bundle bundle = new Bundle();
             bundle.putInt("type",1);
@@ -199,6 +204,7 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
             mTvWhenRemind.setText(ProjectHelper.getRemindStr(detailBean.getRemind()));
             String updateTime = Helper.long2DateString(detailBean.getUpdatetime()*1000,"MM-dd HH:mm");
             mTvUpdateTime.setText(String.format(mContext.getString(R.string.update_time),updateTime));
+            refreshFileBtn();
             if (Helper.isNotEmpty(detailData.getFile())){
                 mLinFile.setVisibility(View.VISIBLE);
                 FileBean fileBean = detailData.getFile().get(0);
@@ -218,6 +224,7 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
             }else{
                 mTvShares.setText("");
             }
+
             long dif =(System.currentTimeMillis()/1000) - detailBean.getTime_s();
             boolean isMore72 = dif>72*60*60;
             mLinEdit.setVisibility(detailBean.getCreate_by() == CurrentUser.getInstance().getId() && !isMore72?View.VISIBLE:View.GONE);
@@ -232,32 +239,32 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
             mProgressDialog.setTitle("文件下载");//设置标题
             mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);//设置样式为横向显示进度的样式
             mProgressDialog.setMessage("正在下载，请稍后...");
-            mProgressDialog.setMax(100);//设置最大值
-            mProgressDialog.setProgress(0);//设置初始值为0，其实可以不用设置，默认就是0
             mProgressDialog.setIndeterminate(false);//是否精确显示对话框，flase为是，反之为否
             mProgressDialog.show();
-            DownloadHelper.getInstance()
-                    .downloadFile(fileBean.getUrl(), Environment.getExternalStorageDirectory() + File.separator + "/ScheduleSync", fileBean.getFilename(),
-                            new FileDownloadCallback<File>() {
-                                @Override
-                                public void onDownLoadSuccess(File file) {
-                                    showToastMessage("下载完成,请到sdcard Schedule文件夹下查看下载文件");
-                                    mProgressDialog.dismiss();
-                                }
+            new DownloadUtils(new JsDownloadListener() {
+                @Override
+                public void onStartDownload() {
 
-                                @Override
-                                public void onDownLoadFail(Throwable e) {
-                                    showToastMessage("下载失败");
-                                    mProgressDialog.dismiss();
-                                }
+                }
 
-                                @Override
-                                public void onProgress(int progress, int total) {
-                                    float percent = progress/total*1f;
-                                    int currentProgress = (int)(percent*100);
-                                    mProgressDialog.setProgress(currentProgress);
-                                }
-                            });
+                @Override
+                public void onProgress(int progress) {
+                    mProgressDialog.setProgress(progress);//设置初始值为0，其实可以不用设置，默认就是0
+                }
+
+                @Override
+                public void onFinishDownload() {
+                    showToastMessage("下载完成,请到sdcard Schedule文件夹下查看下载文件");
+                    mProgressDialog.dismiss();
+                    refreshFileBtn();
+                }
+
+                @Override
+                public void onFail(String errorInfo) {
+                    showToastMessage("下载失败:"+errorInfo);
+                    mProgressDialog.dismiss();
+                }
+            }).download(fileBean.getUrl(),mFileDir,fileBean.getFilename());
         }
     }
 
@@ -326,5 +333,18 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
             requestMap.put("date",mDate);
         }
         mPresenter.deleteSchedule(requestMap);
+    }
+
+    private void refreshFileBtn(){
+        mTvDownDocument.setText(isFileExit()?"打开附件":"点击下载附件");
+    }
+
+    private boolean isFileExit(){
+        boolean isExit = false;
+        if (mDetailData!=null && Helper.isNotEmpty(mDetailData.getFile())){
+            FileBean fileBean = mDetailData.getFile().get(0);
+            isExit = ProjectHelper.isFileExit(mFileDir,fileBean.getFilename());
+        }
+        return isExit;
     }
 }

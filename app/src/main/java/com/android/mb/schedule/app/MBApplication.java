@@ -3,7 +3,6 @@ package com.android.mb.schedule.app;
 import android.app.Application;
 import android.content.Context;
 
-import com.android.mb.schedule.retrofit.download.HttpMethods;
 import com.pgyersdk.crash.PgyCrashManager;
 
 import cn.jpush.android.api.JPushInterface;
@@ -45,7 +44,6 @@ public class MBApplication extends Application {
 		super.onCreate();
 		sInstance = this;
 		initJPush();
-		HttpMethods.getInstance().init();
 		PgyCrashManager.register(this);
 	}
 

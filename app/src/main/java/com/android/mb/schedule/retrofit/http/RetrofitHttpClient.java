@@ -38,9 +38,9 @@ public class RetrofitHttpClient {
     private static String CACHE_DIR = "mbCache";
 
     // 请求超时时长
-    private static int CONNECT_TIMEOUT = 15 * 1000;
+    private static int CONNECT_TIMEOUT = 60;
     // 读取超时时长
-    private static int READ_TIMEOUT = 20 * 1000;
+    private static int READ_TIMEOUT = 60*2;
     //缓存大小
     private static int CACHE_SIZE = 500 * 1024 * 1024;
 

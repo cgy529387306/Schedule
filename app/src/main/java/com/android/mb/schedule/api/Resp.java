@@ -1,6 +1,6 @@
 package com.android.mb.schedule.api;
 
-public class Resop {
+public class Resp {
 
     /**
      * code : 402
