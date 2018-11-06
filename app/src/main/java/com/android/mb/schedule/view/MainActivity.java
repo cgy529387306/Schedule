@@ -45,6 +45,7 @@ import com.android.mb.schedule.utils.ImageUtils;
 import com.android.mb.schedule.utils.JsonHelper;
 import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.utils.NetworkHelper;
+import com.android.mb.schedule.utils.PreferencesHelper;
 import com.android.mb.schedule.utils.ProgressDialogHelper;
 import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.utils.ToastHelper;
@@ -268,8 +269,12 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
             NavigationHelper.startActivity(MainActivity.this,ScheduleAddActivity.class,bundle,false);
         }else if (id == R.id.iv_refresh){
             if (NetworkHelper.isNetworkAvailable(mContext)){
-                ProgressDialogHelper.showProgressDialog(MainActivity.this,"数据同步中，请稍等...");
-                ProjectHelper.syncSchedule(mContext,true);
+                long lastUpdateTime = PreferencesHelper.getInstance().getLong(ProjectConstants.KEY_LAST_SYNC+ CurrentUser.getInstance().getId(),0);
+                if (lastUpdateTime==0){
+                    showToastMessage("正在后台同步中，请稍等...");
+                }else {
+                    ProjectHelper.syncSchedule(mContext,true);
+                }
             }else{
                 showToastMessage("当前网络已断开，无法同步");
             }

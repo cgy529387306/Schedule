@@ -1,12 +1,18 @@
 package com.android.mb.schedule.service;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.android.mb.schedule.R;
 import com.android.mb.schedule.api.ScheduleMethods;
 import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.db.GreenDaoManager;
@@ -30,6 +36,7 @@ import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.JsonHelper;
 import com.android.mb.schedule.utils.PreferencesHelper;
 import com.android.mb.schedule.utils.ToastHelper;
+import com.android.mb.schedule.view.MainActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,7 +62,7 @@ public class SyncService extends Service {
 
     private int mCurrentPage;
 
-    private int mPageSize = 1000;
+    private int mPageSize = 2000;
 
     private int total;
     @Nullable
@@ -100,6 +107,7 @@ public class SyncService extends Service {
         if (mLastUpdateTime!=0){
             requestMap.put("stamp",mLastUpdateTime);
         }
+        showNotification(this,1001,"船政云·日程","正在同步日程数据...");
         Observable observable = ScheduleMethods.getInstance().syncSchedule(requestMap);
         toSubscribe(observable,  new Subscriber<ScheduleSyncData>() {
             @Override
@@ -109,7 +117,7 @@ public class SyncService extends Service {
 
             @Override
             public void onError(Throwable e) {
-                sendMsg(ProjectConstants.EVENT_SYNC_SUCCESS,null);
+                showNotification(SyncService.this,1001,"船政云·日程","同步失败！");
                 if (e instanceof ApiException && !TextUtils.isEmpty(e.getMessage())){
                     ToastHelper.showLongToast(e.getMessage());
                 }else{
@@ -151,9 +159,10 @@ public class SyncService extends Service {
         if (mIsManual){
             ToastHelper.showLongToast("同步成功");
         }
+        showNotification(this,1001,"船政云·日程","同步成功！");
         PreferencesHelper.getInstance().putLong(ProjectConstants.KEY_LAST_SYNC+ CurrentUser.getInstance().getId(),System.currentTimeMillis()/1000);
         sendMsg(ProjectConstants.EVENT_UPDATE_SCHEDULE_LIST,null);
-        sendMsg(ProjectConstants.EVENT_SYNC_SUCCESS,null);
+//        sendMsg(ProjectConstants.EVENT_SYNC_SUCCESS,null);
     }
 
     private void insertSchedule(final List<ScheduleSync> dataList){
@@ -195,6 +204,28 @@ public class SyncService extends Service {
                 scheduleDao.deleteByKeyInTx(dataList);
             }
         }).start();
+    }
+
+    private void showNotification(Context context, int id, String title, String text) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+        builder.setSmallIcon(R.mipmap.ic_launcher);
+        builder.setContentTitle(title);
+        builder.setContentText(text);
+        builder.setAutoCancel(true);
+        builder.setOnlyAlertOnce(true);
+        builder.setDefaults(Notification.DEFAULT_VIBRATE);
+        builder.setPriority(Notification.PRIORITY_DEFAULT);
+//        //自定义打开的界面
+//        Intent resultIntent = new Intent(context, MainActivity.class);
+//        resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
+//                resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        builder.setContentIntent(contentIntent);
+        NotificationManager notificationManager = (NotificationManager) context
+                .getSystemService(Context.NOTIFICATION_SERVICE);
+        if (notificationManager!=null){
+            notificationManager.notify(id, builder.build());
+        }
     }
 
 
