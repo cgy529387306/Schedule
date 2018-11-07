@@ -72,12 +72,12 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
     private int mIsAllDay = 0;
     private ImageView mIvAddPerson;// 添加相关人员
     private ImageView mIvNoRemind; // 是否提醒相关人员
-    private boolean mIsNoRemind = false;
     private TextView mTvShare; //分享给其他人
     private TextView mTvRepeat; //重复
     private TextView mTvWhenRemind; // 日程什么时候开始提醒
     private ImageView mIvImport; //是否重要
     private int mIsImport = 0;
+    private int mNotRemind = 0;
     private ScheduleRepeatPop mScheduleRepeatPop;
     private ScheduleRemindPop mScheduleRemindPop;
     private TimePickerView mScheduleStartTimePop;
@@ -181,6 +181,9 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
 
             mIsImport = mScheduleRequest.getImportant();
             mIvImport.setImageResource(mIsImport==1?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
+            mNotRemind = mScheduleRequest.getNot_remind_related();
+            mIvNoRemind.setImageResource(mNotRemind==1?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
+
             mTvRepeat.setText(ProjectHelper.getRepeatStr(mScheduleRequest.getRepeattype()));
             mTvWhenRemind.setText(ProjectHelper.getRemindStr(mScheduleRequest.getRemind()));
             mIsShowRemind = mScheduleRequest.getRepeattype()!=1;
@@ -256,8 +259,8 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
             bundle.putSerializable("selectPerson", (Serializable) mRelatePersons);
             NavigationHelper.startActivityForResult(ScheduleAddActivity.this,SelectPersonActivity.class,bundle,ProjectConstants.REQUEST_SELECT_PERSON);
         }else  if (id == R.id.iv_no_remind){
-            mIsNoRemind = !mIsNoRemind;
-            mIvNoRemind.setImageResource(mIsNoRemind?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
+            mNotRemind = mNotRemind==0?1:0;
+            mIvNoRemind.setImageResource(mNotRemind==1?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
         }else  if (id == R.id.lin_share){
             Bundle bundle = new Bundle();
             bundle.putSerializable("selectPerson", (Serializable) mSharePersons);
@@ -657,11 +660,12 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         mScheduleRequest.setDescription(content);
         mScheduleRequest.setAddress(address);
         mScheduleRequest.setImportant(mIsImport);
+        mScheduleRequest.setNot_remind_related(mNotRemind);
         mScheduleRequest.setAllDay(mIsAllDay);
         mScheduleRequest.setRelated(Helper.isEmpty(mRelatePersons)?"":ProjectHelper.getIdStr(mRelatePersons));
         mScheduleRequest.setShare(Helper.isEmpty(mSharePersons)?"":ProjectHelper.getIdStr(mSharePersons));
-        mScheduleRequest.setRelated(JsonHelper.toJson(mRelatePersons));
-        mScheduleRequest.setShare(JsonHelper.toJson(mSharePersons));
+        mScheduleRequest.setRelateList(JsonHelper.toJson(mRelatePersons));
+        mScheduleRequest.setShareList(JsonHelper.toJson(mSharePersons));
 
         mScheduleRequest.setSummary("");
         mScheduleRequest.setStart(start.getTime()/1000);

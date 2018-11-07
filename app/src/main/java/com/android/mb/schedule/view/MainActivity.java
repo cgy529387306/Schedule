@@ -273,6 +273,7 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
                 if (lastUpdateTime==0){
                     showToastMessage("正在后台同步中，请稍等...");
                 }else {
+                    ProgressDialogHelper.showProgressDialog(MainActivity.this,"同步数据中，请稍等...");
                     ProjectHelper.syncSchedule(mContext,true);
                 }
             }else{
@@ -334,6 +335,11 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
             ToastHelper.showToast("再按一次返回退出");
             mLastClickTimeMills = System.currentTimeMillis();
             return;
+        }
+        long lastUpdateTime = PreferencesHelper.getInstance().getLong(ProjectConstants.KEY_LAST_SYNC+ CurrentUser.getInstance().getId(),0);
+        if (lastUpdateTime==0){
+            ScheduleDao scheduleDao = GreenDaoManager.getInstance().getNewSession().getScheduleDao();
+            scheduleDao.deleteAll();
         }
         finish();
     }

@@ -410,6 +410,7 @@ public class ProjectHelper {
             scheduleRequest.setEnd(detailBean.getTime_e());
             scheduleRequest.setAllDay(detailBean.getAllDay());
             scheduleRequest.setRepeattype(detailBean.getRepeattype());
+            scheduleRequest.setNot_remind_related(detailBean.getNot_remind_related());
             scheduleRequest.setRemind(detailBean.getRemind());
             scheduleRequest.setImportant(detailBean.getImportant());
         }
@@ -689,7 +690,7 @@ public class ProjectHelper {
             scheduleDetailBean.setCreatetime(data.getCreatetime());
             scheduleDetailBean.setUpdatetime(data.getUpdatetime());
             scheduleDetailData.setInfo(scheduleDetailBean);
-            scheduleDetailBean.setNot_remind_related(data.getNot_remind_related()+"");
+            scheduleDetailBean.setNot_remind_related(data.getNot_remind_related());
             scheduleDetailData.setInfo(scheduleDetailBean);
 
             List<UserBean> related = JsonHelper.fromJson(data.getRelated(),new TypeToken<List<UserBean>>(){}.getType());
@@ -721,10 +722,10 @@ public class ProjectHelper {
             schedule.setRemind(scheduleRequest.getRemind());
             schedule.setImportant(scheduleRequest.getImportant());
             schedule.setSummary(scheduleRequest.getSummary());
-//            schedule.setNot_remind_related(scheduleRequest.getno);
+            schedule.setNot_remind_related(scheduleRequest.getNot_remind_related());
             schedule.setUpdatetime(System.currentTimeMillis()/1000);
             schedule.setRelated(scheduleRequest.getRelated());
-            schedule.setShare(scheduleRequest.getShare());
+            schedule.setShare(scheduleRequest.getShareList());
             schedule.setFile(scheduleRequest.getFileList());
         }
         return schedule;
@@ -744,9 +745,10 @@ public class ProjectHelper {
             scheduleRequest.setRepeattype(schedule.getRepeattype());
             scheduleRequest.setRemind(schedule.getRemind());
             scheduleRequest.setImportant(schedule.getImportant());
+            scheduleRequest.setNot_remind_related(schedule.getNot_remind_related());
             List<UserBean> shareList = JsonHelper.fromJson(schedule.getShare(),new TypeToken<List<UserBean>>(){}.getType());
             List<UserBean> relateList = JsonHelper.fromJson(schedule.getShare(),new TypeToken<List<UserBean>>(){}.getType());
-            List<FileBean> fileList = JsonHelper.fromJson(schedule.getShare(),new TypeToken<List<FileBean>>(){}.getType());
+            List<FileBean> fileList = JsonHelper.fromJson(schedule.getFile(),new TypeToken<List<FileBean>>(){}.getType());
             scheduleRequest.setRelated(ProjectHelper.getIdStr(relateList));
             scheduleRequest.setShare(ProjectHelper.getIdStr(shareList));
             if (Helper.isNotEmpty(fileList)){
@@ -777,10 +779,10 @@ public class ProjectHelper {
         schedule.setRemind(scheduleRequest.getRemind());
         schedule.setImportant(scheduleRequest.getImportant());
         schedule.setSummary(scheduleRequest.getSummary());
-//            schedule.setNot_remind_related(scheduleRequest.getno);
+        schedule.setNot_remind_related(scheduleRequest.getNot_remind_related());
         schedule.setUpdatetime(System.currentTimeMillis()/1000);
-        schedule.setRelated(scheduleRequest.getRelated());
-        schedule.setShare(scheduleRequest.getShare());
+        schedule.setRelated(scheduleRequest.getRelateList());
+        schedule.setShare(scheduleRequest.getShareList());
         schedule.setFile(scheduleRequest.getFileList());
         return schedule;
     }

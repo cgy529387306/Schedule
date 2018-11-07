@@ -51,6 +51,8 @@ public class ScheduleRequest implements Serializable{
 
     private String fileList;
 
+    private int not_remind_related;
+
 
     public long getId() {
         return id;
@@ -194,5 +196,13 @@ public class ScheduleRequest implements Serializable{
 
     public void setFileList(String fileList) {
         this.fileList = fileList;
+    }
+
+    public int getNot_remind_related() {
+        return not_remind_related;
+    }
+
+    public void setNot_remind_related(int not_remind_related) {
+        this.not_remind_related = not_remind_related;
     }
 }

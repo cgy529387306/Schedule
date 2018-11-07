@@ -27,7 +27,7 @@ public class ScheduleDetailBean implements Serializable {
     private String update_date;
     private long createtime;
     private long updatetime;
-    private String not_remind_related;
+    private int not_remind_related;
 
     public long getId() {
         return id;
@@ -189,13 +189,11 @@ public class ScheduleDetailBean implements Serializable {
         this.updatetime = updatetime;
     }
 
-
-    public String getNot_remind_related() {
-        return not_remind_related == null ? "" : not_remind_related;
+    public int getNot_remind_related() {
+        return not_remind_related;
     }
 
-    public void setNot_remind_related(String not_remind_related) {
+    public void setNot_remind_related(int not_remind_related) {
         this.not_remind_related = not_remind_related;
     }
-
 }

@@ -107,7 +107,9 @@ public class SyncService extends Service {
         if (mLastUpdateTime!=0){
             requestMap.put("stamp",mLastUpdateTime);
         }
-        showNotification(this,1001,"船政云·日程","正在同步日程数据...");
+        if (mIsManual || mLastUpdateTime==0){
+            showNotification(this,1001,"船政云·日程","正在同步日程数据...");
+        }
         Observable observable = ScheduleMethods.getInstance().syncSchedule(requestMap);
         toSubscribe(observable,  new Subscriber<ScheduleSyncData>() {
             @Override
@@ -117,7 +119,9 @@ public class SyncService extends Service {
 
             @Override
             public void onError(Throwable e) {
-                showNotification(SyncService.this,1001,"船政云·日程","同步失败！");
+                if (mIsManual || mLastUpdateTime==0){
+                    showNotification(SyncService.this,1001,"船政云·日程","同步失败！");
+                }
                 if (e instanceof ApiException && !TextUtils.isEmpty(e.getMessage())){
                     ToastHelper.showLongToast(e.getMessage());
                 }else{
@@ -159,10 +163,12 @@ public class SyncService extends Service {
         if (mIsManual){
             ToastHelper.showLongToast("同步成功");
         }
-        showNotification(this,1001,"船政云·日程","同步成功！");
+        if (mIsManual || mLastUpdateTime==0){
+            showNotification(this,1001,"船政云·日程","同步成功！");
+        }
         PreferencesHelper.getInstance().putLong(ProjectConstants.KEY_LAST_SYNC+ CurrentUser.getInstance().getId(),System.currentTimeMillis()/1000);
         sendMsg(ProjectConstants.EVENT_UPDATE_SCHEDULE_LIST,null);
-//        sendMsg(ProjectConstants.EVENT_SYNC_SUCCESS,null);
+        sendMsg(ProjectConstants.EVENT_SYNC_SUCCESS,null);
     }
 
     private void insertSchedule(final List<ScheduleSync> dataList){

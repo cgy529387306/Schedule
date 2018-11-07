@@ -10,8 +10,8 @@ android {
         applicationId "com.android.mb.schedule"
         minSdkVersion 16
         targetSdkVersion 21
-        versionCode 112
-        versionName "1.1.2"
+        versionCode 101
+        versionName "1.0.1"
     }
     sourceSets {
         main {
@@ -19,11 +19,22 @@ android {
         }
     }
 
+    //配置keystore签名
+    signingConfigs {
+        release {
+            storeFile file("mb.jks")
+            storePassword "mb2018"
+            keyAlias "mb2018"
+            keyPassword "mb2018"
+        }
+    }
 
     buildTypes {
+        debug {
+            signingConfig signingConfigs.release
+        }
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 
