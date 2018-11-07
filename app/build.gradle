@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
+apply from: 'MobSDK.gradle'
 ext {
     SUPPORT_LIBRARY_VERSION = '27.1.1'
 }

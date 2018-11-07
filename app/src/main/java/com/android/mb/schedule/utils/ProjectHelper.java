@@ -367,7 +367,7 @@ public class ProjectHelper {
         String result;
         switch (type){
             case 0:
-                result = "不在提醒";
+                result = "不再提醒";
                 break;
             case 1:
                 result = "10分钟前";

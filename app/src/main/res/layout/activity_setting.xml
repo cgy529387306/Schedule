@@ -31,8 +31,7 @@
                 android:singleLine="true"
                 android:textSize="17sp"
                 android:textStyle="bold"
-                android:textColor="@color/text_color"
-                android:text="陈秋梅" />
+                android:textColor="@color/text_color" />
             <TextView
                 android:id="@+id/tv_job"
                 android:layout_width="match_parent"
@@ -40,8 +39,7 @@
                 android:singleLine="true"
                 android:textSize="15sp"
                 android:layout_marginTop="5dp"
-                android:textColor="@color/text_color"
-                android:text="职位" />
+                android:textColor="@color/text_color" />
         </LinearLayout>
         <ImageView
             android:layout_width="wrap_content"

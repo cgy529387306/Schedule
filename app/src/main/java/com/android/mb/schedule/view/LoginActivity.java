@@ -1,6 +1,7 @@
 package com.android.mb.schedule.view;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -20,10 +21,17 @@ import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.utils.ToastHelper;
 import com.android.mb.schedule.view.interfaces.ILoginView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import cn.jpush.android.api.JPushInterface;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.wechat.friends.Wechat;
 
 /**
  * 登录
@@ -96,11 +104,12 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter,ILoginView> im
             showToastMessage("密码格式错误");
             return;
         }
-        Map<String,Object> requestMap = new HashMap<>();
-        requestMap.put("username",account);
-        requestMap.put("password",pwd);
-        requestMap.put("registerid",rid);
-        mPresenter.userLogin(requestMap);
+        Platform plat = ShareSDK.getPlatform(Wechat.NAME);
+        if (plat.isAuthValid()){
+            getPlatInfo(plat);
+        }else{
+            doWxLogin();
+        }
     }
 
     @Override
@@ -131,6 +140,74 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter,ILoginView> im
         finish();
     }
 
+
+
+
+    private void doWxLogin(){
+        Platform platform = ShareSDK.getPlatform(Wechat.NAME);
+        platform.setPlatformActionListener(new PlatformActionListener() {
+
+            @Override
+            public void onError(Platform arg0, int arg1, Throwable arg2) {
+                arg2.printStackTrace();
+            }
+
+            @Override
+            public void onComplete(Platform arg0, int arg1, HashMap<String, Object> arg2) {
+                getPlatInfo(arg0);
+            }
+
+            @Override
+            public void onCancel(Platform arg0, int arg1) {
+
+            }
+        });
+        platform.authorize();
+    }
+
+
+    private void getPlatInfo(Platform platform){
+        if (platform!=null && platform.getDb()!=null && !TextUtils.isEmpty(platform.getDb().exportData())){
+            String userInfo = platform.getDb().exportData();
+            try {
+                JSONObject jsonObject = new JSONObject(userInfo);
+                wxLoginComplete(jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    private void wxLoginComplete(JSONObject jsonObject){
+        try {
+            String nickname = jsonObject.getString("nickname");
+            String unionid = jsonObject.getString("unionid");
+            String headingurl = jsonObject.getString("icon");
+            String openid = jsonObject.getString("openid");
+
+            String account = mEtAccount.getText().toString().trim();
+            String pwd = mEtPwd.getText().toString().trim();
+            String rid = PreferencesHelper.getInstance().getString(ProjectConstants.KEY_REGISTRATION_ID);
+            if (Helper.isEmpty(rid)){
+                rid = JPushInterface.getRegistrationID(getApplicationContext());
+            }
+            Map<String,Object> requestMap = new HashMap<>();
+            requestMap.put("username",account);
+            requestMap.put("password",pwd);
+            requestMap.put("registerid",rid);
+
+            requestMap.put("nickname",nickname);
+            requestMap.put("unionid",unionid);
+            requestMap.put("headimgurl",headingurl);
+            requestMap.put("openid",openid);
+            mPresenter.userLogin(requestMap);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+    }
 
 
 }

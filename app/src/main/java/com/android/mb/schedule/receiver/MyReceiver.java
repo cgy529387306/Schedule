@@ -93,6 +93,9 @@ public class MyReceiver extends BroadcastReceiver {
 	private void openNotification(Context context, Bundle bundle){
 		String content = bundle.getString(JPushInterface.EXTRA_MESSAGE);
 		String extra = bundle.getString(JPushInterface.EXTRA_EXTRA);
+		int notificationId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
+		JPushInterface.removeLocalNotification(context,notificationId);
+		JPushInterface.clearAllNotifications(context);
 		System.out.println("收到了自定义消息@@消息内容是:"+ content);
 		System.out.println("收到了自定义消息@@消息extra是:"+ extra);
 		PushExtras pushExtras = JsonHelper.fromJson(extra,PushExtras.class);

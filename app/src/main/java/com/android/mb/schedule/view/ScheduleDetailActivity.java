@@ -198,6 +198,10 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
             mTvStartTime.setText(detailBean.getStartTime());
             mTvEndDate.setText(Helper.long2DateString(detailBean.getTime_e()*1000,mDateFormat));
             mTvEndTime.setText(detailBean.getEndTime());
+            int mIsAllDay = detailBean.getAllDay();
+            mTvStartTime.setVisibility(mIsAllDay==1?View.GONE:View.VISIBLE);
+            mTvEndTime.setVisibility(mIsAllDay==1?View.GONE:View.VISIBLE);
+
             mTvImport.setVisibility(detailBean.getImportant()==1?View.VISIBLE:View.GONE);
             mTvScheduleContent.setText(detailBean.getDescription());
             mTvRepeat.setText(ProjectHelper.getRepeatStr(detailBean.getRepeattype()));

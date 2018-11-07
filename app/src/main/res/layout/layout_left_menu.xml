@@ -25,8 +25,7 @@
             android:layout_marginTop="6dp"
             android:textSize="18sp"
             android:textColor="@color/gray_45"
-            android:textStyle="bold"
-            android:text="陈秋梅" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_job"
@@ -37,8 +36,7 @@
             android:layout_marginLeft="15dp"
             android:textColor="@color/gray_4d"
             android:textSize="14sp"
-            android:layout_marginTop="8dp"
-            android:text="职位" />
+            android:layout_marginTop="8dp" />
 
     </RelativeLayout>
     <TextView
