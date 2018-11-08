@@ -221,12 +221,12 @@ public class SyncService extends Service {
         builder.setOnlyAlertOnce(true);
         builder.setDefaults(Notification.DEFAULT_VIBRATE);
         builder.setPriority(Notification.PRIORITY_DEFAULT);
-//        //自定义打开的界面
-//        Intent resultIntent = new Intent(context, MainActivity.class);
-//        resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-//                resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-//        builder.setContentIntent(contentIntent);
+        //自定义打开的界面
+        Intent resultIntent = new Intent(context, MainActivity.class);
+        resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
+                resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(contentIntent);
         NotificationManager notificationManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         if (notificationManager!=null){

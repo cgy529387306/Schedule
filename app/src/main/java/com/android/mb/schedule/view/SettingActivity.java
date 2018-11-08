@@ -12,6 +12,7 @@ import com.android.mb.schedule.entitys.CurrentUser;
 import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.utils.ImageUtils;
 import com.android.mb.schedule.utils.NavigationHelper;
+import com.android.mb.schedule.utils.PreferencesHelper;
 import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.widget.CircleImageView;
 
@@ -58,6 +59,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
+        initData();
         initUserInfo();
         regiestEvent(ProjectConstants.EVENT_UPDATE_USER_INFO, new Action1<Events<?>>() {
             @Override
@@ -75,6 +77,11 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         findViewById(R.id.lly_head).setOnClickListener(this);
     }
 
+    private void initData(){
+        isRemind = PreferencesHelper.getInstance().getBoolean(ProjectConstants.KEY_IS_VIBRATE,true);
+        mIvVibrate.setImageResource(isRemind?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
+    }
+
     @Override
     public void onClick(View view) {
         int id = view.getId();
@@ -85,6 +92,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         }else if (id == R.id.iv_vibrate){
             isRemind = !isRemind;
             mIvVibrate.setImageResource(isRemind?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
+            PreferencesHelper.getInstance().putBoolean(ProjectConstants.KEY_IS_VIBRATE,isRemind);
         }else if (id == R.id.lly_head){
             NavigationHelper.startActivity(SettingActivity.this,PersonalSettingActivity.class,null,false);
         }

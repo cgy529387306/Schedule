@@ -45,4 +45,6 @@ public class ProjectConstants {
     public static final String KEY_LAST_SYNC = "KEY_LAST_SYNC_";
 
     public static final String KEY_LAST_SYNC_OTHER = "KEY_LAST_SYNC_OTHER_";
+
+    public static final String KEY_IS_VIBRATE = "KEY_IS_VIBRATE";
 }
