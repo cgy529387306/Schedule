@@ -4,11 +4,15 @@ import android.text.TextUtils;
 
 import com.android.mb.schedule.app.MBApplication;
 import com.android.mb.schedule.base.BaseMvpPresenter;
+import com.android.mb.schedule.db.Delete;
+import com.android.mb.schedule.db.Edit;
 import com.android.mb.schedule.db.GreenDaoManager;
 import com.android.mb.schedule.db.Schedule;
 import com.android.mb.schedule.entitys.CurrentUser;
 import com.android.mb.schedule.entitys.FileData;
 import com.android.mb.schedule.entitys.ScheduleRequest;
+import com.android.mb.schedule.greendao.DeleteDao;
+import com.android.mb.schedule.greendao.EditDao;
 import com.android.mb.schedule.greendao.ScheduleDao;
 import com.android.mb.schedule.presenter.interfaces.ISchedulePresenter;
 import com.android.mb.schedule.retrofit.http.exception.ApiException;
@@ -106,6 +110,7 @@ public class SchedulePresenter extends BaseMvpPresenter<IScheduleView> implement
 
     private void editDataLocal(ScheduleRequest request) {
         ScheduleDao scheduleDao = GreenDaoManager.getInstance().getNewSession().getScheduleDao();
+        EditDao editDao = GreenDaoManager.getInstance().getNewSession().getEditDao();
         if (request.getType()==1){
             Schedule lastSchedule = scheduleDao.loadByRowId(request.getId());
             lastSchedule.setClose_time(System.currentTimeMillis()/1000);
@@ -119,6 +124,13 @@ public class SchedulePresenter extends BaseMvpPresenter<IScheduleView> implement
         }else{
             Schedule schedule = ProjectHelper.transToEditSchedule(request);
             scheduleDao.update(schedule);
+
+            if (schedule.getLocal()==0){
+                editDao.insert(new Edit(schedule.getId(),schedule.getCreate_by(),schedule.getTitle(),schedule.getDescription(),schedule.getDate(),
+                        schedule.getTime_s(),schedule.getTime_e(),schedule.getAddress(),schedule.getStartTime(),schedule.getEndTime(),schedule.getAllDay(),schedule.getRepeattype(),
+                        schedule.getRemind(),schedule.getImportant(),schedule.getSummary(),schedule.getNot_remind_related(),schedule.getClose_time(),
+                        schedule.getCreatetime(),schedule.getUpdatetime(),schedule.getSt_del(),schedule.getRelated(),schedule.getShare(),schedule.getFile(),schedule.getLocal()));
+            }
         }
         if (mMvpView!=null){
             mMvpView.editSuccess("1");

@@ -1,14 +1,10 @@
 package com.android.mb.schedule.db;
 
 import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
-
-/**
- * Created by cgy on 18/10/26.
- */
+import org.greenrobot.greendao.annotation.Generated;
 @Entity
-public class Schedule {
+public class Edit {
     @Id(autoincrement = true)
     private Long id;
     private long create_by;
@@ -34,8 +30,8 @@ public class Schedule {
     private String share;
     private String file;
     private int local;
-    @Generated(hash = 1812624133)
-    public Schedule(Long id, long create_by, String title, String description,
+    @Generated(hash = 1564941331)
+    public Edit(Long id, long create_by, String title, String description,
             String date, long time_s, long time_e, String address, String startTime,
             String endTime, int allDay, int repeattype, int remind, int important,
             String summary, int not_remind_related, long close_time,
@@ -66,8 +62,8 @@ public class Schedule {
         this.file = file;
         this.local = local;
     }
-    @Generated(hash = 729319394)
-    public Schedule() {
+    @Generated(hash = 1030611551)
+    public Edit() {
     }
     public Long getId() {
         return this.id;

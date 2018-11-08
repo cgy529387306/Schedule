@@ -194,6 +194,17 @@ public class ScheduleMethods extends BaseHttp {
                 .map(new HttpCacheResultFunc<Object>());
     }
 
+    public Observable syncEdit(ScheduleRequest scheduleRequest){
+        Map<String,Object> requestMap = ProjectHelper.objectToMap(scheduleRequest);
+        if (CurrentUser.getInstance().isLogin()){
+            requestMap.put("token_id",CurrentUser.getInstance().getToken_id());
+            requestMap.put("token",CurrentUser.getInstance().getToken());
+        }
+        return getService().syncEdit(requestMap)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<Object>());
+    }
+
     public Observable getDaySchedule(Map<String,Object> requestMap){
         if (CurrentUser.getInstance().isLogin()){
             requestMap.put("token_id",CurrentUser.getInstance().getToken_id());

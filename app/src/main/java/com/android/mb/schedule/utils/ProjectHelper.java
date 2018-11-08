@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewParent;
 
 import com.android.mb.schedule.api.BaseHttp;
+import com.android.mb.schedule.db.Edit;
 import com.android.mb.schedule.db.GreenDaoManager;
 import com.android.mb.schedule.db.Office;
 import com.android.mb.schedule.db.Schedule;
@@ -732,6 +733,34 @@ public class ProjectHelper {
     }
 
     public static ScheduleRequest transToRequest(Schedule schedule){
+        ScheduleRequest scheduleRequest = new ScheduleRequest();
+        if (schedule!=null){
+            scheduleRequest.setId(schedule.getId());
+            scheduleRequest.setTitle(schedule.getTitle());
+            scheduleRequest.setDescription(schedule.getDescription());
+            scheduleRequest.setSummary(schedule.getSummary());
+            scheduleRequest.setAddress(schedule.getAddress());
+            scheduleRequest.setStart(schedule.getTime_s());
+            scheduleRequest.setEnd(schedule.getTime_e());
+            scheduleRequest.setAllDay(schedule.getAllDay());
+            scheduleRequest.setRepeattype(schedule.getRepeattype());
+            scheduleRequest.setRemind(schedule.getRemind());
+            scheduleRequest.setImportant(schedule.getImportant());
+            scheduleRequest.setNot_remind_related(schedule.getNot_remind_related());
+            List<UserBean> shareList = JsonHelper.fromJson(schedule.getShare(),new TypeToken<List<UserBean>>(){}.getType());
+            List<UserBean> relateList = JsonHelper.fromJson(schedule.getShare(),new TypeToken<List<UserBean>>(){}.getType());
+            List<FileBean> fileList = JsonHelper.fromJson(schedule.getFile(),new TypeToken<List<FileBean>>(){}.getType());
+            scheduleRequest.setRelated(ProjectHelper.getIdStr(relateList));
+            scheduleRequest.setShare(ProjectHelper.getIdStr(shareList));
+            if (Helper.isNotEmpty(fileList)){
+                FileBean fileBean = fileList.get(0);
+                scheduleRequest.setFid(fileBean.getId());
+            }
+        }
+        return scheduleRequest;
+    }
+
+    public static ScheduleRequest transEditToRequest(Edit schedule){
         ScheduleRequest scheduleRequest = new ScheduleRequest();
         if (schedule!=null){
             scheduleRequest.setId(schedule.getId());

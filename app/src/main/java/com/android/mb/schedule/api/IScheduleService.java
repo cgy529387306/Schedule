@@ -146,6 +146,10 @@ public interface IScheduleService {
     @FormUrlEncoded
     Observable<HttpResult<UserSyncData>> syncPeople(@FieldMap Map<String,Object> requestMap);
 
+    @POST("app/common/sync_edit")
+    @FormUrlEncoded
+    Observable<HttpResult<Object>> syncEdit(@FieldMap Map<String,Object> requestMap);
+
     @POST("app/schedule/add")
     @FormUrlEncoded
     Observable<HttpResult<Object>> addKpi(@FieldMap Map<String,Object> requestMap);

@@ -50,8 +50,10 @@ public class ScheduleMineAdapter extends BaseQuickAdapter<MyScheduleBean, BaseVi
             helper.setTextColor(R.id.tv_time,mContext.getResources().getColor(R.color.base_orange));
             helper.setText(R.id.tv_time,"全天");
         }else{
+            String timeStart = Helper.long2DateString(item.getTime_s()*1000,"HH:mm");
+            String timeEnd = Helper.long2DateString(item.getTime_e()*1000,"HH:mm");
             helper.setTextColor(R.id.tv_time,mContext.getResources().getColor(R.color.gray_a5));
-            helper.setText(R.id.tv_time,item.getStartTime()+"-"+item.getEndTime());
+            helper.setText(R.id.tv_time,timeStart+"-"+timeEnd);
         }
         helper.setText(R.id.tv_address, item.getAddress());
     }

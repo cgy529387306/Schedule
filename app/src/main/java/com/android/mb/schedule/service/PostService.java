@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import com.android.mb.schedule.api.ScheduleMethods;
 import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.db.Delete;
+import com.android.mb.schedule.db.Edit;
 import com.android.mb.schedule.db.GreenDaoManager;
 import com.android.mb.schedule.db.Office;
 import com.android.mb.schedule.db.Schedule;
@@ -23,6 +24,7 @@ import com.android.mb.schedule.entitys.TreeData;
 import com.android.mb.schedule.entitys.UserBean;
 import com.android.mb.schedule.entitys.UserSyncData;
 import com.android.mb.schedule.greendao.DeleteDao;
+import com.android.mb.schedule.greendao.EditDao;
 import com.android.mb.schedule.greendao.OfficeDao;
 import com.android.mb.schedule.greendao.ScheduleDao;
 import com.android.mb.schedule.greendao.UserDao;
@@ -85,12 +87,21 @@ public class PostService extends Service {
                         doDelete(deleteList,delete);
                     }
                 }
+
                 long userId = CurrentUser.getInstance().getId();
                 ScheduleDao scheduleDao = GreenDaoManager.getInstance().getNewSession().getScheduleDao();
                 List<Schedule> scheduleList = scheduleDao.queryBuilder().where(ScheduleDao.Properties.Create_by.eq(userId)).where(ScheduleDao.Properties.Local.eq(1)).list();
                 if (Helper.isNotEmpty(scheduleList)){
                     for (Schedule schedule:scheduleList){
                         doAdd(scheduleList,schedule);
+                    }
+                }
+
+                EditDao editDao = GreenDaoManager.getInstance().getNewSession().getEditDao();
+                List<Edit> editList = editDao.loadAll();
+                if (Helper.isNotEmpty(editList)){
+                    for (Edit edit:editList){
+                        doEdit(editList,edit);
                     }
                 }
             }
@@ -141,6 +152,27 @@ public class PostService extends Service {
                 ScheduleDao scheduleDao = GreenDaoManager.getInstance().getNewSession().getScheduleDao();
                 scheduleDao.update(schedule);
                 if (dataList.contains(schedule) && dataList.indexOf(schedule)==dataList.size()-1){
+                    ProjectHelper.syncSchedule(getApplicationContext(),false);
+                }
+            }
+        });
+    }
+
+    private void doEdit(final List<Edit> dataList, final Edit edit){
+        Observable observable = ScheduleMethods.getInstance().syncEdit(ProjectHelper.transEditToRequest(edit));
+        toSubscribe(observable,  new Subscriber<Object>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @Override
+            public void onNext(Object result) {
+                if (dataList.contains(edit) && dataList.indexOf(edit)==dataList.size()-1){
                     ProjectHelper.syncSchedule(getApplicationContext(),false);
                 }
             }
