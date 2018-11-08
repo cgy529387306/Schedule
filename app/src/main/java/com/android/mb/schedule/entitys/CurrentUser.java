@@ -23,6 +23,7 @@ public class CurrentUser {
     private long expiretime;
     private long token_id;
     private long id;
+    private int is_bind_wx;
 
     public String getUsername() {
         return username;
@@ -116,6 +117,14 @@ public class CurrentUser {
         this.id = id;
     }
 
+    public int getIs_bind_wx() {
+        return is_bind_wx;
+    }
+
+    public void setIs_bind_wx(int is_bind_wx) {
+        this.is_bind_wx = is_bind_wx;
+    }
+
     //region 单例
     private static final String TAG = CurrentUser.class.getSimpleName();
     private static final String USER = "CurrentUser";
@@ -156,6 +165,7 @@ public class CurrentUser {
             me.setAvatar(entity.getAvatar());
             if (isLogin){
                 me.setToken(entity.getToken());
+                me.setIs_bind_wx(entity.getIs_bind_wx());
                 me.setToken_id(entity.getToken_id());
                 me.setExpiretime(entity.getExpiretime());
             }

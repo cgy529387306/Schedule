@@ -36,7 +36,11 @@ public class LoadingActivity extends AppCompatActivity {
 
             public void run() {
                 if (CurrentUser.getInstance().isLogin()){
-                    NavigationHelper.startActivity(LoadingActivity.this, MainActivity.class, null, true);
+                    if (CurrentUser.getInstance().getIs_bind_wx()==1){
+                        NavigationHelper.startActivity(LoadingActivity.this, MainActivity.class, null, true);
+                    }else{
+                        NavigationHelper.startActivity(LoadingActivity.this, LoginActivity.class, null, true);
+                    }
                 }else{
                     NavigationHelper.startActivity(LoadingActivity.this, LoginActivity.class, null, true);
                 }

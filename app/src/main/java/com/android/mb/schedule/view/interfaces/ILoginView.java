@@ -8,4 +8,6 @@ import com.android.mb.schedule.entitys.LoginData;
  */
 public interface ILoginView extends BaseMvpView {
     void loginSuccess(LoginData result);
+
+    void bindSuccess(Object result);
 }

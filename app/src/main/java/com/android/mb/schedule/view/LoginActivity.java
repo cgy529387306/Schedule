@@ -7,7 +7,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.mb.schedule.R;
-import com.android.mb.schedule.base.BaseActivity;
 import com.android.mb.schedule.base.BaseMvpActivity;
 import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.entitys.CurrentUser;
@@ -100,16 +99,11 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter,ILoginView> im
             showToastMessage("请输入密码");
             return;
         }
-        if (!ProjectHelper.isPwdValid(pwd)){
-            showToastMessage("密码格式错误");
-            return;
-        }
-        Platform plat = ShareSDK.getPlatform(Wechat.NAME);
-        if (plat.isAuthValid()){
-            getPlatInfo(plat);
-        }else{
-            doWxLogin();
-        }
+        Map<String,Object> requestMap = new HashMap<>();
+        requestMap.put("username",account);
+        requestMap.put("password",pwd);
+        requestMap.put("registerid",rid);
+        mPresenter.userLogin(requestMap);
     }
 
     @Override
@@ -120,9 +114,20 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter,ILoginView> im
     @Override
     public void loginSuccess(LoginData result) {
         if (result!=null && result.getUserinfo()!=null){
-            showToastMessage("登录成功");
             AppHelper.hideSoftInputFromWindow(mEtAccount);
             CurrentUser.getInstance().login(result.getUserinfo(),true);
+            if (result.getUserinfo().getIs_bind_wx()==0){
+                doWxLogin();
+            }else{
+                NavigationHelper.startActivity(LoginActivity.this,MainActivity.class,null,true);
+            }
+        }
+    }
+
+    @Override
+    public void bindSuccess(Object result) {
+        if (result!=null){
+            showToastMessage("登录成功");
             NavigationHelper.startActivity(LoginActivity.this,MainActivity.class,null,true);
         }
     }
@@ -145,6 +150,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter,ILoginView> im
 
     private void doWxLogin(){
         Platform platform = ShareSDK.getPlatform(Wechat.NAME);
+        platform.removeAccount(true);
         platform.setPlatformActionListener(new PlatformActionListener() {
 
             @Override
@@ -185,28 +191,15 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter,ILoginView> im
             String unionid = jsonObject.getString("unionid");
             String headingurl = jsonObject.getString("icon");
             String openid = jsonObject.getString("openid");
-
-            String account = mEtAccount.getText().toString().trim();
-            String pwd = mEtPwd.getText().toString().trim();
-            String rid = PreferencesHelper.getInstance().getString(ProjectConstants.KEY_REGISTRATION_ID);
-            if (Helper.isEmpty(rid)){
-                rid = JPushInterface.getRegistrationID(getApplicationContext());
-            }
             Map<String,Object> requestMap = new HashMap<>();
-            requestMap.put("username",account);
-            requestMap.put("password",pwd);
-            requestMap.put("registerid",rid);
-
             requestMap.put("nickname",nickname);
             requestMap.put("unionid",unionid);
             requestMap.put("headimgurl",headingurl);
             requestMap.put("openid",openid);
-            mPresenter.userLogin(requestMap);
+            mPresenter.bindWx(requestMap);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
     }
 
 

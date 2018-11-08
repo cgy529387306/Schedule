@@ -37,6 +37,10 @@ public interface IScheduleService {
     @FormUrlEncoded
     Observable<HttpResult<LoginData>> userLogin(@FieldMap Map<String,Object> requestMap);
 
+    @POST("/app/user/bindWx")
+    @FormUrlEncoded
+    Observable<HttpResult<Object>> bindWx(@FieldMap Map<String,Object> requestMap);
+
     @POST("/app/user/resetpwd")
     @FormUrlEncoded
     Observable<HttpResult<Object>> resetPwd(@FieldMap Map<String,Object> requestMap);

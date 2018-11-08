@@ -71,6 +71,16 @@ public class ScheduleMethods extends BaseHttp {
                 .map(new HttpCacheResultFunc<LoginData>());
     }
 
+    public Observable bindWx(Map<String,Object> requestMap){
+        if (CurrentUser.getInstance().isLogin()){
+            requestMap.put("token_id",CurrentUser.getInstance().getToken_id());
+            requestMap.put("token",CurrentUser.getInstance().getToken());
+        }
+        return getService().bindWx(requestMap)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<Object>());
+    }
+
     public Observable resetPwd(Map<String,Object> requestMap){
         if (CurrentUser.getInstance().isLogin()){
             requestMap.put("token_id",CurrentUser.getInstance().getToken_id());
@@ -80,6 +90,7 @@ public class ScheduleMethods extends BaseHttp {
                 .compose(CacheTransformer.emptyTransformer())
                 .map(new HttpCacheResultFunc<Object>());
     }
+
 
     public Observable setProfile(Map<String,Object> requestMap){
         if (CurrentUser.getInstance().isLogin()){
