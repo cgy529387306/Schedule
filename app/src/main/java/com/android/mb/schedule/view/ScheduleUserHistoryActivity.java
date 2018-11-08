@@ -67,7 +67,7 @@ public class ScheduleUserHistoryActivity extends BaseMvpActivity<MinePresenter,I
         mRecyclerView =  findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.addItemDecoration(new MyDividerItemDecoration(mContext, LinearLayoutManager.VERTICAL,22));
+        mRecyclerView.addItemDecoration(new MyDividerItemDecoration(mContext, LinearLayoutManager.VERTICAL));
         mAdapter = new ScheduleMineAdapter(R.layout.item_schedule_mine,new ArrayList());
         mRecyclerView.setAdapter(mAdapter);
     }

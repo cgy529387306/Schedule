@@ -18,10 +18,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.mb.schedule.R;
+import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.rxbus.RxBus;
 import com.android.mb.schedule.service.PostService;
-import com.android.mb.schedule.service.SyncService;
 import com.android.mb.schedule.utils.AppHelper;
 import com.android.mb.schedule.utils.KeyBoardUtils;
 import com.android.mb.schedule.utils.NetworkHelper;
@@ -218,6 +218,7 @@ public abstract class BaseActivity extends AppCompatActivity{
                         if (mIsNetworkAvailable){
                             startService(new Intent(mContext, PostService.class));
                         }else{
+                            sendMsg(ProjectConstants.EVENT_UPDATE_SCHEDULE_LIST,null);
                             showToastMessage("网络已断开");
                         }
                     }

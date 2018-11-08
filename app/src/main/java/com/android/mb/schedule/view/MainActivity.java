@@ -99,6 +99,7 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
     protected void bindViews() {
         initView();
         initTabViewPager();
+        initUserInfo(CurrentUser.getInstance());
     }
 
     @Override
