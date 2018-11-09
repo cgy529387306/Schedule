@@ -1,5 +1,8 @@
 package com.android.mb.schedule.utils;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -8,12 +11,15 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.provider.MediaStore.MediaColumns;
+import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewParent;
 
+import com.android.mb.schedule.R;
 import com.android.mb.schedule.api.BaseHttp;
+import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.db.Edit;
 import com.android.mb.schedule.db.GreenDaoManager;
 import com.android.mb.schedule.db.Office;
@@ -37,6 +43,7 @@ import com.android.mb.schedule.greendao.OfficeDao;
 import com.android.mb.schedule.greendao.ScheduleDao;
 import com.android.mb.schedule.greendao.UserDao;
 import com.android.mb.schedule.service.SyncService;
+import com.android.mb.schedule.view.MainActivity;
 import com.android.mb.schedule.view.SelectPersonActivity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -934,5 +941,16 @@ public class ProjectHelper {
            e.printStackTrace();
            return false;
        }
+    }
+
+    public static String getFileName(String path){
+        int start = path.lastIndexOf("/");
+        int end = path.lastIndexOf(".");
+        if (start!=-1 && end!=-1) {
+            return path.substring(start+1, end);
+        }
+        else {
+            return "";
+        }
     }
 }

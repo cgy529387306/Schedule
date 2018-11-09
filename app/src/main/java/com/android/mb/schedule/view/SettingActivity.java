@@ -14,9 +14,12 @@ import com.android.mb.schedule.entitys.CurrentUser;
 import com.android.mb.schedule.entitys.LoginData;
 import com.android.mb.schedule.presenter.LoginPresenter;
 import com.android.mb.schedule.rxbus.Events;
+import com.android.mb.schedule.utils.AppHelper;
 import com.android.mb.schedule.utils.ImageUtils;
 import com.android.mb.schedule.utils.NavigationHelper;
+import com.android.mb.schedule.utils.NetworkHelper;
 import com.android.mb.schedule.utils.PreferencesHelper;
+import com.android.mb.schedule.utils.ProgressDialogHelper;
 import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.view.interfaces.ILoginView;
 import com.android.mb.schedule.widget.CircleImageView;
@@ -43,6 +46,7 @@ public class SettingActivity extends BaseMvpActivity<LoginPresenter,ILoginView> 
     private CircleImageView mIvHead;
     private TextView mTvName;  // 名字
     private TextView mTvJob;  //职位
+    private TextView mTvVersion;
     private TextView mBtnSetPwd;
     private ImageView mIvRing;
     private ImageView mIvVibrate;
@@ -67,6 +71,7 @@ public class SettingActivity extends BaseMvpActivity<LoginPresenter,ILoginView> 
         mIvHead = findViewById(R.id.iv_head);
         mTvName = findViewById(R.id.tv_name);
         mTvJob = findViewById(R.id.tv_job);
+        mTvVersion = findViewById(R.id.tv_version);
         mBtnSetPwd = findViewById(R.id.tv_set_pwd);
         mIvRing = findViewById(R.id.iv_ring);
         mIvVibrate = findViewById(R.id.iv_vibrate);
@@ -89,11 +94,14 @@ public class SettingActivity extends BaseMvpActivity<LoginPresenter,ILoginView> 
         mBtnSetPwd.setOnClickListener(this);
         mIvRing.setOnClickListener(this);
         mIvVibrate.setOnClickListener(this);
+        mTvVersion.setOnClickListener(this);
         findViewById(R.id.lly_head).setOnClickListener(this);
         findViewById(R.id.tv_change).setOnClickListener(this);
+        findViewById(R.id.lly_download).setOnClickListener(this);
     }
 
     private void initData(){
+        mTvVersion.setText("版本"+ AppHelper.getCurrentVersionName());
         isRemind = PreferencesHelper.getInstance().getBoolean(ProjectConstants.KEY_IS_VIBRATE,true);
         mIvVibrate.setImageResource(isRemind?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
     }
@@ -113,6 +121,20 @@ public class SettingActivity extends BaseMvpActivity<LoginPresenter,ILoginView> 
             NavigationHelper.startActivity(SettingActivity.this,PersonalSettingActivity.class,null,false);
         }else if (id == R.id.tv_change){
             doWxLogin();
+        }else if (id == R.id.lly_download){
+            if (NetworkHelper.isNetworkAvailable(mContext)){
+                long lastUpdateTime = PreferencesHelper.getInstance().getLong(ProjectConstants.KEY_LAST_SYNC+ CurrentUser.getInstance().getId(),0);
+                if (lastUpdateTime==0){
+                    showToastMessage("正在后台同步中，请稍等...");
+                }else {
+                    ProgressDialogHelper.showProgressDialog(SettingActivity.this,"正在下载云端数据，请稍等...");
+                    ProjectHelper.syncSchedule(mContext,true);
+                }
+            }else{
+                showToastMessage("当前网络已断开，无法同步");
+            }
+        }else if (id == R.id.tv_version){
+            
         }
     }
 
@@ -131,9 +153,7 @@ public class SettingActivity extends BaseMvpActivity<LoginPresenter,ILoginView> 
 
     @Override
     public void bindSuccess(Object result) {
-        if (result!=null){
-            showToastMessage("绑定成功");
-        }
+        showToastMessage("绑定成功");
     }
 
     @Override

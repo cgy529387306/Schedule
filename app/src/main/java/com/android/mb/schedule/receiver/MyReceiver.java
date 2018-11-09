@@ -10,7 +10,9 @@ import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.entitys.PushExtras;
 import com.android.mb.schedule.utils.JsonHelper;
 import com.android.mb.schedule.utils.NavigationHelper;
+import com.android.mb.schedule.utils.NotificationHelper;
 import com.android.mb.schedule.utils.PreferencesHelper;
+import com.android.mb.schedule.view.MainActivity;
 import com.android.mb.schedule.view.ScheduleDetailActivity;
 import com.android.mb.schedule.view.ScheduleRelateActivity;
 
@@ -39,9 +41,9 @@ public class MyReceiver extends BroadcastReceiver {
 			String regId = bundle.getString(JPushInterface.EXTRA_REGISTRATION_ID);
 			PreferencesHelper.getInstance().putString(ProjectConstants.KEY_REGISTRATION_ID, regId);
 		} else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
-//			openNotification(context, bundle);
+			openNotification(context, bundle);
 		} else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
-//			openNotification(context, bundle);
+			openNotification(context, bundle);
 		} else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
 			openNotification(context,bundle);
 		} else if (JPushInterface.ACTION_RICHPUSH_CALLBACK.equals(intent.getAction())) {
@@ -89,6 +91,21 @@ public class MyReceiver extends BroadcastReceiver {
 		Log.e("Jpush", sb.toString());
 		return sb.toString();
 	}
+
+//	private void openCustomNotification(Context context, Bundle bundle){
+//		String content = bundle.getString(JPushInterface.EXTRA_MESSAGE);
+//		String extra = bundle.getString(JPushInterface.EXTRA_EXTRA);
+//		String title = bundle.getString(JPushInterface.EXTRA_TITLE);
+//		System.out.println("收到了自定义消息@@消息内容是:"+ content);
+//		System.out.println("收到了自定义消息@@消息extra是:"+ extra);
+//		PushExtras pushExtras = JsonHelper.fromJson(extra,PushExtras.class);
+//		Intent intent = null;
+//		if (pushExtras!=null){
+//			intent = new Intent(context,ScheduleDetailActivity.class);
+//			intent.putExtra("id",pushExtras.getId());
+//		}
+//		NotificationHelper.showNotification(context,1002,title,content,intent);
+//	}
 
 	private void openNotification(Context context, Bundle bundle){
 		String content = bundle.getString(JPushInterface.EXTRA_MESSAGE);

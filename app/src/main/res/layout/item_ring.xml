@@ -2,12 +2,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:padding="10dp"
+    android:padding="12dp"
     android:background="@color/white"
     android:id="@+id/lly_ring">
 
     <TextView
-        android:id="@+id/tv_ringname"
+        android:id="@+id/tv_ring_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -17,7 +17,7 @@
         android:textSize="14sp" />
 
     <ImageView
-        android:id="@+id/iv_ringchoice"
+        android:id="@+id/iv_ring_choice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"

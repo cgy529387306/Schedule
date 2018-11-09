@@ -119,6 +119,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter,ILoginView> im
             if (result.getUserinfo().getIs_bind_wx()==0){
                 doWxLogin();
             }else{
+                showToastMessage("登录成功");
                 NavigationHelper.startActivity(LoginActivity.this,MainActivity.class,null,true);
             }
         }
@@ -126,10 +127,8 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter,ILoginView> im
 
     @Override
     public void bindSuccess(Object result) {
-        if (result!=null){
-            showToastMessage("登录成功");
-            NavigationHelper.startActivity(LoginActivity.this,MainActivity.class,null,true);
-        }
+        showToastMessage("登录成功");
+        NavigationHelper.startActivity(LoginActivity.this,MainActivity.class,null,true);
     }
 
     private static final long DOUBLE_CLICK_INTERVAL = 2000;
