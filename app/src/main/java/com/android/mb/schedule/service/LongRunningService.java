@@ -17,6 +17,7 @@ import com.android.mb.schedule.utils.NotificationHelper;
 import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.utils.ToastHelper;
 import com.android.mb.schedule.view.MainActivity;
+import com.android.mb.schedule.view.ScheduleDetailActivity;
 
 import java.util.List;
 import java.util.Timer;
@@ -70,8 +71,9 @@ public class LongRunningService extends Service {
 
     private void doRemind(Schedule schedule){
         if (schedule!=null){
-            Intent resultIntent = new Intent(this, MainActivity.class);
-            NotificationHelper.showNotification(this,1001,"日程提醒","日程"+schedule.getTitle()+"快要开始了",resultIntent);
+            Intent intent = new Intent(getApplicationContext(),ScheduleDetailActivity.class);
+            intent.putExtra("id",schedule.getId());
+            NotificationHelper.showNotification(this,1001,"日程提醒","日程"+schedule.getTitle()+"快要开始了",intent);
         }
     }
 

@@ -29,6 +29,7 @@ import com.android.mb.schedule.entitys.UserSyncData;
 import com.android.mb.schedule.greendao.OfficeDao;
 import com.android.mb.schedule.greendao.ScheduleDao;
 import com.android.mb.schedule.greendao.UserDao;
+import com.android.mb.schedule.receiver.NotificationReceiver;
 import com.android.mb.schedule.retrofit.http.exception.ApiException;
 import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.rxbus.RxBus;
@@ -215,7 +216,7 @@ public class SyncService extends Service {
     }
 
     private void showNotification(Context context, int id, String title, String text) {
-        Intent resultIntent = new Intent(context, MainActivity.class);
+        Intent resultIntent = new Intent(context, NotificationReceiver.class);
         NotificationHelper.showNotification(context,id,title,text,resultIntent);
     }
 

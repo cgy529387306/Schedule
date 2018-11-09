@@ -41,9 +41,9 @@ public class MyReceiver extends BroadcastReceiver {
 			String regId = bundle.getString(JPushInterface.EXTRA_REGISTRATION_ID);
 			PreferencesHelper.getInstance().putString(ProjectConstants.KEY_REGISTRATION_ID, regId);
 		} else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
-			openNotification(context, bundle);
+//			openNotification(context, bundle);
 		} else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
-			openNotification(context, bundle);
+//			openNotification(context, bundle);
 		} else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
 			openNotification(context,bundle);
 		} else if (JPushInterface.ACTION_RICHPUSH_CALLBACK.equals(intent.getAction())) {
