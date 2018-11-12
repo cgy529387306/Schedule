@@ -138,12 +138,14 @@ public class RingActivity extends BaseActivity {
         String path = PreferencesHelper.getInstance().getString(ProjectConstants.KEY_RING);
         if (Helper.isEmpty(path)){
             Uri uri = RingtoneManager.getActualDefaultRingtoneUri(this,RingtoneManager.TYPE_NOTIFICATION);
-            String name = ProjectHelper.getFileName(uri.toString());
-            if (Helper.isNotEmpty(name) && Helper.isNotEmpty(mDataList)){
-                for (int i=0;i<mDataList.size();i++){
-                    RingBean ringBean = mDataList.get(i);
-                    if (name.equals(ringBean.getName())){
-                        mAdapter.setCurrentIndex(i);
+            if (uri!=null){
+                String name = ProjectHelper.getFileName(uri.toString());
+                if (Helper.isNotEmpty(name) && Helper.isNotEmpty(mDataList)){
+                    for (int i=0;i<mDataList.size();i++){
+                        RingBean ringBean = mDataList.get(i);
+                        if (name.equals(ringBean.getName())){
+                            mAdapter.setCurrentIndex(i);
+                        }
                     }
                 }
             }

@@ -1,34 +1,21 @@
 package com.android.mb.schedule.service;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.android.mb.schedule.R;
 import com.android.mb.schedule.api.ScheduleMethods;
 import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.db.GreenDaoManager;
-import com.android.mb.schedule.db.Office;
 import com.android.mb.schedule.db.Schedule;
-import com.android.mb.schedule.db.User;
 import com.android.mb.schedule.entitys.CurrentUser;
-import com.android.mb.schedule.entitys.OfficeSyncData;
 import com.android.mb.schedule.entitys.ScheduleSync;
 import com.android.mb.schedule.entitys.ScheduleSyncData;
-import com.android.mb.schedule.entitys.TreeData;
-import com.android.mb.schedule.entitys.UserBean;
-import com.android.mb.schedule.entitys.UserSyncData;
-import com.android.mb.schedule.greendao.OfficeDao;
 import com.android.mb.schedule.greendao.ScheduleDao;
-import com.android.mb.schedule.greendao.UserDao;
 import com.android.mb.schedule.receiver.NotificationReceiver;
 import com.android.mb.schedule.retrofit.http.exception.ApiException;
 import com.android.mb.schedule.rxbus.Events;
@@ -37,9 +24,7 @@ import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.JsonHelper;
 import com.android.mb.schedule.utils.NotificationHelper;
 import com.android.mb.schedule.utils.PreferencesHelper;
-import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.utils.ToastHelper;
-import com.android.mb.schedule.view.MainActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -81,7 +66,9 @@ public class SyncService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        mIsManual = intent.getBooleanExtra("isManual",false);
+        if (intent!=null){
+            mIsManual = intent.getBooleanExtra("isManual",false);
+        }
         doJobTask();
         return super.onStartCommand(intent, flags, startId);
     }
