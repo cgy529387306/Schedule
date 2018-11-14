@@ -10,6 +10,7 @@ import com.android.mb.schedule.db.Schedule;
 import com.android.mb.schedule.entitys.CurrentUser;
 import com.android.mb.schedule.entitys.RelatedBean;
 import com.android.mb.schedule.entitys.TagBean;
+import com.android.mb.schedule.entitys.TagData;
 import com.android.mb.schedule.entitys.TreeData;
 import com.android.mb.schedule.greendao.ScheduleDao;
 import com.android.mb.schedule.presenter.interfaces.IRelatedPresenter;
@@ -34,7 +35,7 @@ public class TagPresenter extends BaseMvpPresenter<ITagView> implements ITagPres
     @Override
     public void getTagList(Map<String, Object> requestMap) {
         Observable observable = ScheduleMethods.getInstance().getTagList(requestMap);
-        toSubscribe(observable,  new Subscriber<List<TagBean>>() {
+        toSubscribe(observable,  new Subscriber<TagData>() {
             @Override
             public void onCompleted() {
 
@@ -50,9 +51,11 @@ public class TagPresenter extends BaseMvpPresenter<ITagView> implements ITagPres
             }
 
             @Override
-            public void onNext(List<TagBean> result) {
+            public void onNext(TagData result) {
                 if (mMvpView!=null){
-                    mMvpView.getSuccess(result);
+                    if (result!=null){
+                        mMvpView.getSuccess(result.getTags());
+                    }
                 }
             }
         });

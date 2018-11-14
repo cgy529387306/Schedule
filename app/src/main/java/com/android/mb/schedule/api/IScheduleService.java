@@ -12,6 +12,7 @@ import com.android.mb.schedule.entitys.ScheduleSyncData;
 import com.android.mb.schedule.entitys.SearchBean;
 import com.android.mb.schedule.entitys.ShareBean;
 import com.android.mb.schedule.entitys.TagBean;
+import com.android.mb.schedule.entitys.TagData;
 import com.android.mb.schedule.entitys.TreeData;
 import com.android.mb.schedule.entitys.UserBean;
 import com.android.mb.schedule.entitys.UserSyncData;
@@ -168,7 +169,7 @@ public interface IScheduleService {
 
     @POST("/app/common/tags")
     @FormUrlEncoded
-    Observable<HttpResult<List<TagBean>>> getTagList(@FieldMap Map<String,Object> requestMap);
+    Observable<HttpResult<TagData>> getTagList(@FieldMap Map<String,Object> requestMap);
 
     @POST("/app/schedule/other")
     @FormUrlEncoded

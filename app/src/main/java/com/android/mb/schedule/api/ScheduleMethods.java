@@ -14,6 +14,7 @@ import com.android.mb.schedule.entitys.ScheduleSyncData;
 import com.android.mb.schedule.entitys.SearchBean;
 import com.android.mb.schedule.entitys.ShareBean;
 import com.android.mb.schedule.entitys.TagBean;
+import com.android.mb.schedule.entitys.TagData;
 import com.android.mb.schedule.entitys.TreeData;
 import com.android.mb.schedule.entitys.UserBean;
 import com.android.mb.schedule.entitys.UserSyncData;
@@ -408,7 +409,7 @@ public class ScheduleMethods extends BaseHttp {
         }
         return getService().getTagList(requestMap)
                 .compose(CacheTransformer.emptyTransformer())
-                .map(new HttpCacheResultFunc<List<TagBean>>());
+                .map(new HttpCacheResultFunc<TagData>());
     }
 
     public Observable getTagPerson(Map<String, Object> requestMap){
