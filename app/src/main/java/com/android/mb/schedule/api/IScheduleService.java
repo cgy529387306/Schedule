@@ -166,7 +166,7 @@ public interface IScheduleService {
     @FormUrlEncoded
     Observable<HttpResult<KpiRequest>> getKpi(@FieldMap Map<String,Object> requestMap);
 
-    @POST("/app/schedule/other")
+    @POST("/app/common/tags")
     @FormUrlEncoded
     Observable<HttpResult<List<TagBean>>> getTagList(@FieldMap Map<String,Object> requestMap);
 

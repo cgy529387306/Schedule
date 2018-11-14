@@ -55,7 +55,7 @@ public class UnderActivity extends BaseMvpActivity<UnderPresenter,IUnderView> im
     @Override
     protected void initTitle() {
         setTitleText("下属日程");
-//        setRightText("标签");
+        setRightText("标签");
     }
 
     @Override

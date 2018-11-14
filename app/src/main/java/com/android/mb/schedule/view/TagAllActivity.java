@@ -27,7 +27,9 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import rx.functions.Action1;
 
@@ -76,9 +78,9 @@ public class TagAllActivity extends BaseMvpActivity<TagPresenter,ITagView> imple
     }
 
     private void getListFormServer(){
-//        Map<String, Object> requestMap = new HashMap<>();
-//        requestMap.put("page",mCurrentPage);
-//        mPresenter.getRelated(requestMap);
+        Map<String, Object> requestMap = new HashMap<>();
+        requestMap.put("page",mCurrentPage);
+        mPresenter.getTagList(requestMap);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

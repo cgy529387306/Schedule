@@ -9,6 +9,8 @@ import com.android.mb.schedule.db.GreenDaoManager;
 import com.android.mb.schedule.db.Schedule;
 import com.android.mb.schedule.entitys.CurrentUser;
 import com.android.mb.schedule.entitys.RelatedBean;
+import com.android.mb.schedule.entitys.TagBean;
+import com.android.mb.schedule.entitys.TreeData;
 import com.android.mb.schedule.greendao.ScheduleDao;
 import com.android.mb.schedule.presenter.interfaces.IRelatedPresenter;
 import com.android.mb.schedule.presenter.interfaces.ITagPresenter;
@@ -31,6 +33,28 @@ public class TagPresenter extends BaseMvpPresenter<ITagView> implements ITagPres
 
     @Override
     public void getTagList(Map<String, Object> requestMap) {
+        Observable observable = ScheduleMethods.getInstance().getTagList(requestMap);
+        toSubscribe(observable,  new Subscriber<List<TagBean>>() {
+            @Override
+            public void onCompleted() {
 
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                if(mMvpView!=null){
+                    if (e instanceof ApiException && !TextUtils.isEmpty(e.getMessage())){
+                        mMvpView.showToastMessage(e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onNext(List<TagBean> result) {
+                if (mMvpView!=null){
+                    mMvpView.getSuccess(result);
+                }
+            }
+        });
     }
 }
