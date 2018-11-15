@@ -55,13 +55,6 @@ public class UnderActivity extends BaseMvpActivity<UnderPresenter,IUnderView> im
     @Override
     protected void initTitle() {
         setTitleText("下属日程");
-        setRightText("标签");
-    }
-
-    @Override
-    protected void onRightAction() {
-        super.onRightAction();
-        NavigationHelper.startActivity(UnderActivity.this, TagAllActivity.class, null, false);
     }
 
     @Override
@@ -80,11 +73,15 @@ public class UnderActivity extends BaseMvpActivity<UnderPresenter,IUnderView> im
 
     @Override
     protected void setListener() {
+        findViewById(R.id.lly_tag).setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         int id = v.getId();
+        if (id == R.id.lly_tag){
+            NavigationHelper.startActivity(UnderActivity.this, TagAllActivity.class, null, false);
+        }
     }
 
 

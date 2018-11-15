@@ -25,6 +25,7 @@ import com.android.mb.schedule.view.interfaces.ITagView;
 import com.android.mb.schedule.widget.MyDividerItemDecoration;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -66,7 +67,7 @@ public class TagAllActivity extends BaseMvpActivity<TagPresenter,ITagView> imple
         mRecyclerView =  findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.addItemDecoration(new MyDividerItemDecoration(mContext, LinearLayoutManager.VERTICAL,10));
+        mRecyclerView.addItemDecoration(new MyDividerItemDecoration(mContext, LinearLayoutManager.VERTICAL));
         mAdapter = new AllTagAdapter(R.layout.item_tag_all,new ArrayList());
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -80,30 +81,8 @@ public class TagAllActivity extends BaseMvpActivity<TagPresenter,ITagView> imple
     private void getListFormServer(){
         Map<String, Object> requestMap = new HashMap<>();
         requestMap.put("page",mCurrentPage);
+        requestMap.put("limit",ProjectConstants.PAGE_SIZE);
         mPresenter.getTagList(requestMap);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                int count = mAdapter.getItemCount();
-                List<String> dataList = new ArrayList<>();
-                for (int i=count;i<count+20;i++){
-                    dataList.add(Helper.date2String(new Date()));
-                }
-                if (mCurrentPage == 1){
-                    //首页
-                    mSwipeRefreshLayout.setRefreshing(false);
-                    mAdapter.setNewData(dataList);
-                    mAdapter.setEmptyView(R.layout.empty_data, (ViewGroup) mRecyclerView.getParent());
-                }else{
-                    if (Helper.isEmpty(dataList)){
-                        mAdapter.loadMoreEnd();
-                    }else{
-                        mAdapter.addData(dataList);
-                        mAdapter.loadMoreComplete();
-                    }
-                }
-            }
-        },1000);
     }
 
 
@@ -146,11 +125,35 @@ public class TagAllActivity extends BaseMvpActivity<TagPresenter,ITagView> imple
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        NavigationHelper.startActivity(TagAllActivity.this, TagPersonActivity.class, null, false);
+        if (mAdapter.getItem(position)!=null){
+            TagBean tagBean = mAdapter.getItem(position);
+            Bundle bundle = new Bundle();
+            bundle.putString("tagName",tagBean.getName());
+            bundle.putSerializable("manList", (Serializable) tagBean.getMan());
+            NavigationHelper.startActivity(TagAllActivity.this, TagPersonActivity.class, bundle, false);
+        }
+
     }
 
     @Override
     public void getSuccess(List<TagBean> result) {
-
+        if (result!=null){
+            if (mCurrentPage == 1){
+                //首页
+                mSwipeRefreshLayout.setRefreshing(false);
+                mAdapter.setNewData(result);
+                mAdapter.setEmptyView(R.layout.empty_data, (ViewGroup) mRecyclerView.getParent());
+                if (result.size()<ProjectConstants.PAGE_SIZE){
+                    mAdapter.loadMoreEnd();
+                }
+            }else{
+                if (Helper.isEmpty(result)){
+                    mAdapter.loadMoreEnd();
+                }else{
+                    mAdapter.addData(result);
+                    mAdapter.loadMoreComplete();
+                }
+            }
+        }
     }
 }

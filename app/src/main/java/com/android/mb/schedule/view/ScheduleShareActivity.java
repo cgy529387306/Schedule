@@ -103,6 +103,9 @@ public class ScheduleShareActivity extends BaseMvpActivity<MySharePresenter,IMyS
                 mSwipeRefreshLayout.setRefreshing(false);
                 mAdapter.setNewData(result);
                 mAdapter.setEmptyView(R.layout.empty_share, (ViewGroup) mRecyclerView.getParent());
+                if (result.size()<ProjectConstants.PAGE_SIZE){
+                    mAdapter.loadMoreEnd();
+                }
             }else{
                 if (Helper.isEmpty(result)){
                     mAdapter.loadMoreEnd();

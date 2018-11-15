@@ -147,6 +147,9 @@ public class ScheduleUserHistoryActivity extends BaseMvpActivity<MinePresenter,I
                 mSwipeRefreshLayout.setRefreshing(false);
                 mAdapter.setNewData(result);
                 mAdapter.setEmptyView(R.layout.empty_schedule, (ViewGroup) mRecyclerView.getParent());
+                if (result.size()<ProjectConstants.PAGE_SIZE){
+                    mAdapter.loadMoreEnd();
+                }
             }else{
                 if (Helper.isEmpty(result)){
                     mAdapter.loadMoreEnd();
