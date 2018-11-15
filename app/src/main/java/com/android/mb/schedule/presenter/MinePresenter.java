@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.android.mb.schedule.app.MBApplication;
 import com.android.mb.schedule.base.BaseMvpPresenter;
+import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.db.GreenDaoManager;
 import com.android.mb.schedule.db.Schedule;
 import com.android.mb.schedule.entitys.CurrentUser;
@@ -70,14 +71,14 @@ public class MinePresenter extends BaseMvpPresenter<IMineView> implements IMineP
         long userId = CurrentUser.getInstance().getId();
         int type = (int) requestMap.get("type");
         int page = (int) requestMap.get("page");
-        int offset = (page-1)*20;
+        int offset = (page-1)*ProjectConstants.PAGE_SIZE;
         Observable observable;
         if (type == 1){
             observable = scheduleDao.queryBuilder().where(ScheduleDao.Properties.Create_by.eq(userId)).where(ScheduleDao.Properties.Date.ge(Helper.date2String(new Date(),"yyyy-MM-dd")))
-                    .orderDesc(ScheduleDao.Properties.Time_s).orderDesc(ScheduleDao.Properties.Id).limit(20).offset(offset).rx().list();
+                    .orderDesc(ScheduleDao.Properties.Time_s).orderDesc(ScheduleDao.Properties.Id).limit(ProjectConstants.PAGE_SIZE).offset(offset).rx().list();
         }else{
             observable = scheduleDao.queryBuilder().where(ScheduleDao.Properties.Create_by.eq(userId)).where(ScheduleDao.Properties.Date.lt(Helper.date2String(new Date(),"yyyy-MM-dd")))
-                    .orderDesc(ScheduleDao.Properties.Time_s).orderDesc(ScheduleDao.Properties.Id).limit(20).offset(offset).rx().list();
+                    .orderDesc(ScheduleDao.Properties.Time_s).orderDesc(ScheduleDao.Properties.Id).limit(ProjectConstants.PAGE_SIZE).offset(offset).rx().list();
         }
         toSubscribe(observable,  new Subscriber<List<Schedule>>() {
             @Override

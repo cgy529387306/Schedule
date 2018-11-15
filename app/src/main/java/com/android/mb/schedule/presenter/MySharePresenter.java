@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.android.mb.schedule.app.MBApplication;
 import com.android.mb.schedule.base.BaseMvpPresenter;
+import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.db.GreenDaoManager;
 import com.android.mb.schedule.db.Schedule;
 import com.android.mb.schedule.entitys.CurrentUser;
@@ -63,9 +64,9 @@ public class MySharePresenter extends BaseMvpPresenter<IMyShareView> implements 
         ScheduleDao scheduleDao = GreenDaoManager.getInstance().getNewSession().getScheduleDao();
         long uid = CurrentUser.getInstance().getId();
         int page = (int) requestMap.get("page");
-        int offset = (page-1)*20;
+        int offset = (page-1)* ProjectConstants.PAGE_SIZE;
         Observable  observable = scheduleDao.queryBuilder().where(ScheduleDao.Properties.Create_by.eq(uid)).where(ScheduleDao.Properties.Share.isNotNull()).where(ScheduleDao.Properties.Share.notEq("[]"))
-                .orderDesc(ScheduleDao.Properties.Time_s).orderDesc(ScheduleDao.Properties.Id).limit(20).offset(offset).rx().list();
+                .orderDesc(ScheduleDao.Properties.Time_s).orderDesc(ScheduleDao.Properties.Id).limit(ProjectConstants.PAGE_SIZE).offset(offset).rx().list();
         toSubscribe(observable,  new Subscriber<List<Schedule>>() {
             @Override
             public void onCompleted() {
