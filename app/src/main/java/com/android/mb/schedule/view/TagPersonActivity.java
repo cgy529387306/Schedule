@@ -12,6 +12,7 @@ import com.android.mb.schedule.adapter.TagAdapter;
 import com.android.mb.schedule.base.BaseActivity;
 import com.android.mb.schedule.entitys.UserBean;
 import com.android.mb.schedule.utils.Helper;
+import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.widget.MyDividerItemDecoration;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
@@ -69,6 +70,13 @@ public class TagPersonActivity extends BaseActivity implements BaseQuickAdapter.
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+        if (mAdapter.getItem(position)!=null){
+            UserBean userBean = mAdapter.getItem(position);
+            Bundle bundle = new Bundle();
+            bundle.putLong("id",userBean.getId());
+            bundle.putString("name",userBean.getNickname());
+            NavigationHelper.startActivity(TagPersonActivity.this, ScheduleUnderActivity.class,bundle,false);
+        }
     }
 
 }

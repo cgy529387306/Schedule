@@ -155,15 +155,15 @@ public interface IScheduleService {
     @FormUrlEncoded
     Observable<HttpResult<Object>> syncEdit(@FieldMap Map<String,Object> requestMap);
 
-    @POST("app/schedule/add")
+    @POST("app/res/save")
     @FormUrlEncoded
     Observable<HttpResult<Object>> addKpi(@FieldMap Map<String,Object> requestMap);
 
-    @POST("app/schedule/edit")
+    @POST("app/res/save")
     @FormUrlEncoded
     Observable<HttpResult<Object>> editKpi(@FieldMap Map<String,Object> requestMap);
 
-    @POST("/app/schedule/get")
+    @POST("app/res/view")
     @FormUrlEncoded
     Observable<HttpResult<KpiRequest>> getKpi(@FieldMap Map<String,Object> requestMap);
 

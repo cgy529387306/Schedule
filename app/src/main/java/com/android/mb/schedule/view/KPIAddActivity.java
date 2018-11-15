@@ -21,6 +21,7 @@ import com.android.mb.schedule.presenter.SchedulePresenter;
 import com.android.mb.schedule.utils.AppHelper;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.ProjectHelper;
+import com.android.mb.schedule.utils.ToastHelper;
 import com.android.mb.schedule.view.interfaces.IKpiView;
 import com.android.mb.schedule.view.interfaces.IScheduleView;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
@@ -30,6 +31,8 @@ import com.bigkoo.pickerview.view.TimePickerView;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -49,8 +52,10 @@ public class KPIAddActivity extends BaseMvpActivity<KpiPresenter,IKpiView> imple
     public static final String mDateFormat = "yyyy年MM月dd日";
     public static final String mTimeFormat = "HH:mm";
     private Calendar mStartTime,mEndTime;
+    private KpiRequest mKpiRequest;
 
     private ScheduleDetailBean mDetailBean;
+    private long mTimeStart,mTimeEnd;
     @Override
     protected void loadIntent() {
         mDetailBean = (ScheduleDetailBean) getIntent().getSerializableExtra("detailBean");
@@ -87,33 +92,20 @@ public class KPIAddActivity extends BaseMvpActivity<KpiPresenter,IKpiView> imple
     @Override
     protected void processLogic(Bundle savedInstanceState) {
         initPop();
-        initData();
+        getKpiInfo();
     }
 
-    private void initData(){
+    private void getKpiInfo(){
         if (mDetailBean!=null){
-            mEdtScheduleName.setText(ProjectHelper.getCommonText(mDetailBean.getTitle()));
-            mEdtScheduleName.setSelection(ProjectHelper.getCommonSelection(mDetailBean.getTitle()));
-            mEdtScheduleContent.setText(ProjectHelper.getCommonText(mDetailBean.getDescription()));
-            mEdtScheduleContent.setSelection(ProjectHelper.getCommonSelection(mDetailBean.getDescription()));
-            mTvStartDate.setText(Helper.long2DateString(mDetailBean.getTime_s()*1000,mDateFormat));
-            mTvStartTime.setText(Helper.long2DateString(mDetailBean.getTime_s()*1000,mTimeFormat));
-            mTvEndDate.setText(Helper.long2DateString(mDetailBean.getTime_e()*1000,mDateFormat));
-            mTvEndTime.setText(Helper.long2DateString(mDetailBean.getTime_e()*1000,mTimeFormat));
-
-            Date startDate = Helper.long2Date(mDetailBean.getTime_s()*1000);
-            mStartTime = (Calendar) Calendar.getInstance().clone();
-            mStartTime.setTime(startDate);
-            mScheduleStartTimePop.setDate(mStartTime);
-
-
-            Date endDate = Helper.long2Date(mDetailBean.getTime_e()*1000);
-            mEndTime = (Calendar) Calendar.getInstance().clone();
-            mEndTime.setTime(endDate);
-            mScheduleEndTimePop.setDate(mEndTime);
+            mTimeStart = mDetailBean.getTime_s();
+            mTimeEnd = mDetailBean.getTime_e();
+            Map<String,Object> requestMap = new HashMap<>();
+            requestMap.put("sid",mDetailBean.getId());
+            requestMap.put("time_s ",mDetailBean.getTime_s());
+            requestMap.put("time_e",mDetailBean.getTime_e());
+            mPresenter.viewKpi(requestMap);
         }
     }
-
 
 
     @Override
@@ -234,21 +226,46 @@ public class KPIAddActivity extends BaseMvpActivity<KpiPresenter,IKpiView> imple
     @Override
     public void addSuccess(Object result) {
         showToastMessage("保存成功");
-        sendMsg(ProjectConstants.EVENT_UPDATE_SCHEDULE_LIST,null);
+        AppHelper.hideSoftInputFromWindow(mEdtScheduleName);
         finish();
     }
 
     @Override
     public void editSuccess(Object result) {
         showToastMessage("修改成功");
-        sendMsg(ProjectConstants.EVENT_UPDATE_SCHEDULE_LIST,null);
-        sendMsg(ProjectConstants.EVENT_UPDATE_SCHEDULE,null);
         finish();
     }
 
     @Override
     public void getSuccess(KpiRequest result) {
+        initKpiInfo(result);
+    }
 
+    private void initKpiInfo(KpiRequest result){
+        if (result!=null){
+            mKpiRequest = result;
+            mEdtScheduleName.setText(ProjectHelper.getCommonText(result.getTitle()));
+            mEdtScheduleName.setSelection(ProjectHelper.getCommonSelection(result.getTitle()));
+            mEdtScheduleContent.setText(ProjectHelper.getCommonText(result.getDesc()));
+            mEdtScheduleContent.setSelection(ProjectHelper.getCommonSelection(result.getDesc()));
+            mEdtKpiContent.setText(ProjectHelper.getCommonText(result.getRes()));
+            mEdtKpiContent.setSelection(ProjectHelper.getCommonSelection(result.getRes()));
+
+            mTvStartDate.setText(Helper.long2DateString(result.getRes_time_s()*1000,mDateFormat));
+            mTvStartTime.setText(Helper.long2DateString(result.getRes_time_s()*1000,mTimeFormat));
+            mTvEndDate.setText(Helper.long2DateString(result.getRes_time_e()*1000,mDateFormat));
+            mTvEndTime.setText(Helper.long2DateString(result.getRes_time_e()*1000,mTimeFormat));
+
+            Date startDate = Helper.long2Date(result.getRes_time_s()*1000);
+            mStartTime = (Calendar) Calendar.getInstance().clone();
+            mStartTime.setTime(startDate);
+            mScheduleStartTimePop.setDate(mStartTime);
+
+            Date endDate = Helper.long2Date(result.getRes_time_e()*1000);
+            mEndTime = (Calendar) Calendar.getInstance().clone();
+            mEndTime.setTime(endDate);
+            mScheduleEndTimePop.setDate(mEndTime);
+        }
     }
 
 
@@ -256,10 +273,31 @@ public class KPIAddActivity extends BaseMvpActivity<KpiPresenter,IKpiView> imple
         String name = mEdtScheduleName.getText().toString().trim();
         String content = mEdtScheduleContent.getText().toString().trim();
         String kpiContent = mEdtKpiContent.getText().toString().trim();
-        String startDate = mTvStartDate.getText().toString().trim();
-        String startTime = mTvStartTime.getText().toString().trim();
-        String endDate = mTvEndDate.getText().toString().trim();
-        String endTime = mTvEndTime.getText().toString().trim();
+        if (Helper.isEmpty(name)){
+            showToastMessage("请输入日程名称");
+            return;
+        }
+        if (Helper.isEmpty(content)){
+            showToastMessage("请输入日程内容");
+            return;
+        }
+        if (mStartTime.getTimeInMillis()>=mEndTime.getTimeInMillis()){
+            showToastMessage("开始时间必须大于结束时间");
+            return;
+        }
+        if (mKpiRequest==null){
+            mKpiRequest = new KpiRequest();
+            mKpiRequest.setSid(mDetailBean.getId());
+        }
+        mKpiRequest.setTitle(name);
+        mKpiRequest.setDesc(content);
+        mKpiRequest.setRes(kpiContent);
+        mKpiRequest.setRes_time_s(mStartTime.getTimeInMillis()/1000);
+        mKpiRequest.setRes_time_e(mEndTime.getTimeInMillis()/1000);
+        mKpiRequest.setTime_s(mTimeStart);
+        mKpiRequest.setTime_e(mTimeEnd);
+        mPresenter.addKpi(mKpiRequest);
+
     }
 
 
