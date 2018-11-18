@@ -7,13 +7,13 @@ import com.android.mb.schedule.entitys.LoginData;
 import com.android.mb.schedule.entitys.MyScheduleBean;
 import com.android.mb.schedule.entitys.OfficeSyncData;
 import com.android.mb.schedule.entitys.RelatedBean;
+import com.android.mb.schedule.entitys.ReportData;
 import com.android.mb.schedule.entitys.ScheduleData;
 import com.android.mb.schedule.entitys.ScheduleDetailData;
 import com.android.mb.schedule.entitys.ScheduleRequest;
 import com.android.mb.schedule.entitys.ScheduleSyncData;
 import com.android.mb.schedule.entitys.SearchBean;
 import com.android.mb.schedule.entitys.ShareBean;
-import com.android.mb.schedule.entitys.TagBean;
 import com.android.mb.schedule.entitys.TagData;
 import com.android.mb.schedule.entitys.TreeData;
 import com.android.mb.schedule.entitys.UserBean;
@@ -420,6 +420,16 @@ public class ScheduleMethods extends BaseHttp {
         return getService().getTagPerson(requestMap)
                 .compose(CacheTransformer.emptyTransformer())
                 .map(new HttpCacheResultFunc<List<UserBean>>());
+    }
+
+    public Observable getWeekReport(Map<String, Object> requestMap){
+        if (CurrentUser.getInstance().isLogin()){
+            requestMap.put("token_id",CurrentUser.getInstance().getToken_id());
+            requestMap.put("token",CurrentUser.getInstance().getToken());
+        }
+        return getService().getWeekReport(requestMap)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<ReportData>());
     }
 
 }

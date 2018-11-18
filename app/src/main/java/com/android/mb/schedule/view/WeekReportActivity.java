@@ -13,16 +13,18 @@ import com.android.mb.schedule.R;
 import com.android.mb.schedule.adapter.WeekReportAdapter;
 import com.android.mb.schedule.base.BaseMvpActivity;
 import com.android.mb.schedule.constants.ProjectConstants;
-import com.android.mb.schedule.entitys.RelatedBean;
-import com.android.mb.schedule.presenter.RelatedPresenter;
+import com.android.mb.schedule.entitys.ReportData;
+import com.android.mb.schedule.presenter.WeekReportPresenter;
 import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.utils.Helper;
-import com.android.mb.schedule.view.interfaces.IRelatedView;
+import com.android.mb.schedule.view.interfaces.IWeekReprtView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import rx.functions.Action1;
 
@@ -31,7 +33,7 @@ import rx.functions.Action1;
  * Created by cgy on 2018\8\20 0020.
  */
 
-public class WeekReportActivity extends BaseMvpActivity<RelatedPresenter,IRelatedView> implements IRelatedView,
+public class WeekReportActivity extends BaseMvpActivity<WeekReportPresenter,IWeekReprtView> implements IWeekReprtView,
         View.OnClickListener,SwipeRefreshLayout.OnRefreshListener,BaseQuickAdapter.RequestLoadMoreListener,BaseQuickAdapter.OnItemClickListener{
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
@@ -70,9 +72,9 @@ public class WeekReportActivity extends BaseMvpActivity<RelatedPresenter,IRelate
     }
 
     private void getListFormServer(){
-//        Map<String, Object> requestMap = new HashMap<>();
-//        requestMap.put("page",mCurrentPage);
-//        mPresenter.getRelated(requestMap);
+        Map<String, Object> requestMap = new HashMap<>();
+        requestMap.put("page",mCurrentPage);
+        mPresenter.getReport(requestMap);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -118,13 +120,10 @@ public class WeekReportActivity extends BaseMvpActivity<RelatedPresenter,IRelate
         int id = v.getId();
     }
 
-    @Override
-    public void getSuccess(List<RelatedBean> result) {
-    }
 
     @Override
-    protected RelatedPresenter createPresenter() {
-        return new RelatedPresenter();
+    protected WeekReportPresenter createPresenter() {
+        return new WeekReportPresenter();
     }
 
     @Override
@@ -141,5 +140,10 @@ public class WeekReportActivity extends BaseMvpActivity<RelatedPresenter,IRelate
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+    }
+
+    @Override
+    public void getSuccess(ReportData result) {
+
     }
 }

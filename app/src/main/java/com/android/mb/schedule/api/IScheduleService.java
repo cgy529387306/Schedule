@@ -6,12 +6,12 @@ import com.android.mb.schedule.entitys.LoginData;
 import com.android.mb.schedule.entitys.MyScheduleBean;
 import com.android.mb.schedule.entitys.OfficeSyncData;
 import com.android.mb.schedule.entitys.RelatedBean;
+import com.android.mb.schedule.entitys.ReportData;
 import com.android.mb.schedule.entitys.ScheduleData;
 import com.android.mb.schedule.entitys.ScheduleDetailData;
 import com.android.mb.schedule.entitys.ScheduleSyncData;
 import com.android.mb.schedule.entitys.SearchBean;
 import com.android.mb.schedule.entitys.ShareBean;
-import com.android.mb.schedule.entitys.TagBean;
 import com.android.mb.schedule.entitys.TagData;
 import com.android.mb.schedule.entitys.TreeData;
 import com.android.mb.schedule.entitys.UserBean;
@@ -174,6 +174,10 @@ public interface IScheduleService {
     @POST("/app/schedule/other")
     @FormUrlEncoded
     Observable<HttpResult<List<UserBean>>> getTagPerson(@FieldMap Map<String,Object> requestMap);
+
+    @POST("/app/user/getweekinfo")
+    @FormUrlEncoded
+    Observable<HttpResult<ReportData>> getWeekReport(@FieldMap Map<String,Object> requestMap);
 
 
 
