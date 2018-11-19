@@ -1,10 +1,12 @@
 package com.android.mb.schedule.entitys;
 
+import java.io.Serializable;
+
 /**
  * Created by cgy on 18/11/18.
  */
 
-public class ReportData {
+public class ReportData implements Serializable{
     private ReportNormalBean normal;
     private ReportAdminBean admin;
     private int is_admin;

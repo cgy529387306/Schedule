@@ -4,4 +4,6 @@ import java.util.Map;
 
 public interface IHomePresenter {
     void getUserInfo();
+
+    void addLog(Map<String, Object> requestMap);
 }

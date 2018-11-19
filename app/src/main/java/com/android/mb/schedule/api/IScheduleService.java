@@ -155,13 +155,13 @@ public interface IScheduleService {
     @FormUrlEncoded
     Observable<HttpResult<Object>> syncEdit(@FieldMap Map<String,Object> requestMap);
 
-    @POST("app/res/save")
+    @POST("index/addlog")
     @FormUrlEncoded
-    Observable<HttpResult<Object>> addKpi(@FieldMap Map<String,Object> requestMap);
+    Observable<HttpResult<Object>> addLog(@FieldMap Map<String,Object> requestMap);
 
     @POST("app/res/save")
     @FormUrlEncoded
-    Observable<HttpResult<Object>> editKpi(@FieldMap Map<String,Object> requestMap);
+    Observable<HttpResult<Object>> addKpi(@FieldMap Map<String,Object> requestMap);
 
     @POST("app/res/view")
     @FormUrlEncoded
@@ -177,7 +177,7 @@ public interface IScheduleService {
 
     @POST("/app/user/getweekinfo")
     @FormUrlEncoded
-    Observable<HttpResult<ReportData>> getWeekReport(@FieldMap Map<String,Object> requestMap);
+    Observable<HttpResult<List<ReportData>>> getWeekReport(@FieldMap Map<String,Object> requestMap);
 
 
 

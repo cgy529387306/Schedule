@@ -9,12 +9,17 @@ import com.android.mb.schedule.entitys.LoginData;
 import com.android.mb.schedule.presenter.interfaces.IHomePresenter;
 import com.android.mb.schedule.retrofit.http.exception.ApiException;
 import com.android.mb.schedule.utils.NetworkHelper;
+import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.view.interfaces.IHomeView;
+
+import java.util.Map;
 
 import rx.Observable;
 import rx.Subscriber;
 
 public class HomePresenter extends BaseMvpPresenter<IHomeView> implements IHomePresenter {
+
+    private int isLogin = 1;
 
     @Override
     public void getUserInfo() {
@@ -43,6 +48,32 @@ public class HomePresenter extends BaseMvpPresenter<IHomeView> implements IHomeP
                 }
             });
         }
+    }
+
+    @Override
+    public void addLog(Map<String, Object> requestMap) {
+        isLogin = (int) requestMap.get("is_login");
+        Observable observable = ScheduleMethods.getInstance().addLog(requestMap);
+        toSubscribe(observable,  new Subscriber<Object>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                if(mMvpView!=null){
+                    mMvpView.addLog(0);
+                }
+            }
+
+            @Override
+            public void onNext(Object result) {
+                if(mMvpView!=null){
+                    mMvpView.addLog(isLogin);
+                }
+            }
+        });
     }
 
 }

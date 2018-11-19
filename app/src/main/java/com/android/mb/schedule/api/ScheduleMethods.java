@@ -370,6 +370,17 @@ public class ScheduleMethods extends BaseHttp {
                 .map(new HttpCacheResultFunc<UserSyncData>());
     }
 
+    public Observable addLog(Map<String,Object> requestMap){
+        if (CurrentUser.getInstance().isLogin()){
+            requestMap.put("token_id",CurrentUser.getInstance().getToken_id());
+            requestMap.put("token",CurrentUser.getInstance().getToken());
+        }
+        return getService().addLog(requestMap)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<Object>());
+    }
+
+
     public Observable addKpi(KpiRequest kpiRequest){
         Map<String,Object> requestMap = ProjectHelper.objectToMap(kpiRequest);
         if (CurrentUser.getInstance().isLogin()){
@@ -377,17 +388,6 @@ public class ScheduleMethods extends BaseHttp {
             requestMap.put("token",CurrentUser.getInstance().getToken());
         }
         return getService().addKpi(requestMap)
-                .compose(CacheTransformer.emptyTransformer())
-                .map(new HttpCacheResultFunc<Object>());
-    }
-
-    public Observable editKpi(KpiRequest kpiRequest){
-        Map<String,Object> requestMap = ProjectHelper.objectToMap(kpiRequest);
-        if (CurrentUser.getInstance().isLogin()){
-            requestMap.put("token_id",CurrentUser.getInstance().getToken_id());
-            requestMap.put("token",CurrentUser.getInstance().getToken());
-        }
-        return getService().editKpi(requestMap)
                 .compose(CacheTransformer.emptyTransformer())
                 .map(new HttpCacheResultFunc<Object>());
     }
@@ -429,7 +429,7 @@ public class ScheduleMethods extends BaseHttp {
         }
         return getService().getWeekReport(requestMap)
                 .compose(CacheTransformer.emptyTransformer())
-                .map(new HttpCacheResultFunc<ReportData>());
+                .map(new HttpCacheResultFunc<List<ReportData>>());
     }
 
 }

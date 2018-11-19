@@ -56,7 +56,9 @@ import com.pgyersdk.update.PgyUpdateManager;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import rx.functions.Action1;
 
@@ -110,6 +112,7 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
         KeepLiveManager.getInstance().registerKeepLifeReceiver(this);
         PgyUpdateManager.setIsForced(false); //设置是否强制更新。true为强制更新；false为不强制更新（默认值）。
         PgyUpdateManager.register(this);
+        addMainInLog();
         mPresenter.getUserInfo();
         regiestEvent(ProjectConstants.EVENT_UPDATE_USER_INFO, new Action1<Events<?>>() {
             @Override
@@ -117,6 +120,18 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
                initUserInfo(CurrentUser.getInstance());
             }
         });
+    }
+
+    private void addMainInLog(){
+        Map<String, Object> requestMap = new HashMap<>();
+        requestMap.put("is_login",1);
+        mPresenter.addLog(requestMap);
+    }
+
+    private void addMainOutLog(){
+        Map<String, Object> requestMap = new HashMap<>();
+        requestMap.put("is_login",2);
+        mPresenter.addLog(requestMap);
     }
 
     @Override
@@ -342,7 +357,8 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
             ScheduleDao scheduleDao = GreenDaoManager.getInstance().getNewSession().getScheduleDao();
             scheduleDao.deleteAll();
         }
-        finish();
+        addMainOutLog();
+//        finish();
     }
 
     @Override
@@ -355,6 +371,13 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
         if (result!=null && result.getUserinfo()!=null){
             CurrentUser.getInstance().login(result.getUserinfo(),false);
             initUserInfo(result.getUserinfo());
+        }
+    }
+
+    @Override
+    public void addLog(int result) {
+        if (result==2){
+            finish();
         }
     }
 

@@ -9,6 +9,7 @@ import com.android.mb.schedule.presenter.interfaces.IWeekReportPresenter;
 import com.android.mb.schedule.retrofit.http.exception.ApiException;
 import com.android.mb.schedule.view.interfaces.IWeekReprtView;
 
+import java.util.List;
 import java.util.Map;
 
 import rx.Observable;
@@ -22,7 +23,7 @@ public class WeekReportPresenter extends BaseMvpPresenter<IWeekReprtView> implem
     @Override
     public void getReport(Map<String, Object> requestMap) {
         Observable observable = ScheduleMethods.getInstance().getWeekReport(requestMap);
-        toSubscribe(observable,  new Subscriber<ReportData>() {
+        toSubscribe(observable,  new Subscriber<List<ReportData>>() {
             @Override
             public void onCompleted() {
 
@@ -38,7 +39,7 @@ public class WeekReportPresenter extends BaseMvpPresenter<IWeekReprtView> implem
             }
 
             @Override
-            public void onNext(ReportData result) {
+            public void onNext(List<ReportData> result) {
                 if (mMvpView!=null){
                     mMvpView.getSuccess(result);
                 }

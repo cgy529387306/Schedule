@@ -75,29 +75,6 @@ public class WeekReportActivity extends BaseMvpActivity<WeekReportPresenter,IWee
         Map<String, Object> requestMap = new HashMap<>();
         requestMap.put("page",mCurrentPage);
         mPresenter.getReport(requestMap);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                int count = mAdapter.getItemCount();
-                List<String> dataList = new ArrayList<>();
-                for (int i=count;i<count+20;i++){
-                    dataList.add(Helper.date2String(new Date()));
-                }
-                if (mCurrentPage == 1){
-                    //首页
-                    mSwipeRefreshLayout.setRefreshing(false);
-                    mAdapter.setNewData(dataList);
-                    mAdapter.setEmptyView(R.layout.empty_data, (ViewGroup) mRecyclerView.getParent());
-                }else{
-                    if (Helper.isEmpty(dataList)){
-                        mAdapter.loadMoreEnd();
-                    }else{
-                        mAdapter.addData(dataList);
-                        mAdapter.loadMoreComplete();
-                    }
-                }
-            }
-        },1000);
     }
 
 
@@ -140,10 +117,28 @@ public class WeekReportActivity extends BaseMvpActivity<WeekReportPresenter,IWee
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+
     }
 
     @Override
-    public void getSuccess(ReportData result) {
-
+    public void getSuccess(List<ReportData> result) {
+        if (result!=null){
+            if (mCurrentPage == 1){
+                //首页
+                mSwipeRefreshLayout.setRefreshing(false);
+                mAdapter.setNewData(result);
+                mAdapter.setEmptyView(R.layout.empty_schedule, (ViewGroup) mRecyclerView.getParent());
+                if (result.size()<ProjectConstants.PAGE_SIZE){
+                    mAdapter.loadMoreEnd();
+                }
+            }else{
+                if (Helper.isEmpty(result)){
+                    mAdapter.loadMoreEnd();
+                }else{
+                    mAdapter.addData(result);
+                    mAdapter.loadMoreComplete();
+                }
+            }
+        }
     }
 }

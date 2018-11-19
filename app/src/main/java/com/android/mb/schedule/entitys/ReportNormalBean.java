@@ -1,10 +1,12 @@
 package com.android.mb.schedule.entitys;
 
+import java.io.Serializable;
+
 /**
  * Created by cgy on 18/11/18.
  */
 
-public class ReportNormalBean {
+public class ReportNormalBean implements Serializable{
 
     /**
      * office_name : 马尾造船

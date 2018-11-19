@@ -1,10 +1,12 @@
 package com.android.mb.schedule.entitys;
 
+import java.io.Serializable;
+
 /**
  * Created by cgy on 18/11/19.
  */
 
-public class ReportAdminBean {
+public class ReportAdminBean implements Serializable{
 
     /**
      * week_num : 45

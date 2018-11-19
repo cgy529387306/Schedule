@@ -8,4 +8,6 @@ import com.android.mb.schedule.entitys.LoginData;
  */
 public interface IHomeView extends BaseMvpView {
     void getUserInfoSuccess(LoginData result);
+
+    void addLog(int result);
 }
