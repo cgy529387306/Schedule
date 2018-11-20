@@ -155,7 +155,7 @@ public interface IScheduleService {
     @FormUrlEncoded
     Observable<HttpResult<Object>> syncEdit(@FieldMap Map<String,Object> requestMap);
 
-    @POST("index/addlog")
+    @POST("app/index/addlog")
     @FormUrlEncoded
     Observable<HttpResult<Object>> addLog(@FieldMap Map<String,Object> requestMap);
 

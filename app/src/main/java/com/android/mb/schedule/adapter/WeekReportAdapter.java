@@ -29,14 +29,12 @@ public class WeekReportAdapter extends BaseQuickAdapter<ReportData, BaseViewHold
             llyReportAdmin.setVisibility(View.VISIBLE);
             ReportAdminBean reportAdminBean = item.getAdmin();
             if (reportAdminBean!=null){
-                String dateStr = Helper.long2DateString(reportAdminBean.getEnd_time_stamp()*1000,mTimeFormat);
-                String timeRange = "企业使用小结 "+Helper.long2DateString(reportAdminBean.getEnd_time_stamp()*1000,mDateFormat)
+                String timeRange = "企业使用小结 "+Helper.long2DateString(reportAdminBean.getStart_time_stamp()*1000,mDateFormat)
                         +"-"+Helper.long2DateString(reportAdminBean.getEnd_time_stamp()*1000,mDateFormat);
 
                 String useCount = "使用人数"+reportAdminBean.getUse_num()+"人";
                 String unUseCount = "未使用人数"+reportAdminBean.getUn_use_num()+"人";
                 String useRatio = "使用率"+reportAdminBean.getUse_pre()+" 环比上一周有"+reportAdminBean.getRing_ratio();
-                helper.setText(R.id.tv_date_admin,dateStr);
                 helper.setText(R.id.tv_time_range_admin,timeRange);
                 helper.setText(R.id.tv_use_people,useCount);
                 helper.setText(R.id.tv_unUse_people,unUseCount);
@@ -47,20 +45,20 @@ public class WeekReportAdapter extends BaseQuickAdapter<ReportData, BaseViewHold
         }
         ReportNormalBean normalBean = item.getNormal();
         if (normalBean!=null){
-            String dateStr = Helper.long2DateString(normalBean.getUsed_time()*1000,mTimeFormat);
             String startTime = Helper.date2String(Helper.string2Date(normalBean.getS_time(),"yyyy-MM-dd"),mDateFormat);
             String endTime = Helper.date2String(Helper.string2Date(normalBean.getE_time(),"yyyy-MM-dd"),mDateFormat);
             String timeRange = "一周小结 "+startTime +"-"+endTime;
             String useNum = "处理工作会话  "+normalBean.getUsed_num()+"次";
             String useTime = "共花"+normalBean.getUsed_time()+"分钟";
 
-            helper.setText(R.id.tv_date,dateStr);
             helper.setText(R.id.tv_time_range,timeRange);
             helper.setText(R.id.tv_use_num,useNum);
             helper.setText(R.id.tv_use_time,useTime);
             ImageUtils.displayAvatar(mContext,normalBean.getNickname(), (ImageView) helper.getView(R.id.iv_avatar));
-
         }
+        String dateStr = Helper.long2DateString(item.getShow_date()*1000,mTimeFormat);
+        helper.setText(R.id.tv_date_admin,dateStr);
+        helper.setText(R.id.tv_date,dateStr);
     }
 
 }

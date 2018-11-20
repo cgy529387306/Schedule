@@ -63,7 +63,7 @@ public class HomePresenter extends BaseMvpPresenter<IHomeView> implements IHomeP
             @Override
             public void onError(Throwable e) {
                 if(mMvpView!=null){
-                    mMvpView.addLog(0);
+                    mMvpView.addLog(isLogin);
                 }
             }
 

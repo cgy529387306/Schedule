@@ -10,7 +10,7 @@ public class ReportData implements Serializable{
     private ReportNormalBean normal;
     private ReportAdminBean admin;
     private int is_admin;
-
+    private long show_date;
 
     public ReportNormalBean getNormal() {
         return normal;
@@ -34,5 +34,13 @@ public class ReportData implements Serializable{
 
     public void setIs_admin(int is_admin) {
         this.is_admin = is_admin;
+    }
+
+    public long getShow_date() {
+        return show_date;
+    }
+
+    public void setShow_date(long show_date) {
+        this.show_date = show_date;
     }
 }
