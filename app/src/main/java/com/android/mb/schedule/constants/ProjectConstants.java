@@ -17,7 +17,11 @@ public class ProjectConstants {
 
     public static final int EVENT_SYNC_SUCCESS = 10006;
 
+    public static final int EVENT_NEW_SCHEDULE = 10007;
 
+    public static final int EVENT_NEW_NOTIFY = 10008;
+
+    public static final int EVENT_NEW_NOTIFY_HIDE = 10009;
 
     //REQUEST
     public static final int REQUEST_SELECT_ADDRESS = 0x01;
@@ -49,4 +53,8 @@ public class ProjectConstants {
     public static final String KEY_IS_VIBRATE = "KEY_IS_VIBRATE";
 
     public static final String KEY_RING = "KEY_RING";
+
+    public static final String KEY_HAS_NEW_SCHEDULE = "KEY_HAS_NEW_SCHEDULE";
+
+    public static final String KEY_HAS_NEW_NOTIFY = "KEY_HAS_NEW_NOTIFY";
 }

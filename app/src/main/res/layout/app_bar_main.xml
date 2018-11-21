@@ -5,17 +5,22 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
     <include layout="@layout/main_content" />
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@mipmap/bg_custom_actionbar">
+
         <ImageView
             android:id="@+id/iv_open_drawerlayout"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:paddingRight="10dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
             android:src="@mipmap/ic_home_menu" />
+
         <TextView
             android:id="@+id/tv_main_title"
             android:layout_width="180dp"
@@ -26,6 +31,7 @@
             android:text="请设置标题"
             android:textColor="@color/text_color"
             android:textSize="20sp" />
+
         <ImageView
             android:id="@+id/iv_today"
             android:layout_width="wrap_content"
@@ -34,6 +40,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:src="@mipmap/ic_home_today" />
+
         <ImageView
             android:id="@+id/iv_refresh"
             android:layout_width="wrap_content"

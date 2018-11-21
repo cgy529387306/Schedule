@@ -13,10 +13,12 @@ import com.android.mb.schedule.R;
 import com.android.mb.schedule.adapter.WeekReportAdapter;
 import com.android.mb.schedule.base.BaseMvpActivity;
 import com.android.mb.schedule.constants.ProjectConstants;
+import com.android.mb.schedule.entitys.CurrentUser;
 import com.android.mb.schedule.entitys.ReportData;
 import com.android.mb.schedule.presenter.WeekReportPresenter;
 import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.utils.Helper;
+import com.android.mb.schedule.utils.PreferencesHelper;
 import com.android.mb.schedule.view.interfaces.IWeekReprtView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
@@ -56,6 +58,7 @@ public class WeekReportActivity extends BaseMvpActivity<WeekReportPresenter,IWee
 
     @Override
     protected void bindViews() {
+        PreferencesHelper.getInstance().putBoolean(ProjectConstants.KEY_HAS_NEW_NOTIFY+ CurrentUser.getInstance().getId(), false);
         mSwipeRefreshLayout = findViewById(R.id.swipeLayout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent,R.color.colorPrimaryDark);
         mRecyclerView =  findViewById(R.id.recyclerView);

@@ -516,6 +516,9 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         showToastMessage("保存成功");
         PreferencesHelper.getInstance().putString(mLocalKey, "");
         sendMsg(ProjectConstants.EVENT_UPDATE_SCHEDULE_LIST,null);
+
+        PreferencesHelper.getInstance().putBoolean(ProjectConstants.KEY_HAS_NEW_SCHEDULE+CurrentUser.getInstance().getId(), true);
+        sendMsg(ProjectConstants.EVENT_NEW_SCHEDULE,null);
         finish();
     }
 

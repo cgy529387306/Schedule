@@ -8,6 +8,8 @@
         android:id="@+id/iv_tab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:layout_gravity="center" />
     <TextView
         android:id="@+id/tv_tab"

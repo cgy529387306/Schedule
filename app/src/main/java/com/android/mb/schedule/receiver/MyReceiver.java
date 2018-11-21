@@ -7,14 +7,19 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.android.mb.schedule.constants.ProjectConstants;
+import com.android.mb.schedule.entitys.CurrentUser;
 import com.android.mb.schedule.entitys.PushExtras;
+import com.android.mb.schedule.rxbus.RxBus;
+import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.JsonHelper;
 import com.android.mb.schedule.utils.NavigationHelper;
 import com.android.mb.schedule.utils.NotificationHelper;
 import com.android.mb.schedule.utils.PreferencesHelper;
+import com.android.mb.schedule.view.LoginActivity;
 import com.android.mb.schedule.view.MainActivity;
 import com.android.mb.schedule.view.ScheduleDetailActivity;
 import com.android.mb.schedule.view.ScheduleRelateActivity;
+import com.android.mb.schedule.view.WeekReportActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,7 +48,7 @@ public class MyReceiver extends BroadcastReceiver {
 		} else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
 //			openNotification(context, bundle);
 		} else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
-//			openNotification(context, bundle);
+			receiveNotification(context, bundle);
 		} else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
 			openNotification(context,bundle);
 		} else if (JPushInterface.ACTION_RICHPUSH_CALLBACK.equals(intent.getAction())) {
@@ -107,6 +112,19 @@ public class MyReceiver extends BroadcastReceiver {
 //		NotificationHelper.showNotification(context,1002,title,content,intent);
 //	}
 
+	private void receiveNotification(Context context, Bundle bundle){
+		String extra = bundle.getString(JPushInterface.EXTRA_EXTRA);
+		if (Helper.isNotEmpty(extra)){
+			PushExtras pushExtras = JsonHelper.fromJson(extra,PushExtras.class);
+			if (pushExtras!=null){
+				if (Helper.isNotEmpty(pushExtras.getType()) && "week".equals(pushExtras.getType())){
+					PreferencesHelper.getInstance().putBoolean(ProjectConstants.KEY_HAS_NEW_NOTIFY+CurrentUser.getInstance().getId(), true);
+					sendMsg(ProjectConstants.EVENT_NEW_NOTIFY,null);
+				}
+			}
+		}
+	}
+
 	private void openNotification(Context context, Bundle bundle){
 		String content = bundle.getString(JPushInterface.EXTRA_MESSAGE);
 		String extra = bundle.getString(JPushInterface.EXTRA_EXTRA);
@@ -117,11 +135,39 @@ public class MyReceiver extends BroadcastReceiver {
 		System.out.println("收到了自定义消息@@消息extra是:"+ extra);
 		PushExtras pushExtras = JsonHelper.fromJson(extra,PushExtras.class);
 		if (pushExtras!=null){
-			Intent intent = new Intent(context,ScheduleDetailActivity.class);
-			intent.putExtra("id",pushExtras.getId());
-			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			context.startActivity(intent);
+			if (Helper.isNotEmpty(pushExtras.getType()) && "week".equals(pushExtras.getType())){
+				if (CurrentUser.getInstance().isLogin()){
+					sendMsg(ProjectConstants.EVENT_NEW_NOTIFY_HIDE,null);
+					Intent intent = new Intent(context,WeekReportActivity.class);
+					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					context.startActivity(intent);
+				}else{
+					Intent intent = new Intent(context,LoginActivity.class);
+					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					context.startActivity(intent);
+				}
+			}else{
+				if (CurrentUser.getInstance().isLogin()){
+					Intent intent = new Intent(context,ScheduleDetailActivity.class);
+					intent.putExtra("id",pushExtras.getId());
+					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					context.startActivity(intent);
+				}else{
+					Intent intent = new Intent(context,LoginActivity.class);
+					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					context.startActivity(intent);
+				}
+			}
 		}
 	}
+	/**
+	 * 发送事件.
+	 * @param event
+	 * @param o
+	 */
+	public void sendMsg(int event,Object o){
+		RxBus.getInstance().send(event,o);
+	}
+
 
 }

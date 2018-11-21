@@ -60,6 +60,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import q.rorbin.badgeview.Badge;
+import q.rorbin.badgeview.QBadgeView;
 import rx.functions.Action1;
 
 /**
@@ -78,10 +80,14 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
     private TextView mTvName;  // 名字
     private TextView mTvJob;  //职位
     private TextView mTvTitle; // 标题
+    private TextView mTvNotify;
     private ImageView mIvRefresh; // 右边图标
     private ImageView mIvToday; // 右边图标
     private LinearLayout mLlyMenu;
     private CoordinatorLayout mCoordinatorLayout;
+
+    private Badge mMenuBadge,mNotifyBadge,mNewBadge;
+
     @Override
     protected void loadIntent() {
 
@@ -106,6 +112,7 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
+        initBadge();
         ProjectHelper.syncSchedule(mContext,false);
         startService(new Intent(this, SyncOtherService.class));
         startService(new Intent(this, LongRunningService.class));
@@ -149,11 +156,29 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
                ProgressDialogHelper.dismissProgressDialog();
             }
         });
+        regiestEvent(ProjectConstants.EVENT_NEW_SCHEDULE, new Action1<Events<?>>() {
+            @Override
+            public void call(Events<?> events) {
+                showNewBadge();
+            }
+        });
+        regiestEvent(ProjectConstants.EVENT_NEW_NOTIFY, new Action1<Events<?>>() {
+            @Override
+            public void call(Events<?> events) {
+                showNotifyBadge();
+            }
+        });
+        regiestEvent(ProjectConstants.EVENT_NEW_NOTIFY_HIDE, new Action1<Events<?>>() {
+            @Override
+            public void call(Events<?> events) {
+                hideNotifyBadge();
+            }
+        });
+        mTvNotify.setOnClickListener(this);
         findViewById(R.id.nav_my_share).setOnClickListener(this);
         findViewById(R.id.nav_other_share).setOnClickListener(this);
         findViewById(R.id.nav_subordinate_log).setOnClickListener(this);
         findViewById(R.id.nav_relatedme_log).setOnClickListener(this);
-        findViewById(R.id.nav_notify).setOnClickListener(this);
         findViewById(R.id.nav_setting).setOnClickListener(this);
         findViewById(R.id.nav_exit).setOnClickListener(this);
 
@@ -179,6 +204,7 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
                     }
                 }else if (tab.getPosition()==3){
                     //我的日程
+                    hideNewBadge();
                     NavigationHelper.startActivity(MainActivity.this,ScheduleUserActivity.class,null,false);
                     TabLayout.Tab tab1 = mTabLayout.getTabAt(mFragmentViewPager.getCurrentItem());
                     if (tab1!=null){
@@ -220,6 +246,10 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
         mIvHead = findViewById(R.id.iv_head);
         mTvName =  findViewById(R.id.tv_name);
         mTvJob =  findViewById(R.id.tv_job);
+        mTvNotify = findViewById(R.id.nav_notify);
+
+        mMenuBadge = new QBadgeView(mContext).bindTarget(mIvOpenDrawerLayout);
+        mNotifyBadge = new QBadgeView(mContext).bindTarget(mTvNotify);
     }
 
     private void initTabViewPager(){
@@ -249,7 +279,48 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
             tvTitle.setText(tabTitles[i]);
             ImageView imgTab =  view.findViewById(R.id.iv_tab);
             imgTab.setImageResource(tabImages[i]);
+            if (i==3){
+                mNewBadge = new QBadgeView(mContext).bindTarget(imgTab);
+            }
             mTabLayout.addTab(tab);
+        }
+    }
+
+    private void initBadge(){
+       boolean hasNewSchedule = PreferencesHelper.getInstance().getBoolean(ProjectConstants.KEY_HAS_NEW_SCHEDULE+CurrentUser.getInstance().getId(),false);
+       if (hasNewSchedule){
+           showNewBadge();
+       }
+        boolean hasNewNotify = PreferencesHelper.getInstance().getBoolean(ProjectConstants.KEY_HAS_NEW_NOTIFY+CurrentUser.getInstance().getId(),false);
+        if (hasNewNotify){
+            showNotifyBadge();
+        }
+    }
+
+
+    private void showNotifyBadge(){
+        if (mMenuBadge!=null && mNotifyBadge!=null){
+            mMenuBadge.setBadgeNumber(-1);
+            mNotifyBadge.setBadgeNumber(-1).setBadgeGravity(Gravity.START|Gravity.TOP).setGravityOffset(80,10,true);
+        }
+    }
+
+    private void hideNotifyBadge(){
+        if (mMenuBadge!=null && mNotifyBadge!=null){
+            mMenuBadge.hide(false);
+            mNotifyBadge.hide(false);
+        }
+    }
+
+    private void showNewBadge(){
+        if (mNewBadge!=null){
+            mNewBadge.setBadgeNumber(-1).setBadgeBackgroundColor(getResources().getColor(R.color.base_blue)).setBadgeGravity(Gravity.END|Gravity.TOP);
+        }
+    }
+
+    private void hideNewBadge(){
+        if (mNewBadge!=null){
+            mNewBadge.hide(false);
         }
     }
 
@@ -324,6 +395,7 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
             NavigationHelper.startActivity(MainActivity.this, LoginActivity.class, null, true);
             mDrawerLayout.closeDrawer(Gravity.LEFT);
         } else if (id == R.id.nav_notify) {  //通知
+            hideNotifyBadge();
             NavigationHelper.startActivity(MainActivity.this, WeekReportActivity.class, null, false);
             mDrawerLayout.closeDrawer(Gravity.LEFT);
         }
