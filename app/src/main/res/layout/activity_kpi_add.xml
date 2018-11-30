@@ -152,7 +152,7 @@
                 android:layout_margin="10dp"
                 android:padding="10dp"
                 android:gravity="top|left"
-                android:hint="填写实绩内容(非必填)"
+                android:hint="填写实绩内容"
                 android:textColorHint="@color/gray_a5"
                 android:textColor="@color/edit_color"
                 android:textSize="15sp" />

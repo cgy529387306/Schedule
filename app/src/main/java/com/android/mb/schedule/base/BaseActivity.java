@@ -5,12 +5,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Build;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -26,8 +25,8 @@ import com.android.mb.schedule.utils.AppHelper;
 import com.android.mb.schedule.utils.KeyBoardUtils;
 import com.android.mb.schedule.utils.NetworkHelper;
 import com.android.mb.schedule.utils.ProjectHelper;
-import com.android.mb.schedule.utils.StatusBarUtil;
 import com.android.mb.schedule.utils.ToastUtils;
+import com.gyf.barlibrary.ImmersionBar;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -79,18 +78,20 @@ public abstract class BaseActivity extends AppCompatActivity{
     }
 
     private void initStatusBar(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // 透明状态栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            StatusBarUtil.StatusBarIconManager.MIUI(this, StatusBarUtil.StatusBarIconManager.TYPE.BLACK);
-            StatusBarUtil.StatusBarIconManager.Flyme(this, StatusBarUtil.StatusBarIconManager.TYPE.BLACK);
-        }
+        ImmersionBar.with(this).fitsSystemWindows(true).statusBarColor(R.color.white).statusBarDarkFont(true).init();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        ImmersionBar.with(this).init();
     }
 
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        ImmersionBar.with(this).destroy();
         unregisterReceiver(mNetWorkStateChangeReceiver);
         RxBus.getInstance().unSubscribe(this);
         onUnsubscribe();

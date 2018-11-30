@@ -53,11 +53,12 @@ public class KPIAddActivity extends BaseMvpActivity<KpiPresenter,IKpiView> imple
     public static final String mTimeFormat = "HH:mm";
     private Calendar mStartTime,mEndTime;
     private KpiRequest mKpiRequest;
-
+    private String mDate;
     private ScheduleDetailBean mDetailBean;
     private long mTimeStart,mTimeEnd;
     @Override
     protected void loadIntent() {
+        mDate = getIntent().getStringExtra("date");
         mDetailBean = (ScheduleDetailBean) getIntent().getSerializableExtra("detailBean");
     }
 
@@ -97,14 +98,36 @@ public class KPIAddActivity extends BaseMvpActivity<KpiPresenter,IKpiView> imple
 
     private void getKpiInfo(){
         if (mDetailBean!=null){
-            mTimeStart = mDetailBean.getTime_s();
-            mTimeEnd = mDetailBean.getTime_e();
+            mTimeStart = getTimeStart();
+            mTimeEnd = getTimeEnd();
             Map<String,Object> requestMap = new HashMap<>();
             requestMap.put("sid",mDetailBean.getId());
-            requestMap.put("time_s ",mDetailBean.getTime_s());
-            requestMap.put("time_e",mDetailBean.getTime_e());
+            requestMap.put("time_s ",mTimeStart);
+            requestMap.put("time_e",mTimeEnd);
             mPresenter.viewKpi(requestMap);
         }
+    }
+
+    private long getTimeStart(){
+        long time;
+        if (Helper.isEmpty(mDate)){
+            time = mDetailBean.getTime_s();
+        }else{
+            String timeStr = Helper.long2DateString(mDetailBean.getTime_s()*1000,mTimeFormat);
+            time = Helper.dateString2Long(mDate+" "+timeStr,"yyyy-MM-dd HH:mm")/1000;
+        }
+        return time;
+    }
+
+    private long getTimeEnd(){
+        long time;
+            if (Helper.isEmpty(mDate)){
+            time = mDetailBean.getTime_e();
+        }else{
+            String timeStr = Helper.long2DateString(mDetailBean.getTime_e()*1000,mTimeFormat);
+            time = Helper.dateString2Long(mDate+" "+timeStr,"yyyy-MM-dd HH:mm")/1000;
+        }
+        return time;
     }
 
 
