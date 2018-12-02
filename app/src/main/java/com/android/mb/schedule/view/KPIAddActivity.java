@@ -102,7 +102,7 @@ public class KPIAddActivity extends BaseMvpActivity<KpiPresenter,IKpiView> imple
             mTimeEnd = getTimeEnd();
             Map<String,Object> requestMap = new HashMap<>();
             requestMap.put("sid",mDetailBean.getId());
-            requestMap.put("time_s ",mTimeStart);
+            requestMap.put("time_s",mTimeStart);
             requestMap.put("time_e",mTimeEnd);
             mPresenter.viewKpi(requestMap);
         }

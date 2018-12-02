@@ -1,6 +1,7 @@
 package com.android.mb.schedule.view;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -108,6 +109,7 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
         initView();
         initTabViewPager();
         initUserInfo(CurrentUser.getInstance());
+        int color = Color.parseColor("#00CCFF");
     }
 
     @Override
