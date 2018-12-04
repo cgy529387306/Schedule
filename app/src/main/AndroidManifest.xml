@@ -39,18 +39,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".keeplive.KeepLiveActivity"
-            android:excludeFromRecents="true"
-            android:exported="false"
-            android:finishOnTaskLaunch="false"
-            android:launchMode="singleInstance"
-            android:process=":live"
-            android:theme="@style/KeepLiveTheme" />
-        <service
-            android:name=".keeplive.KeepLiveService"
-            android:enabled="true"
-            android:exported="true" />
-        <activity
             android:name=".view.LoginActivity"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:screenOrientation="portrait"/>
@@ -118,14 +106,10 @@
             android:name=".view.TagPersonActivity"
             android:screenOrientation="portrait"/>
 
-        <service android:name=".service.LongRunningService"
-            android:priority="1000"/>
-        <service android:name=".service.SyncService"
-            android:priority="1000"/>
-        <service android:name=".service.SyncOtherService"
-            android:priority="1000"/>
-        <service android:name=".service.PostService"
-            android:priority="1000"/>
+        <service android:name=".service.LongRunningService" />
+        <service android:name=".service.SyncService" />
+        <service android:name=".service.SyncOtherService" />
+        <service android:name=".service.PostService" />
         <!-- Required SDK核心功能-->
         <activity
             android:name="cn.jpush.android.ui.PushActivity"

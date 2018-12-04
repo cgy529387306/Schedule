@@ -398,6 +398,9 @@ public class ProjectHelper {
             case 7:
                 result = "2天前";
                 break;
+            case 8:
+                result = "准时提醒";
+                break;
             default:
                 result = "不在提醒";
                 break;

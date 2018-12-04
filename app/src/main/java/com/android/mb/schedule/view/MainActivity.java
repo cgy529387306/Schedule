@@ -3,7 +3,6 @@ package com.android.mb.schedule.view;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
@@ -34,12 +33,10 @@ import com.android.mb.schedule.fragment.WeekFragment;
 import com.android.mb.schedule.greendao.OfficeDao;
 import com.android.mb.schedule.greendao.ScheduleDao;
 import com.android.mb.schedule.greendao.UserDao;
-import com.android.mb.schedule.keeplive.KeepLiveManager;
 import com.android.mb.schedule.presenter.HomePresenter;
 import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.service.LongRunningService;
 import com.android.mb.schedule.service.SyncOtherService;
-import com.android.mb.schedule.service.SyncService;
 import com.android.mb.schedule.utils.AppHelper;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.ImageUtils;
@@ -118,7 +115,6 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
         ProjectHelper.syncSchedule(mContext,false);
         startService(new Intent(this, SyncOtherService.class));
         startService(new Intent(this, LongRunningService.class));
-        KeepLiveManager.getInstance().registerKeepLifeReceiver(this);
         PgyUpdateManager.setIsForced(false); //设置是否强制更新。true为强制更新；false为不强制更新（默认值）。
         PgyUpdateManager.register(this);
         addMainInLog();
@@ -146,7 +142,6 @@ public class MainActivity extends BaseMvpActivity<HomePresenter,IHomeView> imple
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        KeepLiveManager.getInstance().unregisterKeepLiveReceiver(this);
         PgyUpdateManager.unregister();
     }
 
