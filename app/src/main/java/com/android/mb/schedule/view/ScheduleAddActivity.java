@@ -29,6 +29,7 @@ import com.android.mb.schedule.pop.ScheduleRemindPop;
 import com.android.mb.schedule.pop.ScheduleRepeatPop;
 import com.android.mb.schedule.presenter.SchedulePresenter;
 import com.android.mb.schedule.utils.AppHelper;
+import com.android.mb.schedule.utils.FileOpenUtils;
 import com.android.mb.schedule.utils.FileUtils;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.JsonHelper;
@@ -572,7 +573,14 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
                 } else {
                     filePath = FileUtils.getPath(this, uri);
                 }
-                mPresenter.uploadFile(new File(filePath));
+                File file = new File(filePath);
+                boolean isValid = FileOpenUtils.isValidFile(file);
+                if (isValid){
+                    mPresenter.uploadFile(new File(filePath));
+                }else {
+                    showToastMessage("不支持该文件类型");
+                }
+
             }
         }else if (ProjectConstants.REQUEST_SELECT_ADDRESS == requestCode){
             String address = data.getStringExtra("address");

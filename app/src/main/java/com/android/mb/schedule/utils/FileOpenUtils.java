@@ -68,4 +68,18 @@ public class FileOpenUtils {
         intent.setDataAndType(Uri.parse(uri), getMimeTypeFromUrl(uri));//Set the data for the intent along with an explicit指定的、明确的 MIME data type
         activityFrom.startActivity(intent);
     }
+
+    public static boolean isValidFile(File file){
+        boolean valid = false;
+        if (file!=null){
+            String mimeType = file.getName().substring(file.getName().lastIndexOf(".") + 1, file.getName	().length()).toLowerCase();
+            if (mimeType.contains("jpg") || mimeType.contains("gif") || mimeType.contains("png") ||
+                    mimeType.contains("jpeg") || mimeType.contains("bmp") || mimeType.contains("doc") || mimeType.contains("docx")
+                    || mimeType.contains("xls") || mimeType.contains("xlsx") || mimeType.contains("rar") || mimeType.contains("zip")
+                    || mimeType.contains("txt")) {
+                valid = true;
+            }
+        }
+        return valid;
+    }
 }

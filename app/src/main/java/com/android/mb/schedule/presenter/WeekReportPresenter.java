@@ -7,8 +7,10 @@ import com.android.mb.schedule.base.BaseMvpPresenter;
 import com.android.mb.schedule.entitys.ReportData;
 import com.android.mb.schedule.presenter.interfaces.IWeekReportPresenter;
 import com.android.mb.schedule.retrofit.http.exception.ApiException;
+import com.android.mb.schedule.retrofit.http.exception.NoNetWorkException;
 import com.android.mb.schedule.view.interfaces.IWeekReprtView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +36,9 @@ public class WeekReportPresenter extends BaseMvpPresenter<IWeekReprtView> implem
                 if(mMvpView!=null){
                     if (e instanceof ApiException && !TextUtils.isEmpty(e.getMessage())){
                         mMvpView.showToastMessage(e.getMessage());
+                    }else if (e instanceof NoNetWorkException){
+                        mMvpView.showToastMessage("网络存在问题,请检查网络状态");
+                        mMvpView.getSuccess(new ArrayList<ReportData>());
                     }
                 }
             }

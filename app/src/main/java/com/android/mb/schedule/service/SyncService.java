@@ -123,6 +123,7 @@ public class SyncService extends Service {
             public void onNext(ScheduleSyncData result) {
                 if (result!=null){
                     if (count==1){
+                        //获取总条数
                         total = result.getTotal();
                         if (total==0){
                             syncSuccess();
@@ -131,14 +132,17 @@ public class SyncService extends Service {
                             syncSchedule(0);
                         }
                     }else{
-                        if (Helper.isNotEmpty(result.getUpd()) && mCurrentPage*mPageSize<total){
-                            if (Helper.isNotEmpty(result.getUpd())){
-                                insertSchedule(result.getUpd());
+                        //获取同步的日程数据
+                        if (Helper.isNotEmpty(result.getUpd())){
+                            insertSchedule(result.getUpd());
+                            if (mCurrentPage*mPageSize>=total){
+                                //没有下一页数据
+                                syncSuccess();
+                            }else{
+                                //还有下一页数据
                                 mCurrentPage++;
                                 syncSchedule(0);
                             }
-                        }else{
-                            syncSuccess();
                         }
                         if (Helper.isNotEmpty(result.getDel()) && mCurrentPage==1){
                             deleteSchedule(result.getDel());
