@@ -55,6 +55,10 @@ public class ScheduleRemindPop extends PopupWindow implements View.OnClickListen
     private LinearLayout mLlyNoRemind; //不在提醒
     private TextView mTvNoRemind;
     private ImageView mIvNoRemind;
+
+    private LinearLayout mLlyZsRemind; //准时提醒
+    private TextView mTvZsRemind;
+    private ImageView mIvZsRemind;
     private SelectListener mSelectListener;
     private int mType = 1;//0 不提醒,1 10分钟前，2 15分钟前，3 30分钟前，4 1小时前，5 2小时前，6 24小时前，7 2天前
 
@@ -122,6 +126,10 @@ public class ScheduleRemindPop extends PopupWindow implements View.OnClickListen
         mLlyNoRemind = mContentView.findViewById(R.id.lly_no_remind);
         mTvNoRemind = mContentView.findViewById(R.id.tv_no_remind);
         mIvNoRemind = mContentView.findViewById(R.id.iv_no_remind);
+
+        mLlyZsRemind = mContentView.findViewById(R.id.lly_zs_remind);
+        mTvZsRemind = mContentView.findViewById(R.id.tv_zs_remind);
+        mIvZsRemind = mContentView.findViewById(R.id.iv_zs_remind);
         refresh(mType);
     }
 
@@ -136,6 +144,7 @@ public class ScheduleRemindPop extends PopupWindow implements View.OnClickListen
         mLlyBeforeOneDay.setOnClickListener(this);
         mLlyBeforeTwoDay.setOnClickListener(this);
         mLlyNoRemind.setOnClickListener(this);
+        mLlyZsRemind.setOnClickListener(this);
     }
 
     /**
@@ -184,6 +193,9 @@ public class ScheduleRemindPop extends PopupWindow implements View.OnClickListen
         }else if (id == R.id.lly_before_two_day){
             mType = 7;
             refresh(mType);
+        }else if (id == R.id.lly_zs_remind){
+            mType = 8;
+            refresh(mType);
         }
     }
     private void refresh(int type){
@@ -195,6 +207,7 @@ public class ScheduleRemindPop extends PopupWindow implements View.OnClickListen
         mTvBeforeTwoHour.setTextColor(type == 5?ContextCompat.getColor(mContext, R.color.base_blue):ContextCompat.getColor(mContext, R.color.black));
         mTvBeforeOneDay.setTextColor(type == 6?ContextCompat.getColor(mContext, R.color.base_blue):ContextCompat.getColor(mContext, R.color.black));
         mTvBeforeTwoDay.setTextColor(type == 7?ContextCompat.getColor(mContext, R.color.base_blue):ContextCompat.getColor(mContext, R.color.black));
+        mTvZsRemind.setTextColor(type == 8?ContextCompat.getColor(mContext, R.color.base_blue):ContextCompat.getColor(mContext, R.color.black));
 
         mIvNoRemind.setVisibility(type == 0?View.VISIBLE:View.GONE);
         mIvBeforeTen.setVisibility(type == 1?View.VISIBLE:View.GONE);
@@ -204,6 +217,7 @@ public class ScheduleRemindPop extends PopupWindow implements View.OnClickListen
         mIvBeforeTwoHour.setVisibility(type == 5?View.VISIBLE:View.GONE);
         mIvBeforeOneDay.setVisibility(type == 6?View.VISIBLE:View.GONE);
         mIvBeforeTwoDay.setVisibility(type == 7?View.VISIBLE:View.GONE);
+        mIvZsRemind.setVisibility(type == 8?View.VISIBLE:View.GONE);
     }
 
     public int getType() {

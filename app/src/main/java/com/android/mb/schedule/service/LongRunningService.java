@@ -130,6 +130,8 @@ public class LongRunningService extends Service {
                     break;
                 case 7:remindTime = start-2*24*60*60;// 2天前
                     break;
+                case 8:remindTime = start-0;// 准时提醒
+                    break;
                 default:remindTime = 0;
                     break;
             }

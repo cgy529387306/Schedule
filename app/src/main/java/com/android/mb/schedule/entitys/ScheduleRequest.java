@@ -26,7 +26,7 @@ public class ScheduleRequest implements Serializable{
     private int repeattype;
 
     /**
-     * 提醒: 0 不提醒,1 10分钟前，2 15分钟前，3 30分钟前，4 1小时前，5 2小时前，6 24小时前，7 2天前
+     * 提醒: 0 不提醒,1 10分钟前，2 15分钟前，3 30分钟前，4 1小时前，5 2小时前，6 24小时前，7 2天前  8 准时提醒
      */
     private int remind;
 
