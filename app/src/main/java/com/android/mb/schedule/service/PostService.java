@@ -143,7 +143,7 @@ public class PostService extends Service {
         if (fileList!=null && fileList.size()>0){
             FileBean fileBean = fileList.get(0);
             String url = fileBean.getUrl();
-            if (!url.contains("http") && fileBean.getId()!=0 && new File(url).exists()){
+            if (!url.contains("http") && fileBean.getId()==0 && new File(url).exists()){
                 //本地文件且存在
                 uploadFile(dataList,schedule,new File(url));
             }else{

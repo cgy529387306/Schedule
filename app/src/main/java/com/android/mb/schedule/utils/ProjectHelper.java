@@ -706,7 +706,7 @@ public class ProjectHelper {
 
             List<UserBean> related = JsonHelper.fromJson(data.getRelated(),new TypeToken<List<UserBean>>(){}.getType());
             List<UserBean> share = JsonHelper.fromJson(data.getShare(),new TypeToken<List<UserBean>>(){}.getType());
-            List<FileBean> file = JsonHelper.fromJson(data.getShare(),new TypeToken<List<FileBean>>(){}.getType());
+            List<FileBean> file = JsonHelper.fromJson(data.getFile(),new TypeToken<List<FileBean>>(){}.getType());
             scheduleDetailData.setRelated(related);
             scheduleDetailData.setShare(share);
             scheduleDetailData.setFile(file);

@@ -26,6 +26,7 @@ import com.android.mb.schedule.utils.DialogHelper;
 import com.android.mb.schedule.utils.FileOpenUtils;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.NavigationHelper;
+import com.android.mb.schedule.utils.NetworkHelper;
 import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.view.interfaces.IDetailView;
 import com.android.mb.schedule.widget.BottomMenuDialog;
@@ -162,8 +163,17 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
         int id = view.getId();
         if (id == R.id.tv_download_document){
             if (isFileExit()){
-                File file = new File(mFileDir,mDetailData.getFile().get(0).getFilename());
-                FileOpenUtils.openFile(ScheduleDetailActivity.this,file);
+                File file;
+                if (NetworkHelper.isNetworkAvailable(mContext)){
+                    file = new File(mFileDir,mDetailData.getFile().get(0).getFilename());
+                }else{
+                    file =new File(mDetailData.getFile().get(0).getUrl());
+                }
+                if (file!=null && file.exists()){
+                    FileOpenUtils.openFile(ScheduleDetailActivity.this,file);
+                }else{
+                    showToastMessage("文件不存在");
+                }
             }else{
                 downloadFile();
             }
@@ -350,7 +360,7 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
         boolean isExit = false;
         if (mDetailData!=null && Helper.isNotEmpty(mDetailData.getFile())){
             FileBean fileBean = mDetailData.getFile().get(0);
-            isExit = ProjectHelper.isFileExit(mFileDir,fileBean.getFilename());
+            isExit = ProjectHelper.isFileExit(mFileDir,fileBean.getFilename()) || new File(fileBean.getUrl()).exists();
         }
         return isExit;
     }
