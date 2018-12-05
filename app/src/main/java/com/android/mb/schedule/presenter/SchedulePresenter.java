@@ -2,31 +2,23 @@ package com.android.mb.schedule.presenter;
 
 import android.text.TextUtils;
 
+import com.android.mb.schedule.api.ScheduleMethods;
 import com.android.mb.schedule.app.MBApplication;
 import com.android.mb.schedule.base.BaseMvpPresenter;
-import com.android.mb.schedule.db.Delete;
 import com.android.mb.schedule.db.Edit;
 import com.android.mb.schedule.db.GreenDaoManager;
 import com.android.mb.schedule.db.Schedule;
-import com.android.mb.schedule.entitys.CurrentUser;
 import com.android.mb.schedule.entitys.FileData;
 import com.android.mb.schedule.entitys.ScheduleRequest;
-import com.android.mb.schedule.greendao.DeleteDao;
 import com.android.mb.schedule.greendao.EditDao;
 import com.android.mb.schedule.greendao.ScheduleDao;
 import com.android.mb.schedule.presenter.interfaces.ISchedulePresenter;
 import com.android.mb.schedule.retrofit.http.exception.ApiException;
-import com.android.mb.schedule.retrofit.http.exception.NoNetWorkException;
-import com.android.mb.schedule.api.ScheduleMethods;
-import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.NetworkHelper;
 import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.view.interfaces.IScheduleView;
 
 import java.io.File;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -140,36 +132,50 @@ public class SchedulePresenter extends BaseMvpPresenter<IScheduleView> implement
 
     @Override
     public void uploadFile(final File file) {
-        mMvpView.showProgressDialog("上传中...");
-        Observable observable = ScheduleMethods.getInstance().upload(file);
-        toSubscribe(observable,  new Subscriber<FileData>() {
-            @Override
-            public void onCompleted() {
-                if (mMvpView!=null){
-                    mMvpView.dismissProgressDialog();
-                }
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                if(mMvpView!=null){
-                    mMvpView.dismissProgressDialog();
-                    if (e instanceof ApiException && !TextUtils.isEmpty(e.getMessage())){
-                        mMvpView.showToastMessage(e.getMessage());
+        if (NetworkHelper.isNetworkAvailable(MBApplication.getInstance())){
+            mMvpView.showProgressDialog("上传中...");
+            Observable observable = ScheduleMethods.getInstance().upload(file);
+            toSubscribe(observable,  new Subscriber<FileData>() {
+                @Override
+                public void onCompleted() {
+                    if (mMvpView!=null){
+                        mMvpView.dismissProgressDialog();
                     }
                 }
-            }
 
-            @Override
-            public void onNext(FileData result) {
-                if (mMvpView!=null){
-                    mMvpView.dismissProgressDialog();
-                    if (result!=null){
-                        result.setFileName(file.getName());
+                @Override
+                public void onError(Throwable e) {
+                    if(mMvpView!=null){
+                        mMvpView.dismissProgressDialog();
+                        if (e instanceof ApiException && !TextUtils.isEmpty(e.getMessage())){
+                            mMvpView.showToastMessage(e.getMessage());
+                        }
                     }
-                    mMvpView.uploadSuccess(result);
                 }
-            }
-        });
+
+                @Override
+                public void onNext(FileData result) {
+                    if (mMvpView!=null){
+                        mMvpView.dismissProgressDialog();
+                        if (result!=null){
+                            result.setFileName(file.getName());
+                        }
+                        mMvpView.uploadSuccess(result);
+                    }
+                }
+            });
+        }else{
+            addFileLocal(file);
+        }
+    }
+
+    private void addFileLocal(final File file) {
+        FileData fileData = new FileData();
+        fileData.setFileName(file.getName());
+        fileData.setId(0);
+        fileData.setFile(file.getPath());
+        if (mMvpView!=null){
+            mMvpView.uploadSuccess(fileData);
+        }
     }
 }

@@ -573,10 +573,10 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
                 } else {
                     filePath = FileUtils.getPath(this, uri);
                 }
-                File file = new File(filePath);
+                File file = new File(filePath==null?"":filePath);
                 boolean isValid = FileOpenUtils.isValidFile(file);
                 if (isValid){
-                    mPresenter.uploadFile(new File(filePath));
+                    mPresenter.uploadFile(file);
                 }else {
                     showToastMessage("不支持该文件类型");
                 }

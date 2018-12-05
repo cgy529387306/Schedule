@@ -15,6 +15,8 @@ import com.android.mb.schedule.db.Office;
 import com.android.mb.schedule.db.Schedule;
 import com.android.mb.schedule.db.User;
 import com.android.mb.schedule.entitys.CurrentUser;
+import com.android.mb.schedule.entitys.FileBean;
+import com.android.mb.schedule.entitys.FileData;
 import com.android.mb.schedule.entitys.OfficeSyncData;
 import com.android.mb.schedule.entitys.ScheduleDetailData;
 import com.android.mb.schedule.entitys.ScheduleRequest;
@@ -34,7 +36,9 @@ import com.android.mb.schedule.utils.JsonHelper;
 import com.android.mb.schedule.utils.PreferencesHelper;
 import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.utils.ToastHelper;
+import com.google.gson.reflect.TypeToken;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -135,6 +139,48 @@ public class PostService extends Service {
     }
 
     private void doAdd(final List<Schedule> dataList, final Schedule schedule){
+        List<FileBean> fileList = JsonHelper.fromJson(schedule.getFile(),new TypeToken<List<FileBean>>(){}.getType());
+        if (fileList!=null && fileList.size()>0){
+            FileBean fileBean = fileList.get(0);
+            String url = fileBean.getUrl();
+            if (!url.contains("http") && fileBean.getId()!=0 && new File(url).exists()){
+                //本地文件且存在
+                uploadFile(dataList,schedule,new File(url));
+            }else{
+                addSchedule(dataList,schedule);
+            }
+        }else{
+            addSchedule(dataList,schedule);
+        }
+    }
+
+    private void uploadFile(final List<Schedule> dataList, final Schedule schedule, final File file){
+        Observable observable = ScheduleMethods.getInstance().upload(file);
+        toSubscribe(observable,  new Subscriber<FileData>() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                addSchedule(dataList,schedule);
+            }
+
+            @Override
+            public void onNext(FileData result) {
+                List<FileBean> fileList = JsonHelper.fromJson(schedule.getFile(),new TypeToken<List<FileBean>>(){}.getType());
+                if (result!=null && fileList!=null && fileList.size()>0){
+                    FileBean fileBean = fileList.get(0);
+                    fileBean.setId(result.getId());
+                    fileBean.setUrl(result.getFile());
+                    schedule.setFile(JsonHelper.toJson(fileList));
+                }
+                addSchedule(dataList,schedule);
+            }
+        });
+    }
+
+    private void addSchedule(final List<Schedule> dataList, final Schedule schedule){
         Observable observable = ScheduleMethods.getInstance().addSchedule(ProjectHelper.transToRequest(schedule));
         toSubscribe(observable,  new Subscriber<Object>() {
             @Override
