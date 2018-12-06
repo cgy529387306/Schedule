@@ -92,6 +92,17 @@ public class KPIAddActivity extends BaseMvpActivity<KpiPresenter,IKpiView> imple
     protected void processLogic(Bundle savedInstanceState) {
         initPop();
         initKpiInfo(mKpiRequest);
+        getKpiInfo();
+    }
+
+    private void getKpiInfo(){
+        if (mDetailBean!=null && mKpiRequest!=null){
+            Map<String,Object> requestMap = new HashMap<>();
+            requestMap.put("sid",mDetailBean.getId());
+            requestMap.put("time_s",mKpiRequest.getTime_s());
+            requestMap.put("time_e",mKpiRequest.getTime_e());
+            mPresenter.viewKpi(requestMap);
+        }
     }
 
 

@@ -92,7 +92,6 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
     @Override
     protected void initTitle() {
         setTitleText("查看日程");
-        setRightText("填写实绩");
         hideRightText();
     }
 

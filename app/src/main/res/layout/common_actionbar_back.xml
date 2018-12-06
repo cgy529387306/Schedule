@@ -25,7 +25,6 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:singleLine="true"
-            android:text="请设置标题"
             android:textColor="@color/black"
             android:textSize="20sp" />
         <TextView
@@ -35,7 +34,6 @@
             android:layout_gravity="end"
             android:gravity="center"
             android:padding="10dp"
-            android:text="保存"
             android:textColor="@color/base_blue"
             android:textSize="14sp"
             android:visibility="gone" />
