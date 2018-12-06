@@ -5,6 +5,8 @@ package com.android.mb.schedule.entitys;
  */
 
 public class KpiRequest {
+
+    private long resid;
     private long sid;
     private String title;
     private String desc;
@@ -76,5 +78,13 @@ public class KpiRequest {
 
     public void setTime_e(long time_e) {
         this.time_e = time_e;
+    }
+
+    public long getResid() {
+        return resid;
+    }
+
+    public void setResid(long resid) {
+        this.resid = resid;
     }
 }

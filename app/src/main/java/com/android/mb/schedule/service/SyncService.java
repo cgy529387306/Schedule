@@ -80,7 +80,7 @@ public class SyncService extends Service {
         super.onDestroy();
     }
 
-    private void doJobTask(){
+    private synchronized void doJobTask(){
         mCurrentPage = 1;
         mLastUpdateTime = PreferencesHelper.getInstance().getLong(ProjectConstants.KEY_LAST_SYNC+ CurrentUser.getInstance().getId(),0);
         syncSchedule(1);
@@ -125,12 +125,8 @@ public class SyncService extends Service {
                     if (count==1){
                         //获取总条数
                         total = result.getTotal();
-                        if (total==0){
-                            syncSuccess();
-                        }else{
-                            mCurrentPage = 1;
-                            syncSchedule(0);
-                        }
+                        mCurrentPage = 1;
+                        syncSchedule(0);
                     }else{
                         //获取同步的日程数据
                         if (Helper.isNotEmpty(result.getUpd())){
@@ -143,8 +139,10 @@ public class SyncService extends Service {
                                 mCurrentPage++;
                                 syncSchedule(0);
                             }
+                        }else{
+                            syncSuccess();
                         }
-                        if (Helper.isNotEmpty(result.getDel()) && mCurrentPage==1){
+                        if (Helper.isNotEmpty(result.getDel())){
                             deleteSchedule(result.getDel());
                         }
                     }

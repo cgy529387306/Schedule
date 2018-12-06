@@ -80,7 +80,7 @@ public class PostService extends Service {
         super.onDestroy();
     }
 
-    private void doJobTask(){
+    private synchronized void doJobTask(){
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -112,7 +112,7 @@ public class PostService extends Service {
         }).start();
     }
 
-    private void doDelete(final List<Delete> dataList, final Delete delete){
+    private synchronized void doDelete(final List<Delete> dataList, final Delete delete){
         Map<String,Object> requestMap = new HashMap<>();
         requestMap.put("id",delete.getSid());
         Observable observable = ScheduleMethods.getInstance().deleteSchedule(requestMap);
@@ -138,7 +138,7 @@ public class PostService extends Service {
         });
     }
 
-    private void doAdd(final List<Schedule> dataList, final Schedule schedule){
+    private synchronized void doAdd(final List<Schedule> dataList, final Schedule schedule){
         List<FileBean> fileList = JsonHelper.fromJson(schedule.getFile(),new TypeToken<List<FileBean>>(){}.getType());
         if (fileList!=null && fileList.size()>0){
             FileBean fileBean = fileList.get(0);
@@ -154,7 +154,7 @@ public class PostService extends Service {
         }
     }
 
-    private void uploadFile(final List<Schedule> dataList, final Schedule schedule, final File file){
+    private synchronized void uploadFile(final List<Schedule> dataList, final Schedule schedule, final File file){
         Observable observable = ScheduleMethods.getInstance().upload(file);
         toSubscribe(observable,  new Subscriber<FileData>() {
             @Override
@@ -180,7 +180,7 @@ public class PostService extends Service {
         });
     }
 
-    private void addSchedule(final List<Schedule> dataList, final Schedule schedule){
+    private synchronized void addSchedule(final List<Schedule> dataList, final Schedule schedule){
         Observable observable = ScheduleMethods.getInstance().addSchedule(ProjectHelper.transToRequest(schedule));
         toSubscribe(observable,  new Subscriber<Object>() {
             @Override
@@ -204,7 +204,7 @@ public class PostService extends Service {
         });
     }
 
-    private void doEdit(final List<Edit> dataList, final Edit edit){
+    private synchronized void doEdit(final List<Edit> dataList, final Edit edit){
         Observable observable = ScheduleMethods.getInstance().syncEdit(ProjectHelper.transEditToRequest(edit));
         toSubscribe(observable,  new Subscriber<Object>() {
             @Override

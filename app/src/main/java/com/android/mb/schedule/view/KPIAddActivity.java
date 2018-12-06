@@ -69,7 +69,7 @@ public class KPIAddActivity extends BaseMvpActivity<KpiPresenter,IKpiView> imple
 
     @Override
     protected void initTitle() {
-        setTitleText("日程实绩");
+        setTitleText("填写实绩");
         setRightImage(R.mipmap.icon_checked);
     }
 
@@ -266,6 +266,7 @@ public class KPIAddActivity extends BaseMvpActivity<KpiPresenter,IKpiView> imple
 
     private void initKpiInfo(KpiRequest result){
         if (result!=null){
+            setTitleText(result.getResid()==0?"填写实绩":"修改实绩");
             mKpiRequest = result;
             mEdtScheduleName.setText(ProjectHelper.getCommonText(result.getTitle()));
             mEdtScheduleName.setSelection(ProjectHelper.getCommonSelection(result.getTitle()));
