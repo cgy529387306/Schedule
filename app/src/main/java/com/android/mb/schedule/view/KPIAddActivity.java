@@ -53,12 +53,10 @@ public class KPIAddActivity extends BaseMvpActivity<KpiPresenter,IKpiView> imple
     public static final String mTimeFormat = "HH:mm";
     private Calendar mStartTime,mEndTime;
     private KpiRequest mKpiRequest;
-    private String mDate;
     private ScheduleDetailBean mDetailBean;
-    private long mTimeStart,mTimeEnd;
     @Override
     protected void loadIntent() {
-        mDate = getIntent().getStringExtra("date");
+        mKpiRequest = (KpiRequest) getIntent().getSerializableExtra("kpiRequest");
         mDetailBean = (ScheduleDetailBean) getIntent().getSerializableExtra("detailBean");
     }
 
@@ -93,42 +91,9 @@ public class KPIAddActivity extends BaseMvpActivity<KpiPresenter,IKpiView> imple
     @Override
     protected void processLogic(Bundle savedInstanceState) {
         initPop();
-        getKpiInfo();
+        initKpiInfo(mKpiRequest);
     }
 
-    private void getKpiInfo(){
-        if (mDetailBean!=null){
-            mTimeStart = getTimeStart();
-            mTimeEnd = getTimeEnd();
-            Map<String,Object> requestMap = new HashMap<>();
-            requestMap.put("sid",mDetailBean.getId());
-            requestMap.put("time_s",mTimeStart);
-            requestMap.put("time_e",mTimeEnd);
-            mPresenter.viewKpi(requestMap);
-        }
-    }
-
-    private long getTimeStart(){
-        long time;
-        if (Helper.isEmpty(mDate)){
-            time = mDetailBean.getTime_s();
-        }else{
-            String timeStr = Helper.long2DateString(mDetailBean.getTime_s()*1000,mTimeFormat);
-            time = Helper.dateString2Long(mDate+" "+timeStr,"yyyy-MM-dd HH:mm")/1000;
-        }
-        return time;
-    }
-
-    private long getTimeEnd(){
-        long time;
-            if (Helper.isEmpty(mDate)){
-            time = mDetailBean.getTime_e();
-        }else{
-            String timeStr = Helper.long2DateString(mDetailBean.getTime_e()*1000,mTimeFormat);
-            time = Helper.dateString2Long(mDate+" "+timeStr,"yyyy-MM-dd HH:mm")/1000;
-        }
-        return time;
-    }
 
 
     @Override
@@ -250,12 +215,15 @@ public class KPIAddActivity extends BaseMvpActivity<KpiPresenter,IKpiView> imple
     public void addSuccess(Object result) {
         showToastMessage("保存成功");
         AppHelper.hideSoftInputFromWindow(mEdtScheduleName);
+        setResult(RESULT_OK);
         finish();
     }
 
     @Override
     public void editSuccess(Object result) {
         showToastMessage("修改成功");
+        AppHelper.hideSoftInputFromWindow(mEdtScheduleName);
+        setResult(RESULT_OK);
         finish();
     }
 
@@ -279,7 +247,9 @@ public class KPIAddActivity extends BaseMvpActivity<KpiPresenter,IKpiView> imple
             mTvStartTime.setText(Helper.long2DateString(result.getRes_time_s()*1000,mTimeFormat));
             mTvEndDate.setText(Helper.long2DateString(result.getRes_time_e()*1000,mDateFormat));
             mTvEndTime.setText(Helper.long2DateString(result.getRes_time_e()*1000,mTimeFormat));
-
+//            int mIsAllDay = mDetailBean.getAllDay();
+//            mTvStartTime.setVisibility(mIsAllDay==1?View.GONE:View.VISIBLE);
+//            mTvEndTime.setVisibility(mIsAllDay==1?View.GONE:View.VISIBLE);
             Date startDate = Helper.long2Date(result.getRes_time_s()*1000);
             mStartTime = (Calendar) Calendar.getInstance().clone();
             mStartTime.setTime(startDate);
@@ -318,11 +288,9 @@ public class KPIAddActivity extends BaseMvpActivity<KpiPresenter,IKpiView> imple
         mKpiRequest.setRes(kpiContent);
         mKpiRequest.setRes_time_s(mStartTime.getTimeInMillis()/1000);
         mKpiRequest.setRes_time_e(mEndTime.getTimeInMillis()/1000);
-        mKpiRequest.setTime_s(mTimeStart);
-        mKpiRequest.setTime_e(mTimeEnd);
+        mKpiRequest.setTime_s(mKpiRequest.getTime_s());
+        mKpiRequest.setTime_e(mKpiRequest.getTime_e());
         mPresenter.addKpi(mKpiRequest);
-
     }
-
 
 }

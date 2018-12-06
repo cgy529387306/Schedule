@@ -15,6 +15,7 @@ import com.android.mb.schedule.base.BaseMvpActivity;
 import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.entitys.CurrentUser;
 import com.android.mb.schedule.entitys.FileBean;
+import com.android.mb.schedule.entitys.KpiRequest;
 import com.android.mb.schedule.entitys.ScheduleDetailBean;
 import com.android.mb.schedule.entitys.ScheduleDetailData;
 import com.android.mb.schedule.entitys.UserBean;
@@ -74,7 +75,8 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
     private ScheduleDetailData mDetailData;
     private BottomMenuDialog mCheckDialog;
     private String mFileDir;
-
+    private KpiRequest mKpiRequest;
+    private ScheduleDetailBean mDetailBean;
     @Override
     protected void loadIntent() {
         mFileDir = Environment.getExternalStorageDirectory() + File.separator + "/Schedule";
@@ -97,14 +99,15 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
     @Override
     protected void onRightAction() {
         super.onRightAction();
-        if (mDetailData!=null && mDetailData.getInfo()!=null){
+        if (mDetailData!=null && mDetailData.getInfo()!=null && mKpiRequest!=null){
             ScheduleDetailBean detailBean = mDetailData.getInfo();
             Bundle bundle = new Bundle();
             if (Helper.isNotEmpty(mDate)){
                 bundle.putString("date",mDate);
             }
+            bundle.putSerializable("kpiRequest",mKpiRequest);
             bundle.putSerializable("detailBean",detailBean);
-            NavigationHelper.startActivity(ScheduleDetailActivity.this,KPIAddActivity.class,bundle,false);
+            NavigationHelper.startActivityForResult(ScheduleDetailActivity.this,KPIAddActivity.class,bundle,ProjectConstants.REQUEST_KPI_EDIT);
         }
     }
 
@@ -144,6 +147,17 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
             requestMap.put("date",mDate);
         }
         mPresenter.getSchedule(requestMap);
+    }
+
+    private void getKpiInfo(){
+        if (mDetailData!=null && mDetailData.getInfo()!=null){
+            mDetailBean = mDetailData.getInfo();
+            Map<String,Object> requestMap = new HashMap<>();
+            requestMap.put("sid",mDetailBean.getId());
+            requestMap.put("time_s",getTimeStart());
+            requestMap.put("time_e",getTimeEnd());
+            mPresenter.viewKpi(requestMap);
+        }
     }
 
     @Override
@@ -248,7 +262,7 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
             boolean isMore72 = dif>72*60*60;
             boolean isValid = detailBean.getCreate_by() == CurrentUser.getInstance().getId() && !isMore72;
             mLinEdit.setVisibility(isValid?View.VISIBLE:View.GONE);
-            if (isValid){
+            if (NetworkHelper.isNetworkAvailable(ScheduleDetailActivity.this) && isValid){
                 showRightText();
             }else{
                 hideRightText();
@@ -298,6 +312,7 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
         if (Helper.isNotEmpty(result)){
             mDetailData = result;
             initData(mDetailData);
+            getKpiInfo();
         }
     }
 
@@ -315,6 +330,14 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
     }
 
     @Override
+    public void getKpiSuccess(KpiRequest result) {
+        if (result!=null){
+            mKpiRequest = result;
+            setRightText(result.getResid()==0?"填写实绩":"修改实绩");
+        }
+    }
+
+    @Override
     protected DetailPresenter createPresenter() {
         return new DetailPresenter();
     }
@@ -328,6 +351,8 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
         if (ProjectConstants.REQUEST_SELECT_PERSON == requestCode){
             List<UserBean> list = (List<UserBean>) data.getSerializableExtra("selectPerson");
             mPresenter.shareTo(mId,list);
+        }else if (ProjectConstants.REQUEST_KPI_EDIT == requestCode){
+            getKpiInfo();
         }
     }
 
@@ -372,4 +397,27 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
         }
         return isExit;
     }
+
+    private long getTimeStart(){
+        long time;
+        if (mDetailBean.getRepeattype()==1 || Helper.isEmpty(mDate)){
+            time = mDetailBean.getTime_s();
+        }else{
+            String timeStr = Helper.long2DateString(mDetailBean.getTime_s()*1000,mTimeFormat);
+            time = Helper.dateString2Long(mDate+" "+timeStr,"yyyy-MM-dd HH:mm")/1000;
+        }
+        return time;
+    }
+
+    private long getTimeEnd(){
+        long time;
+        if (mDetailBean.getRepeattype()==1 || Helper.isEmpty(mDate)){
+            time = mDetailBean.getTime_e();
+        }else{
+            String timeStr = Helper.long2DateString(mDetailBean.getTime_e()*1000,mTimeFormat);
+            time = Helper.dateString2Long(mDate+" "+timeStr,"yyyy-MM-dd HH:mm")/1000;
+        }
+        return time;
+    }
+
 }

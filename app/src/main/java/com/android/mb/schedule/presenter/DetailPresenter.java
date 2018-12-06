@@ -8,6 +8,7 @@ import com.android.mb.schedule.db.Delete;
 import com.android.mb.schedule.db.GreenDaoManager;
 import com.android.mb.schedule.db.Schedule;
 import com.android.mb.schedule.entitys.CurrentUser;
+import com.android.mb.schedule.entitys.KpiRequest;
 import com.android.mb.schedule.entitys.ScheduleDetailData;
 import com.android.mb.schedule.entitys.UserBean;
 import com.android.mb.schedule.greendao.DeleteDao;
@@ -191,6 +192,33 @@ public class DetailPresenter extends BaseMvpPresenter<IDetailView> implements ID
         if (mMvpView!=null){
             mMvpView.shareSuccess("");
         }
+    }
+
+    @Override
+    public void viewKpi(Map<String, Object> requestMap) {
+        Observable observable = ScheduleMethods.getInstance().getKpi(requestMap);
+        toSubscribe(observable,  new Subscriber<KpiRequest>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                if(mMvpView!=null){
+                    if (e instanceof ApiException && !TextUtils.isEmpty(e.getMessage())){
+                        mMvpView.showToastMessage(e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onNext(KpiRequest result) {
+                if (mMvpView!=null){
+                    mMvpView.getKpiSuccess(result);
+                }
+            }
+        });
     }
 
 }

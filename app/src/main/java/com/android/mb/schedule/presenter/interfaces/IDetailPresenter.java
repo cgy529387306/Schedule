@@ -11,4 +11,6 @@ public interface IDetailPresenter {
     void deleteSchedule(Map<String, Object> requestMap);
 
     void shareTo(long id, List<UserBean> shareList);
+
+    void viewKpi(Map<String, Object> requestMap);
 }

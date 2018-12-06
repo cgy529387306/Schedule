@@ -34,6 +34,8 @@ public class ProjectConstants {
 
     public static final int REQUEST_SEARCH_PEOPLE = 0x05;
 
+    public static final int REQUEST_KPI_EDIT = 0x06;
+
 
     //SharedPreferences
     public static final String KEY_REGISTRATION_ID = "KEY_REGISTRATION_ID";

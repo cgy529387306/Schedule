@@ -1,10 +1,12 @@
 package com.android.mb.schedule.entitys;
 
+import java.io.Serializable;
+
 /**
  * Created by cgy on 18/11/5.
  */
 
-public class KpiRequest {
+public class KpiRequest implements Serializable{
 
     private long resid;
     private long sid;

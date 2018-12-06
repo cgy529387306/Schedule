@@ -1,6 +1,7 @@
 package com.android.mb.schedule.view.interfaces;
 
 import com.android.mb.schedule.base.BaseMvpView;
+import com.android.mb.schedule.entitys.KpiRequest;
 import com.android.mb.schedule.entitys.ScheduleData;
 import com.android.mb.schedule.entitys.ScheduleDetailData;
 
@@ -15,4 +16,6 @@ public interface IDetailView extends BaseMvpView {
     void deleteSuccess(Object result);
 
     void shareSuccess(Object result);
+
+    void getKpiSuccess(KpiRequest result);
 }
