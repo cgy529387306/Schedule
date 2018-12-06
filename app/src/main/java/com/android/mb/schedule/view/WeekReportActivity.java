@@ -77,7 +77,7 @@ public class WeekReportActivity extends BaseMvpActivity<WeekReportPresenter,IWee
     private void getListFormServer(){
         Map<String, Object> requestMap = new HashMap<>();
         requestMap.put("page",mCurrentPage);
-        requestMap.put("limit",ProjectConstants.PAGE_SIZE);
+        requestMap.put("limit",5);
         mPresenter.getReport(requestMap);
     }
 
@@ -132,7 +132,7 @@ public class WeekReportActivity extends BaseMvpActivity<WeekReportPresenter,IWee
                 mSwipeRefreshLayout.setRefreshing(false);
                 mAdapter.setNewData(result);
                 mAdapter.setEmptyView(R.layout.empty_data, (ViewGroup) mRecyclerView.getParent());
-                if (result.size()<ProjectConstants.PAGE_SIZE){
+                if (result.size()<5){
                     mAdapter.loadMoreEnd();
                 }
             }else{

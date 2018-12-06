@@ -67,6 +67,7 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
     private LinearLayout mLinFile;
     private LinearLayout mLinEdit;
     public static final String mDateFormat = "yyyy年MM月dd日";
+    public static final String mTimeFormat = "HH:mm";
     private ProgressDialog mProgressDialog;//创建ProgressDialog
     private long mId;
     private String mDate;
@@ -90,6 +91,7 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
     protected void initTitle() {
         setTitleText("查看日程");
         setRightText("填写实绩");
+        hideRightText();
     }
 
     @Override
@@ -169,7 +171,7 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
                 }else{
                     file =new File(mDetailData.getFile().get(0).getUrl());
                 }
-                if (file!=null && file.exists()){
+                if (file!=null){
                     FileOpenUtils.openFile(ScheduleDetailActivity.this,file);
                 }else{
                     showToastMessage("文件不存在");
@@ -208,9 +210,9 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
             mTvScheduleName.setText(detailBean.getTitle());
             mTvAddress.setText(detailBean.getAddress());
             mTvStartDate.setText(Helper.long2DateString(detailBean.getTime_s()*1000,mDateFormat));
-            mTvStartTime.setText(detailBean.getStartTime());
+            mTvStartTime.setText(Helper.long2DateString(detailBean.getTime_s()*1000,mTimeFormat));
             mTvEndDate.setText(Helper.long2DateString(detailBean.getTime_e()*1000,mDateFormat));
-            mTvEndTime.setText(detailBean.getEndTime());
+            mTvEndTime.setText(Helper.long2DateString(detailBean.getTime_e()*1000,mTimeFormat));
             int mIsAllDay = detailBean.getAllDay();
             mTvStartTime.setVisibility(mIsAllDay==1?View.GONE:View.VISIBLE);
             mTvEndTime.setVisibility(mIsAllDay==1?View.GONE:View.VISIBLE);
@@ -244,7 +246,13 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
 
             long dif =(System.currentTimeMillis()/1000) - detailBean.getTime_s();
             boolean isMore72 = dif>72*60*60;
-            mLinEdit.setVisibility(detailBean.getCreate_by() == CurrentUser.getInstance().getId() && !isMore72?View.VISIBLE:View.GONE);
+            boolean isValid = detailBean.getCreate_by() == CurrentUser.getInstance().getId() && !isMore72;
+            mLinEdit.setVisibility(isValid?View.VISIBLE:View.GONE);
+            if (isValid){
+                showRightText();
+            }else{
+                hideRightText();
+            }
         }
     }
 

@@ -166,6 +166,16 @@ public abstract class BaseActivity extends AppCompatActivity{
             mActionBarLayout.setVisibility(View.GONE);
     }
 
+    public void hideRightText(){
+        if (mTvAction != null && mTvAction.getVisibility()==View.VISIBLE)
+            mTvAction.setVisibility(View.GONE);
+    }
+
+    public void showRightText(){
+        if (mTvAction != null && mTvAction.getVisibility()==View.GONE)
+            mTvAction.setVisibility(View.VISIBLE);
+    }
+
 
     private View.OnClickListener mTitleBarOnclick = new View.OnClickListener() {
         @Override
