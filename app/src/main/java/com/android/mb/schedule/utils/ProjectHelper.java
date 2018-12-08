@@ -356,7 +356,7 @@ public class ProjectHelper {
                 result = "一次性";
                 break;
             case 2:
-                result = "每天";
+                result = "一次性";
                 break;
             case 3:
                 result = "每周";

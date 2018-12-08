@@ -57,6 +57,7 @@
             android:id="@+id/lly_every_day"
             android:layout_width="match_parent"
             android:layout_height="48dp"
+            android:visibility="gone"
             android:background="@color/white"
             android:gravity="center_vertical"
             android:padding="10dp">
@@ -80,7 +81,8 @@
 
         </LinearLayout>
 
-        <include layout="@layout/common_divider" />
+        <include layout="@layout/common_divider"
+            android:visibility="gone"/>
 
         <LinearLayout
             android:id="@+id/lly_every_week"

@@ -282,10 +282,6 @@ public class KPIAddActivity extends BaseMvpActivity<KpiPresenter,IKpiView> imple
             showToastMessage("请输入日程名称");
             return;
         }
-        if (Helper.isEmpty(content)){
-            showToastMessage("请输入日程内容");
-            return;
-        }
         if (mStartTime.getTimeInMillis()>=mEndTime.getTimeInMillis()){
             showToastMessage("开始时间必须大于结束时间");
             return;
