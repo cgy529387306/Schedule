@@ -956,4 +956,15 @@ public class ProjectHelper {
             return "";
         }
     }
+
+    public static boolean isEditSchedule(ScheduleRequest scheduleRequest) {
+        boolean isEdit = false;
+        if (scheduleRequest!=null){
+            isEdit = Helper.isNotEmpty(scheduleRequest.getTitle()) || Helper.isNotEmpty(scheduleRequest.getDescription())
+                    || Helper.isNotEmpty(scheduleRequest.getAddress()) || scheduleRequest.getAllDay()!=0 || scheduleRequest.getRemind()!=1
+                    || scheduleRequest.getImportant()!=0 || Helper.isNotEmpty(scheduleRequest.getRelated()) || Helper.isNotEmpty(scheduleRequest.getShare())
+                    || scheduleRequest.getFid()!=0;
+        }
+        return isEdit;
+    }
 }

@@ -171,9 +171,9 @@ public abstract class BaseActivity extends AppCompatActivity{
             mTvAction.setVisibility(View.GONE);
     }
 
-    public void showRightText(){
-        if (mTvAction != null && mTvAction.getVisibility()==View.GONE)
-            mTvAction.setVisibility(View.VISIBLE);
+    public void hideRightImage(){
+        if (mIvAction != null && mIvAction.getVisibility()==View.VISIBLE)
+            mIvAction.setVisibility(View.GONE);
     }
 
 
@@ -202,6 +202,7 @@ public abstract class BaseActivity extends AppCompatActivity{
     }
 
     protected void onRightAction(){
+
     }
 
     /**

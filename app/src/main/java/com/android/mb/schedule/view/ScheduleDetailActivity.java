@@ -77,6 +77,7 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
     private String mFileDir;
     private KpiRequest mKpiRequest;
     private ScheduleDetailBean mDetailBean;
+    private boolean mIsValid;
     @Override
     protected void loadIntent() {
         mFileDir = Environment.getExternalStorageDirectory() + File.separator + "/Schedule";
@@ -106,6 +107,7 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
             }
             bundle.putSerializable("kpiRequest",mKpiRequest);
             bundle.putSerializable("detailBean",detailBean);
+            bundle.putBoolean("isValid",mIsValid);
             NavigationHelper.startActivityForResult(ScheduleDetailActivity.this,KPIAddActivity.class,bundle,ProjectConstants.REQUEST_KPI_EDIT);
         }
     }
@@ -257,15 +259,10 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
                 mTvShares.setText("");
             }
 
-            long dif =(System.currentTimeMillis()/1000) - detailBean.getTime_s();
+            long dif =(System.currentTimeMillis()/1000) - detailBean.getTime_e();
             boolean isMore72 = dif>72*60*60;
-            boolean isValid = detailBean.getCreate_by() == CurrentUser.getInstance().getId() && !isMore72;
-            mLinEdit.setVisibility(isValid?View.VISIBLE:View.GONE);
-            if (NetworkHelper.isNetworkAvailable(ScheduleDetailActivity.this) && isValid){
-                showRightText();
-            }else{
-                hideRightText();
-            }
+            mIsValid = detailBean.getCreate_by() == CurrentUser.getInstance().getId() && !isMore72;
+            mLinEdit.setVisibility(mIsValid?View.VISIBLE:View.GONE);
         }
     }
 
@@ -332,7 +329,15 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
     public void getKpiSuccess(KpiRequest result) {
         if (result!=null){
             mKpiRequest = result;
-            setRightText(result.getResid()==0?"填写实绩":"修改实绩");
+            if (mIsValid){
+                setRightText(result.getResid()==0?"填写实绩":"修改实绩");
+            }else {
+                if (result.getResid()==0){
+                    hideRightText();
+                }else{
+                    setRightText("查看实绩");
+                }
+            }
         }
     }
 

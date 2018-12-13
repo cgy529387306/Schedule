@@ -59,4 +59,6 @@ public class ProjectConstants {
     public static final String KEY_HAS_NEW_SCHEDULE = "KEY_HAS_NEW_SCHEDULE";
 
     public static final String KEY_HAS_NEW_NOTIFY = "KEY_HAS_NEW_NOTIFY";
+
+    public static final String KEY_SCHEDULE_DRAFT = "KEY_SCHEDULE_DRAFT";
 }

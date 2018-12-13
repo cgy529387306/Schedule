@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.android.mb.schedule.R;
 import com.android.mb.schedule.base.BaseMvpActivity;
 import com.android.mb.schedule.constants.ProjectConstants;
+import com.android.mb.schedule.entitys.CurrentUser;
 import com.android.mb.schedule.entitys.FileData;
 import com.android.mb.schedule.entitys.KpiRequest;
 import com.android.mb.schedule.entitys.ScheduleDetailBean;
@@ -54,8 +55,10 @@ public class KPIAddActivity extends BaseMvpActivity<KpiPresenter,IKpiView> imple
     private Calendar mStartTime,mEndTime;
     private KpiRequest mKpiRequest;
     private ScheduleDetailBean mDetailBean;
+    private boolean mIsValid;
     @Override
     protected void loadIntent() {
+        mIsValid = getIntent().getBooleanExtra("isValid",true);
         mKpiRequest = (KpiRequest) getIntent().getSerializableExtra("kpiRequest");
         mDetailBean = (ScheduleDetailBean) getIntent().getSerializableExtra("detailBean");
     }
@@ -117,13 +120,17 @@ public class KPIAddActivity extends BaseMvpActivity<KpiPresenter,IKpiView> imple
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.lly_start_date){
-            AppHelper.hideSoftInputFromWindow(view);
-            mScheduleStartTimePop.setDate(mStartTime);
-            mScheduleStartTimePop.show(view);
+            if (mIsValid){
+                AppHelper.hideSoftInputFromWindow(view);
+                mScheduleStartTimePop.setDate(mStartTime);
+                mScheduleStartTimePop.show(view);
+            }
         }else  if (id == R.id.lly_end_date){
-            AppHelper.hideSoftInputFromWindow(view);
-            mScheduleEndTimePop.setDate(mEndTime);
-            mScheduleEndTimePop.show(view);
+            if (mIsValid){
+                AppHelper.hideSoftInputFromWindow(view);
+                mScheduleEndTimePop.setDate(mEndTime);
+                mScheduleEndTimePop.show(view);
+            }
         }
     }
 
@@ -244,8 +251,15 @@ public class KPIAddActivity extends BaseMvpActivity<KpiPresenter,IKpiView> imple
     }
 
     private void initKpiInfo(KpiRequest result){
-        if (result!=null){
-            setTitleText(result.getResid()==0?"填写实绩":"修改实绩");
+        if (result!=null && mDetailBean!=null){
+            if (mIsValid){
+                setTitleText(result.getResid()==0?"填写实绩":"修改实绩");
+            }else{
+                setTitleText("查看实绩");
+                hideRightImage();
+            }
+            mEdtScheduleName.setEnabled(mIsValid);
+            mEdtKpiContent.setEnabled(mIsValid);
             mKpiRequest = result;
             mEdtScheduleName.setText(ProjectHelper.getCommonText(result.getTitle()));
             mEdtScheduleName.setSelection(ProjectHelper.getCommonSelection(result.getTitle()));

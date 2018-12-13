@@ -2,6 +2,7 @@ package com.android.mb.schedule.view;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import com.android.mb.schedule.pop.ScheduleRemindPop;
 import com.android.mb.schedule.pop.ScheduleRepeatPop;
 import com.android.mb.schedule.presenter.SchedulePresenter;
 import com.android.mb.schedule.utils.AppHelper;
+import com.android.mb.schedule.utils.DialogHelper;
 import com.android.mb.schedule.utils.FileOpenUtils;
 import com.android.mb.schedule.utils.FileUtils;
 import com.android.mb.schedule.utils.Helper;
@@ -43,6 +45,7 @@ import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectChangeListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
 import java.io.Serializable;
@@ -98,6 +101,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
     private boolean mIsShowRemind;
     private Calendar mStartTime,mEndTime;
     private FileBean mFileBean;
+    private ScheduleRequest mLocalRequest;
     @Override
     protected void loadIntent() {
         mLocalKey = "ScheduleRequest"+ CurrentUser.getInstance().getId();
@@ -109,7 +113,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         }else{
             String localStr = PreferencesHelper.getInstance().getString(mLocalKey);
             if (Helper.isNotEmpty(localStr)){
-                mScheduleRequest = JsonHelper.fromJson(localStr,ScheduleRequest.class);
+                mLocalRequest = JsonHelper.fromJson(localStr,ScheduleRequest.class);
             }
         }
 
@@ -188,22 +192,54 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
             mTvRepeat.setText(ProjectHelper.getRepeatStr(mScheduleRequest.getRepeattype()));
             mTvWhenRemind.setText(ProjectHelper.getRemindStr(mScheduleRequest.getRemind()));
             mIsShowRemind = mScheduleRequest.getRepeattype()!=1;
-            if (Helper.isNotEmpty(mDetailData.getRelated())){
-                mRelatePersons = mDetailData.getRelated();
-                String relateStr = String.format(mContext.getString(R.string.relate_person), ProjectHelper.getSharePersonStr(mRelatePersons),mRelatePersons.size());
-                mTvPersons.setText(relateStr);
+            //相关人员
+            if (mType==1){
+                if (mDetailData!=null && Helper.isNotEmpty(mDetailData.getRelated())){
+                    mRelatePersons = mDetailData.getRelated();
+                    String relateStr = String.format(mContext.getString(R.string.relate_person), ProjectHelper.getSharePersonStr(mRelatePersons),mRelatePersons.size());
+                    mTvPersons.setText(relateStr);
+                }
+            }else{
+                if (Helper.isNotEmpty(mScheduleRequest.getRelateList()) && !"[]".equals(mScheduleRequest.getRelateList())){
+                    mRelatePersons = JsonHelper.fromJson(mScheduleRequest.getRelateList(),new TypeToken<List<UserBean>>(){}.getType());
+                    String relateStr = String.format(mContext.getString(R.string.relate_person), ProjectHelper.getSharePersonStr(mRelatePersons),mRelatePersons.size());
+                    mTvPersons.setText(relateStr);
+                }
             }
-            if (Helper.isNotEmpty(mDetailData.getShare())){
-                mSharePersons = mDetailData.getShare();
-                String shareStr = String.format(mContext.getString(R.string.relate_person), ProjectHelper.getSharePersonStr(mSharePersons),mSharePersons.size());
-                mTvShare.setText(shareStr);
+            //分享人员
+            if (mType==1){
+                if (mDetailData!=null &&Helper.isNotEmpty(mDetailData.getShare())){
+                    mSharePersons = mDetailData.getShare();
+                    String shareStr = String.format(mContext.getString(R.string.relate_person), ProjectHelper.getSharePersonStr(mSharePersons),mSharePersons.size());
+                    mTvShare.setText(shareStr);
+                }
+            }else{
+                if (Helper.isNotEmpty(mScheduleRequest.getShareList()) && !"[]".equals(mScheduleRequest.getShareList())){
+                    mSharePersons = JsonHelper.fromJson(mScheduleRequest.getShareList(),new TypeToken<List<UserBean>>(){}.getType());
+                    String shareStr = String.format(mContext.getString(R.string.relate_person), ProjectHelper.getSharePersonStr(mSharePersons),mSharePersons.size());
+                    mTvShare.setText(shareStr);
+                }
             }
-            if (Helper.isNotEmpty(mDetailData.getFile())){
-                mFileBean = mDetailData.getFile().get(0);
-                if (mFileBean!=null){
-                    mTvFileName.setVisibility(View.VISIBLE);
-                    mTvFileName.setText(mFileBean.getFilename());
-                    mTvUploadDocument.setText("点击替换附件");
+
+            //附件
+            if (mType==1){
+                if (mDetailData!=null &&Helper.isNotEmpty(mDetailData.getFile())){
+                    mFileBean = mDetailData.getFile().get(0);
+                    if (mFileBean!=null){
+                        mTvFileName.setVisibility(View.VISIBLE);
+                        mTvFileName.setText(mFileBean.getFilename());
+                        mTvUploadDocument.setText("点击替换附件");
+                    }
+                }
+            }else{
+                if (Helper.isNotEmpty(mScheduleRequest.getFileList()) && !"[]".equals(mScheduleRequest.getFileList())){
+                    List<FileBean> fileBeans = JsonHelper.fromJson(mScheduleRequest.getFileList(),new TypeToken<List<FileBean>>(){}.getType());
+                    mFileBean = fileBeans.get(0);
+                    if (mFileBean!=null){
+                        mTvFileName.setVisibility(View.VISIBLE);
+                        mTvFileName.setText(mFileBean.getFilename());
+                        mTvUploadDocument.setText("点击替换附件");
+                    }
                 }
             }
         }
@@ -215,7 +251,9 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
             initData();
         }else{
             initDate();
-            initData();
+            if (mLocalRequest!=null){
+                showDraftDialog();
+            }
         }
     }
 
@@ -526,7 +564,6 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
     @Override
     public void editSuccess(Object result) {
         showToastMessage("修改成功");
-        PreferencesHelper.getInstance().putString(mLocalKey, "");
         sendMsg(ProjectConstants.EVENT_UPDATE_SCHEDULE_LIST,null);
         sendMsg(ProjectConstants.EVENT_UPDATE_SCHEDULE,null);
         finish();
@@ -694,5 +731,68 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         }
     }
 
+    @Override
+    protected void onLeftBack() {
+        doSaveDraft();
+        super.onLeftBack();
+    }
 
+    @Override
+    public void onBackPressed() {
+        doSaveDraft();
+        super.onBackPressed();
+    }
+
+    private void doSaveDraft(){
+        String name = mEdtScheduleName.getText().toString().trim();
+        String content = mEdtScheduleContent.getText().toString().trim();
+        String address = mTvAddress.getText().toString().trim();
+        String startDate = mTvStartDate.getText().toString().trim();
+        String startTime = mTvStartTime.getText().toString().trim();
+        String endDate = mTvEndDate.getText().toString().trim();
+        String endTime = mTvEndTime.getText().toString().trim();
+        Date start = Helper.string2Date(startDate+startTime,mDateFormat+mTimeFormat);
+        Date end = Helper.string2Date(endDate+endTime,mDateFormat+mTimeFormat);
+        if (mScheduleRequest==null){
+            mScheduleRequest=new ScheduleRequest();
+        }
+        if (mFileBean!=null && mFileBean.getId()!=-1){
+            mScheduleRequest.setFid(mFileBean.getId());
+            List<FileBean> fileList = new ArrayList<>();
+            fileList.add(mFileBean);
+            mScheduleRequest.setFileList(JsonHelper.toJson(fileList));
+        }
+        mScheduleRequest.setTitle(name);
+        mScheduleRequest.setDescription(content);
+        mScheduleRequest.setAddress(address);
+        mScheduleRequest.setImportant(mIsImport);
+        mScheduleRequest.setNot_remind_related(mNotRemind);
+        mScheduleRequest.setAllDay(mIsAllDay);
+        mScheduleRequest.setRelated(Helper.isEmpty(mRelatePersons)?"":ProjectHelper.getIdStr(mRelatePersons));
+        mScheduleRequest.setShare(Helper.isEmpty(mSharePersons)?"":ProjectHelper.getIdStr(mSharePersons));
+        mScheduleRequest.setRelateList(JsonHelper.toJson(mRelatePersons));
+        mScheduleRequest.setShareList(JsonHelper.toJson(mSharePersons));
+        mScheduleRequest.setStart(start.getTime()/1000);
+        mScheduleRequest.setEnd(end.getTime()/1000);
+        mScheduleRequest.setRemind(mScheduleRemindPop.getType());
+        mScheduleRequest.setRepeattype(mScheduleRepeatPop.getType());
+        if (mType==0 && ProjectHelper.isEditSchedule(mScheduleRequest)){
+            PreferencesHelper.getInstance().putString(mLocalKey,JsonHelper.toJson(mScheduleRequest));
+        }
+    }
+
+    private void showDraftDialog(){
+        DialogHelper.showConfirmDialog(ScheduleAddActivity.this, "草稿", "是否继续使用上次保存的草稿？", true, "是", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mScheduleRequest = mLocalRequest;
+                initData();
+            }
+        }, "否", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                PreferencesHelper.getInstance().putString(mLocalKey, "");
+            }
+        });
+    }
 }
