@@ -125,78 +125,87 @@
             android:layout_height="10dp"
             android:background="@color/bg_color" />
         <LinearLayout
+            android:id="@+id/lly_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="10dp">
+            android:orientation="vertical">
             <LinearLayout
-                android:id="@+id/lly_start_date"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/white"
-                android:orientation="vertical"
-                android:padding="10dp">
+                android:padding="10dp"
+                android:orientation="horizontal">
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="80dp"
                     android:layout_height="wrap_content"
-                    android:text="开始"
-                    android:textColor="@color/gray_a5"
-                    android:textSize="15sp" />
-                <TextView
-                    android:id="@+id/tv_start_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="2018年8月22日"
-                    android:textColor="@color/gray_a5"
-                    android:textSize="15sp" />
-                <TextView
-                    android:id="@+id/tv_start_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="10:00"
+                    android:text="日期选择"
                     android:textColor="@color/text_color"
+                    android:textSize="15sp" />
+                <TextView
+                    android:id="@+id/tv_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2018年8月22日"
+                    android:textColor="@color/base_blue"
                     android:textSize="15sp" />
             </LinearLayout>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@mipmap/ic_arrow_right_big" />
             <LinearLayout
-                android:id="@+id/lly_end_date"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:layout_weight="1"
-                android:background="@color/white"
-                android:orientation="vertical"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:padding="10dp">
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/lly_start_date"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="结束"
-                    android:textColor="@color/gray_a5"
-                    android:textSize="15sp" />
-                <TextView
-                    android:id="@+id/tv_end_date"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="开始"
+                        android:textColor="@color/gray_a5"
+                        android:textSize="15sp" />
+                    <TextView
+                        android:id="@+id/tv_start_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:text="10:00"
+                        android:textColor="@color/black"
+                        android:textSize="30sp" />
+                </LinearLayout>
+                <ImageView
                     android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@mipmap/ic_arrow_right_big" />
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="2018年8月22日"
-                    android:textColor="@color/gray_a5"
-                    android:textSize="15sp" />
-                <TextView
-                    android:id="@+id/tv_end_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="10:00"
-                    android:textColor="@color/text_color"
-                    android:textSize="15sp" />
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="结束"
+                        android:textColor="@color/gray_a5"
+                        android:textSize="15sp" />
+                    <TextView
+                        android:id="@+id/tv_end_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:text="10:00"
+                        android:textColor="@color/black"
+                        android:textSize="30sp" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
         <include layout="@layout/common_divider" />

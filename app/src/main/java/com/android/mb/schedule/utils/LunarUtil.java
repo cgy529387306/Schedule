@@ -188,4 +188,36 @@ public class LunarUtil {
         return (leap ? "闰" : "") + chineseNumber[month - 1] + "月"
                 + getChinaDayString(day);
     }
+
+    public static String getMonthStr(int month){
+        String monthStr;
+        if (month==1){
+            monthStr = "一月";
+        }else if (month==2){
+            monthStr = "二月";
+        }else if (month==3){
+            monthStr = "三月";
+        }else if (month==4){
+            monthStr = "四月";
+        }else if (month==5){
+            monthStr = "五月";
+        }else if (month==6){
+            monthStr = "六月";
+        }else if (month==7){
+            monthStr = "七月";
+        }else if (month==8){
+            monthStr = "八月";
+        }else if (month==9){
+            monthStr = "九月";
+        }else if (month==10){
+            monthStr = "十月";
+        }else if (month==11){
+            monthStr = "十一月";
+        }else if (month==12){
+            monthStr = "十二月";
+        }else {
+            monthStr = "一月";
+        }
+        return monthStr;
+    }
 }

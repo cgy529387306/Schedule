@@ -1,18 +1,12 @@
 package com.android.mb.schedule.view;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,6 +20,7 @@ import com.android.mb.schedule.entitys.FileData;
 import com.android.mb.schedule.entitys.ScheduleDetailData;
 import com.android.mb.schedule.entitys.ScheduleRequest;
 import com.android.mb.schedule.entitys.UserBean;
+import com.android.mb.schedule.fragment.DtpDialogFrament;
 import com.android.mb.schedule.pop.ScheduleRemindPop;
 import com.android.mb.schedule.pop.ScheduleRepeatPop;
 import com.android.mb.schedule.presenter.SchedulePresenter;
@@ -36,15 +31,10 @@ import com.android.mb.schedule.utils.FileUtils;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.JsonHelper;
 import com.android.mb.schedule.utils.NavigationHelper;
-import com.android.mb.schedule.utils.NetworkHelper;
 import com.android.mb.schedule.utils.PreferencesHelper;
 import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.view.interfaces.IScheduleView;
 import com.android.mb.schedule.widget.BottomMenuDialog;
-import com.bigkoo.pickerview.builder.TimePickerBuilder;
-import com.bigkoo.pickerview.listener.OnTimeSelectChangeListener;
-import com.bigkoo.pickerview.listener.OnTimeSelectListener;
-import com.bigkoo.pickerview.view.TimePickerView;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
@@ -65,11 +55,9 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
     private EditText mEdtScheduleContent; // 日程内容
     private TextView mTvUploadDocument; // 点击上传文件
     private TextView mTvFileName;//文件名称
-    private LinearLayout mLlyStartDate ;
-    private TextView mTvStartDate ; //开始日期
+    private LinearLayout mLlyDate;//选择日期
+    private TextView mTvDate ; //开始日期
     private TextView mTvStartTime ; //开始时间
-    private LinearLayout mLlyEndDate;
-    private TextView mTvEndDate ; //结束日期
     private TextView mTvEndTime ; //结束时间
     private TextView mTvPersons;
     private ImageView mIvAllDay ; //全天提醒
@@ -84,10 +72,6 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
     private int mNotRemind = 0;
     private ScheduleRepeatPop mScheduleRepeatPop;
     private ScheduleRemindPop mScheduleRemindPop;
-    private TimePickerView mScheduleStartTimePop;
-    private TimePickerView mScheduleEndTimePop;
-    private TimePickerView mScheduleStartDatePop;
-    private TimePickerView mScheduleEndDatePop;
     private ScheduleRequest mScheduleRequest;
     private int mType;//0:新建 1:编辑
     public static final String mDateFormat = "yyyy年MM月dd日";
@@ -143,11 +127,9 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         mEdtScheduleContent = findViewById(R.id.et_schedule_content);
         mTvUploadDocument = findViewById(R.id.tv_upload_document);
         mTvFileName = findViewById(R.id.tv_file_name);
-        mLlyStartDate = findViewById(R.id.lly_start_date);
-        mTvStartDate = findViewById(R.id.tv_start_date);
+        mLlyDate = findViewById(R.id.lly_date);
+        mTvDate = findViewById(R.id.tv_date);
         mTvStartTime = findViewById(R.id.tv_start_time);
-        mLlyEndDate = findViewById(R.id.lly_end_date);
-        mTvEndDate = findViewById(R.id.tv_end_date);
         mTvEndTime = findViewById(R.id.tv_end_time);
         mIvAllDay = findViewById(R.id.iv_all_day);
         mTvPersons = findViewById(R.id.tv_persons);
@@ -167,17 +149,13 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
             mTvAddress.setText(ProjectHelper.getCommonText(mScheduleRequest.getAddress()));
             mEdtScheduleContent.setText(ProjectHelper.getCommonText(mScheduleRequest.getDescription()));
             mEdtScheduleContent.setSelection(ProjectHelper.getCommonSelection(mScheduleRequest.getDescription()));
-            mTvStartDate.setText(Helper.long2DateString(mScheduleRequest.getStart()*1000,mDateFormat));
             mTvStartTime.setText(Helper.long2DateString(mScheduleRequest.getStart()*1000,mTimeFormat));
-            mTvEndDate.setText(Helper.long2DateString(mScheduleRequest.getEnd()*1000,mDateFormat));
             mTvEndTime.setText(Helper.long2DateString(mScheduleRequest.getEnd()*1000,mTimeFormat));
             mStartTime = (Calendar) Calendar.getInstance().clone();
             mStartTime.setTime(Helper.long2Date(mScheduleRequest.getStart()*1000));
-            mScheduleStartTimePop.setDate(mStartTime);
 
             mEndTime = (Calendar) Calendar.getInstance().clone();
             mEndTime.setTime(Helper.long2Date(mScheduleRequest.getEnd()*1000));
-            mScheduleEndTimePop.setDate(mEndTime);
 
             mIsAllDay = mScheduleRequest.getAllDay();
             mIvAllDay.setImageResource(mIsAllDay==1?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
@@ -269,8 +247,8 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         mTvWhenRemind.setOnClickListener(this);
         mIvImport.setOnClickListener(this);
         mTvUploadDocument.setOnClickListener(this);
-        mLlyStartDate.setOnClickListener(this);
-        mLlyEndDate.setOnClickListener(this);
+        mLlyDate.setOnClickListener(this);
+
     }
 
     @Override
@@ -287,10 +265,9 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
             mTvEndTime.setVisibility(mIsAllDay==1?View.GONE:View.VISIBLE);
             mStartTime = mStartTime==null?Calendar.getInstance():mStartTime;
             String startDate = Helper.date2String(mStartTime.getTime(),mDateFormat);
-            mStartTime.setTime(Helper.string2Date(startDate+"08:00",mDateFormat+mTimeFormat));
-            mEndTime.setTime(Helper.string2Date(startDate+"09:00",mDateFormat+mTimeFormat));
-            mTvStartDate.setText(startDate);
-            mTvEndDate.setText(startDate);
+            mStartTime.setTime(Helper.string2Date(startDate+"00:00",mDateFormat+mTimeFormat));
+            mEndTime.setTime(Helper.string2Date(startDate+"23:59",mDateFormat+mTimeFormat));
+            mTvDate.setText(startDate);
             mTvStartTime.setText(Helper.date2String(mStartTime.getTime(),mTimeFormat));
             mTvEndTime.setText(Helper.date2String(mEndTime.getTime(),mTimeFormat));
         }else  if (id == R.id.iv_add_person){
@@ -315,25 +292,28 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         }else  if (id == R.id.iv_import){
             mIsImport = mIsImport==0?1:0;
             mIvImport.setImageResource(mIsImport==1?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
-        }else  if (id == R.id.lly_start_date){
+        }else  if (id == R.id.lly_date){
             AppHelper.hideSoftInputFromWindow(view);
-            if (mIsAllDay==1){
-                mScheduleStartDatePop.setDate(mStartTime);
-                mScheduleStartDatePop.show(view);
-            }else{
-                mScheduleStartTimePop.setDate(mStartTime);
-                mScheduleStartTimePop.show(view);
-            }
-        }else  if (id == R.id.lly_end_date){
-            AppHelper.hideSoftInputFromWindow(view);
-            if (mIsAllDay==1){
-                mScheduleEndDatePop.setDate(mEndTime);
-                mScheduleEndDatePop.show(view);
-            }else{
-                mScheduleEndTimePop.setDate(mEndTime);
-                mScheduleEndTimePop.show(view);
-            }
+            showDialog();
         }
+    }
+
+    private void initDate(){
+        mStartTime = (Calendar) Calendar.getInstance().clone();
+        mStartTime.add(Calendar.HOUR_OF_DAY,1);
+        if (Helper.isNotEmpty(mDateStr) && Helper.string2Date(mDateStr)!=null){
+            mStartTime.setTime(Helper.string2Date(mDateStr));
+        }
+        int hour = mStartTime.get(Calendar.HOUR_OF_DAY);
+        String hourStr = hour<10?("0"+hour):""+hour;
+        mTvDate.setText(Helper.date2String(mStartTime.getTime(),mDateFormat));
+        mTvStartTime.setText(String.format("%s:%s", hourStr, "00"));
+
+        mEndTime = (Calendar) mStartTime.clone();
+        mEndTime.add(Calendar.HOUR_OF_DAY,1);
+        int endHour = mEndTime.get(Calendar.HOUR_OF_DAY);
+        String endHourStr = endHour<10?("0"+endHour):""+endHour;
+        mTvEndTime.setText(String.format("%s:%s", endHourStr, "00"));
     }
 
     private void choosePop() {
@@ -351,199 +331,8 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
              mTvWhenRemind.setText(ProjectHelper.getRemindStr(type));
             }
         });
-        initStartTimePop();
-        initEndTimePop();
-        initStartDatePop();
-        initEndDatePop();
     }
 
-    private void initEndTimePop() {
-        mScheduleEndTimePop = new TimePickerBuilder(this, new OnTimeSelectListener() {
-            @Override
-            public void onTimeSelect(Date date, View v) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(date);
-                mEndTime = (Calendar) calendar.clone();
-                mTvEndDate.setText(Helper.date2String(date,mDateFormat));
-                mTvEndTime.setText(Helper.date2String(date,mTimeFormat));
-            }
-        })
-                .setTimeSelectChangeListener(new OnTimeSelectChangeListener() {
-                    @Override
-                    public void onTimeSelectChanged(Date date) {
-//                        mScheduleEndTimePop.setTitleText(Helper.date2String(date,"EE"));
-                    }
-                })
-                .setType(new boolean[]{true, true, true, true, true, false})
-                .setTitleBgColor(0xff2aaeff)
-                .setSubmitColor(0xffffffff)
-                .setCancelColor(0xffffffff)
-                .setTitleColor(0xffffffff)
-                .isDialog(true) //默认设置false ，内部实现将DecorView 作为它的父控件。
-                .build();
-        Dialog mDialog = mScheduleEndTimePop.getDialog();
-        if (mDialog != null) {
-            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    Gravity.BOTTOM);
-            params.leftMargin = 0;
-            params.rightMargin = 0;
-            mScheduleEndTimePop.getDialogContainerLayout().setLayoutParams(params);
-
-            Window dialogWindow = mDialog.getWindow();
-            if (dialogWindow != null) {
-                dialogWindow.setWindowAnimations(com.bigkoo.pickerview.R.style.picker_view_slide_anim);//修改动画样式
-                dialogWindow.setGravity(Gravity.BOTTOM);//改成Bottom,底部显示
-            }
-        }
-    }
-
-    private void initStartTimePop(){
-        mScheduleStartTimePop = new TimePickerBuilder(this, new OnTimeSelectListener() {
-            @Override
-            public void onTimeSelect(Date date, View v) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(date);
-                mStartTime = (Calendar) calendar.clone();
-                mTvStartDate.setText(Helper.date2String(date,mDateFormat));
-                mTvStartTime.setText(Helper.date2String(date,mTimeFormat));
-            }
-        })
-                .setTimeSelectChangeListener(new OnTimeSelectChangeListener() {
-                    @Override
-                    public void onTimeSelectChanged(Date date) {
-//                        mScheduleStartTimePop.setTitleText(Helper.date2String(date,"EE"));
-                    }
-                })
-                .setType(new boolean[]{true, true, true, true, true, false})
-                .setTitleBgColor(0xff2aaeff)
-                .setSubmitColor(0xffffffff)
-                .setCancelColor(0xffffffff)
-                .setTitleColor(0xffffffff)
-                .isDialog(true) //默认设置false ，内部实现将DecorView 作为它的父控件。
-                .build();
-        Dialog mDialog = mScheduleStartTimePop.getDialog();
-        if (mDialog != null) {
-            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    Gravity.BOTTOM);
-            params.leftMargin = 0;
-            params.rightMargin = 0;
-            mScheduleStartTimePop.getDialogContainerLayout().setLayoutParams(params);
-
-            Window dialogWindow = mDialog.getWindow();
-            if (dialogWindow != null) {
-                dialogWindow.setWindowAnimations(com.bigkoo.pickerview.R.style.picker_view_slide_anim);//修改动画样式
-                dialogWindow.setGravity(Gravity.BOTTOM);//改成Bottom,底部显示
-            }
-        }
-    }
-
-    private void initStartDatePop(){
-        mScheduleStartDatePop = new TimePickerBuilder(this, new OnTimeSelectListener() {
-            @Override
-            public void onTimeSelect(Date date, View v) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(date);
-                mStartTime = (Calendar) calendar.clone();
-                mTvStartDate.setText(Helper.date2String(date,mDateFormat));
-            }
-        })
-                .setTimeSelectChangeListener(new OnTimeSelectChangeListener() {
-                    @Override
-                    public void onTimeSelectChanged(Date date) {
-//                        mScheduleStartDatePop.setTitleText(Helper.date2String(date,"EE"));
-                    }
-                })
-                .setType(new boolean[]{true, true, true, false, false, false})
-                .setTitleBgColor(0xff2aaeff)
-                .setSubmitColor(0xffffffff)
-                .setCancelColor(0xffffffff)
-                .setTitleColor(0xffffffff)
-                .isDialog(true) //默认设置false ，内部实现将DecorView 作为它的父控件。
-                .build();
-        Dialog mDialog = mScheduleStartDatePop.getDialog();
-        if (mDialog != null) {
-            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    Gravity.BOTTOM);
-            params.leftMargin = 0;
-            params.rightMargin = 0;
-            mScheduleStartDatePop.getDialogContainerLayout().setLayoutParams(params);
-
-            Window dialogWindow = mDialog.getWindow();
-            if (dialogWindow != null) {
-                dialogWindow.setWindowAnimations(com.bigkoo.pickerview.R.style.picker_view_slide_anim);//修改动画样式
-                dialogWindow.setGravity(Gravity.BOTTOM);//改成Bottom,底部显示
-            }
-        }
-    }
-
-    private void initEndDatePop(){
-        mScheduleEndDatePop = new TimePickerBuilder(this, new OnTimeSelectListener() {
-            @Override
-            public void onTimeSelect(Date date, View v) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(date);
-                mEndTime = (Calendar) calendar.clone();
-                mTvEndDate.setText(Helper.date2String(date,mDateFormat));
-            }
-        })
-                .setTimeSelectChangeListener(new OnTimeSelectChangeListener() {
-                    @Override
-                    public void onTimeSelectChanged(Date date) {
-//                        mScheduleEndDatePop.setTitleText(Helper.date2String(date,"EE"));
-                    }
-                })
-                .setType(new boolean[]{true, true, true, false, false, false})
-                .setTitleBgColor(0xff2aaeff)
-                .setSubmitColor(0xffffffff)
-                .setCancelColor(0xffffffff)
-                .setTitleColor(0xffffffff)
-                .isDialog(true) //默认设置false ，内部实现将DecorView 作为它的父控件。
-                .build();
-        Dialog mDialog = mScheduleEndDatePop.getDialog();
-        if (mDialog != null) {
-            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    Gravity.BOTTOM);
-            params.leftMargin = 0;
-            params.rightMargin = 0;
-            mScheduleEndDatePop.getDialogContainerLayout().setLayoutParams(params);
-
-            Window dialogWindow = mDialog.getWindow();
-            if (dialogWindow != null) {
-                dialogWindow.setWindowAnimations(com.bigkoo.pickerview.R.style.picker_view_slide_anim);//修改动画样式
-                dialogWindow.setGravity(Gravity.BOTTOM);//改成Bottom,底部显示
-            }
-        }
-    }
-
-    private void initDate(){
-        mStartTime = (Calendar) Calendar.getInstance().clone();
-        mStartTime.add(Calendar.HOUR_OF_DAY,1);
-        if (Helper.isNotEmpty(mDateStr) && Helper.string2Date(mDateStr)!=null){
-            mStartTime.setTime(Helper.string2Date(mDateStr));
-        }
-        int hour = mStartTime.get(Calendar.HOUR_OF_DAY);
-        String hourStr = hour<10?("0"+hour):""+hour;
-        mTvStartDate.setText(Helper.date2String(mStartTime.getTime(),mDateFormat));
-        mTvStartTime.setText(String.format("%s:%s", hourStr, "00"));
-        mScheduleStartTimePop.setDate(mStartTime);
-
-
-        mEndTime = (Calendar) mStartTime.clone();
-        mEndTime.add(Calendar.HOUR_OF_DAY,1);
-        int endHour = mEndTime.get(Calendar.HOUR_OF_DAY);
-        String endHourStr = endHour<10?("0"+endHour):""+endHour;
-        mTvEndDate.setText(Helper.date2String(mEndTime.getTime(),mDateFormat));
-        mTvEndTime.setText(String.format("%s:%s", endHourStr, "00"));
-        mScheduleEndTimePop.setDate(mEndTime);
-    }
 
     @Override
     protected SchedulePresenter createPresenter() {
@@ -677,12 +466,11 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         String name = mEdtScheduleName.getText().toString().trim();
         String content = mEdtScheduleContent.getText().toString().trim();
         String address = mTvAddress.getText().toString().trim();
-        String startDate = mTvStartDate.getText().toString().trim();
+        String date = mTvDate.getText().toString().trim();
         String startTime = mTvStartTime.getText().toString().trim();
-        String endDate = mTvEndDate.getText().toString().trim();
         String endTime = mTvEndTime.getText().toString().trim();
-        Date start = Helper.string2Date(startDate+startTime,mDateFormat+mTimeFormat);
-        Date end = Helper.string2Date(endDate+endTime,mDateFormat+mTimeFormat);
+        Date start = Helper.string2Date(date+startTime,mDateFormat+mTimeFormat);
+        Date end = Helper.string2Date(date+endTime,mDateFormat+mTimeFormat);
         if (Helper.isEmpty(name)){
             showToastMessage("请输入日程名称");
             return;
@@ -747,12 +535,11 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         String name = mEdtScheduleName.getText().toString().trim();
         String content = mEdtScheduleContent.getText().toString().trim();
         String address = mTvAddress.getText().toString().trim();
-        String startDate = mTvStartDate.getText().toString().trim();
+        String startDate = mTvDate.getText().toString().trim();
         String startTime = mTvStartTime.getText().toString().trim();
-        String endDate = mTvEndDate.getText().toString().trim();
         String endTime = mTvEndTime.getText().toString().trim();
         Date start = Helper.string2Date(startDate+startTime,mDateFormat+mTimeFormat);
-        Date end = Helper.string2Date(endDate+endTime,mDateFormat+mTimeFormat);
+        Date end = Helper.string2Date(startDate+endTime,mDateFormat+mTimeFormat);
         if (mScheduleRequest==null){
             mScheduleRequest=new ScheduleRequest();
         }
@@ -794,5 +581,14 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
                 PreferencesHelper.getInstance().putString(mLocalKey, "");
             }
         });
+    }
+
+    private void showDialog() {
+        String dateStr = mTvDate.getText().toString().trim();
+        String startTime = mTvStartTime.getText().toString().trim();
+        String endTime = mTvEndTime.getText().toString().trim();
+        DtpDialogFrament newFragment = DtpDialogFrament.newInstance(dateStr,startTime,endTime);
+        newFragment.show(getFragmentManager(), "dialog");
+
     }
 }
