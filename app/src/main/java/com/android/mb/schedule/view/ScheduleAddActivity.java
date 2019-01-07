@@ -20,7 +20,7 @@ import com.android.mb.schedule.entitys.FileData;
 import com.android.mb.schedule.entitys.ScheduleDetailData;
 import com.android.mb.schedule.entitys.ScheduleRequest;
 import com.android.mb.schedule.entitys.UserBean;
-import com.android.mb.schedule.fragment.DtpDialogFrament;
+import com.android.mb.schedule.fragment.DtpDialogFragment;
 import com.android.mb.schedule.pop.ScheduleRemindPop;
 import com.android.mb.schedule.pop.ScheduleRepeatPop;
 import com.android.mb.schedule.presenter.SchedulePresenter;
@@ -149,6 +149,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
             mTvAddress.setText(ProjectHelper.getCommonText(mScheduleRequest.getAddress()));
             mEdtScheduleContent.setText(ProjectHelper.getCommonText(mScheduleRequest.getDescription()));
             mEdtScheduleContent.setSelection(ProjectHelper.getCommonSelection(mScheduleRequest.getDescription()));
+            mTvDate.setText(Helper.long2DateString(mScheduleRequest.getStart()*1000,mDateFormat));
             mTvStartTime.setText(Helper.long2DateString(mScheduleRequest.getStart()*1000,mTimeFormat));
             mTvEndTime.setText(Helper.long2DateString(mScheduleRequest.getEnd()*1000,mTimeFormat));
             mStartTime = (Calendar) Calendar.getInstance().clone();
@@ -159,8 +160,8 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
 
             mIsAllDay = mScheduleRequest.getAllDay();
             mIvAllDay.setImageResource(mIsAllDay==1?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
-            mTvStartTime.setVisibility(mIsAllDay==1?View.GONE:View.VISIBLE);
-            mTvEndTime.setVisibility(mIsAllDay==1?View.GONE:View.VISIBLE);
+//            mTvStartTime.setVisibility(mIsAllDay==1?View.GONE:View.VISIBLE);
+//            mTvEndTime.setVisibility(mIsAllDay==1?View.GONE:View.VISIBLE);
 
             mIsImport = mScheduleRequest.getImportant();
             mIvImport.setImageResource(mIsImport==1?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
@@ -261,8 +262,6 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         }else  if (id == R.id.iv_all_day){
             mIsAllDay = mIsAllDay==0?1:0;
             mIvAllDay.setImageResource(mIsAllDay==1?R.mipmap.ic_vibrate_open:R.mipmap.ic_vibrate_close);
-            mTvStartTime.setVisibility(mIsAllDay==1?View.GONE:View.VISIBLE);
-            mTvEndTime.setVisibility(mIsAllDay==1?View.GONE:View.VISIBLE);
             mStartTime = mStartTime==null?Calendar.getInstance():mStartTime;
             String startDate = Helper.date2String(mStartTime.getTime(),mDateFormat);
             mStartTime.setTime(Helper.string2Date(startDate+"00:00",mDateFormat+mTimeFormat));
@@ -587,7 +586,19 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         String dateStr = mTvDate.getText().toString().trim();
         String startTime = mTvStartTime.getText().toString().trim();
         String endTime = mTvEndTime.getText().toString().trim();
-        DtpDialogFrament newFragment = DtpDialogFrament.newInstance(dateStr,startTime,endTime);
+        DtpDialogFragment newFragment = DtpDialogFragment.newInstance(dateStr, startTime, endTime, new DtpDialogFragment.DateTimeSelectListener() {
+            @Override
+            public void onDateTimeSelect(String date, String startTime, String endTime) {
+               try {
+                   String dateStr = Helper.date2String(Helper.string2Date(date,"yyyyMMdd"),mDateFormat);
+                   mTvDate.setText(dateStr);
+                   mTvStartTime.setText(startTime);
+                   mTvEndTime.setText(endTime);
+               }catch (Exception e){
+                   e.printStackTrace();
+               }
+            }
+        });
         newFragment.show(getFragmentManager(), "dialog");
 
     }

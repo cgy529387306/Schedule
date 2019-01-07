@@ -45,6 +45,7 @@ import com.android.mb.schedule.greendao.UserDao;
 import com.android.mb.schedule.service.SyncService;
 import com.android.mb.schedule.view.MainActivity;
 import com.android.mb.schedule.view.SelectPersonActivity;
+import com.contrarywind.interfaces.IPickerViewData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -60,6 +61,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
@@ -966,5 +968,22 @@ public class ProjectHelper {
                     || scheduleRequest.getFid()!=0;
         }
         return isEdit;
+    }
+
+
+    /**
+     * 获取所显示的数据源
+     *
+     * @param item data resource
+     * @return 对应显示的字符串
+     */
+    public static String getContentText(Object item) {
+        if (item == null) {
+            return "";
+        }  else if (item instanceof Integer) {
+            //如果为整形则最少保留两位数.
+            return String.format(Locale.getDefault(), "%02d", (int) item);
+        }
+        return item.toString();
     }
 }

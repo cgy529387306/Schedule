@@ -10,24 +10,35 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.mb.schedule.R;
+import com.android.mb.schedule.utils.Helper;
+import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.utils.ToastHelper;
+import com.android.mb.schedule.view.ScheduleAddActivity;
 import com.bigkoo.pickerview.adapter.MinuteWheelAdapter;
 import com.bigkoo.pickerview.adapter.NumericWheelAdapter;
 import com.contrarywind.listener.OnItemSelectedListener;
 import com.contrarywind.view.WheelView;
 
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * Created by cgy on 19/1/6.
  */
 
-public class TpDialogFrament extends DialogFragment implements View.OnClickListener{
+public class TpDialogFragment extends DialogFragment implements View.OnClickListener{
 
     private TextView mTvBack,mTvFinish;
     private WheelView mHour,mMin;
-    private String mTime;
+    public static TimeSelectListener mTimeSelectListener;
 
-    public static TpDialogFrament newInstance(String time) {
-        TpDialogFrament f = new TpDialogFrament();
+    public interface TimeSelectListener {
+        void onTimeSelect(String time);
+    }
+
+    public static TpDialogFragment newInstance(String time,TimeSelectListener timeSelectListener) {
+        mTimeSelectListener = timeSelectListener;
+        TpDialogFragment f = new TpDialogFragment();
         Bundle args = new Bundle();
         args.putString("time", time);
         f.setArguments(args);
@@ -38,9 +49,8 @@ public class TpDialogFrament extends DialogFragment implements View.OnClickListe
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setCancelable(false);
-        int style = DialogFragment.STYLE_NO_TITLE;
-        int theme =android.R.style.Theme_Holo_Light_Dialog;
-        setStyle(style,theme);
+        int theme = android.R.style.Theme_Holo_Light_Dialog;
+        setStyle(DialogFragment.STYLE_NO_TITLE,theme);
     }
 
     @Nullable
@@ -82,25 +92,38 @@ public class TpDialogFrament extends DialogFragment implements View.OnClickListe
     }
 
     private void initData(){
+        Bundle bundle = getArguments();
+        int hour = 0;
+        int min = 0;
+        if (bundle != null) {
+            try {
+                String time = bundle.getString("time");
+                Date date = Helper.string2Date(time, ScheduleAddActivity.mTimeFormat);
+                Calendar calendar = (Calendar) Calendar.getInstance().clone();
+                calendar.setTime(date);
+                hour = calendar.get(Calendar.HOUR_OF_DAY);
+                min = calendar.get(Calendar.MINUTE)/5;
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
         //时
         mHour.setTextColorCenter(getResources().getColor(R.color.base_blue));
         mHour.setTextColorOut(getResources().getColor(R.color.text_color));
         mHour.setTextSize(38);
         mHour.setAdapter(new NumericWheelAdapter(0, 23));
-        mHour.setCurrentItem(0);
+        mHour.setCurrentItem(hour>23?0:hour);
         mHour.setGravity(Gravity.CENTER);
         //分
         mMin.setTextColorCenter(getResources().getColor(R.color.base_blue));
         mMin.setTextColorOut(getResources().getColor(R.color.text_color));
         mMin.setTextSize(38);
         mMin.setAdapter(new MinuteWheelAdapter(0, 55));
-        mMin.setCurrentItem(0);
+        mMin.setCurrentItem(min>11?0:min);
         mMin.setGravity(Gravity.CENTER);
 
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            mTime = bundle.getString("time");
-        }
+
     }
 
     @Override
@@ -109,10 +132,26 @@ public class TpDialogFrament extends DialogFragment implements View.OnClickListe
         if (id == R.id.tv_back){
             dismiss();
         }else if (id == R.id.tv_finish){
-            String hour = (String) mHour.getAdapter().getItem(mHour.getCurrentItem());
-            String min = (String) mMin.getAdapter().getItem(mMin.getCurrentItem());
-            ToastHelper.showLongToast(hour+":"+min);
+            doConfirm();
+        }
+    }
+
+    private void doConfirm(){
+        try {
+            Integer hour = (Integer) mHour.getAdapter().getItem(mHour.getCurrentItem());
+            Integer min = (Integer) mMin.getAdapter().getItem(mMin.getCurrentItem());
+            String hourStr = ProjectHelper.getContentText(hour);
+            String minStr = ProjectHelper.getContentText(min);
+            String timeStr = hourStr+":"+minStr;
+            if (mTimeSelectListener!=null){
+                mTimeSelectListener.onTimeSelect(timeStr);
+                dismiss();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
             dismiss();
         }
     }
+
+
 }

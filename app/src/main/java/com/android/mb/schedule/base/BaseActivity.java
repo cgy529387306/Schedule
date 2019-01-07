@@ -21,6 +21,7 @@ import com.android.mb.schedule.constants.ProjectConstants;
 import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.rxbus.RxBus;
 import com.android.mb.schedule.service.PostService;
+import com.android.mb.schedule.utils.ActivityManager;
 import com.android.mb.schedule.utils.AppHelper;
 import com.android.mb.schedule.utils.KeyBoardUtils;
 import com.android.mb.schedule.utils.NetworkHelper;
@@ -72,6 +73,7 @@ public abstract class BaseActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         mContext = this;
         mIsNetworkAvailable = NetworkHelper.isNetworkAvailable(this);
+        ActivityManager.getInstance().putActivity(getClass().getName(), this);
         registerNetWorkConnectivityChangeReceiver();
         initView(savedInstanceState);
         initStatusBar();
@@ -91,6 +93,7 @@ public abstract class BaseActivity extends AppCompatActivity{
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        ActivityManager.getInstance().removeActivity(getClass().getName());
         ImmersionBar.with(this).destroy();
         unregisterReceiver(mNetWorkStateChangeReceiver);
         RxBus.getInstance().unSubscribe(this);

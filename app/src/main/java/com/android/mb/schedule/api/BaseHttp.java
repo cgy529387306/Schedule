@@ -1,9 +1,14 @@
 package com.android.mb.schedule.api;
 
 
+import android.content.Intent;
+
+import com.android.mb.schedule.app.MBApplication;
 import com.android.mb.schedule.entitys.CurrentUser;
 import com.android.mb.schedule.retrofit.http.entity.HttpResult;
 import com.android.mb.schedule.retrofit.http.exception.ApiException;
+import com.android.mb.schedule.utils.ActivityManager;
+import com.android.mb.schedule.view.LoginActivity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,10 +37,17 @@ public class BaseHttp {
             HttpResult<T> httpResult;
             if (o instanceof HttpResult) {
                 httpResult = (HttpResult<T>) o;
-                if (httpResult.getCode() != 1) {
+                if (httpResult.getCode() == 1){
+                    return httpResult.getData();
+                }else if (httpResult.getCode() == 403){
+                    //Token 失效，重新登录
+                    ActivityManager.getInstance().closeAllActivity();
+                    Intent intent = new Intent(MBApplication.getInstance(), LoginActivity.class);
+                    MBApplication.getInstance().startActivity(intent);
+                    throw new ApiException(40003, "token 过期");
+                }else {
                     throw new ApiException(40003, httpResult.getMsg());
                 }
-                return httpResult.getData();
             }
             return null;
         }
