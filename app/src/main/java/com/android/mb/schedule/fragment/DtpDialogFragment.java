@@ -133,8 +133,26 @@ public class DtpDialogFragment extends DialogFragment implements View.OnClickLis
             TpDialogFragment newFragment = TpDialogFragment.newInstance(startTime, new TpDialogFragment.TimeSelectListener() {
                 @Override
                 public void onTimeSelect(String time) {
-                    mStartTime = time;
-                    mTvStart.setText(mStartTime);
+                   try {
+                       mStartTime = time;
+                       mTvStart.setText(mStartTime);
+                       //傻逼需求要修改结束时间
+                       String[] timeArray = time.split(":");
+                       if (timeArray.length>1){
+                           String hourStr = timeArray[0];
+                           int hour = Integer.parseInt(hourStr);
+                           if (hour<23){
+                               hour = hour+1;
+                               mEndTime = ProjectHelper.getContentText(hour)+":"+timeArray[1];
+                               mTvEnd.setText(mEndTime);
+                           }else{
+                               mEndTime = "23:55";
+                               mTvEnd.setText(mEndTime);
+                           }
+                       }
+                   }catch (Exception e){
+                       e.printStackTrace();
+                   }
                 }
             });
             newFragment.show(getFragmentManager(), "tpDialog");
