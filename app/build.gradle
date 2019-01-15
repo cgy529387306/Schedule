@@ -11,8 +11,8 @@ android {
         applicationId "com.android.mb.schedule"
         minSdkVersion 16
         targetSdkVersion 21
-        versionCode 114
-        versionName "1.1.4"
+        versionCode 115
+        versionName "1.1.5"
     }
     sourceSets {
         main {
