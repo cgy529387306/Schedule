@@ -77,7 +77,7 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
     private String mFileDir;
     private KpiRequest mKpiRequest;
     private ScheduleDetailBean mDetailBean;
-    private boolean mIsValid;
+    private boolean mIsCanEditKpi;
     @Override
     protected void loadIntent() {
         mFileDir = Environment.getExternalStorageDirectory() + File.separator + "/Schedule";
@@ -107,7 +107,7 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
             }
             bundle.putSerializable("kpiRequest",mKpiRequest);
             bundle.putSerializable("detailBean",detailBean);
-            bundle.putBoolean("isValid",mIsValid);
+            bundle.putBoolean("isValid",mIsCanEditKpi);
             NavigationHelper.startActivityForResult(ScheduleDetailActivity.this,KPIAddActivity.class,bundle,ProjectConstants.REQUEST_KPI_EDIT);
         }
     }
@@ -260,9 +260,11 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
             }
 
             long dif =(System.currentTimeMillis()/1000) - detailBean.getTime_e();
-            boolean isMore72 = dif>72*60*60;
-            mIsValid = detailBean.getCreate_by() == CurrentUser.getInstance().getId() && !isMore72;
-            mLinEdit.setVisibility(mIsValid?View.VISIBLE:View.GONE);
+            boolean isMore3Day = dif>3*24*60*60;
+            boolean isMore7Day = dif>7*24*60*60;
+            boolean isCanEdit = detailBean.getCreate_by() == CurrentUser.getInstance().getId() && !isMore3Day;
+            mIsCanEditKpi = detailBean.getCreate_by() == CurrentUser.getInstance().getId() && !isMore7Day;
+            mLinEdit.setVisibility(isCanEdit?View.VISIBLE:View.GONE);
         }
     }
 
@@ -329,7 +331,7 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
     public void getKpiSuccess(KpiRequest result) {
         if (result!=null){
             mKpiRequest = result;
-            if (mIsValid){
+            if (mIsCanEditKpi){
                 setRightText(result.getResid()==0?"填写实绩":"修改实绩");
             }else {
                 if (result.getResid()==0){
