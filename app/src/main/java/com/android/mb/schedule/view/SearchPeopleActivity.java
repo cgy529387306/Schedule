@@ -57,8 +57,8 @@ public class SearchPeopleActivity extends BaseMvpActivity<SearchPresenter,ISearc
     }
 
     @Override
-    protected void onRightAction() {
-        super.onRightAction();
+    protected void onRightAction(View view) {
+        super.onRightAction(view);
         AppHelper.hideSoftInputFromWindow(mEtSearch);
         sendMsg(ProjectConstants.EVENT_UPDATE_SELECT,null);
         setResult(RESULT_OK);

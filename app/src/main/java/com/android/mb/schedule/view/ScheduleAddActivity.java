@@ -86,6 +86,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
     private Calendar mStartTime,mEndTime;
     private FileBean mFileBean;
     private ScheduleRequest mLocalRequest;
+    private View mAddView;
     @Override
     protected void loadIntent() {
         mLocalKey = "ScheduleRequest"+ CurrentUser.getInstance().getId();
@@ -115,8 +116,9 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
     }
 
     @Override
-    protected void onRightAction() {
-        super.onRightAction();
+    protected void onRightAction(View view) {
+        super.onRightAction(view);
+        mAddView = view;
         doSave();
     }
 
@@ -340,6 +342,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
 
     @Override
     public void addSuccess(Object result) {
+        mAddView.setEnabled(true);
         showToastMessage("保存成功");
         PreferencesHelper.getInstance().putString(mLocalKey, "");
         sendMsg(ProjectConstants.EVENT_UPDATE_SCHEDULE_LIST,null);
@@ -351,10 +354,16 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
 
     @Override
     public void editSuccess(Object result) {
+        mAddView.setEnabled(true);
         showToastMessage("修改成功");
         sendMsg(ProjectConstants.EVENT_UPDATE_SCHEDULE_LIST,null);
         sendMsg(ProjectConstants.EVENT_UPDATE_SCHEDULE,null);
         finish();
+    }
+
+    @Override
+    public void onError() {
+        mAddView.setEnabled(true);
     }
 
     @Override
@@ -438,6 +447,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
                         public void onClick(View v) {
                             mCheckDialog.dismiss();
                             mScheduleRequest.setType(0);
+                            mAddView.setEnabled(false);
                             if (mType==1){
                                 mPresenter.editSchedule(mScheduleRequest);
                             }else{
@@ -449,6 +459,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
                         public void onClick(View v) {
                             mCheckDialog.dismiss();
                             mScheduleRequest.setType(1);
+                            mAddView.setEnabled(false);
                             if (mType==1){
                                 mPresenter.editSchedule(mScheduleRequest);
                             }else{
@@ -510,6 +521,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         if (mIsShowRemind){
             checkRepeatChange();
         }else{
+            mAddView.setEnabled(false);
             if (mType==1){
                 mPresenter.editSchedule(mScheduleRequest);
             }else{

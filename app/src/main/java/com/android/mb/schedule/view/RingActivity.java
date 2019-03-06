@@ -53,8 +53,8 @@ public class RingActivity extends BaseActivity {
     }
 
     @Override
-    protected void onRightAction() {
-        super.onRightAction();
+    protected void onRightAction(View view) {
+        super.onRightAction(view);
         RingBean ringBean = getSelectRing();
         if (ringBean!=null && Helper.isNotEmpty(ringBean.getPath())){
             PreferencesHelper.getInstance().putString(ProjectConstants.KEY_RING,ringBean.getPath());

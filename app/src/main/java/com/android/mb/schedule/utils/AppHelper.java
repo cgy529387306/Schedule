@@ -188,6 +188,23 @@ public class AppHelper {
     }
 
 
+
+    /**
+     * [获取应用程序版本名称信息]
+     * @return 当前应用的版本名称
+     */
+    public static String getPackageName() {
+        String packageName = "";
+        try {
+            PackageInfo info = MBApplication.getInstance().getPackageManager()
+                    .getPackageInfo(MBApplication.getInstance().getPackageName(), 0);
+            packageName = info.packageName;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return packageName;
+    }
+
     /**
      * 判断指定的服务是否已启动
      *

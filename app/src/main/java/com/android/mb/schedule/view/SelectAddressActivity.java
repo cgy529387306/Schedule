@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
@@ -52,8 +53,8 @@ public class SelectAddressActivity extends BaseMvpActivity<AddressPresenter,IAdd
     }
 
     @Override
-    protected void onRightAction() {
-        super.onRightAction();
+    protected void onRightAction(View view) {
+        super.onRightAction(view);
         String address = mEtAddress.getText().toString().trim();
         if (Helper.isEmpty(address)){
             showToastMessage("请输入地址");

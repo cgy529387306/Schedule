@@ -59,8 +59,8 @@ public class ScheduleUserActivity extends BaseMvpActivity<MinePresenter,IMineVie
     }
 
     @Override
-    protected void onRightAction() {
-        super.onRightAction();
+    protected void onRightAction(View view) {
+        super.onRightAction(view);
         NavigationHelper.startActivity(ScheduleUserActivity.this,ScheduleUserHistoryActivity.class,null,false);
     }
 

@@ -29,6 +29,7 @@ public class SchedulePresenter extends BaseMvpPresenter<IScheduleView> implement
     @Override
     public void addSchedule(ScheduleRequest request) {
         if (NetworkHelper.isNetworkAvailable(MBApplication.getInstance())){
+            mMvpView.showProgressDialog("保存中...");
             Observable observable = ScheduleMethods.getInstance().addSchedule(request);
             toSubscribe(observable,  new Subscriber<Object>() {
                 @Override
@@ -39,6 +40,8 @@ public class SchedulePresenter extends BaseMvpPresenter<IScheduleView> implement
                 @Override
                 public void onError(Throwable e) {
                     if(mMvpView!=null){
+                        mMvpView.dismissProgressDialog();
+                        mMvpView.onError();
                         if (e instanceof ApiException && !TextUtils.isEmpty(e.getMessage())){
                             mMvpView.showToastMessage(e.getMessage());
                         }
@@ -48,6 +51,7 @@ public class SchedulePresenter extends BaseMvpPresenter<IScheduleView> implement
                 @Override
                 public void onNext(Object result) {
                     if (mMvpView!=null){
+                        mMvpView.dismissProgressDialog();
                         ProjectHelper.syncSchedule(MBApplication.getInstance(),false);
                         mMvpView.addSuccess(result);
                     }
@@ -71,6 +75,7 @@ public class SchedulePresenter extends BaseMvpPresenter<IScheduleView> implement
     @Override
     public void editSchedule(ScheduleRequest request) {
         if (NetworkHelper.isNetworkAvailable(MBApplication.getInstance())){
+            mMvpView.showProgressDialog("保存中...");
             Observable observable = ScheduleMethods.getInstance().editSchedule(request);
             toSubscribe(observable,  new Subscriber<Object>() {
                 @Override
@@ -81,6 +86,8 @@ public class SchedulePresenter extends BaseMvpPresenter<IScheduleView> implement
                 @Override
                 public void onError(Throwable e) {
                     if(mMvpView!=null){
+                        mMvpView.dismissProgressDialog();
+                        mMvpView.onError();
                         if (e instanceof ApiException && !TextUtils.isEmpty(e.getMessage())){
                             mMvpView.showToastMessage(e.getMessage());
                         }
@@ -90,6 +97,7 @@ public class SchedulePresenter extends BaseMvpPresenter<IScheduleView> implement
                 @Override
                 public void onNext(Object result) {
                     if (mMvpView!=null){
+                        mMvpView.dismissProgressDialog();
                         ProjectHelper.syncSchedule(MBApplication.getInstance(),false);
                         mMvpView.editSuccess(result);
                     }

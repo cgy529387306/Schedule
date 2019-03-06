@@ -69,8 +69,8 @@ public class KPIAddActivity extends BaseMvpActivity<KpiPresenter,IKpiView> imple
     }
 
     @Override
-    protected void onRightAction() {
-        super.onRightAction();
+    protected void onRightAction(View view) {
+        super.onRightAction(view);
         doSave();
     }
 

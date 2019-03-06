@@ -109,7 +109,7 @@ public abstract class BaseActivity extends AppCompatActivity{
      */
     protected void initView(Bundle savedInstanceState) {
         loadIntent();
-        initView();
+        initView();//getLayoutId()
         initTitle();
         bindViews();
         processLogic(savedInstanceState);
@@ -187,11 +187,9 @@ public abstract class BaseActivity extends AppCompatActivity{
             if (id == R.id.iv_back){
                 onLeftBack();
             }else if (id == R.id.iv_action){
-                ProjectHelper.disableViewDoubleClick(v);
-                onRightAction();
+                onRightAction(v);
             }else if (id == R.id.tv_action){
-                ProjectHelper.disableViewDoubleClick(v);
-                onRightAction();
+                onRightAction(v);
             }
         }
     };
@@ -204,7 +202,7 @@ public abstract class BaseActivity extends AppCompatActivity{
         }
     }
 
-    protected void onRightAction(){
+    protected void onRightAction(View view){
 
     }
 

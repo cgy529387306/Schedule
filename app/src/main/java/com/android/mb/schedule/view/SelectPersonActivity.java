@@ -65,8 +65,8 @@ public class SelectPersonActivity extends BaseMvpActivity<PersonPresenter,IPerso
     }
 
     @Override
-    protected void onRightAction() {
-        super.onRightAction();
+    protected void onRightAction(View view) {
+        super.onRightAction(view);
         Intent intent = new Intent();
         intent.putExtra("selectPerson", (Serializable) (mSelectList==null?new ArrayList<UserBean>():mSelectList));
         setResult(RESULT_OK,intent);
