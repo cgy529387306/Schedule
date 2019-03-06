@@ -343,6 +343,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
     @Override
     public void addSuccess(Object result) {
         mAddView.setEnabled(true);
+        setRightImageEnable(true);
         showToastMessage("保存成功");
         PreferencesHelper.getInstance().putString(mLocalKey, "");
         sendMsg(ProjectConstants.EVENT_UPDATE_SCHEDULE_LIST,null);
@@ -355,6 +356,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
     @Override
     public void editSuccess(Object result) {
         mAddView.setEnabled(true);
+        setRightImageEnable(true);
         showToastMessage("修改成功");
         sendMsg(ProjectConstants.EVENT_UPDATE_SCHEDULE_LIST,null);
         sendMsg(ProjectConstants.EVENT_UPDATE_SCHEDULE,null);
@@ -383,6 +385,11 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
                 mTvUploadDocument.setText("点击替换附件");
             }
         }
+    }
+
+    @Override
+    public void updateFail() {
+        setRightImageEnable(true);
     }
 
     private void handlerFileIntent() {
@@ -521,6 +528,7 @@ public class ScheduleAddActivity extends BaseMvpActivity<SchedulePresenter,ISche
         if (mIsShowRemind){
             checkRepeatChange();
         }else{
+            setRightImageEnable(false);
             mAddView.setEnabled(false);
             if (mType==1){
                 mPresenter.editSchedule(mScheduleRequest);

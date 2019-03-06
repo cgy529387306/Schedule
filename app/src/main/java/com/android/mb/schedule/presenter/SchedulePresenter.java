@@ -42,6 +42,7 @@ public class SchedulePresenter extends BaseMvpPresenter<IScheduleView> implement
                     if(mMvpView!=null){
                         mMvpView.dismissProgressDialog();
                         mMvpView.onError();
+                        mMvpView.updateFail();
                         if (e instanceof ApiException && !TextUtils.isEmpty(e.getMessage())){
                             mMvpView.showToastMessage(e.getMessage());
                         }
@@ -86,6 +87,7 @@ public class SchedulePresenter extends BaseMvpPresenter<IScheduleView> implement
                 @Override
                 public void onError(Throwable e) {
                     if(mMvpView!=null){
+                        mMvpView.updateFail();
                         mMvpView.dismissProgressDialog();
                         mMvpView.onError();
                         if (e instanceof ApiException && !TextUtils.isEmpty(e.getMessage())){

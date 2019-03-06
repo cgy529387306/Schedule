@@ -17,6 +17,7 @@ public class KpiRequest implements Serializable{
     private long res_time_e;
     private long time_s;
     private long time_e;
+    private int performance;
 
     public long getSid() {
         return sid;
@@ -88,5 +89,13 @@ public class KpiRequest implements Serializable{
 
     public void setResid(long resid) {
         this.resid = resid;
+    }
+
+    public int getPerformance() {
+        return performance;
+    }
+
+    public void setPerformance(int performance) {
+        this.performance = performance;
     }
 }

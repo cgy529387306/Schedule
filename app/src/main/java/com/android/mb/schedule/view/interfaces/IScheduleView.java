@@ -11,4 +11,6 @@ public interface IScheduleView extends BaseMvpView{
     void onError();
 
     void uploadSuccess(FileData result);
+
+    void updateFail();
 }

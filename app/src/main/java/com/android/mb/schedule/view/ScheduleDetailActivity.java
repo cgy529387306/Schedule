@@ -261,9 +261,7 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
 
             long dif =(System.currentTimeMillis()/1000) - detailBean.getTime_e();
             boolean isMore3Day = dif>3*24*60*60;
-            boolean isMore7Day = dif>7*24*60*60;
             boolean isCanEdit = detailBean.getCreate_by() == CurrentUser.getInstance().getId() && !isMore3Day;
-            mIsCanEditKpi = detailBean.getCreate_by() == CurrentUser.getInstance().getId() && !isMore7Day;
             mLinEdit.setVisibility(isCanEdit?View.VISIBLE:View.GONE);
         }
     }
@@ -329,8 +327,11 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
 
     @Override
     public void getKpiSuccess(KpiRequest result) {
-        if (result!=null){
+        if (result!=null && mDetailBean!=null){
             mKpiRequest = result;
+            long dif =(System.currentTimeMillis()/1000) - mDetailBean.getTime_e();
+            boolean isMoreDay = dif>result.getPerformance()*24*60*60;
+            mIsCanEditKpi = mDetailBean.getCreate_by() == CurrentUser.getInstance().getId() && !isMoreDay;
             if (mIsCanEditKpi){
                 setRightText(result.getResid()==0?"填写实绩":"修改实绩");
             }else {
