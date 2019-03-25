@@ -18,6 +18,7 @@ import com.android.mb.schedule.presenter.MinePresenter;
 import com.android.mb.schedule.rxbus.Events;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.NavigationHelper;
+import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.view.interfaces.IMineView;
 import com.android.mb.schedule.widget.MyDividerItemDecoration;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -58,6 +59,7 @@ public class ScheduleUserHistoryActivity extends BaseMvpActivity<MinePresenter,I
     @Override
     protected void onRightAction(View view) {
         super.onRightAction(view);
+        ProjectHelper.disableViewDoubleClick(view);
     }
 
     @Override

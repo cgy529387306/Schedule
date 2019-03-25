@@ -179,12 +179,6 @@ public abstract class BaseActivity extends AppCompatActivity{
             mIvAction.setVisibility(View.GONE);
     }
 
-    public void setRightImageEnable(boolean enable){
-        if (mIvAction != null && mIvAction.getVisibility()==View.VISIBLE)
-            mIvAction.setEnabled(enable);
-    }
-
-
     private View.OnClickListener mTitleBarOnclick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {

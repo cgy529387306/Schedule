@@ -19,6 +19,7 @@ import com.android.mb.schedule.presenter.AddressPresenter;
 import com.android.mb.schedule.utils.Helper;
 import com.android.mb.schedule.utils.JsonHelper;
 import com.android.mb.schedule.utils.PreferencesHelper;
+import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.view.interfaces.IAddressView;
 import com.android.mb.schedule.widget.MyDividerItemDecoration;
 import com.google.gson.reflect.TypeToken;
@@ -55,6 +56,7 @@ public class SelectAddressActivity extends BaseMvpActivity<AddressPresenter,IAdd
     @Override
     protected void onRightAction(View view) {
         super.onRightAction(view);
+        ProjectHelper.disableViewDoubleClick(view);
         String address = mEtAddress.getText().toString().trim();
         if (Helper.isEmpty(address)){
             showToastMessage("请输入地址");

@@ -99,6 +99,7 @@ public class ScheduleDetailActivity extends BaseMvpActivity<DetailPresenter,IDet
     @Override
     protected void onRightAction(View view) {
         super.onRightAction(view);
+        ProjectHelper.disableViewDoubleClick(view);
         if (mDetailData!=null && mDetailData.getInfo()!=null && mKpiRequest!=null){
             ScheduleDetailBean detailBean = mDetailData.getInfo();
             Bundle bundle = new Bundle();
