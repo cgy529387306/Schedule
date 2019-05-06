@@ -23,6 +23,7 @@ public class SetPwdPresenter extends BaseMvpPresenter<ISetPwdView> implements IS
 
     @Override
     public void setPwd(Map<String, Object> requestMap) {
+        mMvpView.showProgressDialog("保存中...");
         Observable observable = ScheduleMethods.getInstance().resetPwd(requestMap);
         toSubscribe(observable,  new Subscriber<Object>() {
             @Override
@@ -33,6 +34,7 @@ public class SetPwdPresenter extends BaseMvpPresenter<ISetPwdView> implements IS
             @Override
             public void onError(Throwable e) {
                 if(mMvpView!=null){
+                    mMvpView.dismissProgressDialog();
                     if (e instanceof ApiException && !TextUtils.isEmpty(e.getMessage())){
                         mMvpView.showToastMessage(e.getMessage());
                     }else if (e instanceof NoNetWorkException && !TextUtils.isEmpty(e.getMessage())){
@@ -44,6 +46,7 @@ public class SetPwdPresenter extends BaseMvpPresenter<ISetPwdView> implements IS
             @Override
             public void onNext(Object result) {
                 if (mMvpView!=null){
+                    mMvpView.dismissProgressDialog();
                     mMvpView.setSuccess();
                 }
             }

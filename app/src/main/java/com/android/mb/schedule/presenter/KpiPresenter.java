@@ -20,6 +20,7 @@ public class KpiPresenter extends BaseMvpPresenter<IKpiView> implements IKpiPres
 
     @Override
     public void addKpi(KpiRequest request) {
+        mMvpView.showProgressDialog("保存中...");
         Observable observable = ScheduleMethods.getInstance().addKpi(request);
         toSubscribe(observable,  new Subscriber<Object>() {
             @Override
@@ -30,6 +31,7 @@ public class KpiPresenter extends BaseMvpPresenter<IKpiView> implements IKpiPres
             @Override
             public void onError(Throwable e) {
                 if(mMvpView!=null){
+                    mMvpView.dismissProgressDialog();
                     if (e instanceof ApiException && !TextUtils.isEmpty(e.getMessage())){
                         mMvpView.showToastMessage(e.getMessage());
                     }
@@ -39,6 +41,7 @@ public class KpiPresenter extends BaseMvpPresenter<IKpiView> implements IKpiPres
             @Override
             public void onNext(Object result) {
                 if (mMvpView!=null){
+                    mMvpView.dismissProgressDialog();
                     mMvpView.addSuccess(result);
                 }
             }

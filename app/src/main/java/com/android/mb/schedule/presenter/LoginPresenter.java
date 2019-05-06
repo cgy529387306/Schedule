@@ -24,6 +24,7 @@ public class LoginPresenter extends BaseMvpPresenter<ILoginView> implements ILog
 
     @Override
     public void userLogin(Map<String,Object> requestMap) {
+        mMvpView.showProgressDialog("登录中...");
         Observable observable = ScheduleMethods.getInstance().userLogin(requestMap);
         toSubscribe(observable,  new Subscriber<LoginData>() {
             @Override
@@ -34,6 +35,7 @@ public class LoginPresenter extends BaseMvpPresenter<ILoginView> implements ILog
             @Override
             public void onError(Throwable e) {
                 if(mMvpView!=null){
+                    mMvpView.dismissProgressDialog();
                     if (e instanceof ApiException && !TextUtils.isEmpty(e.getMessage())){
                         mMvpView.showToastMessage(e.getMessage());
                     }else if (e instanceof NoNetWorkException && !TextUtils.isEmpty(e.getMessage())){
@@ -45,6 +47,7 @@ public class LoginPresenter extends BaseMvpPresenter<ILoginView> implements ILog
             @Override
             public void onNext(LoginData result) {
                 if (mMvpView!=null){
+                    mMvpView.dismissProgressDialog();
                     mMvpView.loginSuccess(result);
                 }
             }
@@ -53,6 +56,7 @@ public class LoginPresenter extends BaseMvpPresenter<ILoginView> implements ILog
 
     @Override
     public void bindWx(Map<String, Object> requestMap) {
+        mMvpView.showProgressDialog("绑定中...");
         Observable observable = ScheduleMethods.getInstance().bindWx(requestMap);
         toSubscribe(observable,  new Subscriber<Object>() {
             @Override
@@ -63,6 +67,7 @@ public class LoginPresenter extends BaseMvpPresenter<ILoginView> implements ILog
             @Override
             public void onError(Throwable e) {
                 if(mMvpView!=null){
+                    mMvpView.dismissProgressDialog();
                     if (e instanceof ApiException && !TextUtils.isEmpty(e.getMessage())){
                         mMvpView.showToastMessage(e.getMessage());
                     }else if (e instanceof NoNetWorkException && !TextUtils.isEmpty(e.getMessage())){
@@ -74,6 +79,7 @@ public class LoginPresenter extends BaseMvpPresenter<ILoginView> implements ILog
             @Override
             public void onNext(Object result) {
                 if (mMvpView!=null){
+                    mMvpView.dismissProgressDialog();
                     mMvpView.bindSuccess(result);
                 }
             }
