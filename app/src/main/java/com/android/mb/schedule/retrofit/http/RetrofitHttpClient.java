@@ -132,6 +132,7 @@ public class RetrofitHttpClient {
             }
         }
 
+        //忽略https证书
         builder.sslSocketFactory(SSLSocketClient.getSSLSocketFactory());
         builder.hostnameVerifier(SSLSocketClient.getHostnameVerifier());
         OkHttpClient okHttpClient = builder.build();
