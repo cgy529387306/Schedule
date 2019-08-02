@@ -24,7 +24,7 @@ import rx.functions.Func1;
 
 public class BaseHttp {
 
-    public static final String BASE_URL = "https://shop.5979wenhua.com";
+    public static final String BASE_URL = "https://rc.maweiship.com";
 
     public String getServerHost() {
         return BASE_URL;
