@@ -7,10 +7,10 @@ import com.android.mb.schedule.retrofit.cache.RetrofitCache;
 import com.android.mb.schedule.retrofit.cache.intercept.CacheForceInterceptorNoNet;
 import com.android.mb.schedule.retrofit.cache.intercept.CacheInterceptorOnNet;
 import com.android.mb.schedule.retrofit.http.interceptor.HeaderInterceptor;
-import com.android.mb.schedule.retrofit.http.interceptor.LogInterceptor;
 import com.android.mb.schedule.retrofit.http.interceptor.NoNetWorkInterceptor;
 import com.android.mb.schedule.retrofit.http.interceptor.ParameterInterceptor;
 import com.android.mb.schedule.retrofit.http.util.ArrayUtil;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -121,9 +121,9 @@ public class RetrofitHttpClient {
         }
 
         //开启日志.
-        if(isLog) {
-            builder.addNetworkInterceptor(LogInterceptor.getLogInterceptor());
-        }
+//        if(isLog) {
+//            builder.addNetworkInterceptor(LogInterceptor.getLogInterceptor());
+//        }
 
         //添加自定义拦截器
         if(!ArrayUtil.isEmpty(interceptors)){

@@ -25,7 +25,6 @@ import com.android.mb.schedule.utils.ActivityManager;
 import com.android.mb.schedule.utils.AppHelper;
 import com.android.mb.schedule.utils.KeyBoardUtils;
 import com.android.mb.schedule.utils.NetworkHelper;
-import com.android.mb.schedule.utils.ProjectHelper;
 import com.android.mb.schedule.utils.ToastUtils;
 import com.gyf.barlibrary.ImmersionBar;
 

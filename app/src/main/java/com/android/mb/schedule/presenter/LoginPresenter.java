@@ -1,5 +1,6 @@
 package com.android.mb.schedule.presenter;
 
+import android.os.Handler;
 import android.text.TextUtils;
 
 import com.android.mb.schedule.base.BaseMvpPresenter;
@@ -31,7 +32,6 @@ public class LoginPresenter extends BaseMvpPresenter<ILoginView> implements ILog
             public void onCompleted() {
 
             }
-
             @Override
             public void onError(Throwable e) {
                 if(mMvpView!=null){

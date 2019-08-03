@@ -12,7 +12,7 @@ import java.util.Set;
  */
 public class ActivityManager {
 
-    private static ActivityManager activityTaskManager = null;
+    private static volatile ActivityManager instance = null;
 
     private HashMap<String, Activity> activityMap = null;
 
@@ -25,13 +25,16 @@ public class ActivityManager {
      *
      * @return ActivityTaskManager
      */
-    public static synchronized ActivityManager getInstance() {
-        if (activityTaskManager == null) {
-            activityTaskManager = new ActivityManager();
+    public static ActivityManager getInstance() {
+        if (instance == null) {
+            synchronized (ActivityManager.class) {
+                if (instance == null) {
+                    instance = new ActivityManager();
+                }
+            }
         }
-        return activityTaskManager;
+        return instance;
     }
-
     /**
      * 将一个activity添加到管理器。
      *
