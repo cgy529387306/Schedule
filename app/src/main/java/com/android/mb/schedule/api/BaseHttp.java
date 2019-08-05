@@ -24,7 +24,7 @@ import rx.functions.Func1;
 
 public class BaseHttp {
 
-    public static final String BASE_URL = "https://mwrc.fzjieya.cn";
+    public static final String BASE_URL = "http://mwrc.fzjieya.cn";
 
     public String getServerHost() {
         return BASE_URL;
